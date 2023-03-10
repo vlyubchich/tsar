@@ -1,0 +1,493 @@
+---
+output: html_document
+editor_options:
+    chunk_output_type: console
+---
+
+```{r, echo=FALSE}
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+options(digits = 3)
+```
+
+# Trend Detection
+
+This lecture demonstrates the effects of autocorrelation on the results of statistical tests for trend detection. 
+You will recall the assumptions of the classical $t$-test and Mann--Kendall tests and will be able to suggest bootstrapped modifications of these tests to overcome the problem of temporal dependence. 
+Moreover, you will become familiar with tests for non-monotonic parametric trends and stochastic trends. 
+
+**Objectives**
+
+1. Recall the form and standard assumptions of the classical $t$-test and Mann--Kendall tests.
+1. Learn about bootstrapping for time series, particularly the approaches that preserve temporal dependency in the data (e.g., sieve and block bootstraps).
+1. Apply bootstrap to the $t$-test and Mann--Kendall tests.
+1. Test for non-monotonic parametric trends.
+1. Test for stochastic trends (i.e., unit roots).
+
+**Reading materials**
+
+* Chapter 8.1 in @Chatterjee:Hadi:2006 and Chapters 5.1--5.2 in @Chatterjee:Simonoff:2013 about the effects of autocorrelation
+* @Buhlmann:2002 on bootstrap for time series
+* Chapter 6.3 in @Brockwell:Davis:2002 on unit-root tests
+
+
+## Introduction
+
+The majority of studies focus on the detection of linear or monotonic trends, using classical $t$-test or rank-based Mann--Kendall test, typically under the assumption of uncorrelated data.
+
+There exist two main problems:
+
+1. dependence effect, i.e., the issue of inflating significance due to dependent observations -- a possible remedy is to employ bootstrap [@Noguchi:etal:2011;@Cabilio:etal:2013];
+1. changepoints or regime shifts that affect the linear or monotonic trend hypothesis
+[@Seidel:etal:2004;@Powell:Xu:2011;@Lyubchich:2016:trends].
+
+Hence, our goal is to provide reliable inference even for dependent observations and to test different alternative trend shapes.
+
+
+## 'Traditional' tests
+
+### Student's $t$-test for linear trend
+
+The Student's $t$-test for linear trend uses the regression model of linear trend
+$$
+Y_t = b_0 + b_1 t + e_t,
+$$
+where $b_0$ and $b_1$ are the regression coefficients, $t$ is time, and $e_t$ are regression errors typically assumed to be homoskedastic, uncorrelated, and normally distributed.
+
+The test hypotheses are  
+
+$H_0$: no trend ($b_1 = 0$)  
+$H_1$: linear trend ($b_1 \neq 0$)
+
+@fig-ar1sim shows a simulated stationary time series $Y_t \sim \mathrm{AR}(1)$ of length 100 (notice the 'burn-in' period in simulations).
+
+```{r}
+#| label: fig-ar1sim
+#| fig-cap: "A simulated stationary AR(1) series of length 100."
+
+set.seed(123)
+Y <- arima.sim(list(order = c(1,0,0), ar = 0.5), n = 100, n.start = 100)
+forecast::autoplot(Y) +
+    theme_light()
+```
+
+Apply the $t$-test to this time series $Y_t$:
+
+```{r}
+t <- 1:length(Y)
+mod <- lm(Y ~ t)
+summary(mod)
+```
+
+Type I error (false positives) of this test is inflated due to the dependence effect (the assumption of uncorrelatedness is violated). 
+Additionally, this test is limited only to detecting linear trends (see the alternative hypothesis $H_1$).
+
+
+### Mann--Kendall test for monotonic trend
+
+The Mann--Kendall test is based on the Kendall rank correlation and is used to determine if a non-seasonal time series has a monotonic trend over time.
+
+$H_0$: no trend  
+$H_1$: monotonic trend
+
+Test statistic:
+$$
+S=\sum_{k=1}^{n-1}\sum_{j=k+1}^n sgn(X_j-X_k),
+$$
+where $sgn(x)$ takes on the values of 1, 0, and $-1$, for $x>0$, $x=0$, and $x<0$, respectively.
+
+@Kendall:1975 showed that $S$ is asymptotically normally distributed and, for the situations where there may be ties in the $X$ values,
+$$
+\begin{split}
+\mathrm{E}(S) &= 0, \\
+\mathrm{var}(S) &= \frac{1}{18} \left[ n(n-1)(2n+5)-\sum_{j=1}^p t_j(t_j-1)(2t_j+5) \right],
+\end{split}
+$$
+where $p$ is the number of tied groups in the time series, and $t_j$ is the number of data points in the $j$th tied group.
+
+Its seasonal version is the sum of the statistics for individual seasons over all seasons [@Hirsch:etal:1982]:
+$$
+S=\sum_{j=1}^m S_j.
+$$
+
+For data sets as small as $n = 2$ and $m = 12$, the normal approximation of the test statistic is adequate and thus the test is easy to use. 
+The method also accommodates both 
+
+* a moderate number of missing observations and 
+* values below the detection limit, as the latter are treated as ties [see details in @Esterby:1996].
+
+To apply the test, use the package `Kendall`. 
+Also, note the statement about bootstrap in the help file for the function `Kendall::MannKendall()`.
+
+```{r}
+Kendall::MannKendall(Y)
+```
+
+This test is still limited to only monotonic trends and independent observations.
+
+
+## Bootstrap enhancements
+
+### Introduction to bootstrap
+
+When some of the statistical assumptions are violated, we may switch to using other methods or try to accommodate these violations by modifying part of the existing method. 
+
+* One of the assumptions of Pearson correlation analysis is the absence of outliers. 
+When outliers are in the data, we can opt for using Spearman correlations based on ranks, not the actual values. 
+Thus, here we switch the method.
+* We often use the normal distribution for inference about the population mean because we assume that averages of independent samples coming from the same population are distributed normally. 
+The normal approximation is true for large samples or for small samples if the underlying population is close to being normally distributed. 
+So what happens if we have a small sample from a non-normal population? 
+We do not know the distributional law under which sample means are distributed in this case, but we can approximate it using bootstrap.
+
+The seminal paper by @Efron:1979 describes bootstrap for i.i.d. data. 
+In two words, the idea is the following: we can relax distributional assumptions and reconstruct the distribution of the sample statistic by *resampling data with replacement* and recalculating the statistic over and over. 
+The resampling step will give us 'new' cases of collected samples, while the statistics calculated multiple times will let us approximate the distribution of the parameter of interest in this case of violated distributional assumption.
+
+Let $x_i$ ($i = 1, \dots, n$) be sample values collected from a non-normally distributed population using simple random sampling. 
+If the sample size $n$ is small, we cannot be sure that the distribution of sample averages $\bar{x}$ is normal, so we will approximate it using the following bootstrapping steps:
+
+1. Let $x^*_i$ ($i = 1, \dots, n$) be a sample with a replacement from the original sample $x_i$. 
+This is a way for us, without knowing the underlying distribution of the population and without collecting new data, to get a new artificial sample from the population.
+1. Calculate the mean (or another statistic of interest) from the bootstrapped data. 
+For example, $\bar{x}^* = n^{-1} \sum x^*_i$ is the bootstrapped mean.
+1. Repeat the steps above a large number of times to obtain a distribution of the statistics $\bar{x}^*_1, \dots, \bar{x}^*_B$, where $B$ is the number of bootstrap replications. 
+This is so-called *bootstrapped distribution*.
+1. Finally, we use the bootstrapped distribution for the intended analysis. 
+Typically it involves calculating confidence intervals. 
+There are a few ways the intervals can be calculated [see @Davison:Hinkley:1997], some of the methods provide symmetric intervals, while others do not. 
+Probably the simplest is the *percentile confidence interval*, which computes the $\alpha/2$th and $(1-\alpha/2)$th quantiles of the bootstrapped distribution, to get an interval for confidence $1 - \alpha$.
+
+::: {.callout-note icon=false}
+
+## Example: Bootstrap confidence interval for the population mean
+
+Consider a small sample of mercury (Hg) concentrations in fish tissue [@Lyubchich:etal:2016:symmetry]. 
+These observations do not constitute a time series; the data were collected in such a way that we can treat the samples as independent.
+@fig-bootHg A shows that the underlying population of Hg concentrations is likely not normally distributed, so we will use bootstrapping to calculate a confidence interval for the mean.
+
+```{r}
+# Mercury concentrations
+Hg <- c(10.159162, 9.190562, 7.776279, 11.417387, 8.494544, 
+        9.948271, 7.865391, 7.412350, 8.112304, 7.541787)
+
+# Set seed for reproducible bootstrapping
+set.seed(123)
+
+# Number of bootstrap replications
+B = 1000
+
+# Significance level
+alpha = 0.05
+
+# Compute bootstrapped means (option 1)
+xbar_star <- numeric()
+for (b in 1:B) {
+    # bootstrapped sample
+    Hgstar <- sample(Hg, replace = TRUE)
+    # bootstrapped mean
+    xbar_star[b] <- mean(Hgstar)
+}
+
+# Compute bootstrapped means (option 2)
+xbar_star <- sapply(1:B, function(b) mean(sample(Hg, replace = TRUE)))
+
+# Bootstrap percentile interval for confidence 1 - alpha
+interval <- quantile(xbar_star, probs = c(alpha/2, 1 - alpha/2))
+interval
+```
+
+```{r}
+#| label: fig-bootHg
+#| fig-cap: "Histograms of the original data and bootstrapped means. The dashed lines denote the bootstrap confidence interval for the mean."
+
+p1 <- ggplot(data.frame(x = Hg), aes(x = x)) + 
+    geom_histogram(aes(y = after_stat(density)), 
+                   boundary = floor(min(Hg)), binwidth = 1, 
+                   fill = "grey50") +
+    xlab("Hg (ng/g)") + 
+    ylab("Density") +
+    ggtitle("Hg observations") + 
+    theme_light()
+p2 <- ggplot(data.frame(x = xbar_star), aes(x = x)) + 
+    geom_histogram(aes(y = after_stat(density)), bins = 15, fill = "grey50") +
+    geom_vline(xintercept = interval, lty = 2) +
+    xlab("Hg (ng/g)") + 
+    ylab("Density") +
+    ggtitle("Bootstrapped means") + 
+    theme_light()
+p1 + p2 +
+    plot_annotation(tag_levels = 'A')
+```
+
+The calculated confidence interval can be used in hypothesis testing. 
+Note that the package `boot` provides functions with other options.
+:::
+
+We cannot apply the outlined bootstrapping directly to time series or spatial data because these data are not i.i.d. and resampling will break the order and dependence structure. 
+To account for the dependence structure, some modifications to the bootstrap procedure were proposed, including block bootstrap and sieve bootstrap [see @Buhlmann:2002 and references therein].
+
+In short, the first step of the outlined bootstrapping algorithm should preserve the dependence structure of the time series so that the generated bootstrapped samples correspond to the violation case that we want to accommodate in our analysis.
+For example, if we want to accommodate serial dependence in the $t$-test, the bootstrapped time series should be still autocorrelated, so we can approximate the distribution of the test statistic when the assumption of independence is violated.
+
+
+### Bootstrapped $t$-test and Mann--Kendall test
+
+@Noguchi:etal:2011 enhanced the classical $t$-test and Mann--Kendall trend test with sieve bootstrap approaches that take into account the serial correlation of data to obtain more accurate and reliable estimates.
+While taking into account the dependence structure in the data, these tests are still limited to the linear or monotonic case:
+
+$H_0$: no trend  
+$H_1$: linear trend ($t$-test) or monotonic trend (Mann--Kendall test)
+
+Apply the sieve-bootstrapped tests to our time series data, using the package `funtimes`:
+
+```{r}
+funtimes::notrend_test(Y, ar.method = "yw")
+funtimes::notrend_test(Y, test = "MK", ar.method = "yw")
+```
+
+Notice the different $p$-values from the first time we applied the tests.
+
+
+## Detecting non-monotonic trends
+
+Consider a time series 
+$$
+Y_t = \mu(t) + \epsilon_t,
+$$ {#eq-WAVKtrend}
+where $t=1, \dots, n$, $\mu(t)$ is an unknown trend function, and $\epsilon_t$
+is a weakly stationary time series.
+
+We would like to test the hypotheses
+
+$H_0$: $\mu(t)=f(\theta, t)$  
+$H_1$: $\mu(t)\neq f(\theta,t)$,
+
+where the function $f(\cdot, t)$ belongs to a known family of smooth parametric functions $S=\bigl\{f(\theta, \cdot), \theta\in \Theta \bigr\}$ and $\Theta$ is a set of possible parameter values and a subset of Euclidean space.
+
+Special cases include
+
+* no trend (constant trend) $f(\theta,t)\equiv 0$,
+* linear trend $f(\theta,t)=\theta_0+\theta_1 t$, and  
+* quadratic trend $f(\theta,t)=\theta_0+\theta_1 t+\theta_2t^2$.
+
+The following local regression or the local factor test statistic was developed by @Wang:etal:2008 to be applied to pre-filtered observations replicating the residuals $\epsilon_t$ in @eq-WAVKtrend. 
+The idea is to extract the hypothesized trend $f(\theta,t)$ and group residual consecutive in time into small groups. 
+Then, apply the ANOVA $F$-test for these artificial groups:
+$$
+\begin{split}
+\mathrm{WAVK}_n&= F_n=\frac{\mathrm{MST}}{\mathrm{MSE}} \\
+&= \frac{k_n}{n-1}\sum_{i=1}^n{\left( \overline{V}_{i.}-\overline{V}_{..}\right)^2\Big/ \frac{1}{n(k_n-1)}\sum_{i=1}^n\sum_{j=1}^{k_n}{\left(V_{ij}-\overline{V}_{i.}\right)^2}},
+\end{split}
+$$
+where MST is the treatment sum of squares, MSE is the error sum of squares, $\{V_{i1}, \dots, V_{ik_n}\}$ is $k_n$ pre-filtered observations in the $i$th group, $\overline{V}_{i.}$ is the mean of the $i$th group, $\overline{V}_{..}$ is the grand mean.
+
+Both $n\to \infty$ and $k_n\to \infty$; $\rm{MSE}\to$ constant. 
+Hence, we can consider $\sqrt{n}(\rm{MST}-\rm{MSE})$ instead of $\sqrt{n}(F_n-1)$.
+
+@Lyubchich:etal:2013:wavk extended the WAVK approach:
+
+1. Showed that the structure of time series errors can be a linear process that is allowed not to degenerate to MA($q$) or AR($p$), or a conditionally heteroskedastic or GARCH process.
+1. Developed a data-driven bootstrap procedure to estimate the finite sample properties of the WAVK test under the unknown dependence structure.
+1. Proposed to estimate the optimal size of local windows $k_n$ by employing the nonparametric resampling $m$-out-of-$n$ selection algorithm of @Bickel:etal:1997.
+
+The WAVK test is implemented in the package `funtimes` with the same sieve bootstrap as the $t$-test and Mann--Kendall test. 
+It tests the null hypothesis of no trend vs. the alternative of (non)monotonic trend.
+
+```{r}
+funtimes::notrend_test(Y, test = "WAVK", ar.method = "yw")
+```
+
+Also, the version of the test with the hybrid bootstrap by @Lyubchich:etal:2013:wavk is available. 
+This version allows the user to specify different alternatives.
+
+```{r}
+# The null hypothesis is the same as above, no trend (constant trend)
+funtimes::wavk_test(Y ~ 1, 
+                    factor.length = "adaptive.selection", 
+                    ar.method = "yw", 
+                    out = TRUE)
+
+# The null hypothesis is a quadratic trend
+funtimes::wavk_test(Y ~ poly(t, 2), 
+                    factor.length = "adaptive.selection", 
+                    ar.method = "yw", 
+                    out = TRUE)
+```
+
+::: {.callout-note}
+Statistical test results depend on the alternative hypothesis. 
+Sometimes the null hypothesis cannot be rejected in favor of the alternative hypothesis because the data do not match the specified alternative. 
+For example, there are numerous examples when in Pearson correlation analysis the null hypothesis of independence cannot be rejected in favor of the alternative hypothesis of linear dependence because the underlying nonlinear dependence cannot be described as a linear relationship.
+See [this vignette](https://cran.r-project.org/web/packages/funtimes/vignettes/trendtests.html) describing a few similar cases for the time series. 
+:::
+
+
+## Unit roots
+
+By now, we have been identifying the order of integration (if a process $X_t \sim$ I($d$)) by looking at the time series plot of $X_t$ and (largely) by looking at the plot of sample ACF. 
+We differenced time series again and again until we saw a stable mean in the time series plot and a rapid (compared with linear), exponential-like decline in ACF. 
+Here, we present a hypothesis testing approach originally suggested by @Dickey:Fuller:1979 (*Dickey--Fuller test*).
+
+Let $X_1, \dots, X_n$ be observations from an AR(1) model:
+$$
+\begin{split}
+X_t-\mu & =\phi_1(X_{t-1}-\mu) + Z_t, \\
+Z_t &\sim \mathrm{WN}(0,\sigma^2),
+\end{split}
+$$
+where $|\phi_1|<1$ and $\mu=\mathrm{E}X_t$. For a large sample size $n$, the maximum likelihood estimator $\hat{\phi_1}$ of $\phi_1$ is approximately $N(\phi_1, (1-\phi^2_1)/n)$. 
+However, for the unit root case, this approximation is not valid! 
+Thus, do not be tempted to use the normal approximation to construct a confidence interval for $\phi_1$ and check if it includes the value 1. 
+Instead, consider a model that assumes a unit root ($H_0$: unit root is present) and immediately removes it by differencing:
+$$
+\begin{split}
+\Delta X_t = X_t - X_{t-1} &= \phi^*_0 + \phi^*_1X_{t-1}+Z_t,\\
+Z_t & \sim {\rm WN}(0,\sigma^2),
+\end{split}
+$${#eq-DFtest}
+where $\phi^*_0=\mu(1-\phi_1)$ and $\phi_1^*=\phi_1 -1$. 
+Let $\hat{\phi}_1^*$ be the OLS estimator of $\phi_1^*$, with its standard error estimated as
+$$
+\widehat{\mathrm{SE}}\left( \hat{\phi}_1^* \right)
+= S\left( \sum_{t=2}^n \left(X_{t-1}-\bar{X} \right)^2 \right)^{-1/2},
+$$
+where $S^2=\sum_{t=2}^n\left( \Delta X_t - \hat{\phi}_0^* - \hat{\phi}_1^*X_{t-1}\right)^2/(n-3)$ and $\bar{X}$ is the sample mean. 
+@Dickey:Fuller:1979 derived the limit distribution of the test statistic
+$$
+\hat{\tau}_{\mu}=\frac{\hat{\phi}_1^*}{\widehat{\mathrm{SE}}\left( \hat{\phi}_1^* \right)},
+$$
+so we know the critical levels from this distribution (the 0.01, 0.05, and 0.10 quantiles are $-3.43$, $-2.86$, and $-2.57$, respectively) and can test the null hypothesis of $\phi_1^*=0$ (notice the similarity with the usual $t$-test for significance of regression coefficients). 
+An important thing to remember is that the $H_0$ here assumes a unit root (nonstationarity).
+
+For a more general AR($p$) model, statistic $\hat{\tau}_{\mu}$ has a similar form (the $\phi_1^*$ is different: $\phi_1^* = \sum_{i=1}^p\phi_i -1$), and the test is then called the *Augmented Dickey--Fuller test* (ADF test). 
+The order $p$ can be specified in advance or selected automatically using AIC or BIC.
+
+Another popular test for unit roots, the *Phillips--Perron test* (PP test), is built on the ADF test and considers the same null hypothesis.
+
+::: {.callout-note icon=false}
+
+## Example: ADF test applied to simulated data
+
+Simulate a time series $Y_t \sim$ I(2) and apply the rule of thumb approach of taking differences (@fig-YDiff).
+The results in @fig-YDiff show that two differences are enough to remove the trend ($d = 2$).
+
+```{r}
+set.seed(123)
+Z <- rnorm(200)
+Yt <- ts(cumsum(cumsum(Z)))
+```
+
+```{r}
+#| label: fig-YDiff
+#| fig-cap: "Time series and ACF plots for identifying the order of differences $d$ of the simulated time series."
+#| fig-height: 9
+
+# Apply first-order (non-seasonal) differences
+D1 <- diff(Yt)
+
+# Apply first-order (non-seasonal) differences again
+D2 <- diff(D1)
+
+p1 <- forecast::autoplot(Yt) + 
+    ylab("Original") + 
+    ggtitle("Yt") +
+    theme_light()
+p2 <- forecast::ggAcf(Yt) + 
+    ggtitle("Yt") +
+    theme_light()
+p3 <- forecast::autoplot(D1) + 
+    ylab("First differences") + 
+    ggtitle("(1-B)Yt") +
+    theme_light()
+p4 <- forecast::ggAcf(D1) + 
+    ggtitle("(1-B)Yt") +
+    theme_light()
+p5 <- forecast::autoplot(D2) + 
+    ylab("Second differences") + 
+    ggtitle("(1-B)2Yt") +
+    theme_light()
+p6 <- forecast::ggAcf(D2) + 
+    ggtitle("(1-B)2Yt") +
+    theme_light()
+(p1 + p2) / (p3 + p4) / (p5 + p6) +
+    plot_annotation(tag_levels = 'A')
+```
+
+Now apply the test, potentially several times, to identify the order $d$.
+
+```{r}
+tseries::adf.test(Yt)
+```
+
+With the high $p$-value, we cannot reject the $H_0$ of a unit root. 
+Apply the test again on the differenced series.
+
+```{r}
+tseries::adf.test(diff(Yt))
+```
+
+Same result. 
+Difference once more and re-apply the test.
+
+```{r}
+tseries::adf.test(diff(Yt, differences = 2))
+```
+
+Now, when we are using the twice differenced series $\Delta^2 Y_t=(1-B)^2Y_t$, we can reject the $H_0$ and accept the alternative hypothesis of stationarity. 
+Since the time series has been differenced twice, we state that the integration order $d=2$, or $Y_t \sim$ I(2).
+
+What are the potential problems? 
+Multiple testing and alternative model specifications. 
+By model, we mean the regression @eq-DFtest that includes the parameter $\phi_1^*$ that we are testing. 
+Depending on what we know or assume about the process, we may add an intercept or even a parametric trend. 
+In R, it can be done manually or with functions from the package `urca`:
+
+```{r}
+library(urca)
+ADF <- ur.df(Yt, type = "drift", selectlags = "AIC")
+summary(ADF)
+ADF <- ur.df(diff(Yt), type = "drift", selectlags = "AIC")
+summary(ADF)
+ADF <- ur.df(diff(Yt, differences = 2), type = "drift", selectlags = "AIC")
+summary(ADF)
+```
+
+From the results above, the inclusion of the intercept (`"drift"`) in the test model did not affect the conclusion. 
+Now try adding a trend (`type = "trend"` adds the intercept automatically).
+
+```{r}
+ADF <- ur.df(Yt, type = "trend", selectlags = "AIC")
+summary(ADF)
+ADF <- ur.df(diff(Yt), type = "trend", selectlags = "AIC")
+summary(ADF)
+ADF <- ur.df(diff(Yt, differences = 2), type = "trend", selectlags = "AIC")
+summary(ADF)
+```
+
+In this simulated example, misspecification of the testing model did not change our conclusion that $X_t \sim$ I(2), due to the automatic adjusting of the critical values `tau` to `tau2` (model with intercept) and `tau3` (model with trend).
+:::
+
+
+### ADF and PP test problems
+
+The ADF and PP tests are asymptotically equivalent but may differ substantially in finite samples due to the different ways in which they correct for serial correlation in the test regression.
+
+In general, the ADF and PP tests have very low power against I(0) alternatives that are close to being I(1). 
+That is, unit root tests cannot distinguish highly persistent stationary processes from nonstationary processes very well. 
+Also, the power of unit root tests diminishes as deterministic terms are added to the test regressions. 
+Tests that include a constant and trend in the test regression have less power than tests that only include a constant in the test regression.
+
+
+## Conclusion
+
+Temporal dependence of time series is the most violated assumption of classical tests often employed for detecting trends, including the nonparametric Mann--Kendall test. 
+However, multiple workarounds exist that allow the analyst to relax (avoid) the assumption of independence and provide more reliable inference. 
+We have implemented sieve bootstrapping for time series as one such workaround.
+
+Test results depend on the specified alternative hypothesis. 
+Remember that non-rejection of the null hypothesis doesn't make it automatically true.
+
+When testing for unit roots (integration) in time series, the null hypothesis of ADF and PP tests is the unit root, while the alternative is the stationarity of the tested series.
+Iterative testing and differencing can be used to identify the order of integration $d$.

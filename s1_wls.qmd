@@ -1,0 +1,197 @@
+---
+output: html_document
+editor_options:
+    chunk_output_type: console
+---
+
+```{r, echo=FALSE}
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+options(digits = 3)
+```
+
+# Weighted least squares {#sec-wls}
+
+We can often hypothesize that the standard deviation of residuals in the model
+$$
+y_i=\beta_0+\beta_1x_i+\varepsilon_i
+$${#eq-mod1}
+is proportional to the predictor $X$, so
+$$
+\mathrm{Var}(\varepsilon_i)=k^2x^2_i, \;\; k>0.
+$$
+
+In the *weighted least squares* (WLS) method, we can stabilize the variance by dividing both sides of @eq-mod1 by $x_i$:
+$$
+\frac{y_i}{x_i}=\frac{\beta_0}{x_i}+\beta_1+\frac{\varepsilon_i}{x_i},
+$${#eq-mod1W}
+then $\mathrm{Var}\left(\frac{\varepsilon_i}{x_i}\right)=k^2$, i.e., it is now *stabilized*.
+
+::: {.callout-note icon=false}
+
+## Example: WLS applied 'manually'
+
+Consider a simulated example of a linear model $y=3-2x$ with noise, which is a function of $x$.
+
+```{r}
+set.seed(111)
+k = 0.5
+n = 100
+x <- rnorm(n, 0, 5)
+y <- 3 - 2 * x + rnorm(n, 0, k*x^2)
+```
+
+The coefficients estimated using ordinary least squares (OLS):
+
+```{r}
+fit_ols <- lm(y ~ x)
+summary(fit_ols)
+```
+
+Based on @fig-wlsOLS, the OLS assumption of homoskedasticity is violated, because the observations deviate farther from the regression line at its ends (i.e., the variability of regression residuals is higher at the low and high values of the predictor).
+
+```{r}
+#| label: fig-wlsOLS
+#| fig-cap: "Simulated data example with heteroskedasticity. The gray line represents the underlying model; the dashed line is obtained from the OLS fit."
+
+p1 <- ggplot(data.frame(x, y), aes(x = x, y = y)) + 
+    geom_abline(intercept = 3, slope = -2, col = "gray50", lwd = 1.5) +
+    geom_abline(intercept = fit_ols$coefficients[1], 
+                slope = fit_ols$coefficients[2], lty = 2) +
+    geom_point() +
+    theme_light()
+p2 <- ggplot(data.frame(x, y), aes(x = x, y = rstandard(fit_ols))) +
+    geom_hline(yintercept = 0, col = "gray50") +
+    geom_point() +
+    xlab("x") +
+    ylab("Standardized residuals") + 
+    theme_light()
+p1 + p2 +
+    plot_annotation(tag_levels = 'A')
+```
+
+To stabilize the variance 'manually,' transform the variables according to @eq-mod1W and refit the model:
+
+```{r}
+Y.t <- y/x
+X.t <- 1/x
+fit_wls <- lm(Y.t ~ X.t)
+summary(fit_wls)
+```
+
+Check @eq-mod1W to see the correspondence of the coefficients, see the results in @fig-wls.
+
+```{r}
+#| label: fig-wls
+#| fig-cap: "Simulated data example with heteroskedasticity. The gray line represents the underlying model; the dashed line is obtained from the WLS fit."
+
+p1 <- ggplot(data.frame(x, y), aes(x = x, y = y)) + 
+    geom_abline(intercept = 3, slope = -2, col = "gray50", lwd = 1.5) +
+    geom_abline(intercept = fit_wls$coefficients[2], 
+                slope = fit_wls$coefficients[1], lty = 2) +
+    geom_point() +
+    theme_light()
+p2 <- ggplot(data.frame(x, y), aes(x = x, y = rstandard(fit_wls))) +
+    geom_hline(yintercept = 0, col = "gray50") +
+    geom_point() +
+    xlab("x") +
+    ylab("Standardized residuals") + 
+    theme_light()
+p1 + p2 +
+    plot_annotation(tag_levels = 'A')
+```
+:::
+
+Instead of minimizing the residual sum of squares (using the original or transformed data in @eq-mod1 and @eq-mod1W),
+$$
+RSS(\beta) = \sum_{i=1}^n(y_i - x_i\beta)^2,
+$$
+we minimize the *weighted sum of squares*, where $w_i$ are the weights:
+$$
+WSS(\beta; w) = \sum_{i=1}^nw_i(y_i - x_i\beta)^2.
+$$
+This includes OLS as the special case when all the weights $w_i = 1$ ($i=1,\dots,n$). In the example above, $w_i=1/x^2_i$.
+
+In matrix form,
+$$
+\hat{\boldsymbol{\beta}}=(\boldsymbol{X}^{\top}\boldsymbol{W}\boldsymbol{X})^{-1}\boldsymbol{X}^{\top}\boldsymbol{W}\boldsymbol{Y}.
+$${#eq-wls}
+
+To apply @eq-wls in R, specify the argument `weights`, and remember to take an inverse. 
+Note that the coefficients are now labeled as expected.
+
+```{r}
+fit_wls2 <- lm(y ~ x, weights = 1/x^2)
+summary(fit_wls2)
+```
+
+@Chatterjee:Hadi:2006 in Chapter 7 consider two more cases for applying WLS, both related to grouping. 
+We skip those cases for now and revisit our data example from @sec-regression.
+
+::: {.callout-note icon=false}
+
+## Example: Dishwasher shipments WLS model
+
+First, use OLS to estimate the simple linear regression exploring dishwasher shipments (DISH) and private residential investments (RES) for several years.
+
+```{r}
+D <- read.delim("./data/dish.txt") %>% 
+    rename(Year = YEAR)
+modDish_ols <- lm(DISH ~ RES, data = D)
+```
+
+The plot in @fig-dishOLS indicates that the variance might be decreasing with higher investments.
+
+```{r}
+#| label: fig-dishOLS
+#| fig-cap: "OLS residuals vs. the predictor."
+
+ggplot(D, aes(x = RES, y = rstandard(modDish_ols))) +
+    geom_hline(yintercept = 0, col = "gray50") +
+    geom_point() +
+    xlab("Residential investments") +
+    ylab("Standardized residuals") + 
+    theme_light()
+```
+
+Apply the WLS:
+
+```{r}
+modDish_wls <- lm(DISH ~ RES, data = D, weights = RES^2)
+```
+
+In @fig-dishWLS we see minor changes in the slope (better fit?).
+
+```{r}
+#| label: fig-dishWLS
+#| fig-cap: "The regression fits (OLS -- solid line; WLS -- dashed line) and the WLS residuals vs. the predictor."
+
+p1 <- ggplot(D, aes(x = RES, y = DISH)) + 
+    geom_abline(intercept = modDish_wls$coefficients[1], 
+                slope = modDish_wls$coefficients[2], lty = 2) +
+    geom_abline(intercept = modDish_ols$coefficients[1], 
+                slope = modDish_ols$coefficients[2], 
+                col = "gray50") +
+    geom_point() +
+    xlab("Residential investments") + 
+    ylab("Dishwasher shipments") + 
+    theme_light()
+p2 <- ggplot(D, aes(x = RES, y = rstandard(modDish_wls))) +
+    geom_hline(yintercept = 0, col = "gray50") +
+    geom_point() +
+    xlab("Residential investments") +
+    ylab("Standardized residuals") + 
+    theme_light()
+p1 + p2 +
+    plot_annotation(tag_levels = 'A')
+```
+
+However, autocorrelation is still present, which violates another assumption of the OLS and WLS methods:
+
+```{r}
+lawstat::runs.test(rstandard(modDish_wls))
+```
+:::
+
+See @sec-gls on the method of generalized least squares (GLS) that allows accounting for autocorrelation in regression modeling.

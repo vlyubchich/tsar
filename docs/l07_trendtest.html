@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.280">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Time Series Analysis - 7&nbsp; Trend Detection</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./l08_tsreg1.html" rel="next">
+<link href="./l06_garch.html" rel="prev">
+<link href="./TSAfav.png" rel="icon" type="image/png">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Trend Detection</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Time Series Analysis</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-reader-toggle sidebar-tool" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l01_regression.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Review of Linear Regression</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l02_tsintro.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to Time Series Analysis</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l03_smoothing.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Smoothing, Detrending, and Deseasonalizing</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l04_arma.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Autoregressive Moving Average (ARMA) Models</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l05_arima.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Autoregressive Integrated Moving Average (ARIMA) Models</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l06_garch.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Generalized Autoregressive Conditional Heteroskedasticity (GARCH) Models</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l07_trendtest.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Trend Detection</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l08_tsreg1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Time Series Regression with Trends</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l09_tsreg2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Time Series Regression with Correlated Errors</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l10_spectral.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Spectral Analysis</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./software.html" class="sidebar-item-text sidebar-link">Software</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Appendices</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./s1_wls.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Weighted least squares</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./s2_gls.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Generalized least squares</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="toc-section-number">7.1</span>  Introduction</a></li>
+  <li><a href="#traditional-tests" id="toc-traditional-tests" class="nav-link" data-scroll-target="#traditional-tests"><span class="toc-section-number">7.2</span>  ‘Traditional’ tests</a>
+  <ul class="collapse">
+  <li><a href="#students-t-test-for-linear-trend" id="toc-students-t-test-for-linear-trend" class="nav-link" data-scroll-target="#students-t-test-for-linear-trend"><span class="toc-section-number">7.2.1</span>  Student’s <span class="math inline">\(t\)</span>-test for linear trend</a></li>
+  <li><a href="#mannkendall-test-for-monotonic-trend" id="toc-mannkendall-test-for-monotonic-trend" class="nav-link" data-scroll-target="#mannkendall-test-for-monotonic-trend"><span class="toc-section-number">7.2.2</span>  Mann–Kendall test for monotonic trend</a></li>
+  </ul></li>
+  <li><a href="#bootstrap-enhancements" id="toc-bootstrap-enhancements" class="nav-link" data-scroll-target="#bootstrap-enhancements"><span class="toc-section-number">7.3</span>  Bootstrap enhancements</a>
+  <ul class="collapse">
+  <li><a href="#introduction-to-bootstrap" id="toc-introduction-to-bootstrap" class="nav-link" data-scroll-target="#introduction-to-bootstrap"><span class="toc-section-number">7.3.1</span>  Introduction to bootstrap</a></li>
+  <li><a href="#bootstrapped-t-test-and-mannkendall-test" id="toc-bootstrapped-t-test-and-mannkendall-test" class="nav-link" data-scroll-target="#bootstrapped-t-test-and-mannkendall-test"><span class="toc-section-number">7.3.2</span>  Bootstrapped <span class="math inline">\(t\)</span>-test and Mann–Kendall test</a></li>
+  </ul></li>
+  <li><a href="#detecting-non-monotonic-trends" id="toc-detecting-non-monotonic-trends" class="nav-link" data-scroll-target="#detecting-non-monotonic-trends"><span class="toc-section-number">7.4</span>  Detecting non-monotonic trends</a></li>
+  <li><a href="#unit-roots" id="toc-unit-roots" class="nav-link" data-scroll-target="#unit-roots"><span class="toc-section-number">7.5</span>  Unit roots</a>
+  <ul class="collapse">
+  <li><a href="#adf-and-pp-test-problems" id="toc-adf-and-pp-test-problems" class="nav-link" data-scroll-target="#adf-and-pp-test-problems"><span class="toc-section-number">7.5.1</span>  ADF and PP test problems</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="toc-section-number">7.6</span>  Conclusion</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Trend Detection</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="cell">
+
+</div>
+<p>This lecture demonstrates the effects of autocorrelation on the results of statistical tests for trend detection. You will recall the assumptions of the classical <span class="math inline">\(t\)</span>-test and Mann–Kendall tests and will be able to suggest bootstrapped modifications of these tests to overcome the problem of temporal dependence. Moreover, you will become familiar with tests for non-monotonic parametric trends and stochastic trends.</p>
+<p><strong>Objectives</strong></p>
+<ol type="1">
+<li>Recall the form and standard assumptions of the classical <span class="math inline">\(t\)</span>-test and Mann–Kendall tests.</li>
+<li>Learn about bootstrapping for time series, particularly the approaches that preserve temporal dependency in the data (e.g., sieve and block bootstraps).</li>
+<li>Apply bootstrap to the <span class="math inline">\(t\)</span>-test and Mann–Kendall tests.</li>
+<li>Test for non-monotonic parametric trends.</li>
+<li>Test for stochastic trends (i.e., unit roots).</li>
+</ol>
+<p><strong>Reading materials</strong></p>
+<ul>
+<li>Chapter 8.1 in <span class="citation" data-cites="Chatterjee:Hadi:2006">Chatterjee and Hadi (<a href="references.html#ref-Chatterjee:Hadi:2006" role="doc-biblioref">2006</a>)</span> and Chapters 5.1–5.2 in <span class="citation" data-cites="Chatterjee:Simonoff:2013">Chatterjee and Simonoff (<a href="references.html#ref-Chatterjee:Simonoff:2013" role="doc-biblioref">2013</a>)</span> about the effects of autocorrelation</li>
+<li><span class="citation" data-cites="Buhlmann:2002">Bühlmann (<a href="references.html#ref-Buhlmann:2002" role="doc-biblioref">2002</a>)</span> on bootstrap for time series</li>
+<li>Chapter 6.3 in <span class="citation" data-cites="Brockwell:Davis:2002">Brockwell and Davis (<a href="references.html#ref-Brockwell:Davis:2002" role="doc-biblioref">2002</a>)</span> on unit-root tests</li>
+</ul>
+<section id="introduction" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">7.1</span> Introduction</h2>
+<p>The majority of studies focus on the detection of linear or monotonic trends, using classical <span class="math inline">\(t\)</span>-test or rank-based Mann–Kendall test, typically under the assumption of uncorrelated data.</p>
+<p>There exist two main problems:</p>
+<ol type="1">
+<li>dependence effect, i.e., the issue of inflating significance due to dependent observations – a possible remedy is to employ bootstrap <span class="citation" data-cites="Noguchi:etal:2011 Cabilio:etal:2013">(<a href="references.html#ref-Noguchi:etal:2011" role="doc-biblioref">Noguchi et al. 2011</a>; <a href="references.html#ref-Cabilio:etal:2013" role="doc-biblioref">Cabilio et al. 2013</a>)</span>;</li>
+<li>changepoints or regime shifts that affect the linear or monotonic trend hypothesis <span class="citation" data-cites="Seidel:etal:2004 Powell:Xu:2011 Lyubchich:2016:trends">(<a href="references.html#ref-Seidel:etal:2004" role="doc-biblioref">Seidel and Lanzante 2004</a>; <a href="references.html#ref-Powell:Xu:2011" role="doc-biblioref">Powell and Xu 2011</a>; <a href="references.html#ref-Lyubchich:2016:trends" role="doc-biblioref">Lyubchich 2016</a>)</span>.</li>
+</ol>
+<p>Hence, our goal is to provide reliable inference even for dependent observations and to test different alternative trend shapes.</p>
+</section>
+<section id="traditional-tests" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="traditional-tests"><span class="header-section-number">7.2</span> ‘Traditional’ tests</h2>
+<section id="students-t-test-for-linear-trend" class="level3" data-number="7.2.1">
+<h3 data-number="7.2.1" class="anchored" data-anchor-id="students-t-test-for-linear-trend"><span class="header-section-number">7.2.1</span> Student’s <span class="math inline">\(t\)</span>-test for linear trend</h3>
+<p>The Student’s <span class="math inline">\(t\)</span>-test for linear trend uses the regression model of linear trend <span class="math display">\[
+Y_t = b_0 + b_1 t + e_t,
+\]</span> where <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span> are the regression coefficients, <span class="math inline">\(t\)</span> is time, and <span class="math inline">\(e_t\)</span> are regression errors typically assumed to be homoskedastic, uncorrelated, and normally distributed.</p>
+<p>The test hypotheses are</p>
+<p><span class="math inline">\(H_0\)</span>: no trend (<span class="math inline">\(b_1 = 0\)</span>)<br>
+<span class="math inline">\(H_1\)</span>: linear trend (<span class="math inline">\(b_1 \neq 0\)</span>)</p>
+<p><a href="#fig-ar1sim">Figure&nbsp;<span>7.1</span></a> shows a simulated stationary time series <span class="math inline">\(Y_t \sim \mathrm{AR}(1)\)</span> of length 100 (notice the ‘burn-in’ period in simulations).</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">arima.sim</span>(<span class="fu">list</span>(<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>), <span class="at">ar =</span> <span class="fl">0.5</span>), <span class="at">n =</span> <span class="dv">100</span>, <span class="at">n.start =</span> <span class="dv">100</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">autoplot</span>(Y) <span class="sc">+</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-ar1sim" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="l07_trendtest_files/figure-html/fig-ar1sim-1.png" class="img-fluid figure-img" width="768"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;7.1: A simulated stationary AR(1) series of length 100.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Apply the <span class="math inline">\(t\)</span>-test to this time series <span class="math inline">\(Y_t\)</span>:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(Y)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y <span class="sc">~</span> t)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+#&gt; Call:
+#&gt; lm(formula = Y ~ t)
+#&gt; 
+#&gt; Residuals:
+#&gt;     Min      1Q  Median      3Q     Max 
+#&gt; -2.5115 -0.6106  0.0166  0.6808  2.5868 
+#&gt; 
+#&gt; Coefficients:
+#&gt;             Estimate Std. Error t value Pr(&gt;|t|)   
+#&gt; (Intercept) -0.57984    0.20182   -2.87    0.005 **
+#&gt; t            0.00746    0.00347    2.15    0.034 * 
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt; 
+#&gt; Residual standard error: 1 on 98 degrees of freedom
+#&gt; Multiple R-squared:  0.045,  Adjusted R-squared:  0.0352 
+#&gt; F-statistic: 4.62 on 1 and 98 DF,  p-value: 0.0341</code></pre>
+</div>
+</div>
+<p>Type I error (false positives) of this test is inflated due to the dependence effect (the assumption of uncorrelatedness is violated). Additionally, this test is limited only to detecting linear trends (see the alternative hypothesis <span class="math inline">\(H_1\)</span>).</p>
+</section>
+<section id="mannkendall-test-for-monotonic-trend" class="level3" data-number="7.2.2">
+<h3 data-number="7.2.2" class="anchored" data-anchor-id="mannkendall-test-for-monotonic-trend"><span class="header-section-number">7.2.2</span> Mann–Kendall test for monotonic trend</h3>
+<p>The Mann–Kendall test is based on the Kendall rank correlation and is used to determine if a non-seasonal time series has a monotonic trend over time.</p>
+<p><span class="math inline">\(H_0\)</span>: no trend<br>
+<span class="math inline">\(H_1\)</span>: monotonic trend</p>
+<p>Test statistic: <span class="math display">\[
+S=\sum_{k=1}^{n-1}\sum_{j=k+1}^n sgn(X_j-X_k),
+\]</span> where <span class="math inline">\(sgn(x)\)</span> takes on the values of 1, 0, and <span class="math inline">\(-1\)</span>, for <span class="math inline">\(x&gt;0\)</span>, <span class="math inline">\(x=0\)</span>, and <span class="math inline">\(x&lt;0\)</span>, respectively.</p>
+<p><span class="citation" data-cites="Kendall:1975">Kendall (<a href="references.html#ref-Kendall:1975" role="doc-biblioref">1975</a>)</span> showed that <span class="math inline">\(S\)</span> is asymptotically normally distributed and, for the situations where there may be ties in the <span class="math inline">\(X\)</span> values, <span class="math display">\[
+\begin{split}
+\mathrm{E}(S) &amp;= 0, \\
+\mathrm{var}(S) &amp;= \frac{1}{18} \left[ n(n-1)(2n+5)-\sum_{j=1}^p t_j(t_j-1)(2t_j+5) \right],
+\end{split}
+\]</span> where <span class="math inline">\(p\)</span> is the number of tied groups in the time series, and <span class="math inline">\(t_j\)</span> is the number of data points in the <span class="math inline">\(j\)</span>th tied group.</p>
+<p>Its seasonal version is the sum of the statistics for individual seasons over all seasons <span class="citation" data-cites="Hirsch:etal:1982">(<a href="references.html#ref-Hirsch:etal:1982" role="doc-biblioref">Hirsch et al. 1982</a>)</span>: <span class="math display">\[
+S=\sum_{j=1}^m S_j.
+\]</span></p>
+<p>For data sets as small as <span class="math inline">\(n = 2\)</span> and <span class="math inline">\(m = 12\)</span>, the normal approximation of the test statistic is adequate and thus the test is easy to use. The method also accommodates both</p>
+<ul>
+<li>a moderate number of missing observations and</li>
+<li>values below the detection limit, as the latter are treated as ties <span class="citation" data-cites="Esterby:1996">(see details in <a href="references.html#ref-Esterby:1996" role="doc-biblioref">Esterby 1996</a>)</span>.</li>
+</ul>
+<p>To apply the test, use the package <code>Kendall</code>. Also, note the statement about bootstrap in the help file for the function <code>Kendall::MannKendall()</code>.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>Kendall<span class="sc">::</span><span class="fu">MannKendall</span>(Y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; tau = 0.13, 2-sided pvalue =0.06</code></pre>
+</div>
+</div>
+<p>This test is still limited to only monotonic trends and independent observations.</p>
+</section>
+</section>
+<section id="bootstrap-enhancements" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="bootstrap-enhancements"><span class="header-section-number">7.3</span> Bootstrap enhancements</h2>
+<section id="introduction-to-bootstrap" class="level3" data-number="7.3.1">
+<h3 data-number="7.3.1" class="anchored" data-anchor-id="introduction-to-bootstrap"><span class="header-section-number">7.3.1</span> Introduction to bootstrap</h3>
+<p>When some of the statistical assumptions are violated, we may switch to using other methods or try to accommodate these violations by modifying part of the existing method.</p>
+<ul>
+<li>One of the assumptions of Pearson correlation analysis is the absence of outliers. When outliers are in the data, we can opt for using Spearman correlations based on ranks, not the actual values. Thus, here we switch the method.</li>
+<li>We often use the normal distribution for inference about the population mean because we assume that averages of independent samples coming from the same population are distributed normally. The normal approximation is true for large samples or for small samples if the underlying population is close to being normally distributed. So what happens if we have a small sample from a non-normal population? We do not know the distributional law under which sample means are distributed in this case, but we can approximate it using bootstrap.</li>
+</ul>
+<p>The seminal paper by <span class="citation" data-cites="Efron:1979">Efron (<a href="references.html#ref-Efron:1979" role="doc-biblioref">1979</a>)</span> describes bootstrap for i.i.d. data. In two words, the idea is the following: we can relax distributional assumptions and reconstruct the distribution of the sample statistic by <em>resampling data with replacement</em> and recalculating the statistic over and over. The resampling step will give us ‘new’ cases of collected samples, while the statistics calculated multiple times will let us approximate the distribution of the parameter of interest in this case of violated distributional assumption.</p>
+<p>Let <span class="math inline">\(x_i\)</span> (<span class="math inline">\(i = 1, \dots, n\)</span>) be sample values collected from a non-normally distributed population using simple random sampling. If the sample size <span class="math inline">\(n\)</span> is small, we cannot be sure that the distribution of sample averages <span class="math inline">\(\bar{x}\)</span> is normal, so we will approximate it using the following bootstrapping steps:</p>
+<ol type="1">
+<li>Let <span class="math inline">\(x^*_i\)</span> (<span class="math inline">\(i = 1, \dots, n\)</span>) be a sample with a replacement from the original sample <span class="math inline">\(x_i\)</span>. This is a way for us, without knowing the underlying distribution of the population and without collecting new data, to get a new artificial sample from the population.</li>
+<li>Calculate the mean (or another statistic of interest) from the bootstrapped data. For example, <span class="math inline">\(\bar{x}^* = n^{-1} \sum x^*_i\)</span> is the bootstrapped mean.</li>
+<li>Repeat the steps above a large number of times to obtain a distribution of the statistics <span class="math inline">\(\bar{x}^*_1, \dots, \bar{x}^*_B\)</span>, where <span class="math inline">\(B\)</span> is the number of bootstrap replications. This is so-called <em>bootstrapped distribution</em>.</li>
+<li>Finally, we use the bootstrapped distribution for the intended analysis. Typically it involves calculating confidence intervals. There are a few ways the intervals can be calculated <span class="citation" data-cites="Davison:Hinkley:1997">(see <a href="references.html#ref-Davison:Hinkley:1997" role="doc-biblioref">Davison and Hinkley 1997</a>)</span>, some of the methods provide symmetric intervals, while others do not. Probably the simplest is the <em>percentile confidence interval</em>, which computes the <span class="math inline">\(\alpha/2\)</span>th and <span class="math inline">\((1-\alpha/2)\)</span>th quantiles of the bootstrapped distribution, to get an interval for confidence <span class="math inline">\(1 - \alpha\)</span>.</li>
+</ol>
+<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Example: Bootstrap confidence interval for the population mean
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Consider a small sample of mercury (Hg) concentrations in fish tissue <span class="citation" data-cites="Lyubchich:etal:2016:symmetry">(<a href="references.html#ref-Lyubchich:etal:2016:symmetry" role="doc-biblioref">Lyubchich et al. 2016</a>)</span>. These observations do not constitute a time series; the data were collected in such a way that we can treat the samples as independent. <a href="#fig-bootHg">Figure&nbsp;<span>7.2</span></a> A shows that the underlying population of Hg concentrations is likely not normally distributed, so we will use bootstrapping to calculate a confidence interval for the mean.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Mercury concentrations</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>Hg <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">10.159162</span>, <span class="fl">9.190562</span>, <span class="fl">7.776279</span>, <span class="fl">11.417387</span>, <span class="fl">8.494544</span>, </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>        <span class="fl">9.948271</span>, <span class="fl">7.865391</span>, <span class="fl">7.412350</span>, <span class="fl">8.112304</span>, <span class="fl">7.541787</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Set seed for reproducible bootstrapping</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of bootstrap replications</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>B <span class="ot">=</span> <span class="dv">1000</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Significance level</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">=</span> <span class="fl">0.05</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute bootstrapped means (option 1)</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>xbar_star <span class="ot">&lt;-</span> <span class="fu">numeric</span>()</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (b <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>B) {</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># bootstrapped sample</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    Hgstar <span class="ot">&lt;-</span> <span class="fu">sample</span>(Hg, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># bootstrapped mean</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    xbar_star[b] <span class="ot">&lt;-</span> <span class="fu">mean</span>(Hgstar)</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute bootstrapped means (option 2)</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>xbar_star <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span>B, <span class="cf">function</span>(b) <span class="fu">mean</span>(<span class="fu">sample</span>(Hg, <span class="at">replace =</span> <span class="cn">TRUE</span>)))</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Bootstrap percentile interval for confidence 1 - alpha</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>interval <span class="ot">&lt;-</span> <span class="fu">quantile</span>(xbar_star, <span class="at">probs =</span> <span class="fu">c</span>(alpha<span class="sc">/</span><span class="dv">2</span>, <span class="dv">1</span> <span class="sc">-</span> alpha<span class="sc">/</span><span class="dv">2</span>))</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>interval</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt;  2.5% 97.5% 
+#&gt;  8.04  9.64</code></pre>
+</div>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">x =</span> Hg), <span class="fu">aes</span>(<span class="at">x =</span> x)) <span class="sc">+</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)), </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">boundary =</span> <span class="fu">floor</span>(<span class="fu">min</span>(Hg)), <span class="at">binwidth =</span> <span class="dv">1</span>, </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">fill =</span> <span class="st">"grey50"</span>) <span class="sc">+</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"Hg (ng/g)"</span>) <span class="sc">+</span> </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">"Density"</span>) <span class="sc">+</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">"Hg observations"</span>) <span class="sc">+</span> </span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">x =</span> xbar_star), <span class="fu">aes</span>(<span class="at">x =</span> x)) <span class="sc">+</span> </span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)), <span class="at">bins =</span> <span class="dv">15</span>, <span class="at">fill =</span> <span class="st">"grey50"</span>) <span class="sc">+</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> interval, <span class="at">lty =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"Hg (ng/g)"</span>) <span class="sc">+</span> </span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">"Density"</span>) <span class="sc">+</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">"Bootstrapped means"</span>) <span class="sc">+</span> </span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">+</span> p2 <span class="sc">+</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-bootHg" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="l07_trendtest_files/figure-html/fig-bootHg-1.png" class="img-fluid figure-img" width="768"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;7.2: Histograms of the original data and bootstrapped means. The dashed lines denote the bootstrap confidence interval for the mean.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The calculated confidence interval can be used in hypothesis testing. Note that the package <code>boot</code> provides functions with other options.</p>
+</div>
+</div>
+<p>We cannot apply the outlined bootstrapping directly to time series or spatial data because these data are not i.i.d. and resampling will break the order and dependence structure. To account for the dependence structure, some modifications to the bootstrap procedure were proposed, including block bootstrap and sieve bootstrap <span class="citation" data-cites="Buhlmann:2002">(see <a href="references.html#ref-Buhlmann:2002" role="doc-biblioref">Bühlmann 2002</a> and references therein)</span>.</p>
+<p>In short, the first step of the outlined bootstrapping algorithm should preserve the dependence structure of the time series so that the generated bootstrapped samples correspond to the violation case that we want to accommodate in our analysis. For example, if we want to accommodate serial dependence in the <span class="math inline">\(t\)</span>-test, the bootstrapped time series should be still autocorrelated, so we can approximate the distribution of the test statistic when the assumption of independence is violated.</p>
+</section>
+<section id="bootstrapped-t-test-and-mannkendall-test" class="level3" data-number="7.3.2">
+<h3 data-number="7.3.2" class="anchored" data-anchor-id="bootstrapped-t-test-and-mannkendall-test"><span class="header-section-number">7.3.2</span> Bootstrapped <span class="math inline">\(t\)</span>-test and Mann–Kendall test</h3>
+<p><span class="citation" data-cites="Noguchi:etal:2011">Noguchi et al. (<a href="references.html#ref-Noguchi:etal:2011" role="doc-biblioref">2011</a>)</span> enhanced the classical <span class="math inline">\(t\)</span>-test and Mann–Kendall trend test with sieve bootstrap approaches that take into account the serial correlation of data to obtain more accurate and reliable estimates. While taking into account the dependence structure in the data, these tests are still limited to the linear or monotonic case:</p>
+<p><span class="math inline">\(H_0\)</span>: no trend<br>
+<span class="math inline">\(H_1\)</span>: linear trend (<span class="math inline">\(t\)</span>-test) or monotonic trend (Mann–Kendall test)</p>
+<p>Apply the sieve-bootstrapped tests to our time series data, using the package <code>funtimes</code>:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>funtimes<span class="sc">::</span><span class="fu">notrend_test</span>(Y, <span class="at">ar.method =</span> <span class="st">"yw"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+#&gt;  Sieve-bootstrap Student's t-test for a linear trend
+#&gt; 
+#&gt; data:  Y
+#&gt; Student's t value = 2, p-value = 0.1
+#&gt; alternative hypothesis: linear trend.
+#&gt; sample estimates:
+#&gt; $AR_order
+#&gt; [1] 1
+#&gt; 
+#&gt; $AR_coefficients
+#&gt; phi_1 
+#&gt; 0.344</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>funtimes<span class="sc">::</span><span class="fu">notrend_test</span>(Y, <span class="at">test =</span> <span class="st">"MK"</span>, <span class="at">ar.method =</span> <span class="st">"yw"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+#&gt;  Sieve-bootstrap Mann--Kendall's trend test
+#&gt; 
+#&gt; data:  Y
+#&gt; Mann--Kendall's tau = 0.1, p-value = 0.2
+#&gt; alternative hypothesis: monotonic trend.
+#&gt; sample estimates:
+#&gt; $AR_order
+#&gt; [1] 1
+#&gt; 
+#&gt; $AR_coefficients
+#&gt; phi_1 
+#&gt; 0.344</code></pre>
+</div>
+</div>
+<p>Notice the different <span class="math inline">\(p\)</span>-values from the first time we applied the tests.</p>
+</section>
+</section>
+<section id="detecting-non-monotonic-trends" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="detecting-non-monotonic-trends"><span class="header-section-number">7.4</span> Detecting non-monotonic trends</h2>
+<p>Consider a time series <span id="eq-WAVKtrend"><span class="math display">\[
+Y_t = \mu(t) + \epsilon_t,
+\tag{7.1}\]</span></span> where <span class="math inline">\(t=1, \dots, n\)</span>, <span class="math inline">\(\mu(t)\)</span> is an unknown trend function, and <span class="math inline">\(\epsilon_t\)</span> is a weakly stationary time series.</p>
+<p>We would like to test the hypotheses</p>
+<p><span class="math inline">\(H_0\)</span>: <span class="math inline">\(\mu(t)=f(\theta, t)\)</span><br>
+<span class="math inline">\(H_1\)</span>: <span class="math inline">\(\mu(t)\neq f(\theta,t)\)</span>,</p>
+<p>where the function <span class="math inline">\(f(\cdot, t)\)</span> belongs to a known family of smooth parametric functions <span class="math inline">\(S=\bigl\{f(\theta, \cdot), \theta\in \Theta \bigr\}\)</span> and <span class="math inline">\(\Theta\)</span> is a set of possible parameter values and a subset of Euclidean space.</p>
+<p>Special cases include</p>
+<ul>
+<li>no trend (constant trend) <span class="math inline">\(f(\theta,t)\equiv 0\)</span>,</li>
+<li>linear trend <span class="math inline">\(f(\theta,t)=\theta_0+\theta_1 t\)</span>, and<br>
+</li>
+<li>quadratic trend <span class="math inline">\(f(\theta,t)=\theta_0+\theta_1 t+\theta_2t^2\)</span>.</li>
+</ul>
+<p>The following local regression or the local factor test statistic was developed by <span class="citation" data-cites="Wang:etal:2008">Wang et al. (<a href="references.html#ref-Wang:etal:2008" role="doc-biblioref">2008</a>)</span> to be applied to pre-filtered observations replicating the residuals <span class="math inline">\(\epsilon_t\)</span> in <a href="#eq-WAVKtrend">Equation&nbsp;<span>7.1</span></a>. The idea is to extract the hypothesized trend <span class="math inline">\(f(\theta,t)\)</span> and group residual consecutive in time into small groups. Then, apply the ANOVA <span class="math inline">\(F\)</span>-test for these artificial groups: <span class="math display">\[
+\begin{split}
+\mathrm{WAVK}_n&amp;= F_n=\frac{\mathrm{MST}}{\mathrm{MSE}} \\
+&amp;= \frac{k_n}{n-1}\sum_{i=1}^n{\left( \overline{V}_{i.}-\overline{V}_{..}\right)^2\Big/ \frac{1}{n(k_n-1)}\sum_{i=1}^n\sum_{j=1}^{k_n}{\left(V_{ij}-\overline{V}_{i.}\right)^2}},
+\end{split}
+\]</span> where MST is the treatment sum of squares, MSE is the error sum of squares, <span class="math inline">\(\{V_{i1}, \dots, V_{ik_n}\}\)</span> is <span class="math inline">\(k_n\)</span> pre-filtered observations in the <span class="math inline">\(i\)</span>th group, <span class="math inline">\(\overline{V}_{i.}\)</span> is the mean of the <span class="math inline">\(i\)</span>th group, <span class="math inline">\(\overline{V}_{..}\)</span> is the grand mean.</p>
+<p>Both <span class="math inline">\(n\to \infty\)</span> and <span class="math inline">\(k_n\to \infty\)</span>; <span class="math inline">\(\rm{MSE}\to\)</span> constant. Hence, we can consider <span class="math inline">\(\sqrt{n}(\rm{MST}-\rm{MSE})\)</span> instead of <span class="math inline">\(\sqrt{n}(F_n-1)\)</span>.</p>
+<p><span class="citation" data-cites="Lyubchich:etal:2013:wavk">Lyubchich et al. (<a href="references.html#ref-Lyubchich:etal:2013:wavk" role="doc-biblioref">2013</a>)</span> extended the WAVK approach:</p>
+<ol type="1">
+<li>Showed that the structure of time series errors can be a linear process that is allowed not to degenerate to MA(<span class="math inline">\(q\)</span>) or AR(<span class="math inline">\(p\)</span>), or a conditionally heteroskedastic or GARCH process.</li>
+<li>Developed a data-driven bootstrap procedure to estimate the finite sample properties of the WAVK test under the unknown dependence structure.</li>
+<li>Proposed to estimate the optimal size of local windows <span class="math inline">\(k_n\)</span> by employing the nonparametric resampling <span class="math inline">\(m\)</span>-out-of-<span class="math inline">\(n\)</span> selection algorithm of <span class="citation" data-cites="Bickel:etal:1997">Bickel et al. (<a href="references.html#ref-Bickel:etal:1997" role="doc-biblioref">1997</a>)</span>.</li>
+</ol>
+<p>The WAVK test is implemented in the package <code>funtimes</code> with the same sieve bootstrap as the <span class="math inline">\(t\)</span>-test and Mann–Kendall test. It tests the null hypothesis of no trend vs.&nbsp;the alternative of (non)monotonic trend.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>funtimes<span class="sc">::</span><span class="fu">notrend_test</span>(Y, <span class="at">test =</span> <span class="st">"WAVK"</span>, <span class="at">ar.method =</span> <span class="st">"yw"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+#&gt;  Sieve-bootstrap WAVK trend test
+#&gt; 
+#&gt; data:  Y
+#&gt; WAVK test statistic = 4, moving window = 10, p-value = 0.4
+#&gt; alternative hypothesis: (non-)monotonic trend.
+#&gt; sample estimates:
+#&gt; $AR_order
+#&gt; [1] 1
+#&gt; 
+#&gt; $AR_coefficients
+#&gt; phi_1 
+#&gt; 0.344</code></pre>
+</div>
+</div>
+<p>Also, the version of the test with the hybrid bootstrap by <span class="citation" data-cites="Lyubchich:etal:2013:wavk">Lyubchich et al. (<a href="references.html#ref-Lyubchich:etal:2013:wavk" role="doc-biblioref">2013</a>)</span> is available. This version allows the user to specify different alternatives.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The null hypothesis is the same as above, no trend (constant trend)</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>funtimes<span class="sc">::</span><span class="fu">wavk_test</span>(Y <span class="sc">~</span> <span class="dv">1</span>, </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">factor.length =</span> <span class="st">"adaptive.selection"</span>, </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>                    <span class="at">ar.method =</span> <span class="st">"yw"</span>, </span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">out =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+#&gt;  Trend test by Wang, Akritas, and Van Keilegom (bootstrap p-values)
+#&gt; 
+#&gt; data:  Y 
+#&gt; WAVK test statistic = 0.1, adaptively selected window = 4, p-value =
+#&gt; 0.8
+#&gt; alternative hypothesis: trend is not of the form Y ~ 1.
+#&gt; sample estimates:
+#&gt; $trend_coefficients
+#&gt; (Intercept) 
+#&gt;      -0.203 
+#&gt; 
+#&gt; $AR_order
+#&gt; [1] 1
+#&gt; 
+#&gt; $AR_coefficients
+#&gt; phi_1 
+#&gt; 0.344 
+#&gt; 
+#&gt; $all_considered_windows
+#&gt;  Window WAVK-statistic p-value
+#&gt;       4         0.1403   0.760
+#&gt;       5        -0.0495   0.862
+#&gt;       7        -0.0955   0.826
+#&gt;      10        -0.2146   0.866</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The null hypothesis is a quadratic trend</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>funtimes<span class="sc">::</span><span class="fu">wavk_test</span>(Y <span class="sc">~</span> <span class="fu">poly</span>(t, <span class="dv">2</span>), </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">factor.length =</span> <span class="st">"adaptive.selection"</span>, </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>                    <span class="at">ar.method =</span> <span class="st">"yw"</span>, </span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">out =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+#&gt;  Trend test by Wang, Akritas, and Van Keilegom (bootstrap p-values)
+#&gt; 
+#&gt; data:  Y 
+#&gt; WAVK test statistic = 4, adaptively selected window = 4, p-value = 0.01
+#&gt; alternative hypothesis: trend is not of the form Y ~ poly(t, 2).
+#&gt; sample estimates:
+#&gt; $trend_coefficients
+#&gt; (Intercept) poly(t, 2)1 poly(t, 2)2 
+#&gt;      -0.203       2.152      -1.795 
+#&gt; 
+#&gt; $AR_order
+#&gt; [1] 0
+#&gt; 
+#&gt; $AR_coefficients
+#&gt; numeric(0)
+#&gt; 
+#&gt; $all_considered_windows
+#&gt;  Window WAVK-statistic p-value
+#&gt;       4           3.76   0.010
+#&gt;       5           2.97   0.028
+#&gt;       7           1.81   0.086
+#&gt;      10           0.93   0.234</code></pre>
+</div>
+</div>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Statistical test results depend on the alternative hypothesis. Sometimes the null hypothesis cannot be rejected in favor of the alternative hypothesis because the data do not match the specified alternative. For example, there are numerous examples when in Pearson correlation analysis the null hypothesis of independence cannot be rejected in favor of the alternative hypothesis of linear dependence because the underlying nonlinear dependence cannot be described as a linear relationship. See <a href="https://cran.r-project.org/web/packages/funtimes/vignettes/trendtests.html">this vignette</a> describing a few similar cases for the time series.</p>
+</div>
+</div>
+</section>
+<section id="unit-roots" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="unit-roots"><span class="header-section-number">7.5</span> Unit roots</h2>
+<p>By now, we have been identifying the order of integration (if a process <span class="math inline">\(X_t \sim\)</span> I(<span class="math inline">\(d\)</span>)) by looking at the time series plot of <span class="math inline">\(X_t\)</span> and (largely) by looking at the plot of sample ACF. We differenced time series again and again until we saw a stable mean in the time series plot and a rapid (compared with linear), exponential-like decline in ACF. Here, we present a hypothesis testing approach originally suggested by <span class="citation" data-cites="Dickey:Fuller:1979">Dickey and Fuller (<a href="references.html#ref-Dickey:Fuller:1979" role="doc-biblioref">1979</a>)</span> (<em>Dickey–Fuller test</em>).</p>
+<p>Let <span class="math inline">\(X_1, \dots, X_n\)</span> be observations from an AR(1) model: <span class="math display">\[
+\begin{split}
+X_t-\mu &amp; =\phi_1(X_{t-1}-\mu) + Z_t, \\
+Z_t &amp;\sim \mathrm{WN}(0,\sigma^2),
+\end{split}
+\]</span> where <span class="math inline">\(|\phi_1|&lt;1\)</span> and <span class="math inline">\(\mu=\mathrm{E}X_t\)</span>. For a large sample size <span class="math inline">\(n\)</span>, the maximum likelihood estimator <span class="math inline">\(\hat{\phi_1}\)</span> of <span class="math inline">\(\phi_1\)</span> is approximately <span class="math inline">\(N(\phi_1, (1-\phi^2_1)/n)\)</span>. However, for the unit root case, this approximation is not valid! Thus, do not be tempted to use the normal approximation to construct a confidence interval for <span class="math inline">\(\phi_1\)</span> and check if it includes the value 1. Instead, consider a model that assumes a unit root (<span class="math inline">\(H_0\)</span>: unit root is present) and immediately removes it by differencing: <span id="eq-DFtest"><span class="math display">\[
+\begin{split}
+\Delta X_t = X_t - X_{t-1} &amp;= \phi^*_0 + \phi^*_1X_{t-1}+Z_t,\\
+Z_t &amp; \sim {\rm WN}(0,\sigma^2),
+\end{split}
+\tag{7.2}\]</span></span> where <span class="math inline">\(\phi^*_0=\mu(1-\phi_1)\)</span> and <span class="math inline">\(\phi_1^*=\phi_1 -1\)</span>. Let <span class="math inline">\(\hat{\phi}_1^*\)</span> be the OLS estimator of <span class="math inline">\(\phi_1^*\)</span>, with its standard error estimated as <span class="math display">\[
+\widehat{\mathrm{SE}}\left( \hat{\phi}_1^* \right)
+= S\left( \sum_{t=2}^n \left(X_{t-1}-\bar{X} \right)^2 \right)^{-1/2},
+\]</span> where <span class="math inline">\(S^2=\sum_{t=2}^n\left( \Delta X_t - \hat{\phi}_0^* - \hat{\phi}_1^*X_{t-1}\right)^2/(n-3)\)</span> and <span class="math inline">\(\bar{X}\)</span> is the sample mean. <span class="citation" data-cites="Dickey:Fuller:1979">Dickey and Fuller (<a href="references.html#ref-Dickey:Fuller:1979" role="doc-biblioref">1979</a>)</span> derived the limit distribution of the test statistic <span class="math display">\[
+\hat{\tau}_{\mu}=\frac{\hat{\phi}_1^*}{\widehat{\mathrm{SE}}\left( \hat{\phi}_1^* \right)},
+\]</span> so we know the critical levels from this distribution (the 0.01, 0.05, and 0.10 quantiles are <span class="math inline">\(-3.43\)</span>, <span class="math inline">\(-2.86\)</span>, and <span class="math inline">\(-2.57\)</span>, respectively) and can test the null hypothesis of <span class="math inline">\(\phi_1^*=0\)</span> (notice the similarity with the usual <span class="math inline">\(t\)</span>-test for significance of regression coefficients). An important thing to remember is that the <span class="math inline">\(H_0\)</span> here assumes a unit root (nonstationarity).</p>
+<p>For a more general AR(<span class="math inline">\(p\)</span>) model, statistic <span class="math inline">\(\hat{\tau}_{\mu}\)</span> has a similar form (the <span class="math inline">\(\phi_1^*\)</span> is different: <span class="math inline">\(\phi_1^* = \sum_{i=1}^p\phi_i -1\)</span>), and the test is then called the <em>Augmented Dickey–Fuller test</em> (ADF test). The order <span class="math inline">\(p\)</span> can be specified in advance or selected automatically using AIC or BIC.</p>
+<p>Another popular test for unit roots, the <em>Phillips–Perron test</em> (PP test), is built on the ADF test and considers the same null hypothesis.</p>
+<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Example: ADF test applied to simulated data
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Simulate a time series <span class="math inline">\(Y_t \sim\)</span> I(2) and apply the rule of thumb approach of taking differences (<a href="#fig-YDiff">Figure&nbsp;<span>7.3</span></a>). The results in <a href="#fig-YDiff">Figure&nbsp;<span>7.3</span></a> show that two differences are enough to remove the trend (<span class="math inline">\(d = 2\)</span>).</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>Z <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">200</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>Yt <span class="ot">&lt;-</span> <span class="fu">ts</span>(<span class="fu">cumsum</span>(<span class="fu">cumsum</span>(Z)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply first-order (non-seasonal) differences</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>D1 <span class="ot">&lt;-</span> <span class="fu">diff</span>(Yt)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply first-order (non-seasonal) differences again</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>D2 <span class="ot">&lt;-</span> <span class="fu">diff</span>(D1)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">autoplot</span>(Yt) <span class="sc">+</span> </span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">"Original"</span>) <span class="sc">+</span> </span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">"Yt"</span>) <span class="sc">+</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">ggAcf</span>(Yt) <span class="sc">+</span> </span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">"Yt"</span>) <span class="sc">+</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">autoplot</span>(D1) <span class="sc">+</span> </span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">"First differences"</span>) <span class="sc">+</span> </span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">"(1-B)Yt"</span>) <span class="sc">+</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>p4 <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">ggAcf</span>(D1) <span class="sc">+</span> </span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">"(1-B)Yt"</span>) <span class="sc">+</span></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>p5 <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">autoplot</span>(D2) <span class="sc">+</span> </span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">"Second differences"</span>) <span class="sc">+</span> </span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">"(1-B)2Yt"</span>) <span class="sc">+</span></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>p6 <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">ggAcf</span>(D2) <span class="sc">+</span> </span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">"(1-B)2Yt"</span>) <span class="sc">+</span></span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a>(p1 <span class="sc">+</span> p2) <span class="sc">/</span> (p3 <span class="sc">+</span> p4) <span class="sc">/</span> (p5 <span class="sc">+</span> p6) <span class="sc">+</span></span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-YDiff" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="l07_trendtest_files/figure-html/fig-YDiff-1.png" class="img-fluid figure-img" width="768"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;7.3: Time series and ACF plots for identifying the order of differences <span class="math inline">\(d\)</span> of the simulated time series.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Now apply the test, potentially several times, to identify the order <span class="math inline">\(d\)</span>.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>tseries<span class="sc">::</span><span class="fu">adf.test</span>(Yt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+#&gt;  Augmented Dickey-Fuller Test
+#&gt; 
+#&gt; data:  Yt
+#&gt; Dickey-Fuller = -2, Lag order = 5, p-value = 0.8
+#&gt; alternative hypothesis: stationary</code></pre>
+</div>
+</div>
+<p>With the high <span class="math inline">\(p\)</span>-value, we cannot reject the <span class="math inline">\(H_0\)</span> of a unit root. Apply the test again on the differenced series.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>tseries<span class="sc">::</span><span class="fu">adf.test</span>(<span class="fu">diff</span>(Yt))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+#&gt;  Augmented Dickey-Fuller Test
+#&gt; 
+#&gt; data:  diff(Yt)
+#&gt; Dickey-Fuller = -2, Lag order = 5, p-value = 0.5
+#&gt; alternative hypothesis: stationary</code></pre>
+</div>
+</div>
+<p>Same result. Difference once more and re-apply the test.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>tseries<span class="sc">::</span><span class="fu">adf.test</span>(<span class="fu">diff</span>(Yt, <span class="at">differences =</span> <span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+#&gt;  Augmented Dickey-Fuller Test
+#&gt; 
+#&gt; data:  diff(Yt, differences = 2)
+#&gt; Dickey-Fuller = -6, Lag order = 5, p-value = 0.01
+#&gt; alternative hypothesis: stationary</code></pre>
+</div>
+</div>
+<p>Now, when we are using the twice differenced series <span class="math inline">\(\Delta^2 Y_t=(1-B)^2Y_t\)</span>, we can reject the <span class="math inline">\(H_0\)</span> and accept the alternative hypothesis of stationarity. Since the time series has been differenced twice, we state that the integration order <span class="math inline">\(d=2\)</span>, or <span class="math inline">\(Y_t \sim\)</span> I(2).</p>
+<p>What are the potential problems? Multiple testing and alternative model specifications. By model, we mean the regression <a href="#eq-DFtest">Equation&nbsp;<span>7.2</span></a> that includes the parameter <span class="math inline">\(\phi_1^*\)</span> that we are testing. Depending on what we know or assume about the process, we may add an intercept or even a parametric trend. In R, it can be done manually or with functions from the package <code>urca</code>:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(urca)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>ADF <span class="ot">&lt;-</span> <span class="fu">ur.df</span>(Yt, <span class="at">type =</span> <span class="st">"drift"</span>, <span class="at">selectlags =</span> <span class="st">"AIC"</span>)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ADF)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+#&gt; ############################################### 
+#&gt; # Augmented Dickey-Fuller Test Unit Root Test # 
+#&gt; ############################################### 
+#&gt; 
+#&gt; Test regression drift 
+#&gt; 
+#&gt; 
+#&gt; Call:
+#&gt; lm(formula = z.diff ~ z.lag.1 + 1 + z.diff.lag)
+#&gt; 
+#&gt; Residuals:
+#&gt;     Min      1Q  Median      3Q     Max 
+#&gt; -2.1896 -0.5737 -0.0834  0.5603  2.9911 
+#&gt; 
+#&gt; Coefficients:
+#&gt;              Estimate Std. Error t value Pr(&gt;|t|)    
+#&gt; (Intercept)  0.301046   0.136667    2.20    0.029 *  
+#&gt; z.lag.1     -0.000895   0.000490   -1.83    0.069 .  
+#&gt; z.diff.lag   0.933704   0.024665   37.86   &lt;2e-16 ***
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt; 
+#&gt; Residual standard error: 0.93 on 195 degrees of freedom
+#&gt; Multiple R-squared:  0.886,  Adjusted R-squared:  0.884 
+#&gt; F-statistic:  755 on 2 and 195 DF,  p-value: &lt;2e-16
+#&gt; 
+#&gt; 
+#&gt; Value of test-statistic is: -1.83 2.43 
+#&gt; 
+#&gt; Critical values for test statistics: 
+#&gt;       1pct  5pct 10pct
+#&gt; tau2 -3.46 -2.88 -2.57
+#&gt; phi1  6.52  4.63  3.81</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>ADF <span class="ot">&lt;-</span> <span class="fu">ur.df</span>(<span class="fu">diff</span>(Yt), <span class="at">type =</span> <span class="st">"drift"</span>, <span class="at">selectlags =</span> <span class="st">"AIC"</span>)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ADF)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+#&gt; ############################################### 
+#&gt; # Augmented Dickey-Fuller Test Unit Root Test # 
+#&gt; ############################################### 
+#&gt; 
+#&gt; Test regression drift 
+#&gt; 
+#&gt; 
+#&gt; Call:
+#&gt; lm(formula = z.diff ~ z.lag.1 + 1 + z.diff.lag)
+#&gt; 
+#&gt; Residuals:
+#&gt;     Min      1Q  Median      3Q     Max 
+#&gt; -2.1574 -0.5527 -0.0072  0.5857  2.9193 
+#&gt; 
+#&gt; Coefficients:
+#&gt;             Estimate Std. Error t value Pr(&gt;|t|)  
+#&gt; (Intercept)   0.0812     0.0794    1.02    0.308  
+#&gt; z.lag.1      -0.0536     0.0248   -2.16    0.032 *
+#&gt; z.diff.lag   -0.0362     0.0717   -0.51    0.614  
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt; 
+#&gt; Residual standard error: 0.935 on 194 degrees of freedom
+#&gt; Multiple R-squared:  0.0274, Adjusted R-squared:  0.0174 
+#&gt; F-statistic: 2.73 on 2 and 194 DF,  p-value: 0.0676
+#&gt; 
+#&gt; 
+#&gt; Value of test-statistic is: -2.16 2.35 
+#&gt; 
+#&gt; Critical values for test statistics: 
+#&gt;       1pct  5pct 10pct
+#&gt; tau2 -3.46 -2.88 -2.57
+#&gt; phi1  6.52  4.63  3.81</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>ADF <span class="ot">&lt;-</span> <span class="fu">ur.df</span>(<span class="fu">diff</span>(Yt, <span class="at">differences =</span> <span class="dv">2</span>), <span class="at">type =</span> <span class="st">"drift"</span>, <span class="at">selectlags =</span> <span class="st">"AIC"</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ADF)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+#&gt; ############################################### 
+#&gt; # Augmented Dickey-Fuller Test Unit Root Test # 
+#&gt; ############################################### 
+#&gt; 
+#&gt; Test regression drift 
+#&gt; 
+#&gt; 
+#&gt; Call:
+#&gt; lm(formula = z.diff ~ z.lag.1 + 1 + z.diff.lag)
+#&gt; 
+#&gt; Residuals:
+#&gt;     Min      1Q  Median      3Q     Max 
+#&gt; -2.1597 -0.6052 -0.0711  0.6161  3.0784 
+#&gt; 
+#&gt; Coefficients:
+#&gt;             Estimate Std. Error t value Pr(&gt;|t|)    
+#&gt; (Intercept)  -0.0131     0.0675   -0.19     0.85    
+#&gt; z.lag.1      -1.1534     0.1049  -10.99   &lt;2e-16 ***
+#&gt; z.diff.lag    0.0833     0.0716    1.16     0.25    
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt; 
+#&gt; Residual standard error: 0.945 on 193 degrees of freedom
+#&gt; Multiple R-squared:  0.534,  Adjusted R-squared:  0.529 
+#&gt; F-statistic:  110 on 2 and 193 DF,  p-value: &lt;2e-16
+#&gt; 
+#&gt; 
+#&gt; Value of test-statistic is: -11 60.4 
+#&gt; 
+#&gt; Critical values for test statistics: 
+#&gt;       1pct  5pct 10pct
+#&gt; tau2 -3.46 -2.88 -2.57
+#&gt; phi1  6.52  4.63  3.81</code></pre>
+</div>
+</div>
+<p>From the results above, the inclusion of the intercept (<code>"drift"</code>) in the test model did not affect the conclusion. Now try adding a trend (<code>type = "trend"</code> adds the intercept automatically).</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>ADF <span class="ot">&lt;-</span> <span class="fu">ur.df</span>(Yt, <span class="at">type =</span> <span class="st">"trend"</span>, <span class="at">selectlags =</span> <span class="st">"AIC"</span>)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ADF)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+#&gt; ############################################### 
+#&gt; # Augmented Dickey-Fuller Test Unit Root Test # 
+#&gt; ############################################### 
+#&gt; 
+#&gt; Test regression trend 
+#&gt; 
+#&gt; 
+#&gt; Call:
+#&gt; lm(formula = z.diff ~ z.lag.1 + 1 + tt + z.diff.lag)
+#&gt; 
+#&gt; Residuals:
+#&gt;     Min      1Q  Median      3Q     Max 
+#&gt; -2.2098 -0.5435 -0.0667  0.5545  2.9750 
+#&gt; 
+#&gt; Coefficients:
+#&gt;             Estimate Std. Error t value Pr(&gt;|t|)    
+#&gt; (Intercept)  0.25599    0.15611    1.64     0.10    
+#&gt; z.lag.1     -0.00162    0.00131   -1.24     0.22    
+#&gt; tt           0.00192    0.00320    0.60     0.55    
+#&gt; z.diff.lag   0.93768    0.02558   36.66   &lt;2e-16 ***
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt; 
+#&gt; Residual standard error: 0.932 on 194 degrees of freedom
+#&gt; Multiple R-squared:  0.886,  Adjusted R-squared:  0.884 
+#&gt; F-statistic:  502 on 3 and 194 DF,  p-value: &lt;2e-16
+#&gt; 
+#&gt; 
+#&gt; Value of test-statistic is: -1.24 1.73 1.85 
+#&gt; 
+#&gt; Critical values for test statistics: 
+#&gt;       1pct  5pct 10pct
+#&gt; tau3 -3.99 -3.43 -3.13
+#&gt; phi2  6.22  4.75  4.07
+#&gt; phi3  8.43  6.49  5.47</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>ADF <span class="ot">&lt;-</span> <span class="fu">ur.df</span>(<span class="fu">diff</span>(Yt), <span class="at">type =</span> <span class="st">"trend"</span>, <span class="at">selectlags =</span> <span class="st">"AIC"</span>)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ADF)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+#&gt; ############################################### 
+#&gt; # Augmented Dickey-Fuller Test Unit Root Test # 
+#&gt; ############################################### 
+#&gt; 
+#&gt; Test regression trend 
+#&gt; 
+#&gt; 
+#&gt; Call:
+#&gt; lm(formula = z.diff ~ z.lag.1 + 1 + tt + z.diff.lag)
+#&gt; 
+#&gt; Residuals:
+#&gt;     Min      1Q  Median      3Q     Max 
+#&gt; -2.1777 -0.5443 -0.0691  0.5697  2.9673 
+#&gt; 
+#&gt; Coefficients:
+#&gt;             Estimate Std. Error t value Pr(&gt;|t|)  
+#&gt; (Intercept)  0.24888    0.15538    1.60    0.111  
+#&gt; z.lag.1     -0.06228    0.02571   -2.42    0.016 *
+#&gt; tt          -0.00153    0.00122   -1.26    0.211  
+#&gt; z.diff.lag  -0.03604    0.07155   -0.50    0.615  
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt; 
+#&gt; Residual standard error: 0.933 on 193 degrees of freedom
+#&gt; Multiple R-squared:  0.0353, Adjusted R-squared:  0.0203 
+#&gt; F-statistic: 2.35 on 3 and 193 DF,  p-value: 0.0735
+#&gt; 
+#&gt; 
+#&gt; Value of test-statistic is: -2.42 2.1 3.13 
+#&gt; 
+#&gt; Critical values for test statistics: 
+#&gt;       1pct  5pct 10pct
+#&gt; tau3 -3.99 -3.43 -3.13
+#&gt; phi2  6.22  4.75  4.07
+#&gt; phi3  8.43  6.49  5.47</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>ADF <span class="ot">&lt;-</span> <span class="fu">ur.df</span>(<span class="fu">diff</span>(Yt, <span class="at">differences =</span> <span class="dv">2</span>), <span class="at">type =</span> <span class="st">"trend"</span>, <span class="at">selectlags =</span> <span class="st">"AIC"</span>)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ADF)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+#&gt; ############################################### 
+#&gt; # Augmented Dickey-Fuller Test Unit Root Test # 
+#&gt; ############################################### 
+#&gt; 
+#&gt; Test regression trend 
+#&gt; 
+#&gt; 
+#&gt; Call:
+#&gt; lm(formula = z.diff ~ z.lag.1 + 1 + tt + z.diff.lag)
+#&gt; 
+#&gt; Residuals:
+#&gt;     Min      1Q  Median      3Q     Max 
+#&gt; -2.1801 -0.6461 -0.0636  0.6026  3.1220 
+#&gt; 
+#&gt; Coefficients:
+#&gt;              Estimate Std. Error t value Pr(&gt;|t|)    
+#&gt; (Intercept)  0.064035   0.136866    0.47     0.64    
+#&gt; z.lag.1     -1.156959   0.105235  -10.99   &lt;2e-16 ***
+#&gt; tt          -0.000775   0.001196   -0.65     0.52    
+#&gt; z.diff.lag   0.085265   0.071776    1.19     0.24    
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt; 
+#&gt; Residual standard error: 0.946 on 192 degrees of freedom
+#&gt; Multiple R-squared:  0.535,  Adjusted R-squared:  0.527 
+#&gt; F-statistic: 73.5 on 3 and 192 DF,  p-value: &lt;2e-16
+#&gt; 
+#&gt; 
+#&gt; Value of test-statistic is: -11 40.3 60.4 
+#&gt; 
+#&gt; Critical values for test statistics: 
+#&gt;       1pct  5pct 10pct
+#&gt; tau3 -3.99 -3.43 -3.13
+#&gt; phi2  6.22  4.75  4.07
+#&gt; phi3  8.43  6.49  5.47</code></pre>
+</div>
+</div>
+<p>In this simulated example, misspecification of the testing model did not change our conclusion that <span class="math inline">\(X_t \sim\)</span> I(2), due to the automatic adjusting of the critical values <code>tau</code> to <code>tau2</code> (model with intercept) and <code>tau3</code> (model with trend).</p>
+</div>
+</div>
+<section id="adf-and-pp-test-problems" class="level3" data-number="7.5.1">
+<h3 data-number="7.5.1" class="anchored" data-anchor-id="adf-and-pp-test-problems"><span class="header-section-number">7.5.1</span> ADF and PP test problems</h3>
+<p>The ADF and PP tests are asymptotically equivalent but may differ substantially in finite samples due to the different ways in which they correct for serial correlation in the test regression.</p>
+<p>In general, the ADF and PP tests have very low power against I(0) alternatives that are close to being I(1). That is, unit root tests cannot distinguish highly persistent stationary processes from nonstationary processes very well. Also, the power of unit root tests diminishes as deterministic terms are added to the test regressions. Tests that include a constant and trend in the test regression have less power than tests that only include a constant in the test regression.</p>
+</section>
+</section>
+<section id="conclusion" class="level2" data-number="7.6">
+<h2 data-number="7.6" class="anchored" data-anchor-id="conclusion"><span class="header-section-number">7.6</span> Conclusion</h2>
+<p>Temporal dependence of time series is the most violated assumption of classical tests often employed for detecting trends, including the nonparametric Mann–Kendall test. However, multiple workarounds exist that allow the analyst to relax (avoid) the assumption of independence and provide more reliable inference. We have implemented sieve bootstrapping for time series as one such workaround.</p>
+<p>Test results depend on the specified alternative hypothesis. Remember that non-rejection of the null hypothesis doesn’t make it automatically true.</p>
+<p>When testing for unit roots (integration) in time series, the null hypothesis of ADF and PP tests is the unit root, while the alternative is the stationarity of the tested series. Iterative testing and differencing can be used to identify the order of integration <span class="math inline">\(d\)</span>.</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="ref-Bickel:etal:1997" class="csl-entry" role="doc-biblioentry">
+Bickel PJ, Götze F, Zwet WR van (1997) Resampling fewer than <span class="math inline">\(n\)</span> observations: Gains, losses, and remedies for losses. Statistica Sinica 7:1–31
+</div>
+<div id="ref-Brockwell:Davis:2002" class="csl-entry" role="doc-biblioentry">
+Brockwell PJ, Davis RA (2002) Introduction to time series and forecasting, 2nd edn. Springer, New York
+</div>
+<div id="ref-Buhlmann:2002" class="csl-entry" role="doc-biblioentry">
+Bühlmann P (2002) Bootstraps for time series. Statistical Science 17:52–72. <a href="https://doi.org/10.1214/ss/1023798998">https://doi.org/10.1214/ss/1023798998</a>
+</div>
+<div id="ref-Cabilio:etal:2013" class="csl-entry" role="doc-biblioentry">
+Cabilio P, Zhang Y, Chen X (2013) Bootstrap rank tests for trend in time series. Environmetrics 24:537–549. <a href="https://doi.org/10.1002/env.2250">https://doi.org/10.1002/env.2250</a>
+</div>
+<div id="ref-Chatterjee:Hadi:2006" class="csl-entry" role="doc-biblioentry">
+Chatterjee S, Hadi AS (2006) Regression analysis by example, 4th edn. John Wiley &amp; Sons, Hoboken, New Jersey
+</div>
+<div id="ref-Chatterjee:Simonoff:2013" class="csl-entry" role="doc-biblioentry">
+Chatterjee S, Simonoff JS (2013) Handbook of regression analysis. John Wiley &amp; Sons, Hoboken, New Jersey
+</div>
+<div id="ref-Davison:Hinkley:1997" class="csl-entry" role="doc-biblioentry">
+Davison AC, Hinkley DV (1997) Bootstrap methods and their application. Cambridge University Press, Cambridge
+</div>
+<div id="ref-Dickey:Fuller:1979" class="csl-entry" role="doc-biblioentry">
+Dickey DA, Fuller WA (1979) Distribution of the estimators for autoregressive time series with a unit root. Journal of the American Statistical Association 74:427–431. <a href="https://doi.org/10.2307/2286348">https://doi.org/10.2307/2286348</a>
+</div>
+<div id="ref-Efron:1979" class="csl-entry" role="doc-biblioentry">
+Efron B (1979) Bootstrap methods: Another look at the jackknife. The Annals of Statistics 7:1–26. <a href="https://doi.org/10.1214/aos/1176344552">https://doi.org/10.1214/aos/1176344552</a>
+</div>
+<div id="ref-Esterby:1996" class="csl-entry" role="doc-biblioentry">
+Esterby SR (1996) Review of methods for the detection and estimation of trends with emphasis on water quality applications. Hydrological Processes 10:127–149. <a href="https://doi.org/10.1002/(SICI)1099-1085(199602)10:2<127::AID-HYP354>3.0.CO;2-8">https://doi.org/10.1002/(SICI)1099-1085(199602)10:2&lt;127::AID-HYP354&gt;3.0.CO;2-8</a>
+</div>
+<div id="ref-Hirsch:etal:1982" class="csl-entry" role="doc-biblioentry">
+Hirsch RM, Slack JR, Smith RA (1982) Techniques of trend analysis for monthly water quality data. Water Resources Research 18:107–121. <a href="https://doi.org/10.1029/WR018i001p00107">https://doi.org/10.1029/WR018i001p00107</a>
+</div>
+<div id="ref-Kendall:1975" class="csl-entry" role="doc-biblioentry">
+Kendall MG (1975) Rank correlation methods, 4th edn. Charles Griffin, London
+</div>
+<div id="ref-Lyubchich:2016:trends" class="csl-entry" role="doc-biblioentry">
+Lyubchich V (2016) Detecting time series trends and their synchronization in climate data. Intelligence Innovations Investments 12:132–137
+</div>
+<div id="ref-Lyubchich:etal:2013:wavk" class="csl-entry" role="doc-biblioentry">
+Lyubchich V, Gel YR, El‐Shaarawi A (2013) On detecting non‐monotonic trends in environmental time series: A fusion of local regression and bootstrap. Environmetrics 24:209–226. <a href="https://doi.org/10.1002/env.2212">https://doi.org/10.1002/env.2212</a>
+</div>
+<div id="ref-Lyubchich:etal:2016:symmetry" class="csl-entry" role="doc-biblioentry">
+Lyubchich V, Wang X, Heyes A, Gel YR (2016) A distribution-free <span class="math inline">\(m\)</span>-out-of-<span class="math inline">\(n\)</span> bootstrap approach to testing symmetry about an unknown median. Computational Statistics &amp; Data Analysis 104:1–9. <a href="https://doi.org/10.1016/j.csda.2016.05.004">https://doi.org/10.1016/j.csda.2016.05.004</a>
+</div>
+<div id="ref-Noguchi:etal:2011" class="csl-entry" role="doc-biblioentry">
+Noguchi K, Gel YR, Duguay CR (2011) Bootstrap-based tests for trends in hydrological time series, with application to ice phenology data. Journal of Hydrology 410:150–161. <a href="https://doi.org/10.1016/j.jhydrol.2011.09.008">https://doi.org/10.1016/j.jhydrol.2011.09.008</a>
+</div>
+<div id="ref-Powell:Xu:2011" class="csl-entry" role="doc-biblioentry">
+Powell AM, Xu J (2011) Abrupt climate regime shifts, their potential forcing and fisheries impacts. Atmospheric and Climate Sciences 1:33. <a href="https://doi.org/10.4236/acs.2011.12004">https://doi.org/10.4236/acs.2011.12004</a>
+</div>
+<div id="ref-Seidel:etal:2004" class="csl-entry" role="doc-biblioentry">
+Seidel DJ, Lanzante JR (2004) An assessment of three alternatives to linear trends for characterizing global atmospheric temperature changes. Journal of Geophysical Research: Atmospheres 109: <a href="https://doi.org/10.1029/2003JD004414">https://doi.org/10.1029/2003JD004414</a>
+</div>
+<div id="ref-Wang:etal:2008" class="csl-entry" role="doc-biblioentry">
+Wang L, Akritas MG, Van Keilegom I (2008) An <span>ANOVA</span>-type nonparametric diagnostic test for heteroscedastic regression models. Journal of Nonparametric Statistics 20:365–382. <a href="https://doi.org/10.1080/10485250802066112">https://doi.org/10.1080/10485250802066112</a>
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./l06_garch.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Generalized Autoregressive Conditional Heteroskedasticity (GARCH) Models</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./l08_tsreg1.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Time Series Regression with Trends</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

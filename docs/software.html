@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.280">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Time Series Analysis - Software</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./references.html" rel="next">
+<link href="./l10_spectral.html" rel="prev">
+<link href="./TSAfav.png" rel="icon" type="image/png">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Software</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Time Series Analysis</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-reader-toggle sidebar-tool" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l01_regression.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Review of Linear Regression</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l02_tsintro.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to Time Series Analysis</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l03_smoothing.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Smoothing, Detrending, and Deseasonalizing</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l04_arma.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Autoregressive Moving Average (ARMA) Models</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l05_arima.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Autoregressive Integrated Moving Average (ARIMA) Models</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l06_garch.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Generalized Autoregressive Conditional Heteroskedasticity (GARCH) Models</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l07_trendtest.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Trend Detection</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l08_tsreg1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Time Series Regression with Trends</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l09_tsreg2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Time Series Regression with Correlated Errors</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l10_spectral.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Spectral Analysis</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./software.html" class="sidebar-item-text sidebar-link active">Software</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Appendices</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./s1_wls.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Weighted least squares</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./s2_gls.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Generalized least squares</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Software</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>Examples were calculated in R version 4.2.2 (2022-10-31 ucrt) with an effort to use the most recent versions of R packages.</p>
+<p>The codes load silently only a few packages:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>All other packages are named before the function as in <code>forecast::ggAcf()</code> (this code calls the function <code>ggAcf()</code> from the package <code>forecast</code>) or called immediately before the necessary function use:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fable)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">as_tsibble</span>(Y) <span class="sc">%&gt;%</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">model</span>(<span class="fu">ARIMA</span>(Y <span class="sc">~</span> <span class="dv">1</span>, <span class="at">ic =</span> <span class="st">"bic"</span>))</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">report</span>(m)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>The R packages used in this book include (in alphabetic order):</p>
+<div class="cell">
+
+</div>
+<ul>
+<li><code>dplyr</code> <span class="citation" data-cites="R-dplyr">(<a href="references.html#ref-R-dplyr" role="doc-biblioref">Wickham et al. 2022b</a>)</span></li>
+<li><code>dynlm</code> <span class="citation" data-cites="R-dynlm">(<a href="references.html#ref-R-dynlm" role="doc-biblioref">Zeileis 2019</a>)</span></li>
+<li><code>Ecdat</code> <span class="citation" data-cites="R-Ecdat">(<a href="references.html#ref-R-Ecdat" role="doc-biblioref">Croissant and Graves 2022</a>)</span></li>
+<li><code>fable</code> <span class="citation" data-cites="R-fable">(<a href="references.html#ref-R-fable" role="doc-biblioref">O’Hara-Wild et al. 2022a</a>)</span></li>
+<li><code>feasts</code> <span class="citation" data-cites="R-feasts">(<a href="references.html#ref-R-feasts" role="doc-biblioref">O’Hara-Wild et al. 2022b</a>)</span></li>
+<li><code>fGarch</code> <span class="citation" data-cites="R-fGarch">(<a href="references.html#ref-R-fGarch" role="doc-biblioref">Wuertz et al. 2022</a>)</span></li>
+<li><code>FinTS</code> <span class="citation" data-cites="R-FinTS">(<a href="references.html#ref-R-FinTS" role="doc-biblioref">Graves 2019</a>)</span></li>
+<li><code>fma</code> <span class="citation" data-cites="R-fma">(<a href="references.html#ref-R-fma" role="doc-biblioref">Hyndman 2020</a>)</span></li>
+<li><code>forecast</code> <span class="citation" data-cites="R-forecast">(<a href="references.html#ref-R-forecast" role="doc-biblioref">Hyndman et al. 2022</a>)</span></li>
+<li><code>funtimes</code> <span class="citation" data-cites="R-funtimes">(<a href="references.html#ref-R-funtimes" role="doc-biblioref">Lyubchich et al. 2022</a>)</span></li>
+<li><code>gamlss</code> <span class="citation" data-cites="R-gamlss">(<a href="references.html#ref-R-gamlss" role="doc-biblioref">Stasinopoulos and Rigby 2022</a>)</span></li>
+<li><code>gamlss.util</code> <span class="citation" data-cites="R-gamlss.util">(<a href="references.html#ref-R-gamlss.util" role="doc-biblioref">Stasinopoulos et al. 2016</a>)</span></li>
+<li><code>GGally</code> <span class="citation" data-cites="R-GGally">(<a href="references.html#ref-R-GGally" role="doc-biblioref">Schloerke et al. 2021</a>)</span></li>
+<li><code>ggplot2</code> <span class="citation" data-cites="R-ggplot2">(<a href="references.html#ref-R-ggplot2" role="doc-biblioref">Wickham et al. 2022a</a>)</span></li>
+<li><code>ggpubr</code> <span class="citation" data-cites="R-ggpubr">(<a href="references.html#ref-R-ggpubr" role="doc-biblioref">Kassambara 2022</a>)</span></li>
+<li><code>Kendall</code> <span class="citation" data-cites="R-Kendall">(<a href="references.html#ref-R-Kendall" role="doc-biblioref">McLeod 2022</a>)</span></li>
+<li><code>knitr</code> <span class="citation" data-cites="R-knitr">(<a href="references.html#ref-R-knitr" role="doc-biblioref">Xie 2022</a>)</span></li>
+<li><code>lawstat</code> <span class="citation" data-cites="R-lawstat">(<a href="references.html#ref-R-lawstat" role="doc-biblioref">Gastwirth et al. 2022</a>)</span></li>
+<li><code>lmtest</code> <span class="citation" data-cites="R-lmtest">(<a href="references.html#ref-R-lmtest" role="doc-biblioref">Hothorn et al. 2022</a>)</span></li>
+<li><code>lomb</code> <span class="citation" data-cites="R-lomb">(<a href="references.html#ref-R-lomb" role="doc-biblioref">Ruf et al. 2022</a>)</span></li>
+<li><code>nlme</code> <span class="citation" data-cites="R-nlme">(<a href="references.html#ref-R-nlme" role="doc-biblioref">Pinheiro et al. 2022</a>)</span></li>
+<li><code>patchwork</code> <span class="citation" data-cites="R-patchwork">(<a href="references.html#ref-R-patchwork" role="doc-biblioref">Pedersen 2022</a>)</span></li>
+<li><code>plotly</code> <span class="citation" data-cites="R-plotly">(<a href="references.html#ref-R-plotly" role="doc-biblioref">Sievert et al. 2022</a>)</span></li>
+<li><code>pracma</code> <span class="citation" data-cites="R-pracma">(<a href="references.html#ref-R-pracma" role="doc-biblioref">Borchers 2022</a>)</span></li>
+<li><code>randtests</code> <span class="citation" data-cites="R-randtests">(<a href="references.html#ref-R-randtests" role="doc-biblioref">Caeiro and Mateus 2022</a>)</span></li>
+<li><code>readr</code> <span class="citation" data-cites="R-readr">(<a href="references.html#ref-R-readr" role="doc-biblioref">Wickham et al. 2022c</a>)</span></li>
+<li><code>rmarkdown</code> <span class="citation" data-cites="R-rmarkdown">(<a href="references.html#ref-R-rmarkdown" role="doc-biblioref">Allaire et al. 2022</a>)</span></li>
+<li><code>tseries</code> <span class="citation" data-cites="R-tseries">(<a href="references.html#ref-R-tseries" role="doc-biblioref">Trapletti and Hornik 2022</a>)</span></li>
+<li><code>TSstudio</code> <span class="citation" data-cites="R-TSstudio">(<a href="references.html#ref-R-TSstudio" role="doc-biblioref">Krispin 2020</a>)</span></li>
+<li><code>urca</code> <span class="citation" data-cites="R-urca">(<a href="references.html#ref-R-urca" role="doc-biblioref">Pfaff 2022</a>)</span></li>
+</ul>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="ref-R-rmarkdown" class="csl-entry" role="doc-biblioentry">
+Allaire J, Xie Y, McPherson J, et al (2022) Rmarkdown: Dynamic documents for r. R package version 2.19, <a href="https://CRAN.R-project.org/package=rmarkdown">https://CRAN.R-project.org/package=rmarkdown</a>
+</div>
+<div id="ref-R-pracma" class="csl-entry" role="doc-biblioentry">
+Borchers HW (2022) Pracma: Practical numerical math functions. R package version 2.4.2, <a href="https://CRAN.R-project.org/package=pracma">https://CRAN.R-project.org/package=pracma</a>
+</div>
+<div id="ref-R-randtests" class="csl-entry" role="doc-biblioentry">
+Caeiro F, Mateus A (2022) Randtests: Testing randomness in r. R package version 1.0.1, <a href="https://CRAN.R-project.org/package=randtests">https://CRAN.R-project.org/package=randtests</a>
+</div>
+<div id="ref-R-Ecdat" class="csl-entry" role="doc-biblioentry">
+Croissant Y, Graves S (2022) Ecdat: Data sets for econometrics. R package version 0.4-2, <a href="https://www.r-project.org">https://www.r-project.org</a>
+</div>
+<div id="ref-R-lawstat" class="csl-entry" role="doc-biblioentry">
+Gastwirth JL, Gel YR, Hui WLW, et al (2022) Lawstat: Tools for biostatistics, public policy, and law. R package version 3.5, <a href="https://CRAN.R-project.org/package=lawstat">https://CRAN.R-project.org/package=lawstat</a>
+</div>
+<div id="ref-R-FinTS" class="csl-entry" role="doc-biblioentry">
+Graves S (2019) FinTS: Companion to tsay (2005) analysis of financial time series. R package version 0.4-6, <a href="https://r-forge.r-project.org/projects/fints/">https://r-forge.r-project.org/projects/fints/</a>
+</div>
+<div id="ref-R-lmtest" class="csl-entry" role="doc-biblioentry">
+Hothorn T, Zeileis A, Farebrother RW, Cummins C (2022) Lmtest: Testing linear regression models. R package version 0.9-40, <a href="https://CRAN.R-project.org/package=lmtest">https://CRAN.R-project.org/package=lmtest</a>
+</div>
+<div id="ref-R-fma" class="csl-entry" role="doc-biblioentry">
+Hyndman R (2020) Fma: Data sets from "forecasting: Methods and applications" by makridakis, wheelwright &amp; hyndman (1998). R package version 2.4, <a href="https://CRAN.R-project.org/package=fma">https://CRAN.R-project.org/package=fma</a>
+</div>
+<div id="ref-R-forecast" class="csl-entry" role="doc-biblioentry">
+Hyndman R, Athanasopoulos G, Bergmeir C, et al (2022) Forecast: Forecasting functions for time series and linear models. R package version 8.19, <a href="https://CRAN.R-project.org/package=forecast">https://CRAN.R-project.org/package=forecast</a>
+</div>
+<div id="ref-R-ggpubr" class="csl-entry" role="doc-biblioentry">
+Kassambara A (2022) Ggpubr: ggplot2 based publication ready plots. R package version 0.5.0, <a href="https://rpkgs.datanovia.com/ggpubr/">https://rpkgs.datanovia.com/ggpubr/</a>
+</div>
+<div id="ref-R-TSstudio" class="csl-entry" role="doc-biblioentry">
+Krispin R (2020) TSstudio: Functions for time series analysis and forecasting. R package version 0.1.6, <a href="https://github.com/RamiKrispin/TSstudio">https://github.com/RamiKrispin/TSstudio</a>
+</div>
+<div id="ref-R-funtimes" class="csl-entry" role="doc-biblioentry">
+Lyubchich V, Gel YR, Vishwakarma S (2022) Funtimes: Functions for time series analysis. R package version 9.0, <a href="https://CRAN.R-project.org/package=funtimes">https://CRAN.R-project.org/package=funtimes</a>
+</div>
+<div id="ref-R-Kendall" class="csl-entry" role="doc-biblioentry">
+McLeod AI (2022) Kendall: Kendall rank correlation and mann-kendall trend test. R package version 2.2.1, <a href="http://www.stats.uwo.ca/faculty/aim">http://www.stats.uwo.ca/faculty/aim</a>
+</div>
+<div id="ref-R-fable" class="csl-entry" role="doc-biblioentry">
+O’Hara-Wild M, Hyndman R, Wang E (2022a) Fable: Forecasting models for tidy time series. R package version 0.3.2, <a href="https://CRAN.R-project.org/package=fable">https://CRAN.R-project.org/package=fable</a>
+</div>
+<div id="ref-R-feasts" class="csl-entry" role="doc-biblioentry">
+O’Hara-Wild M, Hyndman R, Wang E (2022b) Feasts: Feature extraction and statistics for time series. R package version 0.3.0, <a href="https://CRAN.R-project.org/package=feasts">https://CRAN.R-project.org/package=feasts</a>
+</div>
+<div id="ref-R-patchwork" class="csl-entry" role="doc-biblioentry">
+Pedersen TL (2022) Patchwork: The composer of plots. R package version 1.1.2, <a href="https://CRAN.R-project.org/package=patchwork">https://CRAN.R-project.org/package=patchwork</a>
+</div>
+<div id="ref-R-urca" class="csl-entry" role="doc-biblioentry">
+Pfaff B (2022) Urca: Unit root and cointegration tests for time series data. R package version 1.3-3, <a href="https://CRAN.R-project.org/package=urca">https://CRAN.R-project.org/package=urca</a>
+</div>
+<div id="ref-R-nlme" class="csl-entry" role="doc-biblioentry">
+Pinheiro J, Bates D, R Core Team (2022) Nlme: Linear and nonlinear mixed effects models. R package version 3.1-161, <a href="https://svn.r-project.org/R-packages/trunk/nlme/">https://svn.r-project.org/R-packages/trunk/nlme/</a>
+</div>
+<div id="ref-R-lomb" class="csl-entry" role="doc-biblioentry">
+Ruf T, C original by Press et al. partially based on, Python module Astropy. the (2022) Lomb: Lomb-scargle periodogram. R package version 2.1.0, <a href="https://CRAN.R-project.org/package=lomb">https://CRAN.R-project.org/package=lomb</a>
+</div>
+<div id="ref-R-GGally" class="csl-entry" role="doc-biblioentry">
+Schloerke B, Cook D, Larmarange J, et al (2021) GGally: Extension to ggplot2. R package version 2.1.2, <a href="https://CRAN.R-project.org/package=GGally">https://CRAN.R-project.org/package=GGally</a>
+</div>
+<div id="ref-R-plotly" class="csl-entry" role="doc-biblioentry">
+Sievert C, Parmer C, Hocking T, et al (2022) Plotly: Create interactive web graphics via plotly.js. R package version 4.10.1, <a href="https://CRAN.R-project.org/package=plotly">https://CRAN.R-project.org/package=plotly</a>
+</div>
+<div id="ref-R-gamlss" class="csl-entry" role="doc-biblioentry">
+Stasinopoulos M, Rigby B (2022) Gamlss: Generalised additive models for location scale and shape. R package version 5.4-10, <a href="https://www.gamlss.com/">https://www.gamlss.com/</a>
+</div>
+<div id="ref-R-gamlss.util" class="csl-entry" role="doc-biblioentry">
+Stasinopoulos M, Rigby B, Eilers P (2016) Gamlss.util: GAMLSS utilities. R package version 4.3-4, <a href="http://www.gamlss.org/">http://www.gamlss.org/</a>
+</div>
+<div id="ref-R-tseries" class="csl-entry" role="doc-biblioentry">
+Trapletti A, Hornik K (2022) Tseries: Time series analysis and computational finance. R package version 0.10-52, <a href="https://CRAN.R-project.org/package=tseries">https://CRAN.R-project.org/package=tseries</a>
+</div>
+<div id="ref-R-ggplot2" class="csl-entry" role="doc-biblioentry">
+Wickham H, Chang W, Henry L, et al (2022a) ggplot2: Create elegant data visualisations using the grammar of graphics. R package version 3.4.0, <a href="https://CRAN.R-project.org/package=ggplot2">https://CRAN.R-project.org/package=ggplot2</a>
+</div>
+<div id="ref-R-dplyr" class="csl-entry" role="doc-biblioentry">
+Wickham H, François R, Henry L, Müller K (2022b) Dplyr: A grammar of data manipulation. R package version 1.0.10, <a href="https://CRAN.R-project.org/package=dplyr">https://CRAN.R-project.org/package=dplyr</a>
+</div>
+<div id="ref-R-readr" class="csl-entry" role="doc-biblioentry">
+Wickham H, Hester J, Bryan J (2022c) Readr: Read rectangular text data. R package version 2.1.3, <a href="https://CRAN.R-project.org/package=readr">https://CRAN.R-project.org/package=readr</a>
+</div>
+<div id="ref-R-fGarch" class="csl-entry" role="doc-biblioentry">
+Wuertz D, Chalabi Y, Setz T, Maechler M (2022) fGarch: Rmetrics - autoregressive conditional heteroskedastic modelling. R package version 4022.89, <a href="https://www.rmetrics.org">https://www.rmetrics.org</a>
+</div>
+<div id="ref-R-knitr" class="csl-entry" role="doc-biblioentry">
+Xie Y (2022) Knitr: A general-purpose package for dynamic report generation in r. R package version 1.41, <a href="https://yihui.org/knitr/">https://yihui.org/knitr/</a>
+</div>
+<div id="ref-R-dynlm" class="csl-entry" role="doc-biblioentry">
+Zeileis A (2019) Dynlm: Dynamic linear regression. R package version 0.3-6, <a href="https://CRAN.R-project.org/package=dynlm">https://CRAN.R-project.org/package=dynlm</a>
+</div>
+</div>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./l10_spectral.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Spectral Analysis</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./references.html" class="pagination-link">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

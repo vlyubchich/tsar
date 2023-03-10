@@ -1,0 +1,134 @@
+---
+output: html_document
+editor_options:
+    chunk_output_type: console
+---
+
+```{r, echo=FALSE}
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+options(digits = 3)
+```
+
+#
+
+\section{Introduction}
+The problem of detecting joint trend dynamics in time series is essential in a variety of applications, ranging from analysis of macroeconomic indicators \citep{Vogelsang:Franses:2005, Eun:Lee:2010} to assessing patterns in ice phenology measurements from multiple locations \citep{latifovic:pouliot:2007, duguay:etal:2013} to evaluating yields of financial instruments at various maturity levels \citep{Park_etal_2009} and cell phone download activity at different area codes \citep{degras:etal:2012}.
+The extensive research on comparing trend patterns follows two main directions: 
+\begin{enumerate}
+\item Testing for joint mean functions (Section~\ref{sec:parametric}).
+\item Analysis of joint stochastic trends, which is closely linked to the cointegration notion by \citet{engle:granger:1987} (Section~\ref{sec:cointegration}).
+\end{enumerate}
+We start with the first direction, that is, assess whether $N$ observed time series follow the same hypothesized parametric trend. 
+
+
+\section{Synchronism of parametric trends}
+\label{sec:parametric}
+
+There exist many tests for comparing mean functions, but most of the developed methodology focuses on independent errors. Substantially less is known about testing for joint deterministic trends in a time series framework.
+
+One of the methods developed for time series is by 
+\citet{degras:etal:2012} and \citet{Zhang:2013} who 
+extend the integrated square error (ISE) based approach of \citet{vilar-fernandez:gonzalez-manteiga:2004} to a case of multiple time series with weakly dependent (non)stationary errors. For a comprehensive literature review of available methodology for comparing mean functions embedded into independent errors in a time series framework, see \cite{degras:etal:2012, Park:etal:2014}. Most of these methods, however, either focus on aligning only two curves, or involve selection of {multiple nuisance parameters}, such as bandwidth, level of smoothness, and window size for a long-run variance function. As mentioned by \citet{Park:etal:2014}, the choice of such \emph{multiple nuisance parameters} is challenging for a comparison of curves (even under independent and identically distributed setup) and often leads to inadequate performance, especially in samples of moderate size.
+
+As an alternative, consider an extension of WAVK test to a case of multiple time series \citep{Lyubchich:Gel:2016:synchronism}. Let us observe $N$ time series processes
+\begin{eqnarray}
+\label{model}
+Y_{it} = \mu_i(t/T) + \epsilon_{it} \quad (i=1,\ldots, N;\ t=1,\ldots, T),
+\end{eqnarray}
+where $\mu_i(u)$ ($0<u\leq 1$) %, $u\in(0,1]$,
+are unknown smooth trend functions, and the noise $\epsilon_{it}$ can be represented as a finite-order AR($p$) process or infinite-order AR($\infty$) process with i.i.d. innovations ${e}_{it}$.
+
+We are interested in testing whether these $N$ observed time series have the same trend of some pre-specified smooth parametric form $f(\theta, u)$: %, i.e.,
+\begin{eqnarray} \label{hypot2}
+&H_0 :& \mu_i(u)= c_i + f(\theta, u), \\
+&H_1 :& \mathrm{there}\ \mathrm{exists}\ i, %\ (1\leq i \leq N),\
+\mathrm{such}\ \mathrm{that}\ \mu_i(u)\neq c_i + f(\theta, u),\nonumber
+\end{eqnarray}
+where the reference curve $f(\cdot, u)$ belongs to a known family of smooth parametric functions and $\Theta$ is a set of possible parameter values. For identifiability, assume that $\sum_{i=1}^N c_i=0$. Notice that the hypotheses~(\ref{hypot2}) include (but are not limited to) the special cases of $f(\theta,u)\equiv 0$ (testing for no trend); $f(\theta,u)=\theta_0+\theta_1 u$ (testing for a common linear trend); $f(\theta,u)=\theta_0+\theta_1 u+\theta_2u^2$ (testing for a common quadratic trend).
+
+The following steps are performed to test the hypothesis~(\ref{hypot2}):
+\begin{enumerate}
+\item Estimate the joint hypothetical trend $f({\theta}, \cdot)$ using the aggregated sample $\{\overline{Y}_{.t}\}_{t=1}^T$.
+
+\item Apply the local factor test statistic to each de-trended and filtered series of residuals $\hat{e}_{it}$, which under $H_0$ behave asymptotically like independent and identically distributed ${e}_{it}$:
+\begin{eqnarray}
+    \label{Z}
+\hat{e}_{it}&= &\hat{\epsilon}_{it}-\sum_{j=1}^{p_i(T)}{\hat{\phi}_{ij}\hat{\epsilon}_{i,t-j}} \\ \nonumber
+&=&
+\Big\{ Y_{it}-\sum_{j=1}^{p_i(T)}{\hat{\phi}_{ij}{Y}_{i,t-j}} \Big\}-
+\Big\{ f(\hat{\theta},u_{t})-\sum_{j=1}^{p_i(T)}{\hat{\phi}_{ij}f(\hat{\theta},u_{t-j})} \Big\}.
+\end{eqnarray}
+
+\item Construct a sequence of $N$ %individual %local factor
+statistics
+ $\{{\rm WAVK}_{1}(k_{1T}), \ldots, {\rm WAVK}_{N}(k_{NT})\}$. %, where $\WAVK_{i}(k_{iT})$ is defined by~(\ref{statistic}).
+ Then, the synchronism test statistic is
+\begin{equation}
+\label{statisticST}
+S_T=\sum_{i=1}^N k_{iT}^{-1/2}{\rm WAVK}_{i}(k_{iT}).
+\end{equation}
+
+\item Estimate the variance of $\hat{e}_{it}$, e.g., using the robust difference-based %Rice's
+estimator by \citet{Rice:1984}:
+$$s_i^2= \frac{\sum_{t=2}^T(\hat{e}_{it}-\hat{e}_{i,t-1})^2}{2(T-1)}.$$
+
+\item Simulate $BN$ normally distributed $T$-dimensional vectors $e^\diamond_{iT}$ from $\mathcal{MVN}\left(0, s_i^2I\right)$, where $I$ is a $T\times T$ identity matrix, and compute $B$ bootstrapped statistics $S^\diamond_T=\sum_{i=1}^N k^{-1/2}_{iT} {\rm WAVK}^\diamond_{i}(k_{iT})$ on $e^\diamond_{iT}$ ($i=1,\ldots, N$).
+
+\item The bootstrap $p$-value for testing the $H_0$ is the proportion of $|S^\diamond_T|$ that exceeds $|S_T|$.
+\end{enumerate}
+
+The function \texttt{trend.sync()} from \texttt{funtimes} package can be used directly for testing the hypothesis~(\ref{hypot2}). 
+%when $f(\theta,u)\equiv 0$ (testing for no trend) or $f(\theta,u)=\theta_0+\theta_1 u$ (testing for a common linear trend). The function shall be updated to include user-specified parametric forms of trend. 
+
+Simulate two time series
+<<>>=
+  library(funtimes)
+  set.seed(123)
+  X1 <- arima.sim(list(order = c(1,0,1), ar = 0.4, ma = 0.2), n = 200)[101:200]
+  X2 <- arima.sim(list(order = c(1,0,0), ar = 0.5), n = 200)[101:200]+15
+  par(mfrow=c(1,2))
+  plot.ts(X1)
+  plot.ts(X2)
+@
+
+Combine the time series in a matrix and apply the test
+<<>>=
+  sync.test(cbind(X1,X2) ~ t)
+@
+
+The high $p$-value tells that we cannot reject the $H_0$ of a common linear trend, but notice that the coefficient for linear trend is not statistically significant either. Thus, basically, here we cannot reject that both time series have constant trend (i.e., no trend). 
+
+
+Compare with quadratic trend:
+<<>>=
+sync.test(cbind(X1,X2) ~ poly(t, 2))
+@
+
+
+The function takes some time to compute the results since it is running bootstrap. It also automatically standardizes each time series to have zero mean and unit variance, so the function can be applied to test synchronism of trends in different variables (measured on different scales), e.g., X1 -- temperature, X2 -- pressure, and X3 -- salinity.
+
+When trends are different, we will reject the $H_0$ of synchronism. Power of the test depends largerly on the magnitude of differences and the sample size $T$.
+<<>>=
+  ssize <- 100
+  X3 <- arima.sim(list(order = c(1,0,0), ar = 0.4),
+                  n = 200)[101:200] - c(1:ssize)/ssize
+  par(mfrow=c(1,2))
+  plot.ts(X1)
+  plot.ts(X3)
+@
+
+<<>>=
+  sync.test(cbind(X1,X3) ~ t)
+@
+
+This hypothesis testing approach allows to answer the following questions:
+\begin{itemize}
+\item Do the trends in temperature/wind speeds/precipitation/... reproduced by a climate model correspond to the historical observations? I.e., is the model generally correct? 
+\item Do a number of instruments/sensors capture changes similarly, or deviate, e.g., due to ageing of some instruments.
+\item Are trends in different locations (Canada and USA, lower and mid-troposphere, etc.) follow some hypothesized global trend?
+\end{itemize}
+
+If the null hypothesis is rejected, the method does not tell, however, what was the reason, and which particular time series caused the rejection of the $H_0$. %If clustering of time series is needed instead, some other methods should be used (see the next Section).
+

@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.280">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Time Series Analysis - 5&nbsp; Autoregressive Integrated Moving Average (ARIMA) Models</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./l06_garch.html" rel="next">
+<link href="./l04_arma.html" rel="prev">
+<link href="./TSAfav.png" rel="icon" type="image/png">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Autoregressive Integrated Moving Average (ARIMA) Models</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Time Series Analysis</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-reader-toggle sidebar-tool" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l01_regression.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Review of Linear Regression</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l02_tsintro.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to Time Series Analysis</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l03_smoothing.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Smoothing, Detrending, and Deseasonalizing</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l04_arma.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Autoregressive Moving Average (ARMA) Models</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l05_arima.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Autoregressive Integrated Moving Average (ARIMA) Models</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l06_garch.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Generalized Autoregressive Conditional Heteroskedasticity (GARCH) Models</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l07_trendtest.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Trend Detection</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l08_tsreg1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Time Series Regression with Trends</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l09_tsreg2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Time Series Regression with Correlated Errors</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l10_spectral.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Spectral Analysis</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./software.html" class="sidebar-item-text sidebar-link">Software</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Appendices</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./s1_wls.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Weighted least squares</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./s2_gls.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Generalized least squares</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction-to-arima" id="toc-introduction-to-arima" class="nav-link active" data-scroll-target="#introduction-to-arima"><span class="toc-section-number">5.1</span>  Introduction to ARIMA</a></li>
+  <li><a href="#boxjenkins-methodology" id="toc-boxjenkins-methodology" class="nav-link" data-scroll-target="#boxjenkins-methodology"><span class="toc-section-number">5.2</span>  Box–Jenkins methodology</a></li>
+  <li><a href="#seasonal-arima-sarima" id="toc-seasonal-arima-sarima" class="nav-link" data-scroll-target="#seasonal-arima-sarima"><span class="toc-section-number">5.3</span>  Seasonal ARIMA (SARIMA)</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="toc-section-number">5.4</span>  Conclusion</a></li>
+  <li><a href="#appendix" id="toc-appendix" class="nav-link" data-scroll-target="#appendix"><span class="toc-section-number">5.5</span>  Appendix</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Autoregressive Integrated Moving Average (ARIMA) Models</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="cell">
+
+</div>
+<p>The goal of this lecture is to implement Box–Jenkins methodology for nonstationary time series, by applying differences and fitting an ARMA model to the stationary differenced series. You should be able to recognize when the differencing is needed based on the time series and ACF plots.</p>
+<p><strong>Objectives</strong></p>
+<ol type="1">
+<li>List the steps of Box–Jenkins methodology.</li>
+<li>Identify the order of differences <span class="math inline">\(d\)</span> and order of seasonal differences <span class="math inline">\(D\)</span> from the plots of original and differenced time series.</li>
+<li>Recall how the orders <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span> are identified using ACF and PACF plots for non-seasonal time series.</li>
+<li>Identify the orders <span class="math inline">\(P\)</span> and <span class="math inline">\(Q\)</span> for seasonal time series.</li>
+</ol>
+<p><strong>Reading materials</strong></p>
+<ul>
+<li>Chapters 6.1–6.5 in <span class="citation" data-cites="Brockwell:Davis:2002">Brockwell and Davis (<a href="references.html#ref-Brockwell:Davis:2002" role="doc-biblioref">2002</a>)</span></li>
+</ul>
+<section id="introduction-to-arima" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="introduction-to-arima"><span class="header-section-number">5.1</span> Introduction to ARIMA</h2>
+<p>We have already discussed the class of ARMA models for representing stationary series. A generalization of this class, which incorporates a wide range of nonstationary series, is provided by the <em>autoregressive integrated moving average</em> (ARIMA) processes, i.e., processes which, after differencing finitely many times, reduce to ARMA processes.</p>
+<p>If <span class="math inline">\(d\)</span> is a nonnegative integer, then <span class="math inline">\(X_t\)</span> is an ARIMA(<span class="math inline">\(p, d, q\)</span>) process if <span class="math inline">\(Y_t=(1 - B)^d X_t\)</span> is a causal ARMA(<span class="math inline">\(p, q\)</span>) process. The process is stationary if <span class="math inline">\(d = 0\)</span>, in which case it reduces to an ARMA(<span class="math inline">\(p, q\)</span>) process.</p>
+<p>For example <span class="math inline">\(X_t\)</span> is an ARIMA(1,1,0) process, then <span class="math inline">\(Y_t\)</span> representing the series of its first-order differences (because <span class="math inline">\(d = 1\)</span>) is an ARMA(1,0) process <span class="math display">\[
+Y_t = (1 - B)X_t = \phi_1 Y_{t-1} + Z_t,
+\]</span> where <span class="math inline">\(|\phi_1| &lt; 1\)</span> and <span class="math inline">\(Z_t\)</span> is white noise.</p>
+<p>An equation for ARIMA(<span class="math inline">\(p, d, q\)</span>) is <span id="eq-arima"><span class="math display">\[
+(1 - B)^d (1 - \phi_1B - \dots - \phi_pB^p)X_t =
+(1 + \theta_1B + \dots + \theta_qB^q)Z_t,
+\tag{5.1}\]</span></span> where <span class="math inline">\(B\)</span> is the backshift operator, <span class="math inline">\(d\)</span> is the order of differences, <span class="math inline">\(\phi_1, \dots, \phi_p\)</span> are autoregression coefficients, <span class="math inline">\(p\)</span> is the autoregressive order, <span class="math inline">\(\theta_1, \dots, \theta_q\)</span> are moving average coefficients, <span class="math inline">\(q\)</span> is the moving average order, and <span class="math inline">\(Z_t\sim \mathrm{WN}(0,\sigma^2)\)</span>. The left part of <a href="#eq-arima">Equation&nbsp;<span>5.1</span></a> consists of the differences and the AR part; the right part represents the MA part.</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Modifications of <a href="#eq-arima">Equation&nbsp;<span>5.1</span></a> exists, such as those having both the AR and MA parts on the right side. This affects the signs of estimated coefficients <span class="math inline">\(\phi_1, \dots, \phi_p\)</span> and possibly <span class="math inline">\(\theta_1, \dots, \theta_q\)</span>. Check the help files of the software to know the exact form of the model it is estimating.</p>
+</div>
+</div>
+<p><strong>Why the process is called ‘integrated’?</strong></p>
+<p>Recall the geometric interpretation of the integral of a curve <span class="math inline">\(y = f(x)\)</span> defined on continuous <span class="math inline">\(x\)</span>. The integral of <span class="math inline">\(y\)</span> corresponds to the area under the curve. For example, if <span class="math inline">\(y = f(x)\)</span> is a function describing income <span class="math inline">\(y\)</span> based on working time <span class="math inline">\(x\)</span>, the integral corresponds to the total income in a certain period.</p>
+<p>In our lectures, we deal with time series defined using discrete times <span class="math inline">\(t\)</span> (for example, years), so yearly income is <span class="math inline">\(Y_t\)</span>, and the total income over several years can be obtained by summing the individual annual incomes, <span class="math inline">\(\sum Y_t\)</span>. Hence, here we integrate by summation.</p>
+<p>Recall the definition of random walk series, which is a cumulative sum of i.i.d. noise: <span class="math display">\[
+X_t = \sum_{i=1}^t Y_i,
+\]</span> where <span class="math inline">\(Y_t \sim\)</span> i.i.d.(<span class="math inline">\(0,\sigma^2\)</span>). This <span class="math inline">\(X_t\)</span> is the simplest example of integrated series. The notation $X_t $I(1) means <span class="math inline">\(X_t\)</span> is a first-order integrated series. The differences of <span class="math inline">\(X_t\)</span> <span class="math display">\[
+(1 - B)X_t = X_t - X_{t-1} = Y_t
+\]</span> give us back the uncorrelated series <span class="math inline">\(Y_t\)</span>, hence <span class="math inline">\(X_t\)</span> is an ARIMA(0,1,0) process.</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>ARIMA(<span class="math inline">\(p, d, q\)</span>) processes with <span class="math inline">\(d \geqslant 1\)</span> are also called <em>difference-stationary</em> processes or processes with a <em>stochastic trend</em>. I.e., difference-stationary means the process is not stationary but can be made stationary by proper differencing.</p>
+</div>
+</div>
+</section>
+<section id="boxjenkins-methodology" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="boxjenkins-methodology"><span class="header-section-number">5.2</span> Box–Jenkins methodology</h2>
+<p>The approach developed by <span class="citation" data-cites="Box:Jenkins:1976">Box and Jenkins (<a href="references.html#ref-Box:Jenkins:1976" role="doc-biblioref">1976</a>)</span> applies the differencing to the original time series repeatedly, until a stationary time series is obtained. We will first learn how to identify the number of differences (i.e., the order of differences <span class="math inline">\(d\)</span>) by analyzing plots of the time series and ACF at each iteration of the method. In the later lecture on detecting trends in time series, we will also introduce formal tests for the integration order.</p>
+<p>Below is a general algorithm used to fit ARIMA(<span class="math inline">\(p, d, q\)</span>) models</p>
+<ol type="1">
+<li>Start assuming <span class="math inline">\(d = 0\)</span>.</li>
+<li>Plot the time series and ACF.</li>
+<li>If the plots suggest nonstationarity, iterate differencing and plotting to update <span class="math inline">\(d\)</span>:
+<ul>
+<li>Apply differences of the current time series, write <span class="math inline">\(d = d + 1\)</span></li>
+<li>Plot the time series and ACF</li>
+<li>If nonstationarity is still obvious, repeat the differencing and plotting</li>
+</ul></li>
+<li>Identify the orders <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span> from the plots of ACF and PACF of the latest (differenced) time series.</li>
+<li>Estimate the model.</li>
+<li>Apply model diagnostics, particularly for homogeneity, uncorrelatedness, and normality of residuals. Address the violations by respecifying the model.</li>
+<li>Forecast with the resultant model.</li>
+</ol>
+<p>Using the Box–Jenkins methodology, the linear predictor approximately follows a normal distribution, i.e., <span class="math display">\[
+\hat{X}_{n+h} \sim N\left( X_{n+h}, \mathrm{var}(\hat{X}_{n+h}) \right).
+\]</span></p>
+<p>Therefore, a <span class="math inline">\((100 - \alpha)\)</span>% prediction interval is <span class="math display">\[
+\hat{X}_{n+h} \pm z_{1-\alpha/2} \sqrt{\mathrm{var}(\hat{X}_{n+h})}.
+\]</span></p>
+<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Example: ARIMA for Lake Baikal
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Here we find an ARIMA model for the Lake Baikal thaw (breakup) dates from the Global Lake and River Ice Phenology Database <span class="citation" data-cites="Benson:etal:2020">(<a href="references.html#ref-Benson:etal:2020" role="doc-biblioref">Benson et al. 2020</a>)</span>.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate calendar day from ice break-up date</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"./data/baikal.csv"</span>, <span class="at">skip =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">Date_iceoff =</span> <span class="fu">as.Date</span>(<span class="fu">paste</span>(iceoff_year, iceoff_month, iceoff_day,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">sep =</span> <span class="st">"-"</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">DoY_iceoff =</span> <span class="fu">as.numeric</span>(<span class="fu">format</span>(Date_iceoff, <span class="st">"%j"</span>)))</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to ts format</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>iceoff <span class="ot">&lt;-</span> <span class="fu">ts</span>(B<span class="sc">$</span>DoY_iceoff, <span class="at">start =</span> B<span class="sc">$</span>iceoff_year[<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p><a href="#fig-BaikalARIMA">Figure&nbsp;<span>5.1</span></a> shows that there is possibly a decreasing trend (ice melts earlier in the year), although the ACF declines fast.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> iceoff</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">autoplot</span>(X) <span class="sc">+</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"Year"</span>) <span class="sc">+</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">"Ice breakup day"</span>) <span class="sc">+</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">ggAcf</span>(X) <span class="sc">+</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">ggAcf</span>(X, <span class="at">type =</span> <span class="st">"partial"</span>) <span class="sc">+</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">/</span> (p2 <span class="sc">+</span> p3) <span class="sc">+</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-BaikalARIMA" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="l05_arima_files/figure-html/fig-BaikalARIMA-1.png" class="img-fluid figure-img" width="768"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;5.1: Plots for the original time series of ice breakup days.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>To remove this potential trend, we apply differencing once (more specifically, consecutive differencing, <span class="math inline">\(X_t - X_{t-1}\)</span>) and produce the plots again. From <a href="#fig-BaikalARIMAd1">Figure&nbsp;<span>5.2</span></a>, there is no tendency in the differenced series, and the ACF declines fast, so we achieved stationarity and no need to difference the data more. Overall, we differenced the time series once to achieve stationarity, so the order of differences <span class="math inline">\(d = 1\)</span>.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">diff</span>(iceoff)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> ggplot2<span class="sc">::</span><span class="fu">autoplot</span>(X) <span class="sc">+</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"Year"</span>) <span class="sc">+</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">"diff(Ice breakup day)"</span>) <span class="sc">+</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">ggAcf</span>(X) <span class="sc">+</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">ggAcf</span>(X, <span class="at">type =</span> <span class="st">"partial"</span>) <span class="sc">+</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">/</span> (p2 <span class="sc">+</span> p3) <span class="sc">+</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-BaikalARIMAd1" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="l05_arima_files/figure-html/fig-BaikalARIMAd1-1.png" class="img-fluid figure-img" width="768"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;5.2: Plots for the differenced time series of ice breakup days.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Continue working with <a href="#fig-BaikalARIMAd1">Figure&nbsp;<span>5.2</span></a> to identify the orders <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span>. If we treat the behavior of ACF as exhibiting a cut-off, and PACF having an exponential decay, an MA(<span class="math inline">\(q\)</span>) model might be plausible (i.e., <span class="math inline">\(p = 0\)</span>). Since the ACF cuts off after lag 1, <span class="math inline">\(q = 1\)</span> in this case.</p>
+<p>Hence, we specified the model for ice breakup dates to be ARIMA(0,1,1), which can be written as <span class="math display">\[
+(1 - B) Y_t = (1 + \theta_1B)Z_t
+\]</span> or <span class="math display">\[
+Y_t = Y_{t-1} + \theta_1 Z_{t-1} + Z_t,
+\]</span> where <span class="math inline">\(Y_t\)</span> represents the ice breakup dates in the year <span class="math inline">\(t\)</span>, <span class="math inline">\(\theta_1\)</span> is the moving average coefficient, and <span class="math inline">\(Z_t\sim \mathrm{WN}(0,\sigma^2)\)</span>.</p>
+<p>We can now estimate the model, for example, using <code>stats::arima()</code>.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>mod_baikal <span class="ot">&lt;-</span> stats<span class="sc">::</span><span class="fu">arima</span>(iceoff, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>mod_baikal</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+#&gt; Call:
+#&gt; stats::arima(x = iceoff, order = c(0, 1, 1))
+#&gt; 
+#&gt; Coefficients:
+#&gt;          ma1
+#&gt;       -0.843
+#&gt; s.e.   0.075
+#&gt; 
+#&gt; sigma^2 estimated as 59:  log likelihood = -519,  aic = 1042</code></pre>
+</div>
+</div>
+<p>We can also check the orders selected automatically:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">auto.arima</span>(iceoff)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; Series: iceoff 
+#&gt; ARIMA(0,1,1) 
+#&gt; 
+#&gt; Coefficients:
+#&gt;          ma1
+#&gt;       -0.843
+#&gt; s.e.   0.075
+#&gt; 
+#&gt; sigma^2 = 59.4:  log likelihood = -519
+#&gt; AIC=1042   AICc=1043   BIC=1048</code></pre>
+</div>
+</div>
+<p>In the next step, we apply diagnostic checks for the residuals, for example, using plots (<a href="#fig-BaikalARIMAres">Figure&nbsp;<span>5.3</span></a>). Remember that the residuals should resemble white noise.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>e <span class="ot">&lt;-</span> mod_baikal<span class="sc">$</span>residuals</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> ggplot2<span class="sc">::</span><span class="fu">autoplot</span>(e) <span class="sc">+</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">"Residuals"</span>) <span class="sc">+</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">ggAcf</span>(e) <span class="sc">+</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> ggpubr<span class="sc">::</span><span class="fu">ggqqplot</span>(e) <span class="sc">+</span> </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"Standard normal quantiles"</span>) <span class="sc">+</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">/</span> (p2 <span class="sc">+</span> p3) <span class="sc">+</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-BaikalARIMAres" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="l05_arima_files/figure-html/fig-BaikalARIMAres-1.png" class="img-fluid figure-img" width="768"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;5.3: Residual diagnostics for the ARIMA(0,1,1) model for ice breakup dates.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Given that the diagnostics plots show satisfactory behavior of the residuals (<a href="#fig-BaikalARIMAres">Figure&nbsp;<span>5.3</span></a>), continue with forecasting using this model (<a href="#fig-BaikalARIMAfcst">Figure&nbsp;<span>5.4</span></a>). Note that ARIMA(0,1,1) is mathematically equivalent to simple exponential smoothing, hence the forecast is a horizontal line.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>ggplot2<span class="sc">::</span><span class="fu">autoplot</span>(forecast<span class="sc">::</span><span class="fu">forecast</span>(mod_baikal, <span class="at">h =</span> <span class="dv">10</span>)) <span class="sc">+</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"Year"</span>) <span class="sc">+</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">"Ice breakup day"</span>) <span class="sc">+</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-BaikalARIMAfcst" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="l05_arima_files/figure-html/fig-BaikalARIMAfcst-1.png" class="img-fluid figure-img" width="768"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;5.4: ARIMA(0,1,1) model predictions of ice breakup dates 10 years ahead.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="seasonal-arima-sarima" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="seasonal-arima-sarima"><span class="header-section-number">5.3</span> Seasonal ARIMA (SARIMA)</h2>
+<p>Recall that time series with seasonal variability or another strictly periodic component (e.g., daily cycles) can be deseasonalized by applying differencing that is not of consecutive values but with a lag equal to the period of the cyclical variability. We will use such differences to remove <em>strong</em> periodicity, as an additional step in the Box–Jenkins algorithm.</p>
+<p>Similar to the regular differences, we will apply seasonal differences not to eliminate autocorrelations at the corresponding lags, but to achieve fast decay of ACF at seasonal lags. Even after the seasonal differences, there might be significant spikes at the seasonal lags in ACF and PACF, which can be addressed by selecting proper seasonal autoregressive and moving average orders. Therefore, we can define orders of integration, AR, and MA for the seasonal part of the time series in the same way we define these orders for the non-seasonal part.</p>
+<p>Based on the definitions in <span class="citation" data-cites="Brockwell:Davis:2002">Brockwell and Davis (<a href="references.html#ref-Brockwell:Davis:2002" role="doc-biblioref">2002</a>)</span>, <span class="math inline">\(X_t\)</span> is a <em>seasonal autoregressive integrated moving average</em>, SARIMA(<span class="math inline">\(p,d,q\)</span>)(<span class="math inline">\(P,D,Q\)</span>)<span class="math inline">\(_s\)</span> process if the differenced series <span class="math inline">\(Y_t=(1 - B)^d (1 - B^s)^D X_t\)</span> is a causal ARMA process. Here <span class="math inline">\(d\)</span> and <span class="math inline">\(D\)</span> are nonnegative integers, and <span class="math inline">\(s\)</span> is the period.</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In practice, <span class="math inline">\(D \leqslant 1\)</span> and <span class="math inline">\(P, Q \leqslant 3\)</span>.</p>
+</div>
+</div>
+<p>An equation for SARIMA(<span class="math inline">\(p, d, q\)</span>)(<span class="math inline">\(P, D, Q\)</span>)<span class="math inline">\(_s\)</span> is <span id="eq-sarima"><span class="math display">\[
+\begin{split}
+(1 - B)^d (1 - \phi_1B - \dots - \phi_pB^p) (1 - B^s)^D (1 - \Phi_1B^s - \dots - \Phi_PB^{sP}) X_t \\
+= (1 + \theta_1B + \dots + \theta_qB^q) (1 + \Theta_1B^s + \dots + \Theta_QB^{sQ})Z_t,
+\end{split}
+\tag{5.2}\]</span></span> where <span class="math inline">\(D\)</span> is the order of seasonal differences, <span class="math inline">\(\Phi_1, \dots, \Phi_P\)</span> are seasonal autoregression coefficients, <span class="math inline">\(P\)</span> is the seasonal autoregressive order, <span class="math inline">\(\Theta_1, \dots, \Theta_q\)</span> are seasonal moving average coefficients, <span class="math inline">\(Q\)</span> is the seasonal moving average order, and the rest of the terms are the same as in <a href="#eq-arima">Equation&nbsp;<span>5.1</span></a>.</p>
+<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Example: SARIMA for the number of airline passengers
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Here we revisit the time series on airline passengers from which we have removed the trend by taking regular non-seasonal differences once (<span class="math inline">\(d = 1\)</span>). Notice from <a href="#fig-AirDiff">Figure&nbsp;<span>5.5</span></a> C and D how after taking the usual differences the upward trend disappeared, and ACF started to decay much faster. At the seasonal lags, however, the ACF decays still linearly (<a href="#fig-AirDiff">Figure&nbsp;<span>5.5</span></a> D), which suggested differencing at the seasonal lag to remove strong periodicity. After taking seasonal differences once (<span class="math inline">\(D = 1\)</span>), the time series looks stationary (<a href="#fig-AirDiff">Figure&nbsp;<span>5.5</span></a> E), and the ACF decays fast at both seasonal and non-seasonal lags. This is enough differencing.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>Yt <span class="ot">&lt;-</span> <span class="fu">log10</span>(AirPassengers)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply first-order (non-seasonal) differences</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>D1 <span class="ot">&lt;-</span> <span class="fu">diff</span>(Yt)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Additionally, apply first-order seasonal differences</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>D1D12 <span class="ot">&lt;-</span> <span class="fu">diff</span>(D1, <span class="at">lag =</span> <span class="dv">12</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> ggplot2<span class="sc">::</span><span class="fu">autoplot</span>(Yt) <span class="sc">+</span> </span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"Year"</span>) <span class="sc">+</span> </span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">"lg(Air passangers)"</span>) <span class="sc">+</span> </span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">"Yt"</span>) <span class="sc">+</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">ggAcf</span>(Yt) <span class="sc">+</span> </span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">"Yt"</span>) <span class="sc">+</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"Lag (months)"</span>) <span class="sc">+</span> </span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> ggplot2<span class="sc">::</span><span class="fu">autoplot</span>(D1) <span class="sc">+</span> </span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"Year"</span>) <span class="sc">+</span> </span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">"lg(Air passangers)"</span>) <span class="sc">+</span> </span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">"(1-B)Yt"</span>) <span class="sc">+</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>p4 <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">ggAcf</span>(D1) <span class="sc">+</span> </span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">"(1-B)Yt"</span>) <span class="sc">+</span></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"Lag (months)"</span>) <span class="sc">+</span> </span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>p5 <span class="ot">&lt;-</span> ggplot2<span class="sc">::</span><span class="fu">autoplot</span>(D1D12) <span class="sc">+</span> </span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"Year"</span>) <span class="sc">+</span> </span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">"lg(Air passangers)"</span>) <span class="sc">+</span> </span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">"(1-B)(1-B12)Yt"</span>) <span class="sc">+</span></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>p6 <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">ggAcf</span>(D1D12) <span class="sc">+</span> </span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">"(1-B)(1-B12)Yt"</span>) <span class="sc">+</span></span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"Lag (months)"</span>) <span class="sc">+</span> </span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>(p1 <span class="sc">+</span> p2) <span class="sc">/</span> (p3 <span class="sc">+</span> p4) <span class="sc">/</span> (p5 <span class="sc">+</span> p6) <span class="sc">+</span></span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-AirDiff" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="l05_arima_files/figure-html/fig-AirDiff-1.png" class="img-fluid figure-img" width="768"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;5.5: Time series plot of the airline passenger series with an estimated ACF and the detrended (differenced) series with their ACFs.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>For the next step, see <a href="#fig-AirDiffACF">Figure&nbsp;<span>5.6</span></a> to identify the orders <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span>. For that, look only at the non-seasonal lags, 1–11. Both ACF and PACF have significant values at lags 1 and 3, which could correspond to AR(3), MA(3), ARMA(1,1), or ARMA with higher orders. From these options ARMA(1,1) has fewer parameters, hence we prefer this model, with <span class="math inline">\(p = 1\)</span> and <span class="math inline">\(q = 1\)</span>, as the most parsimonious option. (However, given that the correlations at lag 2 are not statistically significant, information criteria may penalize adding extra arguments and might prefer a more compact specification, AR(1) or MA(1).)</p>
+<p>Next, use <a href="#fig-AirDiffACF">Figure&nbsp;<span>5.6</span></a> again to identify orders <span class="math inline">\(P\)</span> and <span class="math inline">\(Q\)</span>. Now look only at the seasonal lags 12, 24, 36, etc. Both the ACF and PACF have significant values only on the first of those lags (lag 12), which could correspond to AR(1), MA(1), or ARMA(1,1) for the seasonal component. From these options, AR(1) and MA(1) are the most parsimonious so we should select one of them or use some numeric criterion to select the best model (e.g., information criterion like AIC or forecasting accuracy on a testing set).</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>p6 <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">ggAcf</span>(D1D12, <span class="at">lag.max =</span> <span class="dv">36</span>) <span class="sc">+</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">"(1-B)(1-B12)Yt"</span>) <span class="sc">+</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"Lag (months)"</span>) <span class="sc">+</span> </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>p7 <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">ggAcf</span>(D1D12, <span class="at">lag.max =</span> <span class="dv">36</span>, <span class="at">type =</span> <span class="st">"partial"</span>) <span class="sc">+</span> </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">"(1-B)(1-B12)Yt"</span>) <span class="sc">+</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"Lag (months)"</span>) <span class="sc">+</span> </span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>p6 <span class="sc">+</span> p7 <span class="sc">+</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-AirDiffACF" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="l05_arima_files/figure-html/fig-AirDiffACF-1.png" class="img-fluid figure-img" width="768"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;5.6: ACF and PACF of the differenced airline passenger time series <span class="math inline">\((1-B)(1-B^{12})Y_t\)</span>.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Overall, our analysis suggested that SARIMA(1,1,1)(1,1,0) or SARIMA(1,1,1)(0,1,1) is a plausible model for this time series. For example, estimate SARIMA(1,1,1)(0,1,1):</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>mod_air <span class="ot">&lt;-</span> stats<span class="sc">::</span><span class="fu">arima</span>(Yt, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>                        <span class="at">seasonal =</span> <span class="fu">list</span>(<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">period =</span> <span class="dv">12</span>))</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>mod_air</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+#&gt; Call:
+#&gt; stats::arima(x = Yt, order = c(1, 1, 1), seasonal = list(order = c(0, 1, 1), 
+#&gt;     period = 12))
+#&gt; 
+#&gt; Coefficients:
+#&gt;         ar1     ma1    sma1
+#&gt;       0.196  -0.578  -0.564
+#&gt; s.e.  0.247   0.213   0.075
+#&gt; 
+#&gt; sigma^2 estimated as 0.000253:  log likelihood = 354,  aic = -700</code></pre>
+</div>
+</div>
+<p>SARIMA(1,1,1)(0,1,1)<span class="math inline">\(_{12}\)</span> model can be written down as <span class="math display">\[
+\begin{split}
+(1 - B) (1 - \phi_1B) (1 - B^{12}) X_t \\
+= (1 + \theta_1B) (1 + \Theta_1B^{12})Z_t.
+\end{split}
+\]</span> We can apply the backshift operations are rewrite the model without the backshift operator as follows: <span class="math display">\[
+\begin{split}
+(1 - B - \phi_1B + \phi_1B^2) (1 - B^{12}) X_t \\
+= (1 + \theta_1B + \Theta_1B^{12} + \theta_1\Theta_1B^{13})Z_t,
+\end{split}
+\]</span> then <span class="math display">\[
+\begin{split}
+(1 - B - \phi_1B + \phi_1B^2 - B^{12} + B^{13} + \phi_1B^{13} - \phi_1B^{14}) X_t \\
+= (1 + \theta_1B + \Theta_1B^{12} + \theta_1\Theta_1B^{13})Z_t,
+\end{split}
+\]</span> then <span class="math display">\[
+\begin{split}
+X_t - X_{t-1} - \phi_1X_{t-1} + \phi_1X_{t-2} - X_{t-12} + X_{t-13} + \phi_1X_{t-13} - \phi_1X_{t-14} \\
+= Z_t + \theta_1Z_{t-1} + \Theta_1Z_{t-12} + \theta_1\Theta_1Z_{t-13},
+\end{split}
+\]</span> then <span class="math display">\[
+\begin{split}
+X_t = X_{t-1} + \phi_1X_{t-1} - \phi_1X_{t-2} + X_{t-12} - X_{t-13} - \phi_1X_{t-13} + \phi_1X_{t-14} \\
++ \theta_1Z_{t-1} + \Theta_1Z_{t-12} + \theta_1\Theta_1Z_{t-13} + Z_t,
+\end{split}
+\]</span> where <span class="math inline">\(X_t = \lg(AirPassengers)\)</span> and <span class="math inline">\(Z_t\sim \mathrm{WN}(0,\sigma^2)\)</span>.</p>
+<p>Below are results based on the automatic selection of the orders:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">auto.arima</span>(Yt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; Series: Yt 
+#&gt; ARIMA(0,1,1)(0,1,1)[12] 
+#&gt; 
+#&gt; Coefficients:
+#&gt;          ma1    sma1
+#&gt;       -0.402  -0.557
+#&gt; s.e.   0.090   0.073
+#&gt; 
+#&gt; sigma^2 = 0.000259:  log likelihood = 354
+#&gt; AIC=-702   AICc=-702   BIC=-693</code></pre>
+</div>
+</div>
+<p>The orders selected automatically based on AIC suggest that indeed the non-significance of correlations at lag 2 and relatively low correlations at lag 3 made it not worthy to estimate additional parameters in the non-seasonal part, for which MA(1) specification was selected, not the suggested ARMA(1,1), AR(3), or MA(3).</p>
+<p>In the next step, we apply diagnostic checks for the residuals, for example, using plots (<a href="#fig-AirARIMAres">Figure&nbsp;<span>5.7</span></a>).</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>e <span class="ot">&lt;-</span> mod_air<span class="sc">$</span>residuals</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> ggplot2<span class="sc">::</span><span class="fu">autoplot</span>(e) <span class="sc">+</span> </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">"Residuals"</span>) <span class="sc">+</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">ggAcf</span>(e) <span class="sc">+</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> ggpubr<span class="sc">::</span><span class="fu">ggqqplot</span>(e) <span class="sc">+</span> </span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"Standard normal quantiles"</span>) <span class="sc">+</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">/</span> (p2 <span class="sc">+</span> p3) <span class="sc">+</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-AirARIMAres" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="l05_arima_files/figure-html/fig-AirARIMAres-1.png" class="img-fluid figure-img" width="768"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;5.7: Residual diagnostics for the SARIMA model for the airline passenger data.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Given that the diagnostics plots show satisfactory behavior of the residuals (<a href="#fig-AirARIMAres">Figure&nbsp;<span>5.7</span></a>), continue with forecasting using this model (<a href="#fig-AirARIMAfcst">Figure&nbsp;<span>5.8</span></a>).</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>ggplot2<span class="sc">::</span><span class="fu">autoplot</span>(forecast<span class="sc">::</span><span class="fu">forecast</span>(mod_air, <span class="at">h =</span> <span class="dv">24</span>)) <span class="sc">+</span> </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"Year"</span>) <span class="sc">+</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">"lg(Air passangers)"</span>) <span class="sc">+</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-AirARIMAfcst" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="l05_arima_files/figure-html/fig-AirARIMAfcst-1.png" class="img-fluid figure-img" width="768"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;5.8: SARIMA model predictions of airline passenger data 2 years ahead.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Compare ACF in <a href="#fig-AirARIMAres">Figure&nbsp;<span>5.7</span></a> with ACF of regression residuals in <a href="l03_smoothing.html#fig-airpassangersRegTrendSeas">Figure&nbsp;<span>3.15</span></a> and <a href="l03_smoothing.html#fig-airpassangersRegTrendFourier">Figure&nbsp;<span>3.16</span></a>. The residuals of those regression models are autocorrelated, while the models have more parameters than the specified SARIMA models. Hence, the SARIMA model is much better for this time series.</p>
+</div>
+</div>
+</section>
+<section id="conclusion" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="conclusion"><span class="header-section-number">5.4</span> Conclusion</h2>
+<p>In this lecture, we discovered ARIMA as an extension of ARMA modeling to nonstationary data and SARIMA as an extension of ARIMA models to time series with periodicity (seasonality).</p>
+<p>We learned Box–Jenkins iterative procedure for identifying such models, including the orders of differences, <span class="math inline">\(d\)</span> and <span class="math inline">\(D\)</span>, and <span class="math inline">\(p\)</span>, <span class="math inline">\(q\)</span>, <span class="math inline">\(P\)</span>, and <span class="math inline">\(Q\)</span>.</p>
+<p>Please remember to specify the criterion for selecting a model beforehand and consider such options as cross-validation and using a testing set.</p>
+</section>
+<section id="appendix" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="appendix"><span class="header-section-number">5.5</span> Appendix</h2>
+<p><strong>Equivalences</strong></p>
+<p>Mathematically, some models are equivalent one to another. Below are some examples.</p>
+<ul>
+<li>Forecasts of ARIMA(0,1,1) are equivalent to simple exponential smoothing.</li>
+</ul>
+<p>An ARIMA(0,1,1) model can be written as <span class="math display">\[
+Y_t = Y_{t-1} + \theta_1 Z_{t-1} + Z_t,
+\]</span> from which the one-step-ahead forecast is <span class="math display">\[
+\hat{Y}_t = Y_{t-1} + \theta_1 (Y_{t-1} - \hat{Y}_{t-1}).
+\]</span> If we define <span class="math inline">\(\theta_1 = \alpha - 1\)</span>, then the above equation transforms to <span class="math display">\[
+\begin{split}
+\hat{Y}_t &amp;= Y_{t-1} + (\alpha - 1) (Y_{t-1} - \hat{Y}_{t-1})\\
+&amp;= Y_{t-1} + (\alpha - 1) Y_{t-1} - (\alpha - 1) \hat{Y}_{t-1}\\
+&amp;= \alpha Y_{t-1} + (1 - \alpha) \hat{Y}_{t-1}
+\end{split}
+\]</span></p>
+<ul>
+<li><p>Forecasts of ARIMA(0,2,2) are equivalent to Holt’s method.</p></li>
+<li><p>Forecasts of SARIMA(0,1,<span class="math inline">\(s+1\)</span>)(0,1,0)<span class="math inline">\(_s\)</span> are equivalent to Holt–Winters additive method.</p></li>
+</ul>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="ref-Benson:etal:2020" class="csl-entry" role="doc-biblioentry">
+Benson B, Magnuson J, Sharma S (2020) <a href="https://doi.org/10.7265/N5W66HP8">Global lake and river ice phenology database. <span>Version 1 (G01377)</span></a>. <span>National Snow and Ice Data Center</span>, Boulder, CO, USA
+</div>
+<div id="ref-Box:Jenkins:1976" class="csl-entry" role="doc-biblioentry">
+Box GEP, Jenkins GM (1976) Time series analysis: Forecasting and control. Holden-Day, San Francisco
+</div>
+<div id="ref-Brockwell:Davis:2002" class="csl-entry" role="doc-biblioentry">
+Brockwell PJ, Davis RA (2002) Introduction to time series and forecasting, 2nd edn. Springer, New York
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./l04_arma.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Autoregressive Moving Average (ARMA) Models</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./l06_garch.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Generalized Autoregressive Conditional Heteroskedasticity (GARCH) Models</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

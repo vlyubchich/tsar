@@ -1,0 +1,482 @@
+---
+output: html_document
+editor_options:
+    chunk_output_type: console
+---
+
+```{r, echo=FALSE}
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+options(digits = 3)
+```
+
+# Autoregressive Integrated Moving Average (ARIMA) Models
+
+The goal of this lecture is to implement Box--Jenkins methodology for nonstationary time series, by applying differences and fitting an ARMA model to the stationary differenced series. 
+You should be able to recognize when the differencing is needed based on the time series and ACF plots.
+
+**Objectives**
+
+1. List the steps of Box--Jenkins methodology.
+1. Identify the order of differences $d$ and order of seasonal differences $D$ from the plots of original and differenced time series.
+1. Recall how the orders $p$ and $q$ are identified using ACF and PACF plots for non-seasonal time series.
+1. Identify the orders $P$ and $Q$ for seasonal time series.
+
+**Reading materials**
+
+* Chapters 6.1--6.5 in @Brockwell:Davis:2002
+
+
+## Introduction to ARIMA
+
+We have already discussed the class of ARMA models for representing stationary series. 
+A generalization of this class, which incorporates a wide range of nonstationary series, is provided by the *autoregressive integrated moving average* (ARIMA) processes, i.e., processes which, after differencing finitely many times, reduce to ARMA processes.
+
+If $d$ is a nonnegative integer, then $X_t$ is an ARIMA($p, d, q$) process if $Y_t=(1 - B)^d X_t$ is a causal ARMA($p, q$) process. 
+The process is stationary if $d = 0$, in which case it reduces to an ARMA($p, q$) process.
+
+For example $X_t$ is an ARIMA(1,1,0) process, then $Y_t$ representing the series of its first-order differences (because $d = 1$) is an ARMA(1,0) process
+$$
+Y_t = (1 - B)X_t = \phi_1 Y_{t-1} + Z_t,
+$$
+where $|\phi_1| < 1$ and $Z_t$ is white noise.
+
+An equation for ARIMA($p, d, q$) is
+$$
+(1 - B)^d (1 - \phi_1B - \dots - \phi_pB^p)X_t = 
+(1 + \theta_1B + \dots + \theta_qB^q)Z_t,
+$$ {#eq-arima}
+where $B$ is the backshift operator, $d$ is the order of differences, $\phi_1, \dots, \phi_p$ are autoregression coefficients, $p$ is the autoregressive order, $\theta_1, \dots, \theta_q$ are moving average coefficients, $q$ is the moving average order, and $Z_t\sim \mathrm{WN}(0,\sigma^2)$. 
+The left part of @eq-arima consists of the differences and the AR part; the right part represents the MA part.
+
+::: {.callout-note}
+Modifications of @eq-arima exists, such as those having both the AR and MA parts on the right side. 
+This affects the signs of estimated coefficients $\phi_1, \dots, \phi_p$ and possibly $\theta_1, \dots, \theta_q$. 
+Check the help files of the software to know the exact form of the model it is estimating.
+:::
+
+**Why the process is called 'integrated'?**
+
+Recall the geometric interpretation of the integral of a curve $y = f(x)$ defined on continuous $x$. 
+The integral of $y$ corresponds to the area under the curve. 
+For example, if $y = f(x)$ is a function describing income $y$ based on working time $x$, the integral corresponds to the total income in a certain period.
+
+In our lectures, we deal with time series defined using discrete times $t$ (for example, years), so yearly income is $Y_t$, and the total income over several years can be obtained by summing the individual annual incomes, $\sum Y_t$. 
+Hence, here we integrate by summation.
+
+Recall the definition of random walk series, which is a cumulative sum of i.i.d. noise:
+$$
+X_t = \sum_{i=1}^t Y_i,
+$$
+where $Y_t \sim$ i.i.d.($0,\sigma^2$).
+This $X_t$ is the simplest example of integrated series. 
+The notation $X_t \sim $I(1) means $X_t$ is a first-order integrated series. 
+The differences of $X_t$
+$$
+(1 - B)X_t = X_t - X_{t-1} = Y_t
+$$
+give us back the uncorrelated series $Y_t$, hence $X_t$ is an ARIMA(0,1,0) process.
+
+::: {.callout-note}
+ARIMA($p, d, q$) processes with $d \geqslant 1$ are also called *difference-stationary* processes or processes with a *stochastic trend*.
+I.e., difference-stationary means the process is not stationary but can be made stationary by proper differencing.
+:::
+
+
+## Box--Jenkins methodology
+
+The approach developed by @Box:Jenkins:1976 applies the differencing to the original time series repeatedly, until a stationary time series is obtained. 
+We will first learn how to identify the number of differences (i.e., the order of differences $d$) by analyzing plots of the time series and ACF at each iteration of the method. 
+In the later lecture on detecting trends in time series, we will also introduce formal tests for the integration order.
+
+Below is a general algorithm used to fit ARIMA($p, d, q$) models
+
+1. Start assuming $d = 0$.
+1. Plot the time series and ACF.
+1. If the plots suggest nonstationarity, iterate differencing and plotting to update $d$:
+    * Apply differences of the current time series, write $d = d + 1$
+    * Plot the time series and ACF
+    * If nonstationarity is still obvious, repeat the differencing and plotting
+1. Identify the orders $p$ and $q$ from the plots of ACF and PACF of the latest (differenced) time series.
+1. Estimate the model.
+1. Apply model diagnostics, particularly for homogeneity, uncorrelatedness, and normality of residuals. 
+Address the violations by respecifying the model.
+1. Forecast with the resultant model.
+
+Using the Box--Jenkins methodology, the linear predictor approximately follows a normal distribution, i.e.,
+$$
+\hat{X}_{n+h} \sim N\left( X_{n+h}, \mathrm{var}(\hat{X}_{n+h}) \right).
+$$
+
+Therefore, a $(100 - \alpha)$\% prediction interval is
+$$
+\hat{X}_{n+h} \pm z_{1-\alpha/2} \sqrt{\mathrm{var}(\hat{X}_{n+h})}.
+$$
+
+::: {.callout-note icon=false}
+
+## Example: ARIMA for Lake Baikal
+
+Here we find an ARIMA model for the Lake Baikal thaw (breakup) dates from the Global Lake and River Ice Phenology Database [@Benson:etal:2020].
+
+```{r}
+# Calculate calendar day from ice break-up date
+B <- read.csv("./data/baikal.csv", skip = 1) %>%
+    mutate(Date_iceoff = as.Date(paste(iceoff_year, iceoff_month, iceoff_day,
+                                       sep = "-"))) %>%
+    mutate(DoY_iceoff = as.numeric(format(Date_iceoff, "%j")))
+
+# Convert to ts format
+iceoff <- ts(B$DoY_iceoff, start = B$iceoff_year[1])
+```
+
+@fig-BaikalARIMA shows that there is possibly a decreasing trend (ice melts earlier in the year), although the ACF declines fast.
+
+```{r}
+#| label: fig-BaikalARIMA
+#| fig-cap: "Plots for the original time series of ice breakup days."
+#| fig-height: 7
+
+X <- iceoff
+p1 <- forecast::autoplot(X) +
+    xlab("Year") +
+    ylab("Ice breakup day") +
+    theme_light()
+p2 <- forecast::ggAcf(X) +
+    ggtitle("") +
+    theme_light()
+p3 <- forecast::ggAcf(X, type = "partial") +
+    ggtitle("") +
+    theme_light()
+p1 / (p2 + p3) +
+    plot_annotation(tag_levels = 'A')
+```
+
+To remove this potential trend, we apply differencing once (more specifically, consecutive differencing, $X_t - X_{t-1}$) and produce the plots again. 
+From @fig-BaikalARIMAd1, there is no tendency in the differenced series, and the ACF declines fast, so we achieved stationarity and no need to difference the data more. 
+Overall, we differenced the time series once to achieve stationarity, so the order of differences $d = 1$.
+
+```{r}
+#| label: fig-BaikalARIMAd1
+#| fig-cap: "Plots for the differenced time series of ice breakup days."
+#| fig-height: 7
+
+X <- diff(iceoff)
+p1 <- ggplot2::autoplot(X) +
+    xlab("Year") +
+    ylab("diff(Ice breakup day)") +
+    theme_light()
+p2 <- forecast::ggAcf(X) +
+    ggtitle("") +
+    theme_light()
+p3 <- forecast::ggAcf(X, type = "partial") +
+    ggtitle("") +
+    theme_light()
+p1 / (p2 + p3) +
+    plot_annotation(tag_levels = 'A')
+```
+
+Continue working with @fig-BaikalARIMAd1 to identify the orders $p$ and $q$. 
+If we treat the behavior of ACF as exhibiting a cut-off, and PACF having an exponential decay, an MA($q$) model might be plausible (i.e., $p = 0$). 
+Since the ACF cuts off after lag 1, $q = 1$ in this case. 
+
+Hence, we specified the model for ice breakup dates to be ARIMA(0,1,1), which can be written as 
+$$
+(1 - B) Y_t = (1 + \theta_1B)Z_t
+$$
+or
+$$
+Y_t = Y_{t-1} + \theta_1 Z_{t-1} + Z_t,
+$$
+where $Y_t$ represents the ice breakup dates in the year $t$, $\theta_1$ is the moving average coefficient, and $Z_t\sim \mathrm{WN}(0,\sigma^2)$.
+
+We can now estimate the model, for example, using `stats::arima()`.
+
+```{r}
+mod_baikal <- stats::arima(iceoff, order = c(0, 1, 1))
+mod_baikal
+```
+
+We can also check the orders selected automatically: 
+
+```{r}
+forecast::auto.arima(iceoff)
+```
+
+In the next step, we apply diagnostic checks for the residuals, for example, using plots (@fig-BaikalARIMAres). 
+Remember that the residuals should resemble white noise.
+
+```{r}
+#| label: fig-BaikalARIMAres
+#| fig-cap: "Residual diagnostics for the ARIMA(0,1,1) model for ice breakup dates."
+#| fig-height: 7
+
+e <- mod_baikal$residuals
+p1 <- ggplot2::autoplot(e) + 
+    ylab("Residuals") +
+    theme_light()
+p2 <- forecast::ggAcf(e) +
+    ggtitle("") +
+    theme_light()
+p3 <- ggpubr::ggqqplot(e) + 
+    xlab("Standard normal quantiles") +
+    theme_light()
+p1 / (p2 + p3) +
+    plot_annotation(tag_levels = 'A')
+```
+
+Given that the diagnostics plots show satisfactory behavior of the residuals (@fig-BaikalARIMAres), continue with forecasting using this model (@fig-BaikalARIMAfcst). 
+Note that ARIMA(0,1,1) is mathematically equivalent to simple exponential smoothing, hence the forecast is a horizontal line.
+
+```{r}
+#| label: fig-BaikalARIMAfcst
+#| fig-cap: "ARIMA(0,1,1) model predictions of ice breakup dates 10 years ahead."
+
+ggplot2::autoplot(forecast::forecast(mod_baikal, h = 10)) + 
+    xlab("Year") +
+    ylab("Ice breakup day") +
+    ggtitle("") +
+    theme_light()
+```
+:::
+
+
+## Seasonal ARIMA (SARIMA)
+
+Recall that time series with seasonal variability or another strictly periodic component (e.g., daily cycles) can be deseasonalized by applying differencing that is not of consecutive values but with a lag equal to the period of the cyclical variability. 
+We will use such differences to remove *strong* periodicity, as an additional step in the Box--Jenkins algorithm.
+
+Similar to the regular differences, we will apply seasonal differences not to eliminate autocorrelations at the corresponding lags, but to achieve fast decay of ACF at seasonal lags. 
+Even after the seasonal differences, there might be significant spikes at the seasonal lags in ACF and PACF, which can be addressed by selecting proper seasonal autoregressive and moving average orders. 
+Therefore, we can define orders of integration, AR, and MA for the seasonal part of the time series in the same way we define these orders for the non-seasonal part.
+
+Based on the definitions in @Brockwell:Davis:2002, $X_t$ is a *seasonal autoregressive integrated moving average*, SARIMA($p,d,q$)($P,D,Q$)$_s$ process if the differenced series $Y_t=(1 - B)^d (1 - B^s)^D X_t$ is a causal ARMA process. 
+Here $d$ and $D$ are nonnegative integers, and $s$ is the period.
+
+::: {.callout-note}
+In practice, $D \leqslant 1$ and $P, Q \leqslant 3$.
+:::
+
+An equation for SARIMA($p, d, q$)($P, D, Q$)$_s$ is
+$$
+\begin{split}
+(1 - B)^d (1 - \phi_1B - \dots - \phi_pB^p) (1 - B^s)^D (1 - \Phi_1B^s - \dots - \Phi_PB^{sP}) X_t \\
+= (1 + \theta_1B + \dots + \theta_qB^q) (1 + \Theta_1B^s + \dots + \Theta_QB^{sQ})Z_t,
+\end{split}
+$$ {#eq-sarima}
+where $D$ is the order of seasonal differences, $\Phi_1, \dots, \Phi_P$ are seasonal autoregression coefficients, $P$ is the seasonal autoregressive order, $\Theta_1, \dots, \Theta_q$ are seasonal moving average coefficients, $Q$ is the seasonal moving average order, and the rest of the terms are the same as in @eq-arima.
+
+::: {.callout-note icon=false}
+
+## Example: SARIMA for the number of airline passengers
+
+Here we revisit the time series on airline passengers from which we have removed the trend by taking regular non-seasonal differences once ($d = 1$). 
+Notice from @fig-AirDiff C and D how after taking the usual differences the upward trend disappeared, and ACF started to decay much faster. 
+At the seasonal lags, however, the ACF decays still linearly (@fig-AirDiff D), which suggested differencing at the seasonal lag to remove strong periodicity. 
+After taking seasonal differences once ($D = 1$), the time series looks stationary (@fig-AirDiff E), and the ACF decays fast at both seasonal and non-seasonal lags. 
+This is enough differencing.
+
+```{r}
+#| label: fig-AirDiff
+#| fig-cap: "Time series plot of the airline passenger series with an estimated ACF and the detrended (differenced) series with their ACFs."
+#| fig-height: 9
+
+Yt <- log10(AirPassengers)
+
+# Apply first-order (non-seasonal) differences
+D1 <- diff(Yt)
+
+# Additionally, apply first-order seasonal differences
+D1D12 <- diff(D1, lag = 12)
+
+p1 <- ggplot2::autoplot(Yt) + 
+    xlab("Year") + 
+    ylab("lg(Air passangers)") + 
+    ggtitle("Yt") +
+    theme_light()
+p2 <- forecast::ggAcf(Yt) + 
+    ggtitle("Yt") +
+    xlab("Lag (months)") + 
+    theme_light()
+p3 <- ggplot2::autoplot(D1) + 
+    xlab("Year") + 
+    ylab("lg(Air passangers)") + 
+    ggtitle("(1-B)Yt") +
+    theme_light()
+p4 <- forecast::ggAcf(D1) + 
+    ggtitle("(1-B)Yt") +
+    xlab("Lag (months)") + 
+    theme_light()
+p5 <- ggplot2::autoplot(D1D12) + 
+    xlab("Year") + 
+    ylab("lg(Air passangers)") + 
+    ggtitle("(1-B)(1-B12)Yt") +
+    theme_light()
+p6 <- forecast::ggAcf(D1D12) + 
+    ggtitle("(1-B)(1-B12)Yt") +
+    xlab("Lag (months)") + 
+    theme_light()
+(p1 + p2) / (p3 + p4) / (p5 + p6) +
+    plot_annotation(tag_levels = 'A')
+```
+
+For the next step, see @fig-AirDiffACF to identify the orders $p$ and $q$. 
+For that, look only at the non-seasonal lags, 1--11. 
+Both ACF and PACF have significant values at lags 1 and 3, which could correspond to AR(3), MA(3), ARMA(1,1), or ARMA with higher orders. 
+From these options ARMA(1,1) has fewer parameters, hence we prefer this model, with $p = 1$ and $q = 1$, as the most parsimonious option. 
+(However, given that the correlations at lag 2 are not statistically significant, information criteria may penalize adding extra arguments and might prefer a more compact specification, AR(1) or MA(1).)
+
+Next, use @fig-AirDiffACF again to identify orders $P$ and $Q$. 
+Now look only at the seasonal lags 12, 24, 36, etc. 
+Both the ACF and PACF have significant values only on the first of those lags (lag 12), which could correspond to AR(1), MA(1), or ARMA(1,1) for the seasonal component. 
+From these options, AR(1) and MA(1) are the most parsimonious so we should select one of them or use some numeric criterion to select the best model (e.g., information criterion like AIC or forecasting accuracy on a testing set).
+
+```{r}
+#| label: fig-AirDiffACF
+#| fig-cap: "ACF and PACF of the differenced airline passenger time series $(1-B)(1-B^{12})Y_t$."
+
+p6 <- forecast::ggAcf(D1D12, lag.max = 36) + 
+    ggtitle("(1-B)(1-B12)Yt") +
+    xlab("Lag (months)") + 
+    theme_light()
+p7 <- forecast::ggAcf(D1D12, lag.max = 36, type = "partial") + 
+    ggtitle("(1-B)(1-B12)Yt") +
+    xlab("Lag (months)") + 
+    theme_light()
+p6 + p7 +
+    plot_annotation(tag_levels = 'A')
+```
+
+Overall, our analysis suggested that SARIMA(1,1,1)(1,1,0) or SARIMA(1,1,1)(0,1,1) is a plausible model for this time series.
+For example, estimate SARIMA(1,1,1)(0,1,1):
+
+```{r}
+mod_air <- stats::arima(Yt, order = c(1, 1, 1),
+                        seasonal = list(order = c(0, 1, 1),
+                                        period = 12))
+mod_air
+```
+
+SARIMA(1,1,1)(0,1,1)$_{12}$ model can be written down as
+$$
+\begin{split}
+(1 - B) (1 - \phi_1B) (1 - B^{12}) X_t \\
+= (1 + \theta_1B) (1 + \Theta_1B^{12})Z_t.
+\end{split}
+$$
+We can apply the backshift operations are rewrite the model without the backshift operator as follows:
+$$
+\begin{split}
+(1 - B - \phi_1B + \phi_1B^2) (1 - B^{12}) X_t \\
+= (1 + \theta_1B + \Theta_1B^{12} + \theta_1\Theta_1B^{13})Z_t,
+\end{split}
+$$
+then
+$$
+\begin{split}
+(1 - B - \phi_1B + \phi_1B^2 - B^{12} + B^{13} + \phi_1B^{13} - \phi_1B^{14}) X_t \\
+= (1 + \theta_1B + \Theta_1B^{12} + \theta_1\Theta_1B^{13})Z_t,
+\end{split}
+$$
+then
+$$
+\begin{split}
+X_t - X_{t-1} - \phi_1X_{t-1} + \phi_1X_{t-2} - X_{t-12} + X_{t-13} + \phi_1X_{t-13} - \phi_1X_{t-14} \\
+= Z_t + \theta_1Z_{t-1} + \Theta_1Z_{t-12} + \theta_1\Theta_1Z_{t-13},
+\end{split}
+$$
+then
+$$
+\begin{split}
+X_t = X_{t-1} + \phi_1X_{t-1} - \phi_1X_{t-2} + X_{t-12} - X_{t-13} - \phi_1X_{t-13} + \phi_1X_{t-14} \\
++ \theta_1Z_{t-1} + \Theta_1Z_{t-12} + \theta_1\Theta_1Z_{t-13} + Z_t,
+\end{split}
+$$
+where $X_t = \lg(AirPassengers)$ and $Z_t\sim \mathrm{WN}(0,\sigma^2)$.
+
+Below are results based on the automatic selection of the orders:
+
+```{r}
+forecast::auto.arima(Yt)
+```
+
+The orders selected automatically based on AIC suggest that indeed the non-significance of correlations at lag 2 and relatively low correlations at lag 3 made it not worthy to estimate additional parameters in the non-seasonal part, for which MA(1) specification was selected, not the suggested ARMA(1,1), AR(3), or MA(3).
+
+In the next step, we apply diagnostic checks for the residuals, for example, using plots (@fig-AirARIMAres).
+
+```{r}
+#| label: fig-AirARIMAres
+#| fig-cap: "Residual diagnostics for the SARIMA model for the airline passenger data."
+#| fig-height: 7
+
+e <- mod_air$residuals
+p1 <- ggplot2::autoplot(e) + 
+    ylab("Residuals") +
+    theme_light()
+p2 <- forecast::ggAcf(e) +
+    ggtitle("") +
+    theme_light()
+p3 <- ggpubr::ggqqplot(e) + 
+    xlab("Standard normal quantiles") +
+    theme_light()
+p1 / (p2 + p3) +
+    plot_annotation(tag_levels = 'A')
+```
+
+Given that the diagnostics plots show satisfactory behavior of the residuals (@fig-AirARIMAres), continue with forecasting using this model (@fig-AirARIMAfcst).
+
+```{r}
+#| label: fig-AirARIMAfcst
+#| fig-cap: "SARIMA model predictions of airline passenger data 2 years ahead."
+
+ggplot2::autoplot(forecast::forecast(mod_air, h = 24)) + 
+    xlab("Year") +
+    ylab("lg(Air passangers)") +
+    ggtitle("") +
+    theme_light()
+```
+
+Compare ACF in @fig-AirARIMAres with ACF of regression residuals in @fig-airpassangersRegTrendSeas and @fig-airpassangersRegTrendFourier. 
+The residuals of those regression models are autocorrelated, while the models have more parameters than the specified SARIMA models. 
+Hence, the SARIMA model is much better for this time series.
+:::
+
+
+## Conclusion
+
+In this lecture, we discovered ARIMA as an extension of ARMA modeling to nonstationary data and SARIMA as an extension of ARIMA models to time series with periodicity (seasonality).
+
+We learned Box--Jenkins iterative procedure for identifying such models, including the orders of differences, $d$ and $D$, and $p$, $q$, $P$, and $Q$.
+
+Please remember to specify the criterion for selecting a model beforehand and consider such options as cross-validation and using a testing set.
+
+
+## Appendix
+
+**Equivalences**
+
+Mathematically, some models are equivalent one to another. Below are some examples.
+
+* Forecasts of ARIMA(0,1,1) are equivalent to simple exponential smoothing.
+
+An ARIMA(0,1,1) model can be written as 
+$$
+Y_t = Y_{t-1} + \theta_1 Z_{t-1} + Z_t,
+$$
+from which the one-step-ahead forecast is
+$$
+\hat{Y}_t = Y_{t-1} + \theta_1 (Y_{t-1} - \hat{Y}_{t-1}).
+$$
+If we define $\theta_1 = \alpha - 1$, then the above equation transforms to
+$$
+\begin{split}
+\hat{Y}_t &= Y_{t-1} + (\alpha - 1) (Y_{t-1} - \hat{Y}_{t-1})\\
+&= Y_{t-1} + (\alpha - 1) Y_{t-1} - (\alpha - 1) \hat{Y}_{t-1}\\
+&= \alpha Y_{t-1} + (1 - \alpha) \hat{Y}_{t-1}
+\end{split}
+$$
+
+* Forecasts of ARIMA(0,2,2) are equivalent to Holt's method.
+
+* Forecasts of SARIMA(0,1,$s+1$)(0,1,0)$_s$ are equivalent to Holt--Winters additive method.

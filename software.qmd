@@ -1,0 +1,91 @@
+---
+output: html_document
+editor_options: 
+    chunk_output_type: console
+---
+
+# Software {.unnumbered}
+
+Examples were calculated in `r R.Version()$version.string` with an effort to use the most recent versions of R packages.
+
+The codes load silently only a few packages:
+
+```{r}
+#| eval: false
+#| echo: true
+
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+```
+
+All other packages are named before the function as in `forecast::ggAcf()` (this code calls the function `ggAcf()` from the package `forecast`) or called immediately before the necessary function use:
+
+```{r}
+#| eval: false
+#| echo: true
+
+library(fable)
+m <- as_tsibble(Y) %>%
+    model(ARIMA(Y ~ 1, ic = "bic"))
+report(m)
+```
+
+The R packages used in this book include (in alphabetic order):
+
+```{r}
+#| echo: false
+
+packages2cite <- sort(c(
+    # 'car'
+    'dplyr'
+    ,'dynlm'
+    ,'Ecdat'
+    # ,'ecm'
+    ,'fable'
+    ,'feasts'
+    ,'fGarch'
+    ,'FinTS'
+    ,'fma'
+    ,'forecast'
+    ,'funtimes'
+    ,'gamlss'
+    ,'gamlss.util'
+    ,'GGally'
+    # # ,'ggfortify'
+    ,'ggplot2'
+    ,'ggpubr'
+    ,'Kendall'
+    ,'knitr'
+    ,'lawstat'
+    ,'lmtest'
+    ,'lomb'
+    # ,'mgcv'
+    ,'nlme'
+    ,'patchwork'
+    ,'plotly'
+    ,'pracma'
+    ,'randtests'
+    ,'readr'
+    ,'rmarkdown'
+    ,'tseries'
+    ,'TSstudio'
+    ,'urca'))
+
+# Install the packages, if missing
+new.packages <- packages2cite[!(packages2cite %in% installed.packages()[,"Package"])]
+if (length(new.packages)) {
+    install.packages(new.packages)
+}
+
+# Create a bib database for R packages
+knitr::write_bib(c(.packages()
+                   ,'base'
+                   ,packages2cite
+), 'refpackages.bib')
+
+# Form a list with citations
+tmp <- paste0("* `", packages2cite, "` [@R-", packages2cite, "]")
+```
+
+`r paste(tmp, collapse = "\n")`

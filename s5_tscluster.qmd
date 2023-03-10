@@ -1,0 +1,114 @@
+---
+    output: html_document
+editor_options:
+    chunk_output_type: console
+---
+
+    ```{r, echo=FALSE}
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+options(digits = 3)
+```
+
+#
+
+
+\section{Time series clustering}
+
+Algorithms for time series clustering, available from R package \emph{funtimes}:
+    \begin{itemize}
+\item a method from computer science by \citet{Ciampi:etal:2010} for dynamic time series clustering -- \texttt{BICC()}, \texttt{CWindowCluster()};
+\item iterative testing of synchronism -- \texttt{sync.cluster()}.
+\end{itemize}
+
+
+
+\bibliographystyle{C:/Users/Slava/Dropbox/Documents/ResearchProjects/spbasic}
+\bibliography{C:/Users/Slava/Dropbox/Documents/ResearchProjects/RefsGeneral}
+
+\end{document}
+
+
+
+
+
+
+
+
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/Ciampi_Slides.PNG}
+\caption{Sliding windows with $p = 6$ and $w = 4$. Figure source: \citet{Ciampi:etal:2010}.
+\label{Ciampi_Slides}}
+\end{figure}
+
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/Ciampi_Clusters.PNG}
+\caption{Trend clusters. Figure source: \citet{Ciampi:etal:2010}.
+    \label{Ciampi_Clusters}}
+\end{figure}
+
+
+The algorithm is applied to snapshots of data coming, e.g., from different weather stations. There are $p$ snapshots in each slide, and $w$ slides in each window.
+
+For the data domain $[\alpha, \beta]$ and $\delta$ a real value in $[0, 1]$, the $\delta$-close measure is defined as
+\begin{equation}\label{eq:closeness}
+\psi_{\delta}(x_1,x_2)=
+    \begin{dcases}
+1 & \frac{\|x_1-x_2\|_1}{\beta-\alpha}\leq \delta\\
+0 & \mathrm{otherwise}
+\end{dcases}
+\end{equation}
+
+Clustering goes first on the slide level. Then, assigned clusters at each slide are clustered within window.
+
+In the course of clustering \textbf{at the slide level}, we operate with time series buckets $B_u$ and $B_v$ --- collections of one or more time series. For the selected time series (we start clustering with one time series) or bucket $B_u$ we select neighbours that satisfy
+\begin{equation}
+\sum_{i=1}^p\psi_{\delta}(B_u[i],B_v[i])\geq \theta\times p,
+\end{equation}
+where $\theta$ is a real value in $[0,1]$.
+
+If the closeness condition~(\ref{eq:closeness}) is satisfied for the medians of $B_u$ and selected neighbours $B_v$, then $B_u$ and $B_v$ are considered a homogeneous group and joined in one cluster. Otherwise, each element of $B_v$ is checked on homogeneity with $B_u$.
+
+The algorithm repeats itself untill all time series are assigned to a cluster.
+
+\textbf{At the window level,} time series are clustered together if they appear more than $\varepsilon \times w$ times in one cluster, where $\varepsilon$ is a real value in $[0,1]$.
+
+Code for this procedure is replicated in \texttt{funtimes} package. Here we apply it to Google dengue data for Mexican states.
+
+Weekly data, 52 weeks per year, for 2009--2014 (6 years). By setting $p=52$ and $w=6$ we first group states within each year, then identify which states were groupped together certain number of times during these 6 years.
+
+The algorithm can be applied in two ways: using standardized data (to see the similarity of trends) or raw data (to see the similarity of values).
+Here we standardize.
+<<>>=
+    D <- read.csv("data/GDT_Mex.csv", header=TRUE)
+#remove week and date columns
+d <- as.matrix(D[,-c(1,2)])
+X <- demean(d)
+vec <- apply(X, 2, sd)
+X <- sweep(X, MARGIN=2, 1/vec, `*`)
+@
+
+    Apply to standardized data
+<<>>=
+    library(funtimes)
+res_stand <- CWindowCluster(X, p=52, w=6, s=6, Epsilon=4/6)
+res_stand
+@
+
+    Apply to raw data
+<<>>=
+    res_raw <- CWindowCluster(d, p=52, w=6, s=6, Theta=0.5, Epsilon=4/6)
+res_raw
+@
+
+    <<>>=
+    par(mfrow=c(1,2))
+plot.ts(X[,res_stand[1,]==2], plot.type="single")
+plot.ts(d[,res_raw[1,]==2], plot.type="single")
+@
+

@@ -1,0 +1,39 @@
+## Preface {.unnumbered}
+
+This is a collection of lecture notes on applied time series analysis and forecasting using the statistical programming language R. 
+Many of these lectures are based on the original notes by Y. R. Gel and C. Cutler for the course STAT-443 *Forecasting* (University of Waterloo, Canada) adapted and expanded by V. Lyubchich for the course MEES-713 *Environmental Statistics 2* (University of Maryland, USA).
+
+Each lecture starts by listing the learning objectives and required reading materials, with additional references in the text. 
+The notes introduce the methods and give a few examples but are less detailed than the reading materials. 
+The notes do not substitute a textbook.
+
+The audience is expected to be familiar with R programming and the following statistical concepts and methods:
+probability distributions, 
+sampling inference and hypothesis testing,
+correlation analysis, 
+and regression analysis (including 
+simple and multiple linear regression, 
+mixed-effects models, 
+generalized linear models, and
+generalized additive models).
+
+
+## Authors {.unnumbered}
+
+Vyacheslav Lyubchich is an Associate Research Professor at the University of Maryland Center for Environmental Science. 
+<https://www.umces.edu/vyacheslav-lyubchich>
+
+Yulia R. Gel is a Professor of Statistics at the University of Texas at Dallas.
+<https://personal.utdallas.edu/~yxg142030/>
+
+
+## Citation {.unnumbered}
+
+Lyubchich, V. and Gel, Y. R. (`r substr(Sys.Date(), 1, 4)`) Time Series Analysis. Lecture Notes with Examples in R. Draft `r substr(Sys.Date(), 1, 7)`.
+
+
+## License {.unnumbered}
+
+This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a>

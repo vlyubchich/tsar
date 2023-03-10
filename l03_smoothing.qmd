@@ -1,0 +1,1144 @@
+---
+output: html_document
+editor_options: 
+    chunk_output_type: console
+---
+
+```{r, echo=FALSE}
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+options(digits = 3)
+```
+
+# Smoothing, Detrending, and Deseasonalizing
+
+The goal of this lecture is to learn a variety of methods used for *trend visualization* (such that make a trend in noisy data more apparent), *trend modeling* (such that can help us to come up with 'an equation' for the trend, which could be further studied or used for interpolation, forecasting, or detrending), and *detrending* (just to remove trend from the series, with or without modeling it). 
+You should be able to choose a method based on the goals of your analysis. 
+We will start with simple and widely used methods that can be further combined into more elaborate algorithms.
+
+**Objectives**
+
+1. Implement smoothing methods often used for trend
+    * visualization (example: moving average, lowess);
+    * modeling (example: exponential smoothing, polynomial smoothing);
+    * removal (example: differencing, however, the above methods also can be used to remove trends).
+1. Accomplish each of the tasks above when handling a time series with cycles (seasonality).
+1. Understand the concepts of trend- and difference-stationary time series.
+
+**Reading materials**
+
+* Chapter 1.5 in @Brockwell:Davis:2002
+* Chapter 5 in @Kirchgassner:Wolters:2007 (optional)
+
+
+## Introduction
+
+Recall the classical decomposition
+$$
+Y_t = M_t + S_t + \epsilon_t,
+$${#eq-trseas}
+where $M_t$ is a slowly changing function (trend component), $\epsilon_t$ is stationary random noise component, and $S_t$ is the periodic term with the period $m\geqslant 2$ (seasonal component) and scaling factors $\lambda_k > 0$ such that $S_{t+km} = \lambda_kS_t$ for $1 \leqslant t \leqslant m$ and each $k \geqslant 1$. 
+For identification, we need $\sum_{t=1}^m S_t = 0$ and $\mathrm{E}(\epsilon_t)=0$.
+
+Our goal is to estimate and extract $M_t$ and $S_t$ with the hope that the residual or noise component $\epsilon_t$ will turn out to be a stationary time series (@sec-movavg--@sec-regressionTime). 
+Alternatively, Box--Jenkins models use difference operators repeatedly to the series $Y_t$ until a stationary time series is obtained (see @sec-differencing on differencing).
+
+The seasonal component is said to have *constant seasonal variation* if the scaling factors satisfy $\lambda_{k} = 1$ for all $k$. 
+In other words, $S_{t+m} = S_{t}$ for all $t$. The constant variation is an assumption of most modeling techniques we will be using in this course. 
+Unfortunately, many real seasonal time series do not have this constancy property and it is necessary to first perform a *variance-stabilizing transformation* to modify the original time series into one with constant variation. 
+To some extent, this is a matter of trial and error, where we work from 'weaker' transformations to 'stronger' transformations as needed. 
+Typically, power transformations are used $Y_{t} \rightarrow Y^{\lambda}_{t}$, where $0 < \lambda < 1$ or, log or even log log transformations, e.g., $Y_{t} \rightarrow \log Y_{t}$.
+
+The log transformation of $Y_t$ is convenient when we assume not an additive model as @eq-trseas is, but a multiplicative model as
+$$
+Y_t = M_t \cdot S_t \cdot \epsilon_t.
+$${#eq-trseasmult}
+When applying variance-stabilizing log transformation to @eq-trseasmult, we get an additive result:
+$$
+\log Y_t = \log M_t + \log S_t + \log \epsilon_t,
+$${#eq-trseasmultlog}
+which is now similar to @eq-trseas. 
+We will refer to @eq-trseas as *additive seasonality*, and to @eq-trseasmult as *multiplicative seasonality*. 
+Only a few methods can deal with the multiplicative case @eq-trseasmult directly; most methods we consider in this course will require us to apply a transformation as in @eq-trseasmultlog.
+
+In the following sections, we consider methods for the estimation and elimination of $M_t$ (for non-seasonal data, when $S_t = 0$ in the additive case @eq-trseas or $S_t = 1$ in the multiplicative case @eq-trseasmult) and of both $M_t$ and $S_t$ (for seasonal data).
+
+
+## Finite moving average smoothing {#sec-movavg}
+
+The non-seasonal model with a trend:
+$$
+Y_t = M_t + \epsilon_t,
+$$
+where $\mathrm{E}(\epsilon_t)=0$ and $t=1,\dots,n$.
+
+Let $q$ be a nonnegative integer ($q \in \mathbb{N}^{+}$) and consider the *two-sided moving average* of the series $Y_t$:
+$$
+\begin{split}
+W_t &= \frac{1}{2q+1}\sum_{j=-q}^q Y_{t-j}\\
+&= \frac{1}{2q+1}\sum_{j=-q}^q M_{t-j} + \frac{1}{2q+1}\sum_{j=-q}^q \epsilon_{t-j} \\
+&\approx M_t,
+\end{split}
+$${#eq-movav}
+where $w = 2q+1$ is the size of the moving window. 
+Note that the above approximation is correct if the average value of $\epsilon_{t}$ within each window is close to 0 (important for selecting $q$).
+
+::: {.callout-note icon=false}
+
+## Example: Shampoo plots
+
+@fig-shampoo shows a time series plot of monthly shampoo sales. 
+While the data are monthly, the seasonal component is not visible:
+
+* no strong periodicity in the time series plot;
+* the ACF at seasonal lag (1 year) is not significant.
+
+Therefore, we apply @eq-movav treating the shampoo time series as non-seasonal data.
+
+```{r}
+# Get the data from the package fma
+shampoo <- fma::shampoo
+shampoo
+```
+
+```{r}
+#| label: fig-shampoo
+#| fig-cap: "Monthly shampoo sales over three years and a corresponding sample ACF."
+
+pshampoo <- ggplot2::autoplot(shampoo, col = "grey50") + 
+    xlab("Year") + 
+    ylab("Sales") + 
+    theme_light()
+p2 <- forecast::ggAcf(shampoo) + 
+    ggtitle("") +
+    xlab("Lag (months)") + 
+    theme_light()
+pshampoo + p2 +
+    plot_annotation(tag_levels = 'A')
+```
+:::
+
+There are multiple ways to calculate moving averages in R, and formulas for $W_t$ may vary. 
+If using someone's else functions, remember to read the help files or source code to find out the exact formula in place of @eq-movav. 
+Below are some examples.
+
+::: {.callout-note}
+The package `forecast` is now retired in favor of the package `fable`.
+:::
+
+For example, `forecast::ma()` has the default option `centre = TRUE`, and the `order` argument represents the window size. 
+Odd `order` and `centre = TRUE` correspond exactly to our definitions in @eq-movav:
+
+```{r}
+forecast::ma(shampoo, order = 5)
+```
+
+For example, `pracma::movavg()` averages the last `n` data points:
+
+```{r}
+pracma::movavg(shampoo, n = 5)
+```
+
+The base-R function `stats::filter()` can also be used. 
+Its odd window size and `sides = 2` correspond to our definitions in @eq-movav:
+
+```{r}
+window_size <- 5
+stats::filter(shampoo, filter = 1/rep(window_size, window_size), sides = 2)
+```
+
+The `sides = 1` in `stats::filter()` corresponds to the `pracma::movavg()` results above:
+
+```{r}
+stats::filter(shampoo, filter = 1/rep(window_size, window_size), sides = 1)
+```
+
+See @fig-shampoo-movavg and @fig-shampoo-movavg2 for the effects of the window size.
+
+::: {.callout-note icon=false}
+
+## Example: Shampoo moving average smoothing
+
+```{r}
+#| label: fig-shampoo-movavg
+#| fig-cap: "Shampoo sales over three years smoothed with *centered* moving average filters, where the window size is $w = 2q+1$."
+#| fig-height: 7
+
+ps <- lapply(c(1, 2, 3, 5), function(q){
+    w <- 2 * q + 1
+    Wt <- forecast::ma(shampoo, order = w)
+    pshampoo + 
+        geom_line(aes(y = Wt), col = 4, lwd = 1.5) + 
+        ggtitle(paste0("q = ", q, " (window = ", w, ")"))
+})
+wrap_plots(ps, ncol = 2) +
+    plot_annotation(tag_levels = 'A')
+```
+
+```{r}
+#| label: fig-shampoo-movavg2
+#| fig-cap: "Shampoo sales over three years smoothed with *non-centered* moving average filters, where the window size is $w = 2q+1$."
+#| fig-height: 7
+
+ps <- lapply(c(1, 2, 3, 5), function(q){
+    w <- 2 * q + 1
+    Wt <- stats::filter(shampoo, filter = 1/rep(w, w), sides = 1)
+    pshampoo + 
+        geom_line(aes(y = Wt), col = 4, lwd = 1.5) + 
+        ggtitle(paste0("q = ", q, " (window = ", w, ")"))
+})
+wrap_plots(ps, ncol = 2) +
+    plot_annotation(tag_levels = 'A')
+```
+:::
+
+
+### Moving average smoothing for seasonal data {#sec-movavgSeas}
+
+Come back to the trend-seasonal model @eq-trseas:
+$$
+Y_t = M_t + S_t + \epsilon_t.
+$$
+
+We apply the following steps for estimating seasonality and trend:
+
+1. Apply a moving average filter specially chosen to eliminate the seasonal component and dampen the noise -- get $\hat{M}_t$. 
+Remember that the sum of $S_t$ within each period is 0. 
+Hence, to smooth out the seasonal component (and noise) and get an estimate of just $M_t$, we will use a moving window $w$ sized as the seasonal period $m$ (more generally, $w = km$, where $k\in \mathbb{N}^{+}$, if a greater smoothness is desired). 
+It will often lead to the even window size $w$. 
+For even $w$, @eq-movav is modified as follows (we now use $km + 1$ elements so the window is still centered, but the elements on the ends receive half the weight):
+$$
+\hat{M}_t = \frac{0.5Y_{t-km/2} + Y_{t-km/2 + 1} +\dots+Y_{t+km/2-1} + 0.5Y_{t+km/2}}{km}.
+$${#eq-movavEven}
+1. Use $Y_t - \hat{M}_t$ to estimate the seasonal component -- get $\hat{S}_t$. 
+If needed, correct the estimates, to sum up to 0 in each period. 
+Let $\hat{S}^*_t$ be the corrected values.
+1. Use deseasonalized data $Y_t - \hat{S}^*_t$ to re-estimate the trend. 
+Let $\hat{M}^*_t$ be the corrected trend estimate.
+1. The estimated random noise is then: $\hat{\epsilon}_t = Y_t - \hat{M}^*_t - \hat{S}^*_t$.
+
+::: {.callout-note}
+For the multiplicative case, replace subtractions with *divisions* and let the *product* of $\hat{S}^*_t$ be 1 within each seasonal period.
+:::
+
+The above algorithm is implemented in `stats::decompose()`, but its main disadvantage is in the centered moving average filter used to estimate $M_t$ that does not produce smoothed values for the most recent observations. 
+We can elaborate this algorithm, first, by using different estimators for $M_t$; second, by also replacing estimators for $S_t$ (e.g., see the next section).
+
+::: {.callout-note icon=false}
+
+## Example: Secchi depth automatic (simple moving average-based) decomposition
+
+Consider monthly data of Secchi disk depth measured at station CB1.1 in Chesapeake Bay (@fig-Secchi), with the decomposition in @fig-SecchiDecompose.
+
+```{r}
+#| label: fig-Secchi
+#| fig-cap: "Monthly average Secchi disk depth at station CB1.1 and its ACF."
+
+load("./data/Secchi_CB1.1.RData")
+pSecchi <- ggplot2::autoplot(Secchi, col = "grey50") + 
+    xlab("Year") + 
+    ylab("Secchi depth (m)") + 
+    theme_light()
+p2 <- forecast::ggAcf(Secchi) + 
+    ggtitle("") +
+    xlab("Lag (months)") + 
+    theme_light()
+pSecchi + p2 +
+    plot_annotation(tag_levels = 'A')
+```
+
+```{r}
+#| label: fig-SecchiDecompose
+#| fig-cap: "Trend-seasonal decomposition of monthly average Secchi disk depth at station CB1.1."
+#| fig-height: 7
+
+ggplot2::autoplot(stats::decompose(Secchi))  + 
+    theme_light()
+```
+:::
+
+::: {.callout-note icon=false}
+
+## Example: Secchi depth manual simple moving average smoothing
+
+To replicate the behavior of the function `stats::decompose()` or tune the outputs, use the following code. 
+For example, @fig-SecchiDecompose shows a wiggly trend that we might want to smooth more, using a bigger window, such as 24 months instead of 12 months.
+
+```{r}
+Yt <- Secchi
+t <- as.vector(time(Yt))
+month <- as.factor(cycle(Yt))
+
+# 1. Initial trend estimate
+window_size = 24
+Mt <- stats::filter(Yt, 
+                    filter = 1/c(2*window_size, rep(window_size, window_size - 1), 
+                                 2*window_size), 
+                    sides = 2)
+
+# 2. Estimate of a cycle, corrected to sum up to 0
+St <- tapply(Yt - Mt, month, mean, na.rm = TRUE)
+St
+sum(St)
+St_star <- St - sum(St)/12
+sum(St_star)
+
+# 3. Refine trend estimate
+Mt_star <- stats::filter(Yt - St_star[month], 
+                    filter = 1/c(2*window_size, rep(window_size, window_size - 1), 
+                                 2*window_size), 
+                    sides = 2)
+
+# 4. Noise
+et <- Yt - Mt_star - St_star[month]
+
+# Convert back to ts format for plotting
+et <- ts(as.vector(et), start = start(Secchi), frequency = 12)
+```
+
+See @fig-SecchiDeseasMA for the results.
+
+```{r}
+#| label: fig-SecchiDeseasMA
+#| fig-cap: "Detrending using simple moving average and deseasonalizing the Secchi depth data."
+#| fig-height: 7
+
+p1 <- pSecchi + 
+    geom_line(aes(y = Mt_star), col = 4, lwd = 1.5) + 
+    ggtitle("Trend estimate: Mt_star")
+p2 <- pSecchi + 
+    geom_line(aes(y = Mt_star + St_star[month]), col = 4, lwd = 1.5) + 
+    ggtitle("Final trend-cycle: Mt_star + St_star")
+p3 <- ggplot2::autoplot(et) + 
+    xlab("Year") + 
+    ggtitle("Residuals: et") +
+    theme_light()
+p4 <- forecast::ggAcf(et) + 
+    ggtitle("ACF of residuals") +
+    xlab("Lag (months)") +
+    theme_light()
+(p1 + p2) / (p3 + p4) + 
+    plot_annotation(tag_levels = 'A')
+```
+:::
+
+
+## Lowess smoothing
+
+One of the alternatives for estimating trends $M_t$ is *locally weighted regression* (shortened as 'lowess' or 'loess') [@Cleveland:1979]. 
+We can apply lowess as a regression of $Y_t$ on time, for example, using the algorithm outlined by @Berk:2016:
+
+1. Choose the smoothing parameter such as bandwidth, $f$, which is a proportion between 0 and 1.
+1. Choose a point $t_0$ and its $w = f n$ nearest points on the time axis.
+1. For these $w$ nearest neighbor points, compute a weighted least squares regression line for $Y_t$ on $t$. 
+The coefficients $\boldsymbol{\beta}$ of such regression are estimated by minimizing the residual sum of squares
+$$
+\text{RSS}^*(\boldsymbol{\beta}) = (\boldsymbol{Y}^* - \boldsymbol{X}^* \boldsymbol{\beta})^{\top} \boldsymbol{W}^* (\boldsymbol{Y}^* - \boldsymbol{X}^* \boldsymbol{\beta}),
+$$
+where the asterisk indicates that only the observations in the window are included. 
+The regressor matrix $\boldsymbol{X}^*$ can contain polynomial terms of time, $t$. 
+The $\boldsymbol{W}^*$ is a diagonal matrix conforming to $\boldsymbol{X}^*$, with diagonal elements being a function of distance from $t_0$ (observations closer to $t_0$ receive higher weights).
+1. Calculate the fitted value $\tilde{Y}_t$ for that single $t_0$.
+1. Repeat Steps 2--4 for each $t_0 = 1,\dots,n$.
+
+By selecting large bandwidth $f$ in the lowess algorithm, we can obtain greater smoothing (see @fig-lowess).
+
+```{r}
+#| label: fig-lowess
+#| fig-cap: "A lowess illustration, adapted from @Berk:2016."
+#| fig-height: 7
+
+data(WWWusage)
+ps <- lapply(c(0.1, 0.3, 0.5, 0.75), function(w){
+    ggplot2::autoplot(WWWusage, colour = "grey50")  + 
+        ggtitle(paste0("span = ", w)) +
+        theme_light() + 
+        geom_smooth(method = "loess", span = w, se = FALSE)
+})
+wrap_plots(ps, ncol = 2) +
+    plot_annotation(tag_levels = 'A')
+```
+
+::: {.callout-note}
+The function `ggplot2::geom_smooth()` has the default setting `se = TRUE` that produces a confidence interval around the smooth. 
+In time series applications, autocorrelated residuals may lead to underestimated standard errors and incorrect (typically, too narrow) confidence intervals. 
+Hence, we set `se = FALSE`. 
+For testing the significance of the identified trends, see lectures on trend testing (detection).
+:::
+
+
+### Lowess smoothing for seasonal data
+
+Now use the Secchi time series (@fig-Secchi) and implement the procedure of detrending and deseasonalizing from @sec-movavgSeas, but replace the simple moving average estimates of $M_t$ with lowess estimates.
+
+::: {.callout-note icon=false}
+
+## Example: Secchi depth lowess-based decomposition
+
+```{r}
+Yt <- Secchi
+t <- as.vector(time(Yt))
+month <- as.factor(cycle(Yt))
+
+# 1. Initial trend estimate
+Mt <- loess(Yt ~ t, span = 0.25)$fitted
+
+# 2. Estimate of a cycle, corrected to sum up to 0
+St <- tapply(Yt - Mt, month, mean)
+St
+sum(St)
+St_star <- St - sum(St)/12
+sum(St_star)
+
+# 3. Refine trend estimate
+Mt_star <- loess((Yt - St_star[month]) ~ t, span = 0.25)$fitted
+
+# 4. Noise
+et <- Yt - Mt_star - St_star[month]
+
+# Convert back to ts format for plotting
+et <- ts(as.vector(et), start = start(Secchi), frequency = 12)
+```
+
+See @fig-SecchiDeseas for the results.
+
+```{r}
+#| label: fig-SecchiDeseas
+#| fig-cap: "Detrending using lowess and deseasonalizing the Secchi depth data."
+#| fig-height: 7
+
+p1 <- pSecchi + 
+    geom_line(aes(y = Mt_star), col = 4, lwd = 1.5) + 
+    ggtitle("Trend estimate: Mt_star")
+p2 <- pSecchi + 
+    geom_line(aes(y = Mt_star + St_star[month]), col = 4, lwd = 1.5) + 
+    ggtitle("Final trend-cycle: Mt_star + St_star")
+p3 <- ggplot2::autoplot(et) + 
+    xlab("Year") + 
+    ggtitle("Residuals: et") +
+    theme_light()
+p4 <- forecast::ggAcf(et) + 
+    ggtitle("ACF of residuals") +
+    xlab("Lag (months)") +
+    theme_light()
+(p1 + p2) / (p3 + p4) + 
+    plot_annotation(tag_levels = 'A')
+```
+
+In @fig-SecchiDeseas2, we use the decomposition function `stl()` forced to have approximately the same values as we used in the steps above and as shown in @fig-SecchiDeseas. 
+Hence, @fig-SecchiDeseas and @fig-SecchiDeseas2 are similar. 
+However, the function `stl()` is more flexible -- it also automatically smooths the seasonal component (across Januaries, across Februaries, etc.) -- and can provide finer estimates (see @fig-SecchiDeseas3).
+
+```{r}
+#| label: fig-SecchiDeseas2
+#| fig-cap: "Detrending and deseasonalizing the Secchi depth data using lowess within the function `stl()` forced to behave similarly to @fig-SecchiDeseas."
+#| fig-height: 7
+
+# Span we used above (the fraction)
+span = 0.25
+
+# Window size in number of lags (observations)
+w <- span * length(Secchi)/2 
+D <- stl(Yt, s.window = "periodic", t.window = w)
+Mt_star <- D$time.series[,"trend"]
+St_star <- D$time.series[,"seasonal"]
+et <- D$time.series[,"remainder"]
+
+p1 <- pSecchi +
+    geom_line(aes(y = Mt_star), col = 4, lwd = 1.5) + 
+    ggtitle("Trend estimate: Mt_star")
+p2 <- pSecchi + 
+    geom_line(aes(y = Mt_star + St_star), col = 4, lwd = 1.5) + 
+    ggtitle("Final trend-cycle: Mt_star + St_star")
+p3 <- ggplot2::autoplot(et) + 
+    xlab("Year") + 
+    ggtitle("Residuals: et") +
+    theme_light()
+p4 <- forecast::ggAcf(et) + 
+    ggtitle("ACF of residuals") +
+    xlab("Lag (months)") +
+    theme_light()
+(p1 + p2) / (p3 + p4) + 
+    plot_annotation(tag_levels = 'A')
+```
+
+```{r}
+#| label: fig-SecchiDeseas3
+#| fig-cap: "Detrending and deseasonalizing the Secchi depth data using lowess within the function `stl()` with default settings."
+#| fig-height: 7
+
+D <- stl(Yt, s.window = 24, s.degree = 1, t.window = w)
+Mt_star <- D$time.series[,"trend"]
+St_star <- D$time.series[,"seasonal"]
+et <- D$time.series[,"remainder"]
+
+p1 <- pSecchi +
+    geom_line(aes(y = Mt_star), col = 4, lwd = 1.5) + 
+    ggtitle("Trend estimate: Mt_star")
+p2 <- pSecchi + 
+    geom_line(aes(y = Mt_star + St_star), col = 4, lwd = 1.5) + 
+    ggtitle("Final trend-cycle: Mt_star + St_star")
+p3 <- ggplot2::autoplot(et) + 
+    xlab("Year") + 
+    ggtitle("Residuals: et") +
+    theme_light()
+p4 <- forecast::ggAcf(et) + 
+    ggtitle("ACF of residuals") +
+    xlab("Lag (months)") +
+    theme_light()
+(p1 + p2) / (p3 + p4) + 
+    plot_annotation(tag_levels = 'A')
+```
+:::
+
+
+## Exponential smoothing
+
+Exponential smoothing (ES) is a successful forecasting technique. 
+It turns out that ES can be modified to be used effectively for time series with
+
+* slowly drifting trend (double exponential smoothing);
+* trends (Holt's method);
+* seasonal patterns;
+* combination of trend and seasonality (Holt--Winters method).
+
+ES is easy to adjust for past errors and easy to prepare follow-on forecasts. 
+ES is ideal for situations where many forecasts must be prepared. 
+Several different functional forms of ES are used depending on the presence of trend or cyclical variations.
+
+In short, an ES is an averaging technique that uses unequal weights while the weights applied to past observations decline in an exponential manner.
+
+**Single exponential smoothing** calculates the smoothed series as a damping coefficient $\alpha$ ($\alpha \in [0, 1]$) times the actual series plus $1 - \alpha$ times the lagged value of the smoothed series. 
+For the model
+$$
+Y_{t} = M_t + \epsilon_{t},
+$$
+the updating equation is
+$$
+\begin{split}
+\hat{M}_1 &= Y_1\\
+\hat{M}_t &= \alpha Y_t + (1 - \alpha) \hat{M}_{t - 1}
+\end{split}
+$$
+and the forecast is
+$$
+\hat{Y}_{t+1} = \hat{M}_t.
+$$
+
+An exponential smoothing over an already smoothed time series is called *double exponential smoothing*. 
+In some cases, it might be necessary to extend it even to a *triple exponential smoothing*.
+
+**Holt's linear exponential smoothing** Suppose that the series $Y_t$ is non-seasonal but displays a trend. 
+Now we need to estimate both the current mean (or *level* in some professional jargon) and the current trend.
+
+The updating equations express ideas similar to those for exponential smoothing. 
+However, now we have two smoothing parameters, $\alpha$ and $\beta$ ($\alpha \in [0, 1]$; $\beta \in [0, 1]$).
+
+The updating equations are
+$$
+a_{t} = \alpha Y_{t} + \left( 1- \alpha \right) \left( a_{t - 1} + b_{t - 1} \right)
+$$
+for the mean and
+$$
+b_{t} = \beta \left( a_{t} - a_{t-1} \right) + \left( 1 - \beta \right) b_{t-1}
+$$
+for the trend.
+
+Then the forecasting for $k$ steps into the future is
+$$
+\hat{Y}_{t+k} = a_{t} + kb_{t}.
+$$
+
+Usually, the initial (starting) values are
+$$
+\begin{split}
+a_{1} & = Y_{2}, \\
+b_{1} & = Y_{2} - Y_{1}.
+\end{split}
+$$
+
+::: {.callout-note icon=false}
+
+## Example: Shampoo exponential smoothing
+
+See an example in @fig-shampoo-ses.
+
+```{r}
+#| label: fig-shampoo-ses
+#| fig-cap: "Shampoo sales over three years smoothed with different exponential smoothing filters."
+
+clrs <- c("0.3" = 4, "0.7" = 2)
+m1 <- HoltWinters(shampoo, alpha = 0.3, beta = FALSE, gamma = FALSE)
+m2 <- HoltWinters(shampoo, alpha = 0.7, beta = FALSE, gamma = FALSE)
+p1 <- pshampoo + 
+    geom_line(data = fitted(m1)[,1], aes(col = "0.3"), lwd = 1.5) + 
+    geom_line(data = fitted(m2)[,1], aes(col = "0.7"), lwd = 1.5) +
+    ggtitle("Simple exponential smoothing") +
+    labs(color = "\u03b1") +
+    scale_color_manual(values = clrs)
+clrs <- c("(0.3, 0.3)" = 4, "(0.7, 0.7)" = 2)
+m1 <- HoltWinters(shampoo, alpha = 0.3, beta = 0.3, gamma = FALSE)
+m2 <- HoltWinters(shampoo, alpha = 0.7, beta = 0.7, gamma = FALSE)
+p2 <- pshampoo + 
+    geom_line(data = fitted(m1)[,1], aes(col = "(0.3, 0.3)"), lwd = 1.5) + 
+    geom_line(data = fitted(m2)[,1], aes(col = "(0.7, 0.7)"), lwd = 1.5) +
+    ggtitle("Holt's method") +
+    labs(color = "(\u03b1, \u03b2)") +
+    scale_color_manual(values = clrs)
+p1 + p2 +
+    plot_annotation(tag_levels = 'A')
+```
+:::
+
+
+### Exponential smoothing for seasonal data
+
+**Multiplicative Holt--Winters procedure** 
+
+Now in addition to the Holt parameters, suppose that the series exhibits multiplicative seasonality and let $S_{t}$ be the multiplicative seasonal factor at the time $t$.
+
+Suppose also that there are $m$ observations in one period (in a year). 
+For example, $m = 4$ for quarterly data, and $m = 12$ for monthly data.
+
+In some time series, seasonal variation is so strong it obscures any trends or other cycles, which are important for our understanding of the observed process. 
+Holt--Winters smoothing method can remove seasonality and makes long-term fluctuations in the series stand out more clearly.
+
+A simple way of detecting a trend in seasonal data is to take averages over a certain period. 
+If these averages change with time we can say that there is evidence of a trend in the series.
+
+We now use three smoothing parameters: $\alpha$, $\beta$, and $\gamma$ ($\alpha \in [0, 1]$; $\beta \in [0, 1]$; $\gamma \in [0, 1]$).
+
+The updating equations for the level ($a_t$), local trend ($b_t$), and seasonal factor ($S_t$) are:
+$$
+\begin{split}
+a_{t} & = \alpha Y_{t} / S_{t - m} + (1 - \alpha) ( a_{t - 1} + b_{t - 1}), \\
+b_{t} & = \beta (a_{t} - a_{t - 1}) + (1 - \beta) b_{t - 1}, \\
+S_{t} & = \gamma Y_{t} / a_{t} + (1 - \gamma) S_{t - m}.
+\end{split}
+$$
+
+Then the forecasting for $k$ steps into the future is
+$$
+\hat{Y}_{t+k} = (a_{t} + kb_{t}) S_{t+k-m},
+$$
+where $k = 1, 2, \dots, m$.
+
+To obtain starting values, one may use an average over the first few periods (years) of the data.
+
+The smoothing parameters $\alpha$, $\beta$ and $\gamma$ are estimated by minimizing the sum of the squared one-step prediction errors.
+
+**Additive Holt--Winters procedure**
+
+The updating equations are
+$$
+\begin{split}
+a_{t} & = \alpha (Y_{t} - S_{t - m}) + (1 - \alpha) (a_{t - 1} + b_{t - 1}), \\
+b_{t} & = \beta (a_{t} - a_{t - 1}) + (1 - \beta) b_{t - 1} \\
+S_{t} & = \gamma (Y_{t} - a_{t}) + (1 - \gamma) S_{t - m}.
+\end{split}
+$$
+
+Then the forecasting for $k$ steps into the future is
+$$
+\hat{Y}_{t+k} = a_{t} + kb_{t} + S_{t + k - m},
+$$
+where $k = 1, 2, \dots, m$.
+
+::: {.callout-note icon=false}
+
+## Example: Airline passengers non-seasonal and seasonal exponential smoothing
+
+Monthly totals of international airline passengers, 1949--1960 (see @fig-airpassangers). 
+This is a classical example and benchmark in time series analysis.
+
+```{r}
+#| label: fig-airpassangers
+#| fig-cap: "Monthly `AirPassengers` data and a corresponding sample ACF."
+
+pAirPassengers <- ggplot2::autoplot(AirPassengers, col = "grey50") + 
+    xlab("Year") + 
+    ylab("Airline passengers (thousand)") + 
+    theme_light()
+p2 <- forecast::ggAcf(AirPassengers) + 
+    ggtitle("") +
+    xlab("Lag (months)") + 
+    theme_light()
+pAirPassengers + p2 +
+    plot_annotation(tag_levels = 'A')
+```
+
+Comparison of various exponential smoothing techniques for the `AirPassengers` data:
+
+```{r}
+m1 <- HoltWinters(AirPassengers, beta = FALSE, gamma = FALSE)
+m1$SSE
+c(m1$alpha, m1$beta, m1$gamma)
+
+m2 <- HoltWinters(AirPassengers, gamma = FALSE)
+m2$SSE
+c(m2$alpha, m2$beta, m2$gamma)
+
+m3 <- HoltWinters(AirPassengers)
+m3$SSE
+c(m3$alpha, m3$beta, m3$gamma)
+
+m4 <- HoltWinters(AirPassengers, seasonal = "multiplicative")
+m4$SSE
+c(m4$alpha, m4$beta, m4$gamma)
+```
+
+The last multiplicative model is the best one, based on the sum of squared errors (SSE) in the training set (see @fig-airpassangersHW). 
+For a more thorough comparison, consider using out-of-sample data in cross-validation.
+
+```{r}
+#| label: fig-airpassangersHW
+#| fig-cap: "Plots of the observed, fitted, and predicted `AirPassengers` data, using various smoothing procedures."
+#| fig-height: 7
+
+k = 12
+fm1 <- predict(m1, n.ahead = k)
+fm2 <- predict(m2, n.ahead = k)
+fm3 <- predict(m3, n.ahead = k)
+fm4 <- predict(m4, n.ahead = k)
+p1 <- pAirPassengers + 
+    geom_line(data = m1$fitted[,"xhat"], col = 4) +
+    autolayer(fm1) +
+    ggtitle("Exponential smoothing") +
+    theme(legend.position = "none")
+p2 <- pAirPassengers + 
+    geom_line(data = m2$fitted[,"xhat"], col = 4) +
+    autolayer(fm2) +
+    ggtitle("Holt's method") +
+    theme(legend.position = "none")
+p3 <- pAirPassengers + 
+    geom_line(data = m3$fitted[,"xhat"], col = 4) +
+    autolayer(fm3) +
+    ggtitle("Additive Holt-Winters") +
+    theme(legend.position = "none")
+p4 <- pAirPassengers + 
+    geom_line(data = m4$fitted[,"xhat"], col = 4) +
+    autolayer(fm4) +
+    ggtitle("Multiplicative Holt-Winters") +
+    theme(legend.position = "none")
+(p1 + p2) / (p3 + p4) + 
+    plot_annotation(tag_levels = 'A')
+```
+:::
+
+
+## Polynomial regression on time {#sec-regressionTime}
+
+This is a very intuitive procedure for fitting parametric trend functions to time series:
+
+* Make a parametric model assumption about $M_t$ as a function of time $t$, for example, quadratic trend:
+$$
+M_t = \beta_0 + \beta_1 t + \beta_2 t^2
+$$
+* Fit the model using the usual regression estimators (least squares or maximum likelihood)
+
+::: {.callout-note}
+A nonstationary time series with a trend represented by a parametric function is a typical example of a *trend-stationary time series* or a time series with a *deterministic trend*. 
+It is easy to make such a time series stationary by modeling and extracting the trend. 
+:::
+
+::: {.callout-note icon=false}
+
+## Example: Airline passengers non-seasonal polynomial smoothing
+
+Continue using the `AirPassengers` data and fit linear and quadratic trends.
+
+```{r}
+t <- as.vector(time(AirPassengers))
+t2 <- t^2
+tm1 <- lm(AirPassengers ~ t)
+tm2.1 <- lm(AirPassengers ~ t + t2)
+tm2.2 <- lm(AirPassengers ~ t + I(t^2))
+tm2.3 <- lm(AirPassengers ~ poly(t, degree = 2))
+```
+
+After estimating the trend coefficients with OLS, visualize the results (@fig-airpassangersRegTrend).
+
+```{r}
+#| label: fig-airpassangersRegTrend
+#| fig-cap: "The plots of the `AirPassengers` data with estimated parametric linear and quadratic trends."
+
+p1 <- pAirPassengers + 
+    geom_line(aes(y = tm1$fitted.values), col = 4, lwd = 1.5) + 
+    ggtitle("Linear trend")
+p2 <- pAirPassengers + 
+    geom_line(aes(y = tm2.3$fitted.values), col = 4, lwd = 1.5) + 
+    ggtitle("Quadratic trend")
+p1 + p2 +
+    plot_annotation(tag_levels = 'A')
+```
+:::
+
+::: {.callout-note}
+The models `tm2.1` and `tm2.2` are equivalent.
+Model `tm2.1` uses a pre-calculated quadratic transformation, while model `tm2.2` applies the transformation on the fly within the R formula call, using the `I()` syntax (without the `I()` wrapper, the output of `tm2.2` would be the same as of `tm1`, not `tm2.1`). 
+However, both models `tm2.1` and `tm2.2` can easily violate the assumption of independence of predictors in linear regression, especially when values of the time index $t$ are large. 
+That is the case for us because the sequence $t$ represents decimal years, from `r min(t)` to `r max(t)`, and $\widehat{\mathrm{cor}}(t, t^2) =$ `r cor(t, t2)`. 
+Therefore, model `tm2.3` is preferred, because it is evaluated on orthogonal polynomials (basically, centering and normalization are applied to $t$ and $t^2$).
+:::
+
+
+### Seasonal regression with dummy variables
+
+To each time $t$ and each season $k$ we will assign an indicator that 'turns on' if and only if $t$ falls into that season. 
+In principle, a seasonal period of any positive integer length $m \geqslant 2$ is possible, however, in most cases, the length of the seasonal cycle is one year and so the seasonal period of the time series depends on the number of observations per year. 
+The most common periods are $m = 12$ (monthly data) and $m = 4$ (quarterly data). 
+For each $k = 1, \dots, m$, we define the indicator
+$$
+X_{k,t} = \left\{
+\begin{array}{cl}
+1, & \mbox{if} ~ t ~ \text{corresponds to season} ~ k, \\
+0, & \mbox{if} ~ t ~ \text{does not correspond to season} ~ k. \\
+\end{array}
+\right.
+$$
+
+Note that for each $t$ we have $X_{1,t} + X_{2,t} + \dots + X_{m,t} = 1$ since each $t$ corresponds to exactly one season. 
+Thus, given any $m - 1$ of the variables, the remaining variable is known and thus redundant. 
+Because of this linear dependence, we must drop one of the indicator variables (seasons) from the model. 
+It does not matter which season is dropped although sometimes there are choices that are simpler from the point of view of constructing or labeling the design matrix. 
+Thus the general form of a seasonal model looks like
+$$
+\begin{split}
+f (Y_{t}) &= M_{t} + \beta_{2} X_{2,t} + \beta_{3} X_{3,t} + \dots + \beta_{m} X_{m,t} + \epsilon_{t} \\
+&= M_{t} + \sum_{i=2}^{m}\beta_{i} X_{i,t} + \epsilon_{t},
+\end{split}
+$$
+where $M_{t}$ is a trend term which may also include some $\beta$ parameters and explanatory variables. 
+The function $f$ represents the appropriate variance-stabilizing transformations as needed. 
+(Here the 1st season has been dropped from the model.)
+
+::: {.callout-note icon=false}
+
+## Example: Airline passengers polynomial smoothing with dummy variables for the seasons
+
+Consider adding the dummy variables to model seasonality together with the quadratic trend in the `AirPassengers` time series. 
+We noticed multiplicative seasonality in this time series before, therefore we apply a logarithmic transformation to the original data to transform the multiplicative seasonality into additive. 
+That is, we need to estimate the model
+$$
+\ln(Y_{t}) = \alpha_0 + \alpha_1 t + \alpha_2 t^2 + \sum_{i=2}^{12}\beta_{i} X_{i,t} + \epsilon_{t},
+$$
+where $X_{i,t}$ are the dummy variables for the months. 
+(Here the first month has been dropped from the model, the same as in R the first factor level is dropped.)
+
+If we were doing the regression analysis by hand, we would create a design matrix with a few top rows looking like this:
+
+```{r}
+#| echo: false
+
+months <- as.vector(cycle(AirPassengers))
+tmp <- sapply(2:12, function(x) as.numeric(months == x))
+colnames(tmp) <- paste0("X", 2:12)
+tmp <- cbind(t, t2, tmp)
+head(tmp, 13)
+```
+
+::: {.callout-note}
+The way the months are represented above as separate columns of 0s and 1s is called *one-hot encoding* in the field of machine learning.
+:::
+
+In R, it is enough to have *one* variable representing the seasons. 
+This categorical variable should be saved as a `factor`. 
+Then we apply the OLS method to find the model coefficients (see results in @fig-airpassangersRegTrendSeas):
+
+```{r}
+Month <- as.factor(cycle(AirPassengers))
+m <- lm(log(AirPassengers) ~ poly(t, degree = 2) + Month)
+summary(m)
+```
+
+```{r}
+#| label: fig-airpassangersRegTrendSeas
+#| fig-cap: "The `AirPassengers` data, with estimated parametric quadratic trend and seasonality (modeled using *dummy variables*), and ACF of the residuals. Since the model was fitted on the log scale, the trend-cycle estimates need to be exponentiated to match the original scale of the data."
+
+p1 <- pAirPassengers + 
+    geom_line(aes(y = exp(m$fitted.values)), col = 4, lwd = 1.5)
+p2 <- forecast::ggAcf(m$residuals) + 
+    ggtitle("ACF of residuals") +
+    xlab("Lag (months)") + 
+    theme_light()
+p1 + p2 +
+    plot_annotation(tag_levels = 'A')
+```
+:::
+
+
+### Seasonal regression with Fourier series
+
+It is a spoiler for the future lecture on spectral analysis of time series, but seasonal regression modeling would not be complete without introducing the trigonometric Fourier series.
+
+We can fit a linear regression model using several pairs of trigonometric functions as predictors. 
+For example, for monthly observations
+$$
+\begin{split}
+cos_{k} (i) &= \cos (2 \pi ki / 12), \\
+sin_{k} (i) &= \sin (2 \pi ki / 12),
+\end{split}
+$$
+where $i$ is the month within the year, and the trigonometric function has $k$ cycles per year.
+
+
+::: {.callout-note icon=false}
+
+## Example: Airline passengers polynomial smoothing with Fourier series for the seasons
+
+Now let us apply the method of sinusoids to the `AirPassengers` time series. 
+We have one prominent and, possibly, one less prominent peak per year. 
+Hence, we can test the model with $k = 1$ and $k = 2$. 
+We will construct the following trigonometric predictors:
+$$
+\begin{split}
+cos_{1,t} &= \cos(2 \pi \text{month}_t/12),\\
+sin_{1,t} &= \sin(2 \pi \text{month}_t/12),\\
+cos_{2,t} &= \cos(4 \pi \text{month}_t/12),\\
+sin_{2,t} &= \sin(4 \pi \text{month}_t/12)
+\end{split}
+$$
+to use in the model
+$$
+\ln(Y_{t}) = \alpha_0 + \alpha_1 t + \alpha_2 t^2 + \beta_{1}cos_{1,t} + \beta_{2}sin_{1,t} + \beta_{3}cos_{2,t} + \beta_{4}sin_{2,t} + \epsilon_{t}.
+$$
+
+Calculate the predictors and estimate the model in R (see results in @fig-airpassangersRegTrendFourier):
+
+```{r}
+month <- as.numeric(cycle(AirPassengers))
+cos1 <- cos(2 * pi * month / 12)
+sin1 <- sin(2 * pi * month / 12)
+cos2 <- cos(4 * pi * month / 12)
+sin2 <- sin(4 * pi * month / 12)
+m <- lm(log(AirPassengers) ~ poly(t, degree = 2) + cos1 + sin1 + cos2 + sin2)
+summary(m)
+```
+
+```{r}
+#| label: fig-airpassangersRegTrendFourier
+#| fig-cap: "The `AirPassengers` data, with estimated parametric quadratic trend and seasonality (modeled using *trigonometric functions*), and ACF of the residuals. Since the model was fitted on the log scale, the trend-cycle estimates need to be exponentiated to match the original scale of the data."
+
+p1 <- pAirPassengers + 
+    geom_line(aes(y = exp(m$fitted.values)), col = 4, lwd = 1.5)
+p2 <- forecast::ggAcf(m$residuals) + 
+    ggtitle("ACF of residuals") +
+    xlab("Lag (months)") + 
+    theme_light()
+p1 + p2 +
+    plot_annotation(tag_levels = 'A')
+```
+:::
+
+
+## Differencing {#sec-differencing}
+
+A big subset of time series models (particularly, models dealing with random walk series) applies the differencing to eliminate trends.
+
+Let $\Delta$ be the difference operator ($\nabla$ notation is also used sometimes), then the simple first-order differences are:
+$$
+\begin{split}
+\Delta Y_t &= Y_t - Y_{t-1} \\
+&=(1-B)Y_t,
+\end{split}
+$$
+where $B$ is a backshift operator.
+
+The **backshift operator** and difference operator are useful for a convenient representation of higher-order differences. 
+We will often use backshift operators in future lectures:
+$$
+\begin{split}
+B^0Y_{t} &= Y_{t} \\
+BY_{t} &= Y_{t-1} \\
+B^{2}Y_{t} &= Y_{t-2} \\
+& \vdots \\
+B^{k}Y_{t} &= Y_{t-k}.
+\end{split}
+$$
+The convenience is because the powers of the operators can be treated as powers of elements of usual polynomials, so we can make different operations for more complex cases.
+
+For example, if we took second-order differences, $\Delta^2Y_t = (1-B)^2Y_t$, to remove a trend and then used differences with the seasonal lag of 12 months to remove a strong seasonal component, what would be the final form of the transformed series? 
+The transformed series, $Y^*_t$, will be:
+$$
+\begin{split}
+Y^*_t & = (1-B)^2 (1 - B^{12})Y_t \\
+& = (1 - 2B + B^2) (1 - B^{12})Y_t \\
+& = (1 - 2B + B^2 - B^{12} + 2B^{13} - B^{14})Y_t \\
+& = Y_t - 2Y_{t-1} + Y_{t-2} - Y_{t-12} + 2Y_{t-13}-Y_{t-14},
+\end{split}
+$$
+but we will often use just the top-row notations.
+
+We will discuss formal tests to identify an appropriate order of differences in future lectures (unit-root tests), but for now use the *rule of thumb:* for time trends looking linear use 1st order differences ($\Delta Y_t = Y_t - Y_{t-1}$), for parabolic shapes use differences of the 2nd order, etc. 
+Apply the differencing of higher orders until the time series looks stationary (plot the transformed series and its ACF at each step). 
+In practice, differences of order 3 or higher are rarely needed.
+
+::: {.callout-note}
+A nonstationary time series that can be converted to stationary by taking differences is also sometimes called a *difference-stationary time series* or a time series with a *stochastic trend*. 
+Very rarely, a time series may contain both deterministic and stochastic trends that need to be modeled or removed for further analysis.
+:::
+
+::: {.callout-note icon=false}
+
+## Example: Shampoo detrending by differencing
+
+Remove the trend from the shampoo series by applying the differences.
+
+Based on @fig-shampooDiff, differencing once is enough to remove the trend. 
+The resulting detrended series is
+$$
+Y^*_t = \Delta Y_t = (1 - B)Y_t = Y_t - Y_{t-1}.
+$$
+
+```{r}
+#| label: fig-shampooDiff
+#| fig-cap: "Time series plot of shampoo sales with an estimated ACF and the differenced series with their ACFs."
+#| fig-height: 9
+
+p1 <- pshampoo +
+    ggtitle("Yt")
+p2 <- forecast::ggAcf(shampoo) + 
+    ggtitle("") +
+    xlab("Lag (months)") + 
+    theme_light()
+p3 <- ggplot2::autoplot(diff(shampoo)) + 
+    xlab("Year") + 
+    ylab("Sales") + 
+    ggtitle("D1") +
+    theme_light()
+p4 <- forecast::ggAcf(diff(shampoo)) + 
+    ggtitle("") +
+    xlab("Lag (months)") + 
+    theme_light()
+p5 <- ggplot2::autoplot(diff(shampoo, differences = 2)) + 
+    xlab("Year") + 
+    ylab("Sales") +
+    ggtitle("D2") +
+    theme_light()
+p6 <- forecast::ggAcf(diff(shampoo, differences = 2)) + 
+    ggtitle("") +
+    xlab("Lag (months)") + 
+    theme_light()
+(p1 + p2) / (p3 + p4) / (p5 + p6) +
+    plot_annotation(tag_levels = 'A')
+```
+:::
+
+::: {.callout-note icon=false}
+
+## Example: Airline passengers detrending and deseasonalizing by differencing
+
+Remove trend and seasonality from the log-transformed `AirPassengers` series by applying the differences.
+
+Based on @fig-AirPassengersDiff, differencing once with the non-seasonal and the seasonal lags is enough to remove the trend and strong seasonality. 
+The final series (denoted as `D1D12`) is
+$$
+\begin{split}
+D1D12_t & = (1 - B)(1 - B^{12})\lg Y_t = (1 - B - B^{12} + B^{13})\lg Y_t\\
+& = \lg Y_t - \lg Y_{t-1} - \lg Y_{t-12} + \lg Y_{t-13}.
+\end{split}
+$$
+
+```{r}
+#| label: fig-AirPassengersDiff
+#| fig-cap: "Time series plot of the airline passenger series with an estimated ACF and the detrended (differenced) series with their ACFs."
+#| fig-height: 9
+
+Yt <- log10(AirPassengers)
+
+# Apply first-order (non-seasonal) differences
+D1 <- diff(Yt)
+
+# Additionally, apply first-order seasonal differences
+D1D12 <- diff(D1, lag = 12)
+
+p1 <- ggplot2::autoplot(Yt) + 
+    xlab("Year") + 
+    ylab("log10(Air passangers)") + 
+    ggtitle("Yt") +
+    theme_light()
+p2 <- forecast::ggAcf(Yt) + 
+    ggtitle("Yt") +
+    xlab("Lag (months)") + 
+    theme_light()
+p3 <- ggplot2::autoplot(D1) + 
+    xlab("Year") + 
+    ylab("log10(Air passangers)") + 
+    ggtitle("(1-B)Yt") +
+    theme_light()
+p4 <- forecast::ggAcf(D1) + 
+    ggtitle("(1-B)Yt") +
+    xlab("Lag (months)") + 
+    theme_light()
+p5 <- ggplot2::autoplot(D1D12) + 
+    xlab("Year") + 
+    ylab("log10(Air passangers)") + 
+    ggtitle("(1-B)(1-B12)Yt") +
+    theme_light()
+p6 <- forecast::ggAcf(D1D12) + 
+    ggtitle("(1-B)(1-B12)Yt") +
+    xlab("Lag (months)") + 
+    theme_light()
+(p1 + p2) / (p3 + p4) / (p5 + p6) +
+    plot_annotation(tag_levels = 'A')
+```
+:::
+
+
+## Conclusion
+
+We have implemented various methods for trend visualization, modeling, and trend removal. 
+In each case, the method could be extended to additionally remove from a time series a strong seasonal signal. 
+The choice of a method depends on many things, such as:
+
+* The methods require different skill levels (and time commitment) for their implementation and can be categorized as automatic and non-automatic.
+* Some methods are very flexible when dealing with seasonality (e.g., Holt--Winters), while others are not.
+* The goal of smoothing and desired degree of smoothness in the output.
+* Some of the methods have a convenient way of getting forecasts (e.g., exponential smoothing and polynomial regression), while other methods are more suitable for interpolation (polynomial regression) and simple visualization (simple moving average), or just trend elimination (all of the considered methods are capable of eliminating trends, but differencing is the method that does nothing else but the elimination).
+
+Remember that forecasted values (point forecasts) are not valuable if their uncertainty is not quantified. 
+To quantify the uncertainty, we provide prediction intervals that are based on the past behavior of residuals and careful residual diagnostics (such as described in the previous lectures).
+
+The evaluation of the methods may involve splitting the time series into training and testing periods. 
+Overall, this lecture focused on presenting the methods themselves, while *residual diagnostics* and *evaluation on a testing set* were omitted due to time constraints.
+
+While the considered methods are among the most common, there are many more smoothing methods that can be applied to time series: splines (such as used in generalized additive models, GAMs), kernels, machine learning techniques, etc.
+
+
+## Appendix
+
+::: {.callout-note icon=false}
+
+## Example: Smoothing blocks
+
+A student was concerned about applying smoothing to data with a block-like structure. 
+Without a real data set on hand, below we simulate a series $X_t$ with the mentioned structure.
+
+```{r}
+set.seed(123)
+
+# Set number of blocks
+n <- 10 
+
+# Let the values of blocks come from standard normal distribution,
+# and length of block be a random variable generated from Poisson distribution:
+Xt <- rep(rnorm(n), times = rpois(n, 5))
+```
+
+@fig-blocks shows an example of lowess applied to $X_t$ to get a smoothed series $M_t$.
+
+We see that lowess estimates *smooth* trends. 
+If we assume that trends are not smooth, then some other techniques (e.g., piecewise linear estimation) should be used.
+
+```{r}
+#| label: fig-blocks
+#| fig-cap: "Smoothing of the block-like data $X_t$."
+
+t <- c(1:length(Xt))
+ggplot(data.frame(t = t, Xt = Xt), aes(x = t, y = Xt)) + 
+    geom_line() + 
+    geom_smooth(se = FALSE, span = 0.25) + 
+    theme_light()
+```
+:::

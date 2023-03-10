@@ -1,0 +1,127 @@
+---
+output: html_document
+editor_options:
+    chunk_output_type: console
+---
+
+```{r, echo=FALSE}
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+options(digits = 3)
+```
+
+# Generalized least squares {#sec-gls}
+
+We are coming back to time series data (ordered by $t$), thus, @eq-mod1 will be written with time indices $t$ as
+$$
+y_t=\beta_0+\beta_1x_t+\varepsilon_t,
+$${#eq-mod1t}
+where the regression errors at times $t$ and $t-1$ are
+$$
+\begin{split}
+\varepsilon_t&=y_t-\beta_0-\beta_1x_t,\\
+\varepsilon_{t-1}&=y_{t-1}-\beta_0-\beta_1x_{t-1}.
+\end{split}
+$${#eq-mod1error}
+
+An AR(1) model for the errors will yield
+$$
+\begin{split}
+y_t-\beta_0-\beta_1x_t & = \rho\varepsilon_{t-1} + w_t, \\
+y_t-\beta_0-\beta_1x_t & = \rho(y_{t-1}-\beta_0-\beta_1x_{t-1})+w_t,
+\end{split}
+$${#eq-modAR1}
+where $w_t$ are uncorrelated errors.
+
+Rewrite it as
+$$
+\begin{split}
+y_t-\rho y_{t-1}&=\beta_0(1-\rho)+\beta_1(x_t-\rho x_{t-1})+w_t,\\
+y_t^* &= \beta_0^* + \beta_1 x_t^*+w_t,
+\end{split}
+$${#eq-mod1w}
+where $y_t^* = y_t-\rho y_{t-1}$; $\beta_0^* = \beta_0(1-\rho)$; $x_t^* = x_t-\rho x_{t-1}$. 
+Notice the errors $w_t$ in the final @eq-mod1w for the transformed variables $y_t^*$ and $x_t^*$ are uncorrelated.
+
+To get from @eq-mod1t to @eq-mod1w, we can use an iterative procedure by @Cochrane:Orcutt:1949 as in the example below.
+
+::: {.callout-note icon=false}
+
+## Example: Dishwasher shipments model accounting for autocorrelation
+
+1. Estimate the model in @eq-mod1t using OLS.
+```{r}
+D <- read.delim("./data/dish.txt") %>% 
+    rename(Year = YEAR)
+modDish_ols <- lm(DISH ~ RES, data = D)
+```
+
+2. Calculate residuals $\hat{\varepsilon}_t$ and estimate $\rho$ as
+$$
+\hat{\rho}=\frac{\sum_{t=2}^n\hat{\varepsilon}_t\hat{\varepsilon}_{t-1}}{\sum_{t=1}^n\hat{\varepsilon}^2_t}.
+$$
+```{r}
+e <- modDish_ols$residuals
+rho <- sum(e[-1] * e[-length(e)]) / sum(e^2)
+rho
+```
+
+3. Calculate transformed variables $x^*_t$ and $y^*_t$ and fit model in @eq-mod1w.
+```{r}
+y.star <- D$DISH[-1] - rho * D$DISH[-length(D$DISH)]
+x.star <- D$RES[-1] - rho * D$RES[-length(D$RES)]
+modDish_ar1 <- lm(y.star ~ x.star)
+summary(modDish_ar1)
+```
+
+4. Examine the residuals of the newly fitted equation (@fig-dishAR1) and repeat the procedure, if needed.
+
+```{r}
+#| label: fig-dishAR1
+#| fig-cap: "Residual plots of the original OLS model and the model transformed to account for autocorrelation in residuals."
+
+p1 <- ggplot(D, aes(x = Year, y = modDish_ols$residuals)) + 
+    geom_line() + 
+    geom_hline(yintercept = 0, lty = 2, col = 4) + 
+    ggtitle("OLS model modDish_ols") +
+    ylab("Residuals") +
+    theme_light()
+p2 <- ggplot(D[-1,], aes(x = Year, y = modDish_ar1$residuals)) + 
+    geom_line() + 
+    geom_hline(yintercept = 0, lty = 2, col = 4) + 
+    ggtitle("Transformed model modDish_ar1") +
+    ylab("Residuals") +
+    theme_light()
+p1 + p2 +
+    plot_annotation(tag_levels = 'A')
+```
+
+Based on the runs test, there is not enough evidence of autocorrelation in the new residuals:
+
+```{r}
+lawstat::runs.test(rstandard(modDish_ar1))
+```
+:::
+
+What we have just applied is the method of *generalized least squares* (GLS):
+$$
+\hat{\boldsymbol{\beta}} = \left( \boldsymbol{X}^{\top}\boldsymbol{\Sigma}^{-1}\boldsymbol{X}\right)^{-1} \boldsymbol{X}^{\top}\boldsymbol{\Sigma}^{-1}\boldsymbol{Y},
+$${#eq-gls}
+where $\boldsymbol{\Sigma}$ is the covariance matrix. 
+The method of weighted least squares (WLS; @sec-wls) is just a special case of the GLS. 
+In the WLS approach, all the off-diagonal entries of $\boldsymbol{\Sigma}$ are 0.
+
+We can use the function `nlme::gls()` and specify the `correlation` structure to avoid iterating the steps from the previous example manually:
+
+```{r}
+modDish_ar1_v2 <- nlme::gls(DISH ~ RES
+                            ,correlation = nlme::corAR1(form = ~Year)
+                            ,data = D)
+summary(modDish_ar1_v2)
+```
+
+::: {.callout-note}
+In the function `nlme::gls()` we can also specify `weights` to accommodate heteroskedastic errors, but the syntax differs from the `weights` specification in the function `stats::lm()` (@sec-wls). 
+See `?nlme::varFixed`.
+:::

@@ -1,0 +1,547 @@
+---
+output: html_document
+editor_options:
+    chunk_output_type: console
+---
+
+```{r, echo=FALSE}
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+options(digits = 3)
+```
+
+# Time Series Regression with Trends
+
+The goal of this lecture is to introduce methods of handling nonstationary time series in regression models. 
+You will become familiar with the problem of spurious correlation (regression) and approaches helping to avoid it.
+
+**Objectives**
+
+1. Learn three alternative ways of handling trends and/or seasonality to avoid spurious results: incorporate time effects into a regression model, use deviations from trends, or differenced series.
+1. Introduce the concept of cointegration, learn how to detect it, and model using an error correction model.
+
+**Reading materials**
+
+* Chapter 10 in @Wooldridge:2013
+* Chapter 6 in @Kirchgassner:Wolters:2007 on cointegration
+
+
+## Spurious correlation
+
+Results of statistical analysis (correlation, regression, etc.) are called *spurious* when they are likely driven not by the underlying mechanisms such as the physical relationships between variables, but by matching patterns (often, temporal patterns) of the variables leading to the statistical significance of tested relationships. 
+Such matching patterns include trends, periodic fluctuations (seasonality), and more random patterns like spikes matching in several time series, for example, detected by searching over a large database of time series (a.k.a. cherry picking).
+
+```{r}
+#| label: fig-orig
+#| fig-cap: "Original stationary and independent time series."
+
+set.seed(123)
+T <- 300
+Xt <- ts(rnorm(T))
+Yt <- ts(rnorm(T))
+p1 <- forecast::autoplot(Xt) +
+    theme_light()
+p2 <- forecast::autoplot(Yt) +
+    theme_light()
+p1 + p2 +
+    plot_annotation(tag_levels = 'A')
+```
+
+@fig-orig shows two series of length $T = 300$ simulated from the standard normal distribution, $N(0,1)$.
+These are independent and identically distributed (i.i.d.) random variables: each of the $T$ values in $X_t$ and $Y_t$ was drawn independently from other values from the same distribution. 
+Two random variables are independent if the realization of one does not affect the probability distribution of the other. 
+Independence is a strong condition, it also implies (includes) that the values are not correlated. 
+This is true both for the values within the series $X_t$ and $Y_t$, and across $X_t$ and $Y_t$ (i.e., $X_t$ and $Y_t$ are not autocorrelated, nor correlated with each other). 
+This is the asymptotic property of such a time series (as the sample size increases infinitely).
+
+In finite samples, we may observe that a point estimate of the correlation coefficient even for such an ideal series is not exactly zero, but it will be usually not statistically significant. 
+See the results (confidence interval and $p$-value) from the correlation $t$-test below:
+
+```{r}
+cor.test(Xt, Yt)
+```
+
+Not many time series behave like that in real life -- often we observe some trends. Let's add linear trends to our simulated data, for example, trends going in the same direction but with slopes of different magnitudes. 
+Here we use linear increasing trends, i.e., with positive slopes [@fig-TSwithTrends].
+
+::: {.callout-note}
+It is probably a good idea to refrain from writing 'positive trends' (or 'negative trends') because they can be confused with 'good' or 'beneficial' trends. 
+For example, a decrease in the unemployment rate is a positive (good) trend for a country, but it is a trend with a negative slope. 
+Contrary, a linear trend in pollutant concentrations with a positive slope (going upward) shows a negative (worsening) tendency for the ecosystem.
+:::
+
+```{r}
+#| label: fig-TSwithTrends
+#| fig-cap: "Time series with trends."
+
+Xt <- Xt + c(1:T)/95
+Yt <- Yt + c(1:T)/50
+p1 <- forecast::autoplot(Xt) +
+    ylim(-2, 8) +
+    theme_light()
+p2 <- forecast::autoplot(Yt) +
+    ylim(-2, 8) +
+    theme_light()
+p1 + p2 +
+    plot_annotation(tag_levels = 'A')
+```
+
+After adding trends to each of the time series, the correlation of $X_t$ and $Y_t$ is strong and statistically significant, but this is not necessarily because these series are so strongly related to each other. 
+
+```{r}
+cor.test(Xt, Yt)
+```
+
+Some other factors may be driving the dynamics (trends) of $X_t$ and $Y_t$ in the same direction. 
+Also, recall the general formula for computing correlation (or autocorrelation) of time series and that we need to subtract time-dependent means (not just a mean calculated over the whole period assuming the mean is not changing or time-independent), for example, as in @eq-Cov.
+
+For example, a city's growing population may result in more police officers and heavier pollution at the same time, partially because more people will drive their vehicles in the city. 
+An attempt to correlate (regress) pollution with the number of police officers will produce a so-called spurious correlation (regression). 
+The results of statistical tests will be likely statistically significant. 
+However, is pollution directly related to the number of police officers? 
+Will the dismissal of a police officer help to make the air cleaner?
+
+Not only common increasing/decreasing trends but also other systematic changes (such as seasonality) may be responsible for spurious correlation effects. 
+For example, both high ice cream sales and harmful algal blooms typically occur in warm weather conditions and may be 'significantly' correlated, suggesting banning ice cream for the sake of a safer environment. 
+See more interesting examples of spurious correlation at <http://www.tylervigen.com/spurious-correlations>.
+
+Sometimes, some simple tricks may help to avoid spurious results. 
+For example, analyze not the raw numbers, but the *rates* that remove the effect of population growth in a city: crime rate per 100,000 inhabitants, number of people older than 70 per 1,000 inhabitants, etc. 
+For more general approaches, see the next section.
+
+
+## Common approaches to regressing time series with trends
+
+Consider a situation when we are given time series with trends (like in @fig-TSwithTrends), we do not know the data generating process (DGP; i.e., the true dependence structure), and we want to use these series in regression analysis.
+
+In general, there are three alternative ways of dealing with trends in regression:
+
+1. Incorporate time effect into the model;
+1. Use deviations from trends (i.e., model and remove trends), or
+1. Use differenced series (i.e., remove trends by differencing).
+
+After these three approaches, here we consider a special case of cointegration (@sec-cointegration).
+
+
+### Incorporate time effects {#sec-incorporateTime}
+
+Based on the time series plots (@fig-TSwithTrends), a linear time trend would fit these data, since we see a linear increase of values with time (so we add a linear time effect $t$ in our model). 
+Alternatively, e.g., if we observed parabolic structure, we could include $t+t^2$ or another form of trend.
+
+```{r}
+t <- c(1:T)
+mod_time <- lm(Yt ~ Xt + t)
+summary(mod_time)
+```
+
+This model looks like this:
+$$
+Y_t = \beta_0 + \beta_1X_t + \beta_2t + \epsilon_t,
+$$
+estimated as:
+\begin{align}
+\widehat{Y}_t &= \hat{\beta}_0 + \hat{\beta}_1X_t + \hat{\beta}_2t,\\
+\widehat{Y}_t &=  0.0008 - 0.0637X_t + 0.0207t.
+\end{align}
+
+In the above model, the (highly statistically significant) time term took over the trend influence, thus, the coefficient for $X$ shows the 'real' relationship between $Y$ and $X$. 
+Notice, the coefficient $\beta_1$ is not statistically significant, what we expected.
+
+
+### Use deviations from trends
+
+Here we fit a separate time trend (may be of a different form for each time series: linear, quadratic, log, etc.) for each variable and find deviations from these trends. 
+Based on @fig-TSwithTrends, linear trends are appropriate here:
+$$
+Y_t = a_0 + a_1t + e_{(Y)t}; \quad X_t = b_0 + b_1t + e_{(X)t},
+$$
+where $e_{(Y)t}$ and $e_{(X)t}$ are the trend residuals for the series $Y_t$ and $X_t$, respectively.
+
+After the trend coefficients $a_0$, $a_1$, $b_0$, and $b_1$ are estimated,
+
+```{r}
+MY <- lm(Yt ~ t)
+MX <- lm(Xt ~ t)
+```
+    
+the smoothed series are
+$$
+\widetilde{Y}_t = \hat{a}_0 + \hat{a}_1t; \quad \widetilde{X}_t = \hat{b}_0 + \hat{b}_1t
+$$
+and the estimated trend residuals are (@fig-trendresid)
+$$
+\hat{e}_{(Y)t} = Y_t - \widetilde{Y}_t\quad\text{and}\quad \hat{e}_{(X)t} = X_t - \widetilde{X}_t.
+$$
+
+```{r}
+#| label: fig-trendresid
+#| fig-cap: "Residuals from individually estimated linear trends."
+
+p1 <- ggplot2::autoplot(as.ts(MY$resid)) +
+    xlab("t") +
+    ylab("eYt") +
+    theme_light()
+p2 <- ggplot2::autoplot(as.ts(MX$resid)) +
+    xlab("t") +
+    ylab("eXt") +
+    theme_light()
+p1 + p2 +
+    plot_annotation(tag_levels = 'A')
+```
+
+Use the residuals in our regression model in place of the original variables:
+$$
+\hat{e}_{(Y)t} = \beta_0 + \beta_1\hat{e}_{(X)t} + \epsilon_t.
+$$
+
+```{r}
+mod_devTrend <- lm(MY$residuals ~ MX$residuals)
+summary(mod_devTrend)
+```
+
+We got the result (the relationship between the variables is not statistically significant) similar to running the model incorporating time trends in @sec-incorporateTime. 
+Again, it is a reasonable result based on how the time series were simulated (independent, although with trends in the same direction).
+
+
+### Use differenced series {#sec-RegTrendDiff}
+
+Instead of assuming a deterministic trend as in the previous subsections, we can try to eliminate a stochastic trend by differencing the time series. 
+We define the lag-1 difference operator $\Delta$ by
+$$
+\Delta X_t = X_t - X_{t-1} = (1-B)X_t,
+$$
+where $B$ is the backward shift operator, $BX_t = X_{t-1}$.
+
+There are tests developed in econometrics to find the appropriate order of differences (unit-root tests). 
+Here, however, we will use the rule of thumb: for time trends looking linear (our case, see @fig-TSwithTrends) use the first-order differences, for parabolic shapes -- the second-order differences. 
+After differencing, the series should look stationary.
+
+The first-order differences for our series (@fig-TSdiffed) can be calculated as follows:
+```{r}
+D1X <- diff(Xt)
+D1Y <- diff(Yt)
+```
+
+```{r}
+#| label: fig-TSdiffed
+#| fig-cap: "First-order differences of the time series."
+
+p1 <- ggplot2::autoplot(D1Y) +
+    xlab("t") +
+    theme_light()
+p2 <- ggplot2::autoplot(D1X) +
+    xlab("t") +
+    theme_light()
+p1 + p2 +
+    plot_annotation(tag_levels = 'A')
+```
+
+The series of first-order differences look stationary (@fig-TSdiffed). 
+Use these differenced series instead of the original time series in a regression model:
+$$
+\Delta Y_t = \beta_0 + \beta_1 \Delta X_t + \epsilon_t.
+$$
+
+```{r}
+mod_diff <- lm(D1Y ~ D1X)
+summary(mod_diff)
+```
+
+As expected (since the original series $X_t$ and $Y_t$, before adding the trend, were uncorrelated), the coefficient $\beta_1$ and the whole regression model are not statistically significant.
+
+
+### Wrong approach (do not repeat at home) leading to spurious regression
+
+What if we forget about the three approaches above and just use the time series with trends in a regression model? 
+This could be such a model:
+$$
+Y_t = \beta_0 + \beta_1X_t + \epsilon_t.
+$$
+
+```{r}
+badModel <- lm(Yt ~ Xt)
+summary(badModel)
+```
+
+The bad model shows spurious statistically significant effects, which are not true.
+
+*Beware of trends!*
+
+::: {.callout-note icon=false}
+
+## Example: Predicting sales of home appliances
+
+Recall the dishwasher example from the first lecture. 
+Let's use the above methods for regressing the time series of dishwasher shipments ($DISH_t$) and residential investments ($RES_t$).
+
+First, look at the time series plots of the raw data (@fig-TSdish).
+
+```{r}
+#| label: fig-TSdish
+#| fig-cap: "Time series plots of the dishwasher shipments (DISH) and residential investments (RES)."
+
+D <- read.delim("./data/dish.txt") %>% 
+    rename(Year = YEAR)
+p1 <- ggplot(D, aes(x = Year, y = DISH)) + 
+    geom_line() + 
+    theme_light()
+p2 <- ggplot(D, aes(x = Year, y = RES)) + 
+    geom_line() + 
+    theme_light()
+p1 + p2 + 
+    plot_annotation(tag_levels = 'A')
+```
+
+**Incorporate time effects**
+
+Incorporate linear trend using the model
+$$
+DISH_t = \beta_0 + \beta_1 RES_t + \beta_2 Year + \epsilon_t;
+$${#eq-dishtimetrend}
+see the residual diagnostics below and in @fig-dishtimetrend. 
+
+```{r}
+M_time <- lm(DISH ~ RES + Year, data = D)
+summary(M_time)
+```
+
+```{r}
+shapiro.test(M_time$residuals)
+lawstat::runs.test(M_time$residuals, plot.it = FALSE)
+```
+
+```{r}
+#| label: fig-dishtimetrend
+#| fig-cap: "Diagnostics plots for residuals from @eq-dishtimetrend."
+#| fig-height: 3
+
+p1 <- ggplot(D, aes(x = Year, y = M_time$residuals)) + 
+    geom_line() + 
+    geom_hline(yintercept = 0, lty = 2, col = 4) + 
+    ylab("Residuals") +
+    theme_light()
+p2 <- forecast::ggAcf(M_time$residuals) +
+    ggtitle("") +
+    xlab("Lag (years)") +
+    theme_light()
+p3 <- ggpubr::ggqqplot(M_time$residuals) + 
+    xlab("Standard normal quantiles") +
+    theme_light()
+p1 + p2 + p3 +
+    plot_annotation(tag_levels = 'A')
+```
+
+**Use differenced time series**
+
+Difference the time series (@fig-TSdishdiff) to use in the model
+$$
+\Delta DISH_t = \beta_0 + \beta_1 \Delta RES_t + \epsilon_t
+$${#eq-dishdiff}
+see the residual diagnostics below and in @fig-dishdiff. 
+
+```{r}
+D_DISH <- diff(D$DISH)
+D_RES <- diff(D$RES)
+M_diff <- lm(D_DISH ~ D_RES)
+summary(M_diff)
+```
+
+```{r}
+#| label: fig-TSdishdiff
+#| fig-cap: "Time differences of dishwasher shipments and residential investments, and a scatterplot for assessing pairwise relationships."
+#| fig-height: 3
+
+p1 <- ggplot(D[-1,], aes(x = Year, y = D_DISH)) + 
+    geom_line() + 
+    geom_hline(yintercept = 0, lty = 2, col = 4) + 
+    theme_light()
+p2 <- ggplot(D[-1,], aes(x = Year, y = D_RES)) + 
+    geom_line() + 
+    geom_hline(yintercept = 0, lty = 2, col = 4) + 
+    theme_light()
+p3 <- ggplot(data.frame(D_DISH, D_RES), aes(y = D_DISH, x = D_RES)) +
+    geom_point() + 
+    theme_light()
+p1 + p2 + p3 +
+    plot_annotation(tag_levels = 'A')
+```
+
+```{r}
+shapiro.test(M_diff$residuals)
+lawstat::runs.test(M_diff$residuals, plot.it = FALSE)
+```
+
+```{r}
+#| label: fig-dishdiff
+#| fig-cap: "Diagnostics plots for residuals from @eq-dishdiff."
+#| fig-height: 3
+
+p1 <- ggplot(D[-1,], aes(x = Year, y = M_diff$residuals)) + 
+    geom_line() + 
+    geom_hline(yintercept = 0, lty = 2, col = 4) + 
+    ylab("Residuals") +
+    theme_light()
+p2 <- forecast::ggAcf(M_diff$residuals) +
+    ggtitle("") +
+    xlab("Lag (years)") +
+    theme_light()
+p3 <- ggpubr::ggqqplot(M_diff$residuals) + 
+    xlab("Standard normal quantiles") +
+    theme_light()
+p1 + p2 + p3 +
+    plot_annotation(tag_levels = 'A')
+```
+:::
+
+
+## Cointegration {#sec-cointegration}
+
+Generally, cointegration might be characterized by two or more I(1) variables indicating a common long-run development, i.e., the variables do not drift away from each other except for transitory fluctuations. 
+This defines a statistical equilibrium that, in empirical analysis, can often be interpreted as a long-run [economic] relation.
+
+In other words, two I(1) series $X_t$ and $Y_t$ are cointegrated if their linear combination $u_t$ is I(0):
+$$
+Y_t - \beta X_t = u_t.
+$${#eq-longrun}
+
+Cointegration means a common stochastic trend. 
+The vector $(1, -\beta)^{\top}$ is called the *cointegration vector*.
+
+
+### Two-step Engle--Granger method
+
+1. Estimate long-run relationship, i.e., regression in levels as in @eq-longrun, and test residuals for I(0).
+1. If the residual series $u_t$ is I(0), use it in *error correction model* (ECM) regression
+$$
+\begin{split}
+\Delta Y_t &= a_0 -\gamma_Y(Y_{t-1}-\beta X_{t-1})+\sum_{j=1}^{n_X}a_{Xj}\Delta X_{t-j}+\sum_{j=1}^{n_Y}a_{Yj}\Delta Y_{t-j} + u_{Y,t},\\
+\Delta X_t &= b_0 +\gamma_X(Y_{t-1}-\beta X_{t-1})+\sum_{j=1}^{k_X}b_{Xj}\Delta X_{t-j}+\sum_{j=1}^{k_Y}b_{Yj}\Delta Y_{t-j} + u_{X,t},
+\end{split}
+$${#eq-ecm}
+where $u_X$ and $u_Y$ are pure random processes. 
+If $X_t$ and $Y_t$ are cointegrated, at least one $\gamma_i$, $i = X, Y$, has to be different from zero.
+
+OLS estimator is super consistent, convergence $T$. 
+However, OLS can be biased in small samples.
+
+The representation in @eq-ecm has the advantage that it only contains stationary variables, although the underlying relation is between nonstationary (I(1)) variables. 
+Thus, if the variables are cointegrated and the cointegration vector is known, the traditional statistical procedures can be applied for estimation and testing.
+
+::: {.callout-note icon=false}
+
+## Example: Error correction model for simulated data
+
+```{r}
+#| echo: false
+
+set.seed(1)
+e1 <- rnorm(250, mean = 0, sd = 0.5)
+e2 <- rnorm(250, mean = 0, sd = 0.5)
+u.ar3 <- arima.sim(model =  list(ar = c(0.6, -0.2, 0.1)), n = 250, innov = e1)
+Xt <- ts(cumsum(e2))
+Yt <- u.ar3 + 0.5*Xt
+Wt <- cumsum(rnorm(250))
+```
+
+Demonstrate the analysis using simulated time series (@fig-XYi1).
+
+```{r}
+#| label: fig-XYi1
+#| fig-cap: "Simulated I(1) time series."
+
+p1 <- ggplot2::autoplot(Xt) +
+    theme_light()
+p2 <- ggplot2::autoplot(Yt) +
+    theme_light()
+p1 + p2 +
+    plot_annotation(tag_levels = 'A')
+```
+
+Apply unit-root test to check the integration order of each series, using the R package `tseries`:
+
+```{r}
+tseries::adf.test(Xt)
+tseries::adf.test(diff(Xt))
+tseries::adf.test(Yt)
+tseries::adf.test(diff(Yt))
+```
+
+With the confidence of 95%, the ADF test results show that each of the time series, $X_t$ and $Y_t$, are I(1). 
+(However, we have used the test 4 times, without controlling the overall Type I error.)
+
+Fit the linear regression
+$$
+Y_t = a + bX_t + u_t.
+$${#eq-longr}
+The vector $[1, -b]$ is the cointegration vector.
+
+```{r}
+Ut <- lm(Yt ~ Xt)$residuals
+tseries::adf.test(Ut)
+```
+
+While each of the time series $X_t$ and $Y_t$ is I(1), the resulting residual series $u_t \sim \mathrm{I}(0)$, thus we conclude, $X_t$ and $Y_t$ are cointegrated.
+
+Apply a simple error correction model (with $n_X = n_Y = 1$), using the R package `dynlm` or just specify lags using the package `dplyr`:
+
+```{r}
+# Error correction term
+ect <- Ut[-length(Ut)]
+
+# Differenced series
+dy <- diff(Yt)
+dx <- diff(Xt)
+```
+
+Model using `dynlm::dynlm()`:
+ 
+```{r}
+library(dynlm)
+ecmdat1 <- cbind(dy, dx, ect)
+ecm1 <- dynlm(dy ~ L(ect, 1) + L(dy, 1) + L(dx, 1), data = ecmdat1)
+summary(ecm1)
+```
+
+Model using `lm()` and `dplyr::lag()`:
+
+```{r}
+ecm2 <- lm(dy ~ dplyr::lag(ect, 1) + dplyr::lag(as.vector(dy), 1) + dplyr::lag(as.vector(dx), 1))
+summary(ecm2)
+```
+
+There is also the R package `ecm`, but it uses a modified formulation of the model, see details for the function `ecm::ecm()`.
+:::
+
+In the example above, the time series were simulated as cointegrated. 
+Below is an example of another I(1) process $W_t$ but with a stochastic trend different from that of $X_t$. 
+In this case, the linear combination of individually integrated $W_t$ and $X_t$ does not produce a stationary time series, thus, $W_t$ and $X_t$ are not cointegrated.
+
+```{r}
+U2 <- lm(Wt ~ Xt)$residuals
+tseries::adf.test(U2)
+```
+
+
+### Johansen test
+
+The Johansen test allows for more than one cointegrating relationship. 
+The null hypothesis for the trace test is that the number of cointegration vectors is $r<k$, vs. the alternative that $r=k$. 
+The testing proceeds sequentially for $k=1,2,\dots$; and the first non-rejection of the null hypothesis is taken as an estimate of $r$.
+
+Using the R package `urca`:
+```{r}
+library(urca)
+vecm <- ca.jo(cbind(Yt, Xt, Wt))
+summary(vecm)
+```
+
+If two time series are cointegrated, then the usual regression in @eq-longr is the so-called long-run equilibrium relation or attractor, i.e., the relationship between $X_t$ and $Y_t$ can be explained by @eq-longr in a long run. 
+@eq-longr is applied for estimation, not for testing [see Figure 6.1 in @Kirchgassner:Wolters:2007 on highly dispersed $t$-statistic]. 
+The error correction model in @eq-ecm should be estimated for testing [$p$-values from the ECM can be used for testing, also see Chapter 6 in @Kirchgassner:Wolters:2007].
+
+
+## Conclusion
+
+Now we can incorporate trend effects into our models, using the three considered approaches or by testing for cointegration and applying an error correction model. 
+The next step would be to incorporate autocorrelation structure in the residuals (the simulated example considered here used independent normally distributed noise, so it was an artificial ideal case of no autocorrelation, whereas we usually encounter autocorrelations, e.g., see residual diagnostics in the examples in @sec-incorporateTime).
