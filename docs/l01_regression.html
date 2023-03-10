@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.2.280">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-
-
 <title>Time Series Analysis - 1&nbsp; Review of Linear Regression</title>
 <style>
 code{white-space: pre-wrap;}
@@ -104,7 +101,6 @@ div.csl-indent {
 }
 </style>
 
-
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
@@ -123,8 +119,7 @@ div.csl-indent {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
-<script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -142,30 +137,20 @@ div.csl-indent {
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit"
   }
-}</script>
-
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
+}</script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 </head>
-
 <body class="nav-sidebar floating">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-    <div class="container-fluid d-flex justify-content-between">
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
       <h1 class="quarto-secondary-nav-title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Review of Linear Regression</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
     </div>
-  </nav>
-</header>
-<!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Time Series Analysis</a> 
         <div class="sidebar-tools-main">
@@ -184,7 +169,7 @@ div.csl-indent {
       </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-        <li class="sidebar-item">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">Preface</a>
   </div>
@@ -256,8 +241,8 @@ div.csl-indent {
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./s1_wls.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Weighted least squares</span></a>
   </div>
@@ -268,37 +253,34 @@ div.csl-indent {
   </div>
 </li>
       </ul>
-  </li>
+</li>
     </ul>
-    </div>
-</nav>
-<!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
+</div>
+</nav><!-- margin-sidebar --><div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#diagnostics-for-the-simple-linear-regression-residual-analysis" id="toc-diagnostics-for-the-simple-linear-regression-residual-analysis" class="nav-link active" data-scroll-target="#diagnostics-for-the-simple-linear-regression-residual-analysis"><span class="toc-section-number">1.1</span>  Diagnostics for the simple linear regression: residual analysis</a>
+<li>
+<a href="#diagnostics-for-the-simple-linear-regression-residual-analysis" id="toc-diagnostics-for-the-simple-linear-regression-residual-analysis" class="nav-link active" data-scroll-target="#diagnostics-for-the-simple-linear-regression-residual-analysis"><span class="toc-section-number">1.1</span>  Diagnostics for the simple linear regression: residual analysis</a>
   <ul class="collapse">
-  <li><a href="#homoskedasticity" id="toc-homoskedasticity" class="nav-link" data-scroll-target="#homoskedasticity"><span class="toc-section-number">1.1.1</span>  Homoskedasticity</a></li>
+<li><a href="#homoskedasticity" id="toc-homoskedasticity" class="nav-link" data-scroll-target="#homoskedasticity"><span class="toc-section-number">1.1.1</span>  Homoskedasticity</a></li>
   <li><a href="#uncorrelatedness" id="toc-uncorrelatedness" class="nav-link" data-scroll-target="#uncorrelatedness"><span class="toc-section-number">1.1.2</span>  Uncorrelatedness</a></li>
   <li><a href="#normality" id="toc-normality" class="nav-link" data-scroll-target="#normality"><span class="toc-section-number">1.1.3</span>  Normality</a></li>
   <li><a href="#summary-of-the-simple-linear-regression-residual-diagnostics" id="toc-summary-of-the-simple-linear-regression-residual-diagnostics" class="nav-link" data-scroll-target="#summary-of-the-simple-linear-regression-residual-diagnostics"><span class="toc-section-number">1.1.4</span>  Summary of the simple linear regression residual diagnostics</a></li>
-  </ul></li>
-  <li><a href="#multiple-linear-regression" id="toc-multiple-linear-regression" class="nav-link" data-scroll-target="#multiple-linear-regression"><span class="toc-section-number">1.2</span>  Multiple linear regression</a>
+  </ul>
+</li>
+  <li>
+<a href="#multiple-linear-regression" id="toc-multiple-linear-regression" class="nav-link" data-scroll-target="#multiple-linear-regression"><span class="toc-section-number">1.2</span>  Multiple linear regression</a>
   <ul class="collapse">
-  <li><a href="#summary-of-the-multiple-linear-regression-residual-diagnostics" id="toc-summary-of-the-multiple-linear-regression-residual-diagnostics" class="nav-link" data-scroll-target="#summary-of-the-multiple-linear-regression-residual-diagnostics"><span class="toc-section-number">1.2.1</span>  Summary of the multiple linear regression residual diagnostics</a></li>
-  </ul></li>
+<li><a href="#summary-of-the-multiple-linear-regression-residual-diagnostics" id="toc-summary-of-the-multiple-linear-regression-residual-diagnostics" class="nav-link" data-scroll-target="#summary-of-the-multiple-linear-regression-residual-diagnostics"><span class="toc-section-number">1.2.1</span>  Summary of the multiple linear regression residual diagnostics</a></li>
+  </ul>
+</li>
   <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="toc-section-number">1.3</span>  Conclusion</a></li>
   <li><a href="#sec-diffsign" id="toc-sec-diffsign" class="nav-link" data-scroll-target="#sec-diffsign"><span class="toc-section-number">1.4</span>  Appendix</a></li>
-  </ul>
-</nav>
+  </ul></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <h1 class="title"><span id="sec-regression" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Review of Linear Regression</span></span></h1>
 </div>
 
@@ -312,9 +294,7 @@ div.csl-indent {
   </div>
   
 
-</header>
-
-<div class="cell">
+</header><div class="cell">
 
 </div>
 <p>After this lecture, you should be competent (again) in assessing violations of various assumptions of linear regression models, particularly assumptions about model residuals, by being able to apply visual assessments and formal statistical tests, and interpret the results and effects of the violations.</p>
@@ -326,10 +306,11 @@ div.csl-indent {
 </ol>
 <p><strong>Reading materials</strong></p>
 <ul>
-<li>Chapters 3–4 in <span class="citation" data-cites="Chatterjee:Hadi:2006">Chatterjee and Hadi (<a href="references.html#ref-Chatterjee:Hadi:2006" role="doc-biblioref">2006</a>)</span></li>
+<li>Chapters 3–4 in <span class="citation" data-cites="Chatterjee:Hadi:2006">Chatterjee and Hadi (<a href="references.html#ref-Chatterjee:Hadi:2006" role="doc-biblioref">2006</a>)</span>
+</li>
 </ul>
-<section id="diagnostics-for-the-simple-linear-regression-residual-analysis" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="diagnostics-for-the-simple-linear-regression-residual-analysis"><span class="header-section-number">1.1</span> Diagnostics for the simple linear regression: residual analysis</h2>
+<section id="diagnostics-for-the-simple-linear-regression-residual-analysis" class="level2" data-number="1.1"><h2 data-number="1.1" class="anchored" data-anchor-id="diagnostics-for-the-simple-linear-regression-residual-analysis">
+<span class="header-section-number">1.1</span> Diagnostics for the simple linear regression: residual analysis</h2>
 <p>Given a simple linear regression (SLR) model <span class="math display">\[
 Y_{t} = \beta_{0} + \beta_{1} X_{t} + \epsilon_{t},
 \]</span> where <span class="math inline">\(Y_{t}\)</span> is the dependent variable and <span class="math inline">\(X_{t}\)</span> is the regressor (independent, predictor) variable, <span class="math inline">\(t = 1,\dots,n\)</span>, and <span class="math inline">\(n\)</span> is the sample size.</p>
@@ -338,8 +319,10 @@ Y_{t} = \beta_{0} + \beta_{1} X_{t} + \epsilon_{t},
 <p>Thus, the ordinary least squares (OLS) assumptions are:</p>
 <ol type="1">
 <li><p>the residuals <span class="math inline">\(\epsilon_{t}\)</span> have common variance (<span class="math inline">\(\epsilon_{t}\)</span> are homoskedastic);</p></li>
-<li><p>the residuals <span class="math inline">\(\epsilon_{t}\)</span> are uncorrelated;</p>
-<p>to provide prediction intervals (PIs), confidence intervals (CIs), and to test hypotheses about the parameters in our model, we also need to assume that</p></li>
+<li>
+<p>the residuals <span class="math inline">\(\epsilon_{t}\)</span> are uncorrelated;</p>
+<p>to provide prediction intervals (PIs), confidence intervals (CIs), and to test hypotheses about the parameters in our model, we also need to assume that</p>
+</li>
 <li><p>the residuals <span class="math inline">\(\epsilon_{t}\)</span> are normally distributed (<span class="math inline">\(\epsilon_{t} \sim N (0, \sigma^{ 2} )\)</span>).</p></li>
 </ol>
 <div class="callout-note callout callout-style-default callout-captioned">
@@ -370,24 +353,20 @@ Note
 </div>
 <p>A basic technique for investigating the aptness of a regression model is based on analyzing the residuals <span class="math inline">\(\epsilon_{t}\)</span>. In a residual analysis, we attempt to assess the validity of the OLS assumptions by examining the estimated residuals <span class="math inline">\(\hat{\epsilon}_{1}, \dots, \hat{\epsilon}_{n}\)</span> to see if they satisfy the imposed conditions. If the model is apt, the observed residuals should reflect the assumptions listed above.</p>
 <p>We perform our diagnostics analysis from a step-by-step verification of each assumption. We start with visual diagnostics, then proceed with formal tests. A lot of useful diagnostic information may be obtained from a residual plot.</p>
-<section id="homoskedasticity" class="level3" data-number="1.1.1">
-<h3 data-number="1.1.1" class="anchored" data-anchor-id="homoskedasticity"><span class="header-section-number">1.1.1</span> Homoskedasticity</h3>
+<section id="homoskedasticity" class="level3" data-number="1.1.1"><h3 data-number="1.1.1" class="anchored" data-anchor-id="homoskedasticity">
+<span class="header-section-number">1.1.1</span> Homoskedasticity</h3>
 <p>We plot the residuals <span class="math inline">\(\hat{\epsilon}_{t}\)</span> vs.&nbsp;time, fitted values <span class="math inline">\(\hat{Y}_{t}\)</span>, and predictor values <span class="math inline">\(X_t\)</span>. If the assumption of constant variance is satisfied, <span class="math inline">\(\hat{\epsilon}_{t}\)</span> fluctuate around the zero mean with more or less constant amplitude and this amplitude does not change with time, fitted values <span class="math inline">\(\hat{Y}_{t}\)</span>, and predictor values <span class="math inline">\(X_t\)</span>.</p>
 <p>If the (linear) model is not appropriate, the mean of the residuals may be non-constant, i.e., not always 0. <a href="#fig-IdealResiduals">Figure&nbsp;<span>1.1</span></a> shows an example of a random pattern that we would like the residuals to have (no systematic patterns).</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">26</span>; m <span class="ot">=</span> <span class="dv">0</span>; s <span class="ot">=</span> <span class="dv">522</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">ts</span>(<span class="fu">rnorm</span>(n, <span class="at">mean =</span> m, <span class="at">sd =</span> s))</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">autoplot</span>(x) <span class="sc">+</span> </span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
+<details><summary>Code</summary><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">n</span> <span class="op">=</span> <span class="fl">26</span>; <span class="va">m</span> <span class="op">=</span> <span class="fl">0</span>; <span class="va">s</span> <span class="op">=</span> <span class="fl">522</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/ts.html">ts</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n</span>, mean <span class="op">=</span> <span class="va">m</span>, sd <span class="op">=</span> <span class="va">s</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">geom_hline</span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, lty <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
 <div id="fig-IdealResiduals" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="l01_regression_files/figure-html/fig-IdealResiduals-1.png" class="img-fluid figure-img" width="768"></p>
+<figure class="figure"><p><img src="l01_regression_files/figure-html/fig-IdealResiduals-1.png" class="img-fluid figure-img" width="768"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;1.1: A time series plot of ‘ideal’ residuals. These residuals <span class="math inline">\(x_t\)</span> are simulated i.i.d. normal.</figcaption><p></p>
 </figure>
 </div>
@@ -414,35 +393,31 @@ Example: Dishwasher shipments model and patterns in residuals
 <p><a href="#fig-DishResiduals">Figure&nbsp;<span>1.2</span></a> shows the R code and residuals of a simple linear regression exploring dishwasher shipments (DISH) and private residential investments (RES) for several years.</p>
 <p>How different are the patterns in <a href="#fig-DishResiduals">Figure&nbsp;<span>1.2</span></a> from those in <a href="#fig-IdealResiduals">Figure&nbsp;<span>1.1</span></a>?</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>D <span class="ot">&lt;-</span> <span class="fu">read.delim</span>(<span class="st">"./data/dish.txt"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">Year =</span> YEAR)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(DISH <span class="sc">~</span> RES, <span class="at">data =</span> D)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(D, <span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> mod1<span class="sc">$</span>residuals)) <span class="sc">+</span> </span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="dv">4</span>) <span class="sc">+</span> </span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">"Residuals"</span>) <span class="sc">+</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(D, <span class="fu">aes</span>(<span class="at">x =</span> mod1<span class="sc">$</span>fitted.values, <span class="at">y =</span> mod1<span class="sc">$</span>residuals)) <span class="sc">+</span> </span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="dv">4</span>) <span class="sc">+</span> </span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"Fitted values"</span>) <span class="sc">+</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">"Residuals"</span>) <span class="sc">+</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(D, <span class="fu">aes</span>(<span class="at">x =</span> RES, <span class="at">y =</span> mod1<span class="sc">$</span>residuals)) <span class="sc">+</span> </span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="dv">4</span>) <span class="sc">+</span> </span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"Residential investments (RES)"</span>) <span class="sc">+</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">"Residuals"</span>) <span class="sc">+</span></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">+</span> p2 <span class="sc">+</span> p3 <span class="sc">+</span></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
+<details><summary>Code</summary><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">D</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.delim</a></span><span class="op">(</span><span class="st">"./data/dish.txt"</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>    <span class="fu">rename</span><span class="op">(</span>Year <span class="op">=</span> <span class="va">YEAR</span><span class="op">)</span></span>
+<span><span class="va">mod1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">DISH</span> <span class="op">~</span> <span class="va">RES</span>, data <span class="op">=</span> <span class="va">D</span><span class="op">)</span></span>
+<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="va">D</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Year</span>, y <span class="op">=</span> <span class="va">mod1</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">geom_hline</span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, lty <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">"Residuals"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="va">D</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">mod1</span><span class="op">$</span><span class="va">fitted.values</span>, y <span class="op">=</span> <span class="va">mod1</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">geom_hline</span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, lty <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Fitted values"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">"Residuals"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="va">D</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">RES</span>, y <span class="op">=</span> <span class="va">mod1</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">geom_hline</span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, lty <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Residential investments (RES)"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">"Residuals"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> <span class="va">p3</span> <span class="op">+</span></span>
+<span>    <span class="fu">plot_annotation</span><span class="op">(</span>tag_levels <span class="op">=</span> <span class="st">'A'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
 <div id="fig-DishResiduals" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="l01_regression_files/figure-html/fig-DishResiduals-1.png" class="img-fluid figure-img" width="768"></p>
+<figure class="figure"><p><img src="l01_regression_files/figure-html/fig-DishResiduals-1.png" class="img-fluid figure-img" width="768"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;1.2: Estimated residuals plotted vs.&nbsp;time, fitted values, and predictor.</figcaption><p></p>
 </figure>
 </div>
@@ -450,9 +425,8 @@ Example: Dishwasher shipments model and patterns in residuals
 </div>
 </div>
 </div>
-</section>
-<section id="uncorrelatedness" class="level3" data-number="1.1.2">
-<h3 data-number="1.1.2" class="anchored" data-anchor-id="uncorrelatedness"><span class="header-section-number">1.1.2</span> Uncorrelatedness</h3>
+</section><section id="uncorrelatedness" class="level3" data-number="1.1.2"><h3 data-number="1.1.2" class="anchored" data-anchor-id="uncorrelatedness">
+<span class="header-section-number">1.1.2</span> Uncorrelatedness</h3>
 <p>It is a deep topic that we shall discuss many times in different variations in the future. When observations are obtained in a time sequence (the topic of time series analysis and our course), there is a <em>high</em> possibility that the errors <span class="math inline">\(\epsilon_{t}\)</span> are correlated. For instance, if the residual is positive (or negative) for a given day <span class="math inline">\(t\)</span>, it is likely that the residual for the following day <span class="math inline">\(t+1\)</span> is also positive (or negative). Such residuals are said to be <em>autocorrelated</em> (i.e., serially correlated). Autocorrelation of many environmental time series is positive.</p>
 <p>When the residuals <span class="math inline">\(\epsilon_{t}\)</span> are related over time, a model for the residuals frequently employed is the first-order autoregressive model, i.e., the AR(1) model.</p>
 <p>The <em>autoregressive model of the first order</em>, AR(1), is defined as <span class="math display">\[
@@ -509,24 +483,27 @@ Note
 <col style="width: 20%">
 <col style="width: 20%">
 </colgroup>
-<thead>
-<tr class="header">
-<th>from 0 to <span class="math inline">\(d_{L}\)</span></th>
-<th>from <span class="math inline">\(d_{L}\)</span> to <span class="math inline">\(d_{U}\)</span></th>
-<th>from <span class="math inline">\(d_{U}\)</span> to <span class="math inline">\(4 - d_{U}\)</span></th>
-<th>from <span class="math inline">\(4 - d_{U}\)</span> to <span class="math inline">\(4 - d_{L}\)</span></th>
+<thead><tr class="header">
+<th>from 0 to <span class="math inline">\(d_{L}\)</span>
+</th>
+<th>from <span class="math inline">\(d_{L}\)</span> to <span class="math inline">\(d_{U}\)</span>
+</th>
+<th>from <span class="math inline">\(d_{U}\)</span> to <span class="math inline">\(4 - d_{U}\)</span>
+</th>
+<th>from <span class="math inline">\(4 - d_{U}\)</span> to <span class="math inline">\(4 - d_{L}\)</span>
+</th>
 <th>from <span class="math inline">\(4 - d_{L}\)</span> to 4</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
+</tr></thead>
+<tbody><tr class="odd">
 <td>Reject <span class="math inline">\(H_{0}\)</span>, positive autocorrelation</td>
-<td>Neither accept <span class="math inline">\(H_{1}\)</span> or reject <span class="math inline">\(H_{0}\)</span></td>
-<td>Do not reject <span class="math inline">\(H_{0}\)</span></td>
-<td>Neither accept <span class="math inline">\(H_{1}\)</span> or reject <span class="math inline">\(H_{0}\)</span></td>
+<td>Neither accept <span class="math inline">\(H_{1}\)</span> or reject <span class="math inline">\(H_{0}\)</span>
+</td>
+<td>Do not reject <span class="math inline">\(H_{0}\)</span>
+</td>
+<td>Neither accept <span class="math inline">\(H_{1}\)</span> or reject <span class="math inline">\(H_{0}\)</span>
+</td>
 <td>Reject <span class="math inline">\(H_{0}\)</span>, negative autocorrelation</td>
-</tr>
-</tbody>
+</tr></tbody>
 </table>
 </div>
 <p>The critical values <span class="math inline">\(d_{L}\)</span> and <span class="math inline">\(d_{U}\)</span> have been tabulated for combinations of various sample sizes, significance levels, and number of regressors in a model. For large samples, a normal approximation can be used <span class="citation" data-cites="Chatterjee:Simonoff:2013">(<a href="references.html#ref-Chatterjee:Simonoff:2013" role="doc-biblioref">Chatterjee and Simonoff 2013</a>)</span>: <span class="math display">\[
@@ -544,11 +521,8 @@ Example: Dishwasher residuals DW test
 <div class="callout-body-container callout-body">
 <p>Apply the Durbin–Watson test to the residuals from the dishwashers example, i.e., <code>DISH</code> vs.&nbsp;<code>RES</code>, using the R package <code>lmtest</code>.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">dwtest</span>(D<span class="sc">$</span>DISH <span class="sc">~</span> D<span class="sc">$</span>RES, <span class="at">alternative =</span> <span class="st">"greater"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
+<details><summary>Code</summary><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">lmtest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/dwtest.html">dwtest</a></span><span class="op">(</span><span class="va">D</span><span class="op">$</span><span class="va">DISH</span> <span class="op">~</span> <span class="va">D</span><span class="op">$</span><span class="va">RES</span>, alternative <span class="op">=</span> <span class="st">"greater"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Durbin-Watson test
 #&gt; 
@@ -569,8 +543,10 @@ Example: Dishwasher residuals DW test
 <p>The only assumption for this test is that all sample observations come from a continuous distribution.</p>
 <p>The two-tail alternative is as follows</p>
 <ul>
-<li><span class="math inline">\(H_{0}\)</span>: Sequence is generated by a random process;</li>
-<li><span class="math inline">\(H_{1}\)</span>: Sequence is generated by a process containing either persistence or frequent changes in direction.</li>
+<li>
+<span class="math inline">\(H_{0}\)</span>: Sequence is generated by a random process;</li>
+<li>
+<span class="math inline">\(H_{1}\)</span>: Sequence is generated by a process containing either persistence or frequent changes in direction.</li>
 </ul>
 <p>When positive autocorrelation (or persistence) is present, <span class="math inline">\(R\)</span> will be small. On the other hand, if the process involves frequent changes in direction (negative autocorrelation or anti-persistence), <span class="math inline">\(R\)</span> will be too large.</p>
 <p>When the number of observations is sufficiently large, i.e., <span class="math inline">\(N &gt; 30\)</span>, the runs test statistic <span class="math inline">\(R\)</span> is based on the standardized normal test statistic <span class="math display">\[
@@ -588,24 +564,18 @@ Example: Dishwasher residuals runs test
 </div>
 <div class="callout-body-container callout-body">
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">1</span>) <span class="sc">+</span> <span class="fl">0.1</span>, <span class="at">mgp =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">0</span>), <span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">pty =</span> <span class="st">"m"</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>lawstat<span class="sc">::</span><span class="fu">runs.test</span>(x, <span class="at">plot.it =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
+<details><summary>Code</summary><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.1</span>, mgp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>, mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>pty <span class="op">=</span> <span class="st">"m"</span><span class="op">)</span></span>
+<span><span class="fu">lawstat</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lawstat/man/runs.test.html">runs.test</a></span><span class="op">(</span><span class="va">x</span>, plot.it <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Runs Test - Two sided
 #&gt; 
 #&gt; data:  x
 #&gt; Standardized Runs Statistic = -0.4, p-value = 0.7</code></pre>
 </div>
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>lawstat<span class="sc">::</span><span class="fu">runs.test</span>(mod1<span class="sc">$</span>residuals, <span class="at">plot.it =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
+<details><summary>Code</summary><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">lawstat</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lawstat/man/runs.test.html">runs.test</a></span><span class="op">(</span><span class="va">mod1</span><span class="op">$</span><span class="va">residuals</span>, plot.it <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Runs Test - Two sided
 #&gt; 
@@ -614,8 +584,7 @@ Example: Dishwasher residuals runs test
 </div>
 <div class="cell-output-display">
 <div id="fig-Runs" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="l01_regression_files/figure-html/fig-Runs-1.png" class="img-fluid figure-img" width="768"></p>
+<figure class="figure"><p><img src="l01_regression_files/figure-html/fig-Runs-1.png" class="img-fluid figure-img" width="768"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;1.3: Runs tests and plots of independent normally distributed simulations <span class="math inline">\(x_t\)</span> and the <code>DISH</code> residuals.</figcaption><p></p>
 </figure>
 </div>
@@ -624,39 +593,34 @@ Example: Dishwasher residuals runs test
 <p>The <span class="math inline">\(p\)</span>-value for the runs test for the residuals is very low (<a href="#fig-Runs">Figure&nbsp;<span>1.3</span></a>), which supports the findings of the DW test that residuals are first-order serially correlated.</p>
 </div>
 </div>
-</section>
-<section id="normality" class="level3" data-number="1.1.3">
-<h3 data-number="1.1.3" class="anchored" data-anchor-id="normality"><span class="header-section-number">1.1.3</span> Normality</h3>
+</section><section id="normality" class="level3" data-number="1.1.3"><h3 data-number="1.1.3" class="anchored" data-anchor-id="normality">
+<span class="header-section-number">1.1.3</span> Normality</h3>
 <p>There are two major ways of checking normality. Graphical methods visualize differences between empirical data and theoretical normal distribution. Numerical methods conduct statistical tests on the null hypothesis that the variable is normally distributed.</p>
-<section id="graphical-methods" class="level4" data-number="1.1.3.1">
-<h4 data-number="1.1.3.1" class="anchored" data-anchor-id="graphical-methods"><span class="header-section-number">1.1.3.1</span> Graphical methods</h4>
+<section id="graphical-methods" class="level4" data-number="1.1.3.1"><h4 data-number="1.1.3.1" class="anchored" data-anchor-id="graphical-methods">
+<span class="header-section-number">1.1.3.1</span> Graphical methods</h4>
 <p>Graphical methods visualize the data using graphs, such as histograms, stem-and-leaf plots, box plots, etc. For example, <a href="#fig-Histograms">Figure&nbsp;<span>1.4</span></a> shows a histogram of the simulated normally distributed data and the residuals from the dishwasher example with superimposed normal curves with the corresponding mean and standard deviation.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">x =</span> x), <span class="fu">aes</span>(<span class="at">x =</span> x)) <span class="sc">+</span> </span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)), <span class="at">binwidth =</span> <span class="dv">300</span>, <span class="at">fill =</span> <span class="st">"grey50"</span>) <span class="sc">+</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stat_function</span>(<span class="at">fun =</span> dnorm, </span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">args =</span> <span class="fu">list</span>(<span class="at">mean =</span> <span class="fu">mean</span>(x), <span class="at">sd =</span> <span class="fu">sd</span>(x)),</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">col =</span> <span class="dv">1</span>, <span class="at">lwd =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">"Density"</span>) <span class="sc">+</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">"Random normal values"</span>) <span class="sc">+</span> </span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(x, <span class="fu">aes</span>(<span class="at">x =</span> mod1<span class="sc">$</span>residuals)) <span class="sc">+</span> </span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)), <span class="at">binwidth =</span> <span class="dv">300</span>, <span class="at">fill =</span> <span class="st">"grey50"</span>) <span class="sc">+</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stat_function</span>(<span class="at">fun =</span> dnorm, </span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>                  <span class="at">args =</span> <span class="fu">list</span>(<span class="at">mean =</span> <span class="fu">mean</span>(mod1<span class="sc">$</span>residuals), <span class="at">sd =</span> <span class="fu">sd</span>(mod1<span class="sc">$</span>residuals)),</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>                  <span class="at">col =</span> <span class="dv">1</span>, <span class="at">lwd =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">"Density"</span>) <span class="sc">+</span></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">"Model residuals"</span>) <span class="sc">+</span> </span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">+</span> p2 <span class="sc">+</span></span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
+<details><summary>Code</summary><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span><span class="op">)</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">geom_histogram</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="fu">after_stat</span><span class="op">(</span><span class="va">density</span><span class="op">)</span><span class="op">)</span>, binwidth <span class="op">=</span> <span class="fl">300</span>, fill <span class="op">=</span> <span class="st">"grey50"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">stat_function</span><span class="op">(</span>fun <span class="op">=</span> <span class="va">dnorm</span>, </span>
+<span>                  args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                  col <span class="op">=</span> <span class="fl">1</span>, lwd <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">"Density"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Random normal values"</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="va">x</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">mod1</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">geom_histogram</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="fu">after_stat</span><span class="op">(</span><span class="va">density</span><span class="op">)</span><span class="op">)</span>, binwidth <span class="op">=</span> <span class="fl">300</span>, fill <span class="op">=</span> <span class="st">"grey50"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">stat_function</span><span class="op">(</span>fun <span class="op">=</span> <span class="va">dnorm</span>, </span>
+<span>                  args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">mod1</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span>, sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">mod1</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                  col <span class="op">=</span> <span class="fl">1</span>, lwd <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">"Density"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Model residuals"</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span></span>
+<span>    <span class="fu">plot_annotation</span><span class="op">(</span>tag_levels <span class="op">=</span> <span class="st">'A'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
 <div id="fig-Histograms" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="l01_regression_files/figure-html/fig-Histograms-1.png" class="img-fluid figure-img" width="768"></p>
+<figure class="figure"><p><img src="l01_regression_files/figure-html/fig-Histograms-1.png" class="img-fluid figure-img" width="768"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;1.4: Histograms of the simulated normally distributed values and estimated regression residuals.</figcaption><p></p>
 </figure>
 </div>
@@ -682,9 +646,14 @@ Note
 \Pr \left( X \leqslant x_{(\alpha)} \right) = \alpha
 \tag{1.1}\]</span></span> and no other value of <span class="math inline">\(x\)</span> satisfies <a href="#eq-prob">Equation&nbsp;<span>1.1</span></a>. Then we will call <span class="math inline">\(x_{(\alpha)}\)</span> the <span class="math inline">\(\alpha\)</span>th <em>(population) quantile</em> of <span class="math inline">\(X\)</span>. Note that any normal distribution has this uniqueness property. If we consider a standard normal <span class="math inline">\(Z \sim N(0, 1)\)</span>, then some well-known quantiles are:</p>
 <ul>
-<li><span class="math inline">\(z_{(0.5)} = 0\)</span> (the median, <code>qnorm(0.5, mean = 0, sd = 1)</code>)</li>
-<li><span class="math inline">\(z_{(0.05)} = -1.645\)</span> and <span class="math inline">\(z_{(0.95)} = 1.645\)</span></li>
-<li><span class="math inline">\(z_{(0.025)} = -1.96\)</span> and <span class="math inline">\(z_{(0.975)} = 1.96\)</span></li>
+<li>
+<span class="math inline">\(z_{(0.5)} = 0\)</span> (the median, <code>qnorm(0.5, mean = 0, sd = 1)</code>)</li>
+<li>
+<span class="math inline">\(z_{(0.05)} = -1.645\)</span> and <span class="math inline">\(z_{(0.95)} = 1.645\)</span>
+</li>
+<li>
+<span class="math inline">\(z_{(0.025)} = -1.96\)</span> and <span class="math inline">\(z_{(0.975)} = 1.96\)</span>
+</li>
 </ul>
 <p>We call the 0.25th, 0.5th, 0.75th quantiles the first, the second, and the third quartiles, respectively. The quartiles divide our data into 4 equal parts.</p>
 <p>Now suppose <span class="math inline">\(X \sim N (\mu, \sigma^{2})\)</span>. By standardizing to <span class="math inline">\(Z \sim N(0, 1)\)</span>, we obtain <span class="math display">\[
@@ -700,7 +669,7 @@ X_{(1/n)} &lt; X_{(2/n)} &lt; X_{(3/n)} &lt; \dots &lt; X_{\left((n - 1)/n\right
 \]</span></p>
 <p>The above ordering assumes no ties, but ties can be quite common in data, even continuous data, because of rounding. As long as the proportion of ties is small, this method can be used.</p>
 <p>Note that the proportion of observations less than or equal to <span class="math inline">\(X_{(k/n)}\)</span> is exactly <span class="math inline">\(k/n\)</span>. Hence <span class="math inline">\(X_{(k/n)}\)</span>, called the <span class="math inline">\(k\)</span>th <em>sample quantile</em>, is an estimate of the population quantile <span class="math inline">\(x_{(k/n)}\)</span>.</p>
-<p>The normal Q-Q plot is obtained by plotting the sample quantiles vs.&nbsp;the quantiles of the standard normal distribution. The base-R function <code>qqnorm()</code> produces a normal Q-Q plot of data and the function <code>qqline()</code> adds a line that passes through the first and third quartiles. The R package <code>ggplot2</code> has analogous functions <code>ggplot2::stat_qq()</code> and <code>ggplot2::stat_qq_line()</code>. The R packages <code>car</code> and <code>ggpubr</code> also draw Q-Q plots, but also add a point-wise confidence envelope with their functions <code>car::qqPlot()</code> (base-R plot) and <code>ggpubr::ggqqplot()</code> (ggplot-type plot).</p>
+<p>The normal Q-Q plot is obtained by plotting the sample quantiles vs.&nbsp;the quantiles of the standard normal distribution. The base-R function <code><a href="https://rdrr.io/r/stats/qqnorm.html">qqnorm()</a></code> produces a normal Q-Q plot of data and the function <code><a href="https://rdrr.io/r/stats/qqnorm.html">qqline()</a></code> adds a line that passes through the first and third quartiles. The R package <code>ggplot2</code> has analogous functions <code><a href="https://ggplot2.tidyverse.org/reference/geom_qq.html">ggplot2::stat_qq()</a></code> and <code><a href="https://ggplot2.tidyverse.org/reference/geom_qq.html">ggplot2::stat_qq_line()</a></code>. The R packages <code>car</code> and <code>ggpubr</code> also draw Q-Q plots, but also add a point-wise confidence envelope with their functions <code><a href="https://rdrr.io/pkg/car/man/qqPlot.html">car::qqPlot()</a></code> (base-R plot) and <code><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggqqplot.html">ggpubr::ggqqplot()</a></code> (ggplot-type plot).</p>
 <div class="callout-note callout callout-style-default no-icon callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -713,23 +682,19 @@ Example: Dishwasher residuals normal Q-Q plot
 <div class="callout-body-container callout-body">
 <p><a href="#fig-QQ">Figure&nbsp;<span>1.5</span></a> shows the Q-Q plots of the residuals from the dishwasher example and the simulated normal data with the same mean and standard deviation.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> ggpubr<span class="sc">::</span><span class="fu">ggqqplot</span>(x) <span class="sc">+</span> </span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">"Random normal values"</span>) <span class="sc">+</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"Standard normal quantiles"</span>) <span class="sc">+</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> ggpubr<span class="sc">::</span><span class="fu">ggqqplot</span>(mod1<span class="sc">$</span>residuals) <span class="sc">+</span> </span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">"Model residuals"</span>) <span class="sc">+</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"Standard normal quantiles"</span>) <span class="sc">+</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">+</span> p2 <span class="sc">+</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
+<details><summary>Code</summary><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggqqplot.html">ggqqplot</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Random normal values"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Standard normal quantiles"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggqqplot.html">ggqqplot</a></span><span class="op">(</span><span class="va">mod1</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Model residuals"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Standard normal quantiles"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span></span>
+<span>    <span class="fu">plot_annotation</span><span class="op">(</span>tag_levels <span class="op">=</span> <span class="st">'A'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
 <div id="fig-QQ" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="l01_regression_files/figure-html/fig-QQ-1.png" class="img-fluid figure-img" width="768"></p>
+<figure class="figure"><p><img src="l01_regression_files/figure-html/fig-QQ-1.png" class="img-fluid figure-img" width="768"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;1.5: Normal Q-Q plots of the normally distributed simulated values <span class="math inline">\(x_t\)</span> and the dishwasher residuals.</figcaption><p></p>
 </figure>
 </div>
@@ -741,8 +706,10 @@ Example: Dishwasher residuals normal Q-Q plot
 <p><strong>Shapiro–Wilk normality test</strong></p>
 <p>One of the most popular numerical methods for assessing normality is the Shapiro–Wilk (SW) test:</p>
 <ul>
-<li><span class="math inline">\(H_0\)</span>: the sample data come from a normally distributed population;</li>
-<li><span class="math inline">\(H_1\)</span>: the population is not normally distributed).</li>
+<li>
+<span class="math inline">\(H_0\)</span>: the sample data come from a normally distributed population;</li>
+<li>
+<span class="math inline">\(H_1\)</span>: the population is not normally distributed).</li>
 </ul>
 <p>The SW test is the ratio of the best estimator of the variance to the usual corrected sum of squares estimator of the variance. It has been originally constructed by considering the regression of ordered sample values on corresponding expected normal order statistics. The SW statistic is given by <span class="math display">\[
 \mbox{SW} = \frac{\left(\sum a_{i} x_{(i)} \right)^{2}}{\sum \left(x_{i} - \bar{x} \right)^{2}},
@@ -759,22 +726,16 @@ Example: Dishwasher residuals normality test
 <div class="callout-body-container callout-body">
 <p>Based on the <span class="math inline">\(p\)</span>-values below, we cannot reject the null hypothesis of normality in both cases.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
+<details><summary>Code</summary><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/shapiro.test.html">shapiro.test</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Shapiro-Wilk normality test
 #&gt; 
 #&gt; data:  x
 #&gt; W = 0.9, p-value = 0.08</code></pre>
 </div>
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(mod1<span class="sc">$</span>residuals)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
+<details><summary>Code</summary><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/shapiro.test.html">shapiro.test</a></span><span class="op">(</span><span class="va">mod1</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Shapiro-Wilk normality test
 #&gt; 
@@ -784,20 +745,15 @@ Example: Dishwasher residuals normality test
 </div>
 </div>
 </div>
-</section>
-</section>
-<section id="summary-of-the-simple-linear-regression-residual-diagnostics" class="level3" data-number="1.1.4">
-<h3 data-number="1.1.4" class="anchored" data-anchor-id="summary-of-the-simple-linear-regression-residual-diagnostics"><span class="header-section-number">1.1.4</span> Summary of the simple linear regression residual diagnostics</h3>
+</section></section><section id="summary-of-the-simple-linear-regression-residual-diagnostics" class="level3" data-number="1.1.4"><h3 data-number="1.1.4" class="anchored" data-anchor-id="summary-of-the-simple-linear-regression-residual-diagnostics">
+<span class="header-section-number">1.1.4</span> Summary of the simple linear regression residual diagnostics</h3>
 <ol type="1">
 <li>The residuals do not have a constant mean.</li>
 <li>The residuals seem to have a constant variance.</li>
 <li>The residuals are positively correlated.</li>
 <li>The residuals look normally distributed (but the SW statistic might be affected by the serial correlation of the residuals).</li>
-</ol>
-</section>
-</section>
-<section id="multiple-linear-regression" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="multiple-linear-regression"><span class="header-section-number">1.2</span> Multiple linear regression</h2>
+</ol></section></section><section id="multiple-linear-regression" class="level2" data-number="1.2"><h2 data-number="1.2" class="anchored" data-anchor-id="multiple-linear-regression">
+<span class="header-section-number">1.2</span> Multiple linear regression</h2>
 <p>Here we consider a case of <span class="math inline">\(p\)</span> explanatory variables <span class="math display">\[
 Y_{t} = \beta_{0} + \beta_{1} X_{t,1} + \dots + \beta_{p} X_{t,p} + \epsilon_{t} \quad (t = 1,\dots,n).
 \]</span></p>
@@ -839,7 +795,7 @@ s.e. \left( \hat{\beta}_{j} \right) = \hat{\sigma} \sqrt{ \left( \boldsymbol{X }
 \]</span> yielding a <span class="math inline">\(100(1 - \alpha)\)</span>% prediction interval for <span class="math inline">\(Y_{t}\)</span>: <span class="math display">\[
 \boldsymbol{x}^{\top}_{t} \hat{\boldsymbol{\beta}} \pm t_{\alpha / 2, n-(p+1)} \hat{\sigma} \sqrt{ \boldsymbol{x}^{\top}_{t} \left( \boldsymbol{X}^{\top} \boldsymbol{X} \right)^{-1}\boldsymbol{x}_{t} + 1}.
 \]</span></p>
-<p>We usually never perform these calculations by hand and will use the corresponding software functions, e.g., using the function <code>predict()</code>, see an example code below.</p>
+<p>We usually never perform these calculations by hand and will use the corresponding software functions, e.g., using the function <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code>, see an example code below.</p>
 <p><strong>What else can we get from the regression output?</strong></p>
 <p>As in SLR, we will look for the <span class="math inline">\(t\)</span>-statistics and <span class="math inline">\(p\)</span>-values to get an idea about the statistical significance of each of the predictors <span class="math inline">\(X_{t,1}, X_{t,2}, \dots, X_{t,p}\)</span>. The confidence intervals constructed above correspond to individual tests of hypothesis about a parameter, i.e., <span class="math inline">\(H_{0}\)</span>: <span class="math inline">\(\beta_{j} = 0\)</span> vs.&nbsp;<span class="math inline">\(H_{1}\)</span>: <span class="math inline">\(\beta_{j} \neq 0\)</span>.</p>
 <p>We can also make use of the <span class="math inline">\(F\)</span>-test. The <span class="math inline">\(F\)</span>-test considers <em>all</em> parameters (other than the intercept <span class="math inline">\(\beta_{0}\)</span>) simultaneously, testing <span class="math display">\[
@@ -849,7 +805,7 @@ H_{1}{:} ~ \beta_{j} &amp;\neq 0 ~~~ \mbox{for at least one} ~~~ j \in \{1, \dot
 \end{split}
 \]</span></p>
 <p>Formally, <span class="math inline">\(F_{\rm{obs}} = \rm{MSR/MSE}\)</span> (the ratio of the mean square due to regression and the mean square due to stochastic errors).</p>
-<p>We reject <span class="math inline">\(H_{0}\)</span> when <span class="math inline">\(F_{\rm{obs}}\)</span> is too large relative to a cut-off point determined by the degrees of freedom of the <span class="math inline">\(F\)</span>-distribution. The <span class="math inline">\(p\)</span>-value for this <span class="math inline">\(F\)</span>-test is provided in the <code>lm()</code> output. Rejecting <span class="math inline">\(H_{0}\)</span> is equivalent to stating that the model has some explanatory value within the range of the data set, meaning that changes in at least some of the explanatory <span class="math inline">\(X\)</span>-variables correlate to changes in the average value of <span class="math inline">\(Y\)</span>.</p>
+<p>We reject <span class="math inline">\(H_{0}\)</span> when <span class="math inline">\(F_{\rm{obs}}\)</span> is too large relative to a cut-off point determined by the degrees of freedom of the <span class="math inline">\(F\)</span>-distribution. The <span class="math inline">\(p\)</span>-value for this <span class="math inline">\(F\)</span>-test is provided in the <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code> output. Rejecting <span class="math inline">\(H_{0}\)</span> is equivalent to stating that the model has some explanatory value within the range of the data set, meaning that changes in at least some of the explanatory <span class="math inline">\(X\)</span>-variables correlate to changes in the average value of <span class="math inline">\(Y\)</span>.</p>
 <p>Recall that <span class="math display">\[
 \begin{split}
 \mathrm{SST} &amp;= \sum_{i=1}^n(Y_t-\overline{Y})^2= \mathrm{SSR} + \mathrm{SSE},\\
@@ -892,14 +848,11 @@ Example: Dishwasher shipments multiple linear regression
 <p>Let us now extend the SLR model that we considered previously and include another potential predictor, the durable goods expenditures (billion of 1972 dollars). The goal is to build a model to predict the unit factory shipments of dishwashers (DISH) vs.&nbsp;private residential investment (RES) and durable goods expenditures (DUR) using a multiple linear regression model (MLR): <span class="math display">\[
 Y_{t} = \beta_{0} + \beta_{1} X_{t,1} + \beta_{2} X_{t,2} + \epsilon_t,
 \]</span> where <span class="math inline">\(X_{t,1}\)</span> is the private residential investment <code>RES</code>; <span class="math inline">\(X_{t,2}\)</span> is the durable goods expenditures <code>DUR</code>.</p>
-<p>Now we apply the OLS method to estimate the coefficients <span class="math inline">\(\beta_{0}\)</span>, <span class="math inline">\(\beta_{1}\)</span>, and <span class="math inline">\(\beta_{2}\)</span> using the function <code>lm()</code>.</p>
+<p>Now we apply the OLS method to estimate the coefficients <span class="math inline">\(\beta_{0}\)</span>, <span class="math inline">\(\beta_{1}\)</span>, and <span class="math inline">\(\beta_{2}\)</span> using the function <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code>.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>mod2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(DISH <span class="sc">~</span> RES <span class="sc">+</span> DUR, <span class="at">data =</span> D)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
+<details><summary>Code</summary><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mod2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">DISH</span> <span class="op">~</span> <span class="va">RES</span> <span class="op">+</span> <span class="va">DUR</span>, data <span class="op">=</span> <span class="va">D</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">mod2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt; Call:
 #&gt; lm(formula = DISH ~ RES + DUR, data = D)
@@ -924,26 +877,22 @@ Y_{t} = \beta_{0} + \beta_{1} X_{t,1} + \beta_{2} X_{t,2} + \epsilon_t,
 <p>We have a high <span class="math inline">\(R^2_{adj} =\)</span> 0.867 and both predictors are statistically significant, but can we already wholeheartedly trust these results? We need to perform the residual diagnostics.</p>
 <p>Plot the estimated residuals <span class="math inline">\(\hat{\epsilon}_{t} = \hat{Y}_{t} - Y_{t}\)</span> vs.&nbsp;the observed <span class="math inline">\(Y_{t}\)</span> (<span class="math inline">\(t = 1, 2, \dots, 26\)</span> or <code>Year</code>) – see <a href="#fig-DishResiduals2">Figure&nbsp;<span>1.6</span></a>.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(D, <span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> mod2<span class="sc">$</span>residuals)) <span class="sc">+</span> </span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="dv">4</span>) <span class="sc">+</span> </span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">"Residuals"</span>) <span class="sc">+</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(D, <span class="fu">aes</span>(<span class="at">x =</span> mod2<span class="sc">$</span>fitted.values, <span class="at">y =</span> mod2<span class="sc">$</span>residuals)) <span class="sc">+</span> </span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="dv">4</span>) <span class="sc">+</span> </span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"Fitted values"</span>) <span class="sc">+</span></span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">"Residuals"</span>) <span class="sc">+</span></span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">+</span> p2 <span class="sc">+</span></span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
+<details><summary>Code</summary><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="va">D</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Year</span>, y <span class="op">=</span> <span class="va">mod2</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">geom_hline</span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, lty <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">"Residuals"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="va">D</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">mod2</span><span class="op">$</span><span class="va">fitted.values</span>, y <span class="op">=</span> <span class="va">mod2</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">geom_hline</span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, lty <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Fitted values"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">"Residuals"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span></span>
+<span>    <span class="fu">plot_annotation</span><span class="op">(</span>tag_levels <span class="op">=</span> <span class="st">'A'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
 <div id="fig-DishResiduals2" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="l01_regression_files/figure-html/fig-DishResiduals2-1.png" class="img-fluid figure-img" width="768"></p>
+<figure class="figure"><p><img src="l01_regression_files/figure-html/fig-DishResiduals2-1.png" class="img-fluid figure-img" width="768"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;1.6: Residuals vs.&nbsp;time and vs.&nbsp;fitted values.</figcaption><p></p>
 </figure>
 </div>
@@ -951,11 +900,8 @@ Y_{t} = \beta_{0} + \beta_{1} X_{t,1} + \beta_{2} X_{t,2} + \epsilon_t,
 </div>
 <p>Check that the residuals <span class="math inline">\(\epsilon_{t}\)</span> are uncorrelated (the Durbin–Watson and the runs tests):</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">dwtest</span>(D<span class="sc">$</span>DISH <span class="sc">~</span> D<span class="sc">$</span>RES <span class="sc">+</span> D<span class="sc">$</span>DUR)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
+<details><summary>Code</summary><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">lmtest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/dwtest.html">dwtest</a></span><span class="op">(</span><span class="va">D</span><span class="op">$</span><span class="va">DISH</span> <span class="op">~</span> <span class="va">D</span><span class="op">$</span><span class="va">RES</span> <span class="op">+</span> <span class="va">D</span><span class="op">$</span><span class="va">DUR</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Durbin-Watson test
 #&gt; 
@@ -965,11 +911,8 @@ Y_{t} = \beta_{0} + \beta_{1} X_{t,1} + \beta_{2} X_{t,2} + \epsilon_t,
 </div>
 </div>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>lawstat<span class="sc">::</span><span class="fu">runs.test</span>(mod2<span class="sc">$</span>residuals, <span class="at">plot.it =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
+<details><summary>Code</summary><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">lawstat</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lawstat/man/runs.test.html">runs.test</a></span><span class="op">(</span><span class="va">mod2</span><span class="op">$</span><span class="va">residuals</span>, plot.it <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Runs Test - Two sided
 #&gt; 
@@ -979,11 +922,8 @@ Y_{t} = \beta_{0} + \beta_{1} X_{t,1} + \beta_{2} X_{t,2} + \epsilon_t,
 </div>
 <p>Check that the residuals <span class="math inline">\(\epsilon_{t}\)</span> are normally distributed using the Q-Q plot (<a href="#fig-QQ2">Figure&nbsp;<span>1.7</span></a>) and Shapiro–Wilk test.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(mod2<span class="sc">$</span>residuals)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
+<details><summary>Code</summary><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/shapiro.test.html">shapiro.test</a></span><span class="op">(</span><span class="va">mod2</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Shapiro-Wilk normality test
 #&gt; 
@@ -992,16 +932,12 @@ Y_{t} = \beta_{0} + \beta_{1} X_{t,1} + \beta_{2} X_{t,2} + \epsilon_t,
 </div>
 </div>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>ggpubr<span class="sc">::</span><span class="fu">ggqqplot</span>(mod2<span class="sc">$</span>residuals) <span class="sc">+</span> </span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"Standard normal quantiles"</span>) <span class="sc">+</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
+<details><summary>Code</summary><div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggqqplot.html">ggqqplot</a></span><span class="op">(</span><span class="va">mod2</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Standard normal quantiles"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
 <div id="fig-QQ2" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="l01_regression_files/figure-html/fig-QQ2-1.png" class="img-fluid figure-img" width="768"></p>
+<figure class="figure"><p><img src="l01_regression_files/figure-html/fig-QQ2-1.png" class="img-fluid figure-img" width="768"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;1.7: Normal Q-Q plot of the multiple regression residuals.</figcaption><p></p>
 </figure>
 </div>
@@ -1009,8 +945,8 @@ Y_{t} = \beta_{0} + \beta_{1} X_{t,1} + \beta_{2} X_{t,2} + \epsilon_t,
 </div>
 </div>
 </div>
-<section id="summary-of-the-multiple-linear-regression-residual-diagnostics" class="level3" data-number="1.2.1">
-<h3 data-number="1.2.1" class="anchored" data-anchor-id="summary-of-the-multiple-linear-regression-residual-diagnostics"><span class="header-section-number">1.2.1</span> Summary of the multiple linear regression residual diagnostics</h3>
+<section id="summary-of-the-multiple-linear-regression-residual-diagnostics" class="level3" data-number="1.2.1"><h3 data-number="1.2.1" class="anchored" data-anchor-id="summary-of-the-multiple-linear-regression-residual-diagnostics">
+<span class="header-section-number">1.2.1</span> Summary of the multiple linear regression residual diagnostics</h3>
 <ol type="1">
 <li>The <span class="math inline">\(R^{2}\)</span> has been improved.</li>
 <li>We do not see a visible improvement in terms of the mean and variance of the residuals.</li>
@@ -1019,14 +955,11 @@ Y_{t} = \beta_{0} + \beta_{1} X_{t,1} + \beta_{2} X_{t,2} + \epsilon_t,
 </ol>
 <p>Even though not all OLS assumptions are satisfied we shall consider how to predict the future values of <span class="math inline">\(Y\)</span> and to construct the prediction intervals using R.</p>
 <p>For example, assume that we need to predict the future unit factory shipments of dishwashers (<code>DISH</code>) based on the private residential investment of 100 billion USD and durable goods expenditures of 150 billion USD.</p>
-<p>Supply new values of independent variables and use the function <code>predict()</code>.</p>
+<p>Supply new values of independent variables and use the function <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code>.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>newData <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">RES =</span> <span class="fu">c</span>(<span class="dv">100</span>), <span class="at">DUR =</span> <span class="fu">c</span>(<span class="dv">150</span>))</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(mod2, newData, <span class="at">se.fit =</span> <span class="cn">TRUE</span>, <span class="at">interval =</span> <span class="st">"prediction"</span>, <span class="at">level =</span> <span class="fl">0.95</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
+<details><summary>Code</summary><div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">newData</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>RES <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, DUR <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">150</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">mod2</span>, <span class="va">newData</span>, se.fit <span class="op">=</span> <span class="cn">TRUE</span>, interval <span class="op">=</span> <span class="st">"prediction"</span>, level <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt; $fit
 #&gt;    fit  lwr  upr
 #&gt; 1 5559 4227 6891
@@ -1041,24 +974,18 @@ Y_{t} = \beta_{0} + \beta_{1} X_{t,1} + \beta_{2} X_{t,2} + \epsilon_t,
 #&gt; [1] 378</code></pre>
 </div>
 </div>
-</section>
-</section>
-<section id="conclusion" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="conclusion"><span class="header-section-number">1.3</span> Conclusion</h2>
+</section></section><section id="conclusion" class="level2" data-number="1.3"><h2 data-number="1.3" class="anchored" data-anchor-id="conclusion">
+<span class="header-section-number">1.3</span> Conclusion</h2>
 <p>We have recalled the standard assumptions about residuals of linear regression models. Remember that there are some other assumptions (e.g., about linear independence of predictors) that must be verified. Refer to the reading materials for a complete list.</p>
 <p>The methods we have used to test the homogeneity of residuals included various residual plots. The normality of residuals can be assessed using histograms or Q-Q plots and statistical tests such as the Shapiro–Wilk normality test.</p>
 <p>The use of time series in regression presents additional ways to assess patterns in the regression residuals. A plot of residuals vs.&nbsp;time is assessed for homogeneity and absence of trends. Less obvious patterns, such as autocorrelation, can be tested with parametric and nonparametric tests, such as the Durbin–Watson and runs tests.</p>
 <p>The statistical techniques we will learn aim to model or extract as much information from time series (including the autocorrelation of regression residuals) as possible, such that the remaining series are completely random.</p>
-</section>
-<section id="sec-diffsign" class="level2" data-number="1.4">
-<h2 data-number="1.4" class="anchored" data-anchor-id="sec-diffsign"><span class="header-section-number">1.4</span> Appendix</h2>
+</section><section id="sec-diffsign" class="level2" data-number="1.4"><h2 data-number="1.4" class="anchored" data-anchor-id="sec-diffsign">
+<span class="header-section-number">1.4</span> Appendix</h2>
 <p>Alternative versions of the runs test are available, e.g., in the package <code>randtests</code>.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>randtests<span class="sc">::</span><span class="fu">runs.test</span>(mod2<span class="sc">$</span>residuals)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
+<details><summary>Code</summary><div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">randtests</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/randtests/man/runs.test.html">runs.test</a></span><span class="op">(</span><span class="va">mod2</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Runs Test
 #&gt; 
@@ -1071,11 +998,8 @@ Y_{t} = \beta_{0} + \beta_{1} X_{t,1} + \beta_{2} X_{t,2} + \epsilon_t,
 <p>The logic behind the difference sign test is that in a random process, there will be roughly the same number of ups (positive differences between consecutive values, i.e., <span class="math inline">\(X_t-X_{t-1}\)</span>) and downs (negative differences).</p>
 <p><span class="citation" data-cites="Brockwell:Davis:2002">Brockwell and Davis (<a href="references.html#ref-Brockwell:Davis:2002" role="doc-biblioref">2002</a>)</span>: “The difference-sign test must be used with caution. A set of observations exhibiting a strong cyclic component will pass the difference-sign test for randomness since roughly half of the observations will be points of increase.” We may see (<a href="#fig-DishResiduals">Figure&nbsp;<span>1.2</span></a> and <a href="#fig-DishResiduals2">Figure&nbsp;<span>1.6</span></a>), it is the case for our residuals, even though we have no cyclic component, but have a rise followed by a decline.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>randtests<span class="sc">::</span><span class="fu">difference.sign.test</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
+<details><summary>Code</summary><div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">randtests</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/randtests/man/difference.sign.test.html">difference.sign.test</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Difference Sign Test
 #&gt; 
@@ -1083,11 +1007,8 @@ Y_{t} = \beta_{0} + \beta_{1} X_{t,1} + \beta_{2} X_{t,2} + \epsilon_t,
 #&gt; statistic = -2, n = 26, p-value = 0.1
 #&gt; alternative hypothesis: nonrandomness</code></pre>
 </div>
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>randtests<span class="sc">::</span><span class="fu">difference.sign.test</span>(mod1<span class="sc">$</span>residuals)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
+<details><summary>Code</summary><div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">randtests</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/randtests/man/difference.sign.test.html">difference.sign.test</a></span><span class="op">(</span><span class="va">mod1</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Difference Sign Test
 #&gt; 
@@ -1095,11 +1016,8 @@ Y_{t} = \beta_{0} + \beta_{1} X_{t,1} + \beta_{2} X_{t,2} + \epsilon_t,
 #&gt; statistic = 0.3, n = 26, p-value = 0.7
 #&gt; alternative hypothesis: nonrandomness</code></pre>
 </div>
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>randtests<span class="sc">::</span><span class="fu">difference.sign.test</span>(mod2<span class="sc">$</span>residuals)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
+<details><summary>Code</summary><div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">randtests</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/randtests/man/difference.sign.test.html">difference.sign.test</a></span><span class="op">(</span><span class="va">mod2</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Difference Sign Test
 #&gt; 
@@ -1121,10 +1039,7 @@ Chatterjee S, Hadi AS (2006) Regression analysis by example, 4th edn. John Wiley
 Chatterjee S, Simonoff JS (2013) Handbook of regression analysis. John Wiley &amp; Sons, Hoboken, New Jersey
 </div>
 </div>
-</section>
-
-</main> <!-- /main -->
-<script id="quarto-html-after-body" type="application/javascript">
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -1256,9 +1171,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
-</script>
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
       <a href="./index.html" class="pagination-link">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Preface</span>
       </a>          

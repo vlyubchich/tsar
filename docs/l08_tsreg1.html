@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.2.280">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-
-
 <title>Time Series Analysis - 8&nbsp; Time Series Regression with Trends</title>
 <style>
 code{white-space: pre-wrap;}
@@ -104,7 +101,6 @@ div.csl-indent {
 }
 </style>
 
-
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
@@ -123,8 +119,7 @@ div.csl-indent {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
-<script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -142,30 +137,22 @@ div.csl-indent {
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit"
   }
-}</script>
-
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
+}</script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 </head>
-
 <body class="nav-sidebar floating">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-    <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Time Series Regression with Trends</span></h1>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">
+<span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Time Series Regression with Trends</span>
+</h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
     </div>
-  </nav>
-</header>
-<!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Time Series Analysis</a> 
         <div class="sidebar-tools-main">
@@ -184,7 +171,7 @@ div.csl-indent {
       </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-        <li class="sidebar-item">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">Preface</a>
   </div>
@@ -256,8 +243,8 @@ div.csl-indent {
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./s1_wls.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Weighted least squares</span></a>
   </div>
@@ -268,39 +255,38 @@ div.csl-indent {
   </div>
 </li>
       </ul>
-  </li>
+</li>
     </ul>
-    </div>
-</nav>
-<!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
+</div>
+</nav><!-- margin-sidebar --><div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#spurious-correlation" id="toc-spurious-correlation" class="nav-link active" data-scroll-target="#spurious-correlation"><span class="toc-section-number">8.1</span>  Spurious correlation</a></li>
-  <li><a href="#common-approaches-to-regressing-time-series-with-trends" id="toc-common-approaches-to-regressing-time-series-with-trends" class="nav-link" data-scroll-target="#common-approaches-to-regressing-time-series-with-trends"><span class="toc-section-number">8.2</span>  Common approaches to regressing time series with trends</a>
+<li><a href="#spurious-correlation" id="toc-spurious-correlation" class="nav-link active" data-scroll-target="#spurious-correlation"><span class="toc-section-number">8.1</span>  Spurious correlation</a></li>
+  <li>
+<a href="#common-approaches-to-regressing-time-series-with-trends" id="toc-common-approaches-to-regressing-time-series-with-trends" class="nav-link" data-scroll-target="#common-approaches-to-regressing-time-series-with-trends"><span class="toc-section-number">8.2</span>  Common approaches to regressing time series with trends</a>
   <ul class="collapse">
-  <li><a href="#sec-incorporateTime" id="toc-sec-incorporateTime" class="nav-link" data-scroll-target="#sec-incorporateTime"><span class="toc-section-number">8.2.1</span>  Incorporate time effects</a></li>
+<li><a href="#sec-incorporateTime" id="toc-sec-incorporateTime" class="nav-link" data-scroll-target="#sec-incorporateTime"><span class="toc-section-number">8.2.1</span>  Incorporate time effects</a></li>
   <li><a href="#use-deviations-from-trends" id="toc-use-deviations-from-trends" class="nav-link" data-scroll-target="#use-deviations-from-trends"><span class="toc-section-number">8.2.2</span>  Use deviations from trends</a></li>
   <li><a href="#sec-RegTrendDiff" id="toc-sec-RegTrendDiff" class="nav-link" data-scroll-target="#sec-RegTrendDiff"><span class="toc-section-number">8.2.3</span>  Use differenced series</a></li>
   <li><a href="#wrong-approach-do-not-repeat-at-home-leading-to-spurious-regression" id="toc-wrong-approach-do-not-repeat-at-home-leading-to-spurious-regression" class="nav-link" data-scroll-target="#wrong-approach-do-not-repeat-at-home-leading-to-spurious-regression"><span class="toc-section-number">8.2.4</span>  Wrong approach (do not repeat at home) leading to spurious regression</a></li>
-  </ul></li>
-  <li><a href="#sec-cointegration" id="toc-sec-cointegration" class="nav-link" data-scroll-target="#sec-cointegration"><span class="toc-section-number">8.3</span>  Cointegration</a>
-  <ul class="collapse">
-  <li><a href="#two-step-englegranger-method" id="toc-two-step-englegranger-method" class="nav-link" data-scroll-target="#two-step-englegranger-method"><span class="toc-section-number">8.3.1</span>  Two-step Engle–Granger method</a></li>
-  <li><a href="#johansen-test" id="toc-johansen-test" class="nav-link" data-scroll-target="#johansen-test"><span class="toc-section-number">8.3.2</span>  Johansen test</a></li>
-  </ul></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="toc-section-number">8.4</span>  Conclusion</a></li>
   </ul>
-</nav>
+</li>
+  <li>
+<a href="#sec-cointegration" id="toc-sec-cointegration" class="nav-link" data-scroll-target="#sec-cointegration"><span class="toc-section-number">8.3</span>  Cointegration</a>
+  <ul class="collapse">
+<li><a href="#two-step-englegranger-method" id="toc-two-step-englegranger-method" class="nav-link" data-scroll-target="#two-step-englegranger-method"><span class="toc-section-number">8.3.1</span>  Two-step Engle–Granger method</a></li>
+  <li><a href="#johansen-test" id="toc-johansen-test" class="nav-link" data-scroll-target="#johansen-test"><span class="toc-section-number">8.3.2</span>  Johansen test</a></li>
+  </ul>
+</li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="toc-section-number">8.4</span>  Conclusion</a></li>
+  </ul></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Time Series Regression with Trends</span></h1>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<h1 class="title d-none d-lg-block">
+<span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Time Series Regression with Trends</span>
+</h1>
 </div>
 
 
@@ -313,9 +299,7 @@ div.csl-indent {
   </div>
   
 
-</header>
-
-<div class="cell">
+</header><div class="cell">
 
 </div>
 <p>The goal of this lecture is to introduce methods of handling nonstationary time series in regression models. You will become familiar with the problem of spurious correlation (regression) and approaches helping to avoid it.</p>
@@ -326,30 +310,27 @@ div.csl-indent {
 </ol>
 <p><strong>Reading materials</strong></p>
 <ul>
-<li>Chapter 10 in <span class="citation" data-cites="Wooldridge:2013">Wooldridge (<a href="references.html#ref-Wooldridge:2013" role="doc-biblioref">2013</a>)</span></li>
+<li>Chapter 10 in <span class="citation" data-cites="Wooldridge:2013">Wooldridge (<a href="references.html#ref-Wooldridge:2013" role="doc-biblioref">2013</a>)</span>
+</li>
 <li>Chapter 6 in <span class="citation" data-cites="Kirchgassner:Wolters:2007">Kirchgässner and Wolters (<a href="references.html#ref-Kirchgassner:Wolters:2007" role="doc-biblioref">2007</a>)</span> on cointegration</li>
 </ul>
-<section id="spurious-correlation" class="level2" data-number="8.1">
-<h2 data-number="8.1" class="anchored" data-anchor-id="spurious-correlation"><span class="header-section-number">8.1</span> Spurious correlation</h2>
+<section id="spurious-correlation" class="level2" data-number="8.1"><h2 data-number="8.1" class="anchored" data-anchor-id="spurious-correlation">
+<span class="header-section-number">8.1</span> Spurious correlation</h2>
 <p>Results of statistical analysis (correlation, regression, etc.) are called <em>spurious</em> when they are likely driven not by the underlying mechanisms such as the physical relationships between variables, but by matching patterns (often, temporal patterns) of the variables leading to the statistical significance of tested relationships. Such matching patterns include trends, periodic fluctuations (seasonality), and more random patterns like spikes matching in several time series, for example, detected by searching over a large database of time series (a.k.a. cherry picking).</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>T <span class="ot">&lt;-</span> <span class="dv">300</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>Xt <span class="ot">&lt;-</span> <span class="fu">ts</span>(<span class="fu">rnorm</span>(T))</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>Yt <span class="ot">&lt;-</span> <span class="fu">ts</span>(<span class="fu">rnorm</span>(T))</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">autoplot</span>(Xt) <span class="sc">+</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">autoplot</span>(Yt) <span class="sc">+</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">+</span> p2 <span class="sc">+</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
+<details><summary>Code</summary><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="cn">T</span> <span class="op">&lt;-</span> <span class="fl">300</span></span>
+<span><span class="va">Xt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/ts.html">ts</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="cn">T</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">Yt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/ts.html">ts</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="cn">T</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">Xt</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">Yt</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span></span>
+<span>    <span class="fu">plot_annotation</span><span class="op">(</span>tag_levels <span class="op">=</span> <span class="st">'A'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
 <div id="fig-orig" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="l08_tsreg1_files/figure-html/fig-orig-1.png" class="img-fluid figure-img" width="768"></p>
+<figure class="figure"><p><img src="l08_tsreg1_files/figure-html/fig-orig-1.png" class="img-fluid figure-img" width="768"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;8.1: Original stationary and independent time series.</figcaption><p></p>
 </figure>
 </div>
@@ -358,11 +339,8 @@ div.csl-indent {
 <p><a href="#fig-orig">Figure&nbsp;<span>8.1</span></a> shows two series of length <span class="math inline">\(T = 300\)</span> simulated from the standard normal distribution, <span class="math inline">\(N(0,1)\)</span>. These are independent and identically distributed (i.i.d.) random variables: each of the <span class="math inline">\(T\)</span> values in <span class="math inline">\(X_t\)</span> and <span class="math inline">\(Y_t\)</span> was drawn independently from other values from the same distribution. Two random variables are independent if the realization of one does not affect the probability distribution of the other. Independence is a strong condition, it also implies (includes) that the values are not correlated. This is true both for the values within the series <span class="math inline">\(X_t\)</span> and <span class="math inline">\(Y_t\)</span>, and across <span class="math inline">\(X_t\)</span> and <span class="math inline">\(Y_t\)</span> (i.e., <span class="math inline">\(X_t\)</span> and <span class="math inline">\(Y_t\)</span> are not autocorrelated, nor correlated with each other). This is the asymptotic property of such a time series (as the sample size increases infinitely).</p>
 <p>In finite samples, we may observe that a point estimate of the correlation coefficient even for such an ideal series is not exactly zero, but it will be usually not statistically significant. See the results (confidence interval and <span class="math inline">\(p\)</span>-value) from the correlation <span class="math inline">\(t\)</span>-test below:</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(Xt, Yt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
+<details><summary>Code</summary><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/cor.test.html">cor.test</a></span><span class="op">(</span><span class="va">Xt</span>, <span class="va">Yt</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Pearson's product-moment correlation
 #&gt; 
@@ -391,23 +369,19 @@ Note
 </div>
 </div>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>Xt <span class="ot">&lt;-</span> Xt <span class="sc">+</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>T)<span class="sc">/</span><span class="dv">95</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>Yt <span class="ot">&lt;-</span> Yt <span class="sc">+</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>T)<span class="sc">/</span><span class="dv">50</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">autoplot</span>(Xt) <span class="sc">+</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">8</span>) <span class="sc">+</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">autoplot</span>(Yt) <span class="sc">+</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">8</span>) <span class="sc">+</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">+</span> p2 <span class="sc">+</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
+<details><summary>Code</summary><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">Xt</span> <span class="op">&lt;-</span> <span class="va">Xt</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="cn">T</span><span class="op">)</span><span class="op">/</span><span class="fl">95</span></span>
+<span><span class="va">Yt</span> <span class="op">&lt;-</span> <span class="va">Yt</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="cn">T</span><span class="op">)</span><span class="op">/</span><span class="fl">50</span></span>
+<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">Xt</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ylim</span><span class="op">(</span><span class="op">-</span><span class="fl">2</span>, <span class="fl">8</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">Yt</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ylim</span><span class="op">(</span><span class="op">-</span><span class="fl">2</span>, <span class="fl">8</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span></span>
+<span>    <span class="fu">plot_annotation</span><span class="op">(</span>tag_levels <span class="op">=</span> <span class="st">'A'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
 <div id="fig-TSwithTrends" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="l08_tsreg1_files/figure-html/fig-TSwithTrends-1.png" class="img-fluid figure-img" width="768"></p>
+<figure class="figure"><p><img src="l08_tsreg1_files/figure-html/fig-TSwithTrends-1.png" class="img-fluid figure-img" width="768"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;8.2: Time series with trends.</figcaption><p></p>
 </figure>
 </div>
@@ -415,11 +389,8 @@ Note
 </div>
 <p>After adding trends to each of the time series, the correlation of <span class="math inline">\(X_t\)</span> and <span class="math inline">\(Y_t\)</span> is strong and statistically significant, but this is not necessarily because these series are so strongly related to each other.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(Xt, Yt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
+<details><summary>Code</summary><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/cor.test.html">cor.test</a></span><span class="op">(</span><span class="va">Xt</span>, <span class="va">Yt</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Pearson's product-moment correlation
 #&gt; 
@@ -437,9 +408,8 @@ Note
 <p>For example, a city’s growing population may result in more police officers and heavier pollution at the same time, partially because more people will drive their vehicles in the city. An attempt to correlate (regress) pollution with the number of police officers will produce a so-called spurious correlation (regression). The results of statistical tests will be likely statistically significant. However, is pollution directly related to the number of police officers? Will the dismissal of a police officer help to make the air cleaner?</p>
 <p>Not only common increasing/decreasing trends but also other systematic changes (such as seasonality) may be responsible for spurious correlation effects. For example, both high ice cream sales and harmful algal blooms typically occur in warm weather conditions and may be ‘significantly’ correlated, suggesting banning ice cream for the sake of a safer environment. See more interesting examples of spurious correlation at <a href="http://www.tylervigen.com/spurious-correlations" class="uri">http://www.tylervigen.com/spurious-correlations</a>.</p>
 <p>Sometimes, some simple tricks may help to avoid spurious results. For example, analyze not the raw numbers, but the <em>rates</em> that remove the effect of population growth in a city: crime rate per 100,000 inhabitants, number of people older than 70 per 1,000 inhabitants, etc. For more general approaches, see the next section.</p>
-</section>
-<section id="common-approaches-to-regressing-time-series-with-trends" class="level2" data-number="8.2">
-<h2 data-number="8.2" class="anchored" data-anchor-id="common-approaches-to-regressing-time-series-with-trends"><span class="header-section-number">8.2</span> Common approaches to regressing time series with trends</h2>
+</section><section id="common-approaches-to-regressing-time-series-with-trends" class="level2" data-number="8.2"><h2 data-number="8.2" class="anchored" data-anchor-id="common-approaches-to-regressing-time-series-with-trends">
+<span class="header-section-number">8.2</span> Common approaches to regressing time series with trends</h2>
 <p>Consider a situation when we are given time series with trends (like in <a href="#fig-TSwithTrends">Figure&nbsp;<span>8.2</span></a>), we do not know the data generating process (DGP; i.e., the true dependence structure), and we want to use these series in regression analysis.</p>
 <p>In general, there are three alternative ways of dealing with trends in regression:</p>
 <ol type="1">
@@ -448,17 +418,14 @@ Note
 <li>Use differenced series (i.e., remove trends by differencing).</li>
 </ol>
 <p>After these three approaches, here we consider a special case of cointegration (<a href="#sec-cointegration"><span>Section&nbsp;8.3</span></a>).</p>
-<section id="sec-incorporateTime" class="level3" data-number="8.2.1">
-<h3 data-number="8.2.1" class="anchored" data-anchor-id="sec-incorporateTime"><span class="header-section-number">8.2.1</span> Incorporate time effects</h3>
+<section id="sec-incorporateTime" class="level3" data-number="8.2.1"><h3 data-number="8.2.1" class="anchored" data-anchor-id="sec-incorporateTime">
+<span class="header-section-number">8.2.1</span> Incorporate time effects</h3>
 <p>Based on the time series plots (<a href="#fig-TSwithTrends">Figure&nbsp;<span>8.2</span></a>), a linear time trend would fit these data, since we see a linear increase of values with time (so we add a linear time effect <span class="math inline">\(t\)</span> in our model). Alternatively, e.g., if we observed parabolic structure, we could include <span class="math inline">\(t+t^2\)</span> or another form of trend.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>T)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>mod_time <span class="ot">&lt;-</span> <span class="fu">lm</span>(Yt <span class="sc">~</span> Xt <span class="sc">+</span> t)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod_time)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
+<details><summary>Code</summary><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="cn">T</span><span class="op">)</span></span>
+<span><span class="va">mod_time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Yt</span> <span class="op">~</span> <span class="va">Xt</span> <span class="op">+</span> <span class="va">t</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">mod_time</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt; Call:
 #&gt; lm(formula = Yt ~ Xt + t)
@@ -487,18 +454,15 @@ Y_t = \beta_0 + \beta_1X_t + \beta_2t + \epsilon_t,
 \widehat{Y}_t &amp;=  0.0008 - 0.0637X_t + 0.0207t.
 \end{align}\]</span></p>
 <p>In the above model, the (highly statistically significant) time term took over the trend influence, thus, the coefficient for <span class="math inline">\(X\)</span> shows the ‘real’ relationship between <span class="math inline">\(Y\)</span> and <span class="math inline">\(X\)</span>. Notice, the coefficient <span class="math inline">\(\beta_1\)</span> is not statistically significant, what we expected.</p>
-</section>
-<section id="use-deviations-from-trends" class="level3" data-number="8.2.2">
-<h3 data-number="8.2.2" class="anchored" data-anchor-id="use-deviations-from-trends"><span class="header-section-number">8.2.2</span> Use deviations from trends</h3>
+</section><section id="use-deviations-from-trends" class="level3" data-number="8.2.2"><h3 data-number="8.2.2" class="anchored" data-anchor-id="use-deviations-from-trends">
+<span class="header-section-number">8.2.2</span> Use deviations from trends</h3>
 <p>Here we fit a separate time trend (may be of a different form for each time series: linear, quadratic, log, etc.) for each variable and find deviations from these trends. Based on <a href="#fig-TSwithTrends">Figure&nbsp;<span>8.2</span></a>, linear trends are appropriate here: <span class="math display">\[
 Y_t = a_0 + a_1t + e_{(Y)t}; \quad X_t = b_0 + b_1t + e_{(X)t},
 \]</span> where <span class="math inline">\(e_{(Y)t}\)</span> and <span class="math inline">\(e_{(X)t}\)</span> are the trend residuals for the series <span class="math inline">\(Y_t\)</span> and <span class="math inline">\(X_t\)</span>, respectively.</p>
 <p>After the trend coefficients <span class="math inline">\(a_0\)</span>, <span class="math inline">\(a_1\)</span>, <span class="math inline">\(b_0\)</span>, and <span class="math inline">\(b_1\)</span> are estimated,</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>MY <span class="ot">&lt;-</span> <span class="fu">lm</span>(Yt <span class="sc">~</span> t)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>MX <span class="ot">&lt;-</span> <span class="fu">lm</span>(Xt <span class="sc">~</span> t)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details><summary>Code</summary><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">MY</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Yt</span> <span class="op">~</span> <span class="va">t</span><span class="op">)</span></span>
+<span><span class="va">MX</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Xt</span> <span class="op">~</span> <span class="va">t</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>the smoothed series are <span class="math display">\[
@@ -507,23 +471,19 @@ Y_t = a_0 + a_1t + e_{(Y)t}; \quad X_t = b_0 + b_1t + e_{(X)t},
 \hat{e}_{(Y)t} = Y_t - \widetilde{Y}_t\quad\text{and}\quad \hat{e}_{(X)t} = X_t - \widetilde{X}_t.
 \]</span></p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> ggplot2<span class="sc">::</span><span class="fu">autoplot</span>(<span class="fu">as.ts</span>(MY<span class="sc">$</span>resid)) <span class="sc">+</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"t"</span>) <span class="sc">+</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">"eYt"</span>) <span class="sc">+</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> ggplot2<span class="sc">::</span><span class="fu">autoplot</span>(<span class="fu">as.ts</span>(MX<span class="sc">$</span>resid)) <span class="sc">+</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"t"</span>) <span class="sc">+</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">"eXt"</span>) <span class="sc">+</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">+</span> p2 <span class="sc">+</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
+<details><summary>Code</summary><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/ts.html">as.ts</a></span><span class="op">(</span><span class="va">MY</span><span class="op">$</span><span class="va">resid</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"t"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">"eYt"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/ts.html">as.ts</a></span><span class="op">(</span><span class="va">MX</span><span class="op">$</span><span class="va">resid</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"t"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">"eXt"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span></span>
+<span>    <span class="fu">plot_annotation</span><span class="op">(</span>tag_levels <span class="op">=</span> <span class="st">'A'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
 <div id="fig-trendresid" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="l08_tsreg1_files/figure-html/fig-trendresid-1.png" class="img-fluid figure-img" width="768"></p>
+<figure class="figure"><p><img src="l08_tsreg1_files/figure-html/fig-trendresid-1.png" class="img-fluid figure-img" width="768"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;8.3: Residuals from individually estimated linear trends.</figcaption><p></p>
 </figure>
 </div>
@@ -533,12 +493,9 @@ Y_t = a_0 + a_1t + e_{(Y)t}; \quad X_t = b_0 + b_1t + e_{(X)t},
 \hat{e}_{(Y)t} = \beta_0 + \beta_1\hat{e}_{(X)t} + \epsilon_t.
 \]</span></p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>mod_devTrend <span class="ot">&lt;-</span> <span class="fu">lm</span>(MY<span class="sc">$</span>residuals <span class="sc">~</span> MX<span class="sc">$</span>residuals)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod_devTrend)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
+<details><summary>Code</summary><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mod_devTrend</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">MY</span><span class="op">$</span><span class="va">residuals</span> <span class="op">~</span> <span class="va">MX</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">mod_devTrend</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt; Call:
 #&gt; lm(formula = MY$residuals ~ MX$residuals)
@@ -558,37 +515,30 @@ Y_t = a_0 + a_1t + e_{(Y)t}; \quad X_t = b_0 + b_1t + e_{(X)t},
 </div>
 </div>
 <p>We got the result (the relationship between the variables is not statistically significant) similar to running the model incorporating time trends in <a href="#sec-incorporateTime"><span>Section&nbsp;8.2.1</span></a>. Again, it is a reasonable result based on how the time series were simulated (independent, although with trends in the same direction).</p>
-</section>
-<section id="sec-RegTrendDiff" class="level3" data-number="8.2.3">
-<h3 data-number="8.2.3" class="anchored" data-anchor-id="sec-RegTrendDiff"><span class="header-section-number">8.2.3</span> Use differenced series</h3>
+</section><section id="sec-RegTrendDiff" class="level3" data-number="8.2.3"><h3 data-number="8.2.3" class="anchored" data-anchor-id="sec-RegTrendDiff">
+<span class="header-section-number">8.2.3</span> Use differenced series</h3>
 <p>Instead of assuming a deterministic trend as in the previous subsections, we can try to eliminate a stochastic trend by differencing the time series. We define the lag-1 difference operator <span class="math inline">\(\Delta\)</span> by <span class="math display">\[
 \Delta X_t = X_t - X_{t-1} = (1-B)X_t,
 \]</span> where <span class="math inline">\(B\)</span> is the backward shift operator, <span class="math inline">\(BX_t = X_{t-1}\)</span>.</p>
 <p>There are tests developed in econometrics to find the appropriate order of differences (unit-root tests). Here, however, we will use the rule of thumb: for time trends looking linear (our case, see <a href="#fig-TSwithTrends">Figure&nbsp;<span>8.2</span></a>) use the first-order differences, for parabolic shapes – the second-order differences. After differencing, the series should look stationary.</p>
 <p>The first-order differences for our series (<a href="#fig-TSdiffed">Figure&nbsp;<span>8.4</span></a>) can be calculated as follows:</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>D1X <span class="ot">&lt;-</span> <span class="fu">diff</span>(Xt)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>D1Y <span class="ot">&lt;-</span> <span class="fu">diff</span>(Yt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details><summary>Code</summary><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">D1X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="va">Xt</span><span class="op">)</span></span>
+<span><span class="va">D1Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="va">Yt</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> ggplot2<span class="sc">::</span><span class="fu">autoplot</span>(D1Y) <span class="sc">+</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"t"</span>) <span class="sc">+</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> ggplot2<span class="sc">::</span><span class="fu">autoplot</span>(D1X) <span class="sc">+</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"t"</span>) <span class="sc">+</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">+</span> p2 <span class="sc">+</span></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
+<details><summary>Code</summary><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">D1Y</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"t"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">D1X</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"t"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span></span>
+<span>    <span class="fu">plot_annotation</span><span class="op">(</span>tag_levels <span class="op">=</span> <span class="st">'A'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
 <div id="fig-TSdiffed" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="l08_tsreg1_files/figure-html/fig-TSdiffed-1.png" class="img-fluid figure-img" width="768"></p>
+<figure class="figure"><p><img src="l08_tsreg1_files/figure-html/fig-TSdiffed-1.png" class="img-fluid figure-img" width="768"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;8.4: First-order differences of the time series.</figcaption><p></p>
 </figure>
 </div>
@@ -598,12 +548,9 @@ Y_t = a_0 + a_1t + e_{(Y)t}; \quad X_t = b_0 + b_1t + e_{(X)t},
 \Delta Y_t = \beta_0 + \beta_1 \Delta X_t + \epsilon_t.
 \]</span></p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>mod_diff <span class="ot">&lt;-</span> <span class="fu">lm</span>(D1Y <span class="sc">~</span> D1X)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod_diff)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
+<details><summary>Code</summary><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mod_diff</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">D1Y</span> <span class="op">~</span> <span class="va">D1X</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">mod_diff</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt; Call:
 #&gt; lm(formula = D1Y ~ D1X)
@@ -623,19 +570,15 @@ Y_t = a_0 + a_1t + e_{(Y)t}; \quad X_t = b_0 + b_1t + e_{(X)t},
 </div>
 </div>
 <p>As expected (since the original series <span class="math inline">\(X_t\)</span> and <span class="math inline">\(Y_t\)</span>, before adding the trend, were uncorrelated), the coefficient <span class="math inline">\(\beta_1\)</span> and the whole regression model are not statistically significant.</p>
-</section>
-<section id="wrong-approach-do-not-repeat-at-home-leading-to-spurious-regression" class="level3" data-number="8.2.4">
-<h3 data-number="8.2.4" class="anchored" data-anchor-id="wrong-approach-do-not-repeat-at-home-leading-to-spurious-regression"><span class="header-section-number">8.2.4</span> Wrong approach (do not repeat at home) leading to spurious regression</h3>
+</section><section id="wrong-approach-do-not-repeat-at-home-leading-to-spurious-regression" class="level3" data-number="8.2.4"><h3 data-number="8.2.4" class="anchored" data-anchor-id="wrong-approach-do-not-repeat-at-home-leading-to-spurious-regression">
+<span class="header-section-number">8.2.4</span> Wrong approach (do not repeat at home) leading to spurious regression</h3>
 <p>What if we forget about the three approaches above and just use the time series with trends in a regression model? This could be such a model: <span class="math display">\[
 Y_t = \beta_0 + \beta_1X_t + \epsilon_t.
 \]</span></p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>badModel <span class="ot">&lt;-</span> <span class="fu">lm</span>(Yt <span class="sc">~</span> Xt)</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(badModel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
+<details><summary>Code</summary><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">badModel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Yt</span> <span class="op">~</span> <span class="va">Xt</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">badModel</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt; Call:
 #&gt; lm(formula = Yt ~ Xt)
@@ -671,23 +614,19 @@ Example: Predicting sales of home appliances
 <p>Recall the dishwasher example from the first lecture. Let’s use the above methods for regressing the time series of dishwasher shipments (<span class="math inline">\(DISH_t\)</span>) and residential investments (<span class="math inline">\(RES_t\)</span>).</p>
 <p>First, look at the time series plots of the raw data (<a href="#fig-TSdish">Figure&nbsp;<span>8.5</span></a>).</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>D <span class="ot">&lt;-</span> <span class="fu">read.delim</span>(<span class="st">"./data/dish.txt"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">Year =</span> YEAR)</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(D, <span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> DISH)) <span class="sc">+</span> </span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(D, <span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> RES)) <span class="sc">+</span> </span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">+</span> p2 <span class="sc">+</span> </span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
+<details><summary>Code</summary><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">D</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.delim</a></span><span class="op">(</span><span class="st">"./data/dish.txt"</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>    <span class="fu">rename</span><span class="op">(</span>Year <span class="op">=</span> <span class="va">YEAR</span><span class="op">)</span></span>
+<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="va">D</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Year</span>, y <span class="op">=</span> <span class="va">DISH</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="va">D</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Year</span>, y <span class="op">=</span> <span class="va">RES</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> </span>
+<span>    <span class="fu">plot_annotation</span><span class="op">(</span>tag_levels <span class="op">=</span> <span class="st">'A'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
 <div id="fig-TSdish" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="l08_tsreg1_files/figure-html/fig-TSdish-1.png" class="img-fluid figure-img" width="768"></p>
+<figure class="figure"><p><img src="l08_tsreg1_files/figure-html/fig-TSdish-1.png" class="img-fluid figure-img" width="768"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;8.5: Time series plots of the dishwasher shipments (DISH) and residential investments (RES).</figcaption><p></p>
 </figure>
 </div>
@@ -698,12 +637,9 @@ Example: Predicting sales of home appliances
 DISH_t = \beta_0 + \beta_1 RES_t + \beta_2 Year + \epsilon_t;
 \tag{8.1}\]</span></span> see the residual diagnostics below and in <a href="#fig-dishtimetrend">Figure&nbsp;<span>8.6</span></a>.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>M_time <span class="ot">&lt;-</span> <span class="fu">lm</span>(DISH <span class="sc">~</span> RES <span class="sc">+</span> Year, <span class="at">data =</span> D)</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(M_time)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
+<details><summary>Code</summary><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">M_time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">DISH</span> <span class="op">~</span> <span class="va">RES</span> <span class="op">+</span> <span class="va">Year</span>, data <span class="op">=</span> <span class="va">D</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">M_time</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt; Call:
 #&gt; lm(formula = DISH ~ RES + Year, data = D)
@@ -726,22 +662,16 @@ DISH_t = \beta_0 + \beta_1 RES_t + \beta_2 Year + \epsilon_t;
 </div>
 </div>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(M_time<span class="sc">$</span>residuals)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
+<details><summary>Code</summary><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/shapiro.test.html">shapiro.test</a></span><span class="op">(</span><span class="va">M_time</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Shapiro-Wilk normality test
 #&gt; 
 #&gt; data:  M_time$residuals
 #&gt; W = 1, p-value = 0.4</code></pre>
 </div>
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>lawstat<span class="sc">::</span><span class="fu">runs.test</span>(M_time<span class="sc">$</span>residuals, <span class="at">plot.it =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
+<details><summary>Code</summary><div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">lawstat</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lawstat/man/runs.test.html">runs.test</a></span><span class="op">(</span><span class="va">M_time</span><span class="op">$</span><span class="va">residuals</span>, plot.it <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Runs Test - Two sided
 #&gt; 
@@ -750,27 +680,23 @@ DISH_t = \beta_0 + \beta_1 RES_t + \beta_2 Year + \epsilon_t;
 </div>
 </div>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(D, <span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> M_time<span class="sc">$</span>residuals)) <span class="sc">+</span> </span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="dv">4</span>) <span class="sc">+</span> </span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">"Residuals"</span>) <span class="sc">+</span></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">ggAcf</span>(M_time<span class="sc">$</span>residuals) <span class="sc">+</span></span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">""</span>) <span class="sc">+</span></span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"Lag (years)"</span>) <span class="sc">+</span></span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> ggpubr<span class="sc">::</span><span class="fu">ggqqplot</span>(M_time<span class="sc">$</span>residuals) <span class="sc">+</span> </span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"Standard normal quantiles"</span>) <span class="sc">+</span></span>
-<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
-<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">+</span> p2 <span class="sc">+</span> p3 <span class="sc">+</span></span>
-<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
+<details><summary>Code</summary><div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="va">D</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Year</span>, y <span class="op">=</span> <span class="va">M_time</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">geom_hline</span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, lty <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">"Residuals"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/autoplot.acf.html">ggAcf</a></span><span class="op">(</span><span class="va">M_time</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Lag (years)"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggqqplot.html">ggqqplot</a></span><span class="op">(</span><span class="va">M_time</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Standard normal quantiles"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> <span class="va">p3</span> <span class="op">+</span></span>
+<span>    <span class="fu">plot_annotation</span><span class="op">(</span>tag_levels <span class="op">=</span> <span class="st">'A'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
 <div id="fig-dishtimetrend" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="l08_tsreg1_files/figure-html/fig-dishtimetrend-1.png" class="img-fluid figure-img" width="768"></p>
+<figure class="figure"><p><img src="l08_tsreg1_files/figure-html/fig-dishtimetrend-1.png" class="img-fluid figure-img" width="768"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;8.6: Diagnostics plots for residuals from <a href="#eq-dishtimetrend">Equation&nbsp;<span>8.1</span></a>.</figcaption><p></p>
 </figure>
 </div>
@@ -781,14 +707,11 @@ DISH_t = \beta_0 + \beta_1 RES_t + \beta_2 Year + \epsilon_t;
 \Delta DISH_t = \beta_0 + \beta_1 \Delta RES_t + \epsilon_t
 \tag{8.2}\]</span></span> see the residual diagnostics below and in <a href="#fig-dishdiff">Figure&nbsp;<span>8.8</span></a>.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>D_DISH <span class="ot">&lt;-</span> <span class="fu">diff</span>(D<span class="sc">$</span>DISH)</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>D_RES <span class="ot">&lt;-</span> <span class="fu">diff</span>(D<span class="sc">$</span>RES)</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>M_diff <span class="ot">&lt;-</span> <span class="fu">lm</span>(D_DISH <span class="sc">~</span> D_RES)</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(M_diff)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
+<details><summary>Code</summary><div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">D_DISH</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="va">D</span><span class="op">$</span><span class="va">DISH</span><span class="op">)</span></span>
+<span><span class="va">D_RES</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="va">D</span><span class="op">$</span><span class="va">RES</span><span class="op">)</span></span>
+<span><span class="va">M_diff</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">D_DISH</span> <span class="op">~</span> <span class="va">D_RES</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">M_diff</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt; Call:
 #&gt; lm(formula = D_DISH ~ D_RES)
@@ -810,48 +733,38 @@ DISH_t = \beta_0 + \beta_1 RES_t + \beta_2 Year + \epsilon_t;
 </div>
 </div>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(D[<span class="sc">-</span><span class="dv">1</span>,], <span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> D_DISH)) <span class="sc">+</span> </span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="dv">4</span>) <span class="sc">+</span> </span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(D[<span class="sc">-</span><span class="dv">1</span>,], <span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> D_RES)) <span class="sc">+</span> </span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="dv">4</span>) <span class="sc">+</span> </span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">data.frame</span>(D_DISH, D_RES), <span class="fu">aes</span>(<span class="at">y =</span> D_DISH, <span class="at">x =</span> D_RES)) <span class="sc">+</span></span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
-<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">+</span> p2 <span class="sc">+</span> p3 <span class="sc">+</span></span>
-<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
+<details><summary>Code</summary><div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="va">D</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span>,<span class="op">]</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Year</span>, y <span class="op">=</span> <span class="va">D_DISH</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">geom_hline</span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, lty <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="va">D</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span>,<span class="op">]</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Year</span>, y <span class="op">=</span> <span class="va">D_RES</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">geom_hline</span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, lty <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">D_DISH</span>, <span class="va">D_RES</span><span class="op">)</span>, <span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">D_DISH</span>, x <span class="op">=</span> <span class="va">D_RES</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> <span class="va">p3</span> <span class="op">+</span></span>
+<span>    <span class="fu">plot_annotation</span><span class="op">(</span>tag_levels <span class="op">=</span> <span class="st">'A'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
 <div id="fig-TSdishdiff" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="l08_tsreg1_files/figure-html/fig-TSdishdiff-1.png" class="img-fluid figure-img" width="768"></p>
+<figure class="figure"><p><img src="l08_tsreg1_files/figure-html/fig-TSdishdiff-1.png" class="img-fluid figure-img" width="768"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;8.7: Time differences of dishwasher shipments and residential investments, and a scatterplot for assessing pairwise relationships.</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(M_diff<span class="sc">$</span>residuals)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
+<details><summary>Code</summary><div class="sourceCode" id="cb30"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/shapiro.test.html">shapiro.test</a></span><span class="op">(</span><span class="va">M_diff</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Shapiro-Wilk normality test
 #&gt; 
 #&gt; data:  M_diff$residuals
 #&gt; W = 1, p-value = 0.8</code></pre>
 </div>
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>lawstat<span class="sc">::</span><span class="fu">runs.test</span>(M_diff<span class="sc">$</span>residuals, <span class="at">plot.it =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
+<details><summary>Code</summary><div class="sourceCode" id="cb32"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">lawstat</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lawstat/man/runs.test.html">runs.test</a></span><span class="op">(</span><span class="va">M_diff</span><span class="op">$</span><span class="va">residuals</span>, plot.it <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Runs Test - Two sided
 #&gt; 
@@ -860,27 +773,23 @@ DISH_t = \beta_0 + \beta_1 RES_t + \beta_2 Year + \epsilon_t;
 </div>
 </div>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(D[<span class="sc">-</span><span class="dv">1</span>,], <span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> M_diff<span class="sc">$</span>residuals)) <span class="sc">+</span> </span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="dv">4</span>) <span class="sc">+</span> </span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">"Residuals"</span>) <span class="sc">+</span></span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">ggAcf</span>(M_diff<span class="sc">$</span>residuals) <span class="sc">+</span></span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">""</span>) <span class="sc">+</span></span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"Lag (years)"</span>) <span class="sc">+</span></span>
-<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
-<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> ggpubr<span class="sc">::</span><span class="fu">ggqqplot</span>(M_diff<span class="sc">$</span>residuals) <span class="sc">+</span> </span>
-<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"Standard normal quantiles"</span>) <span class="sc">+</span></span>
-<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
-<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">+</span> p2 <span class="sc">+</span> p3 <span class="sc">+</span></span>
-<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
+<details><summary>Code</summary><div class="sourceCode" id="cb34"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="va">D</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span>,<span class="op">]</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Year</span>, y <span class="op">=</span> <span class="va">M_diff</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">geom_hline</span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, lty <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">"Residuals"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/autoplot.acf.html">ggAcf</a></span><span class="op">(</span><span class="va">M_diff</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Lag (years)"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggqqplot.html">ggqqplot</a></span><span class="op">(</span><span class="va">M_diff</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Standard normal quantiles"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> <span class="va">p3</span> <span class="op">+</span></span>
+<span>    <span class="fu">plot_annotation</span><span class="op">(</span>tag_levels <span class="op">=</span> <span class="st">'A'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
 <div id="fig-dishdiff" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="l08_tsreg1_files/figure-html/fig-dishdiff-1.png" class="img-fluid figure-img" width="768"></p>
+<figure class="figure"><p><img src="l08_tsreg1_files/figure-html/fig-dishdiff-1.png" class="img-fluid figure-img" width="768"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;8.8: Diagnostics plots for residuals from <a href="#eq-dishdiff">Equation&nbsp;<span>8.2</span></a>.</figcaption><p></p>
 </figure>
 </div>
@@ -888,17 +797,15 @@ DISH_t = \beta_0 + \beta_1 RES_t + \beta_2 Year + \epsilon_t;
 </div>
 </div>
 </div>
-</section>
-</section>
-<section id="sec-cointegration" class="level2" data-number="8.3">
-<h2 data-number="8.3" class="anchored" data-anchor-id="sec-cointegration"><span class="header-section-number">8.3</span> Cointegration</h2>
+</section></section><section id="sec-cointegration" class="level2" data-number="8.3"><h2 data-number="8.3" class="anchored" data-anchor-id="sec-cointegration">
+<span class="header-section-number">8.3</span> Cointegration</h2>
 <p>Generally, cointegration might be characterized by two or more I(1) variables indicating a common long-run development, i.e., the variables do not drift away from each other except for transitory fluctuations. This defines a statistical equilibrium that, in empirical analysis, can often be interpreted as a long-run [economic] relation.</p>
 <p>In other words, two I(1) series <span class="math inline">\(X_t\)</span> and <span class="math inline">\(Y_t\)</span> are cointegrated if their linear combination <span class="math inline">\(u_t\)</span> is I(0): <span id="eq-longrun"><span class="math display">\[
 Y_t - \beta X_t = u_t.
 \tag{8.3}\]</span></span></p>
 <p>Cointegration means a common stochastic trend. The vector <span class="math inline">\((1, -\beta)^{\top}\)</span> is called the <em>cointegration vector</em>.</p>
-<section id="two-step-englegranger-method" class="level3" data-number="8.3.1">
-<h3 data-number="8.3.1" class="anchored" data-anchor-id="two-step-englegranger-method"><span class="header-section-number">8.3.1</span> Two-step Engle–Granger method</h3>
+<section id="two-step-englegranger-method" class="level3" data-number="8.3.1"><h3 data-number="8.3.1" class="anchored" data-anchor-id="two-step-englegranger-method">
+<span class="header-section-number">8.3.1</span> Two-step Engle–Granger method</h3>
 <ol type="1">
 <li>Estimate long-run relationship, i.e., regression in levels as in <a href="#eq-longrun">Equation&nbsp;<span>8.3</span></a>, and test residuals for I(0).</li>
 <li>If the residual series <span class="math inline">\(u_t\)</span> is I(0), use it in <em>error correction model</em> (ECM) regression <span id="eq-ecm"><span class="math display">\[
@@ -925,19 +832,15 @@ Example: Error correction model for simulated data
 </div>
 <p>Demonstrate the analysis using simulated time series (<a href="#fig-XYi1">Figure&nbsp;<span>8.9</span></a>).</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> ggplot2<span class="sc">::</span><span class="fu">autoplot</span>(Xt) <span class="sc">+</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> ggplot2<span class="sc">::</span><span class="fu">autoplot</span>(Yt) <span class="sc">+</span></span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_light</span>()</span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">+</span> p2 <span class="sc">+</span></span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
+<details><summary>Code</summary><div class="sourceCode" id="cb35"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">Xt</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">Yt</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span></span>
+<span>    <span class="fu">plot_annotation</span><span class="op">(</span>tag_levels <span class="op">=</span> <span class="st">'A'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
 <div id="fig-XYi1" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="l08_tsreg1_files/figure-html/fig-XYi1-1.png" class="img-fluid figure-img" width="768"></p>
+<figure class="figure"><p><img src="l08_tsreg1_files/figure-html/fig-XYi1-1.png" class="img-fluid figure-img" width="768"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;8.9: Simulated I(1) time series.</figcaption><p></p>
 </figure>
 </div>
@@ -945,11 +848,8 @@ Example: Error correction model for simulated data
 </div>
 <p>Apply unit-root test to check the integration order of each series, using the R package <code>tseries</code>:</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>tseries<span class="sc">::</span><span class="fu">adf.test</span>(Xt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
+<details><summary>Code</summary><div class="sourceCode" id="cb36"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">tseries</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tseries/man/adf.test.html">adf.test</a></span><span class="op">(</span><span class="va">Xt</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Augmented Dickey-Fuller Test
 #&gt; 
@@ -957,11 +857,8 @@ Example: Error correction model for simulated data
 #&gt; Dickey-Fuller = -2, Lag order = 6, p-value = 0.5
 #&gt; alternative hypothesis: stationary</code></pre>
 </div>
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>tseries<span class="sc">::</span><span class="fu">adf.test</span>(<span class="fu">diff</span>(Xt))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
+<details><summary>Code</summary><div class="sourceCode" id="cb38"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">tseries</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tseries/man/adf.test.html">adf.test</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="va">Xt</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Augmented Dickey-Fuller Test
 #&gt; 
@@ -969,11 +866,8 @@ Example: Error correction model for simulated data
 #&gt; Dickey-Fuller = -7, Lag order = 6, p-value = 0.01
 #&gt; alternative hypothesis: stationary</code></pre>
 </div>
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>tseries<span class="sc">::</span><span class="fu">adf.test</span>(Yt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
+<details><summary>Code</summary><div class="sourceCode" id="cb40"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">tseries</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tseries/man/adf.test.html">adf.test</a></span><span class="op">(</span><span class="va">Yt</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Augmented Dickey-Fuller Test
 #&gt; 
@@ -981,11 +875,8 @@ Example: Error correction model for simulated data
 #&gt; Dickey-Fuller = -2, Lag order = 6, p-value = 0.5
 #&gt; alternative hypothesis: stationary</code></pre>
 </div>
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>tseries<span class="sc">::</span><span class="fu">adf.test</span>(<span class="fu">diff</span>(Yt))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
+<details><summary>Code</summary><div class="sourceCode" id="cb42"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">tseries</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tseries/man/adf.test.html">adf.test</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="va">Yt</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Augmented Dickey-Fuller Test
 #&gt; 
@@ -999,12 +890,9 @@ Example: Error correction model for simulated data
 Y_t = a + bX_t + u_t.
 \tag{8.5}\]</span></span> The vector <span class="math inline">\([1, -b]\)</span> is the cointegration vector.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>Ut <span class="ot">&lt;-</span> <span class="fu">lm</span>(Yt <span class="sc">~</span> Xt)<span class="sc">$</span>residuals</span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>tseries<span class="sc">::</span><span class="fu">adf.test</span>(Ut)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
+<details><summary>Code</summary><div class="sourceCode" id="cb44"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">Ut</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Yt</span> <span class="op">~</span> <span class="va">Xt</span><span class="op">)</span><span class="op">$</span><span class="va">residuals</span></span>
+<span><span class="fu">tseries</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tseries/man/adf.test.html">adf.test</a></span><span class="op">(</span><span class="va">Ut</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Augmented Dickey-Fuller Test
 #&gt; 
@@ -1016,26 +904,21 @@ Y_t = a + bX_t + u_t.
 <p>While each of the time series <span class="math inline">\(X_t\)</span> and <span class="math inline">\(Y_t\)</span> is I(1), the resulting residual series <span class="math inline">\(u_t \sim \mathrm{I}(0)\)</span>, thus we conclude, <span class="math inline">\(X_t\)</span> and <span class="math inline">\(Y_t\)</span> are cointegrated.</p>
 <p>Apply a simple error correction model (with <span class="math inline">\(n_X = n_Y = 1\)</span>), using the R package <code>dynlm</code> or just specify lags using the package <code>dplyr</code>:</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Error correction term</span></span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>ect <span class="ot">&lt;-</span> Ut[<span class="sc">-</span><span class="fu">length</span>(Ut)]</span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Differenced series</span></span>
-<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>dy <span class="ot">&lt;-</span> <span class="fu">diff</span>(Yt)</span>
-<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>dx <span class="ot">&lt;-</span> <span class="fu">diff</span>(Xt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details><summary>Code</summary><div class="sourceCode" id="cb46"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Error correction term</span></span>
+<span><span class="va">ect</span> <span class="op">&lt;-</span> <span class="va">Ut</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">Ut</span><span class="op">)</span><span class="op">]</span></span>
+<span></span>
+<span><span class="co"># Differenced series</span></span>
+<span><span class="va">dy</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="va">Yt</span><span class="op">)</span></span>
+<span><span class="va">dx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="va">Xt</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>Model using <code>dynlm::dynlm()</code>:</p>
+<p>Model using <code><a href="https://rdrr.io/pkg/dynlm/man/dynlm.html">dynlm::dynlm()</a></code>:</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dynlm)</span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>ecmdat1 <span class="ot">&lt;-</span> <span class="fu">cbind</span>(dy, dx, ect)</span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>ecm1 <span class="ot">&lt;-</span> <span class="fu">dynlm</span>(dy <span class="sc">~</span> <span class="fu">L</span>(ect, <span class="dv">1</span>) <span class="sc">+</span> <span class="fu">L</span>(dy, <span class="dv">1</span>) <span class="sc">+</span> <span class="fu">L</span>(dx, <span class="dv">1</span>), <span class="at">data =</span> ecmdat1)</span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ecm1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
+<details><summary>Code</summary><div class="sourceCode" id="cb47"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">dynlm</span><span class="op">)</span></span>
+<span><span class="va">ecmdat1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">dy</span>, <span class="va">dx</span>, <span class="va">ect</span><span class="op">)</span></span>
+<span><span class="va">ecm1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/dynlm/man/dynlm.html">dynlm</a></span><span class="op">(</span><span class="va">dy</span> <span class="op">~</span> <span class="fu">L</span><span class="op">(</span><span class="va">ect</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fu">L</span><span class="op">(</span><span class="va">dy</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fu">L</span><span class="op">(</span><span class="va">dx</span>, <span class="fl">1</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">ecmdat1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">ecm1</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt; Time series regression with "ts" data:
 #&gt; Start = 3, End = 250
@@ -1061,14 +944,11 @@ Y_t = a + bX_t + u_t.
 #&gt; F-statistic: 29.3 on 3 and 244 DF,  p-value: 3.2e-16</code></pre>
 </div>
 </div>
-<p>Model using <code>lm()</code> and <code>dplyr::lag()</code>:</p>
+<p>Model using <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code> and <code>dplyr::lag()</code>:</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>ecm2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(dy <span class="sc">~</span> dplyr<span class="sc">::</span><span class="fu">lag</span>(ect, <span class="dv">1</span>) <span class="sc">+</span> dplyr<span class="sc">::</span><span class="fu">lag</span>(<span class="fu">as.vector</span>(dy), <span class="dv">1</span>) <span class="sc">+</span> dplyr<span class="sc">::</span><span class="fu">lag</span>(<span class="fu">as.vector</span>(dx), <span class="dv">1</span>))</span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ecm2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
+<details><summary>Code</summary><div class="sourceCode" id="cb49"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ecm2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">dy</span> <span class="op">~</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">lag</span><span class="op">(</span><span class="va">ect</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">lag</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="va">dy</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">lag</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="va">dx</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">ecm2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt; Call:
 #&gt; lm(formula = dy ~ dplyr::lag(ect, 1) + dplyr::lag(as.vector(dy), 
@@ -1093,17 +973,14 @@ Y_t = a + bX_t + u_t.
 #&gt; F-statistic: 29.3 on 3 and 244 DF,  p-value: 3.2e-16</code></pre>
 </div>
 </div>
-<p>There is also the R package <code>ecm</code>, but it uses a modified formulation of the model, see details for the function <code>ecm::ecm()</code>.</p>
+<p>There is also the R package <code>ecm</code>, but it uses a modified formulation of the model, see details for the function <code><a href="https://rdrr.io/pkg/ecm/man/ecm.html">ecm::ecm()</a></code>.</p>
 </div>
 </div>
 <p>In the example above, the time series were simulated as cointegrated. Below is an example of another I(1) process <span class="math inline">\(W_t\)</span> but with a stochastic trend different from that of <span class="math inline">\(X_t\)</span>. In this case, the linear combination of individually integrated <span class="math inline">\(W_t\)</span> and <span class="math inline">\(X_t\)</span> does not produce a stationary time series, thus, <span class="math inline">\(W_t\)</span> and <span class="math inline">\(X_t\)</span> are not cointegrated.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>U2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Wt <span class="sc">~</span> Xt)<span class="sc">$</span>residuals</span>
-<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>tseries<span class="sc">::</span><span class="fu">adf.test</span>(U2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
+<details><summary>Code</summary><div class="sourceCode" id="cb51"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">U2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Wt</span> <span class="op">~</span> <span class="va">Xt</span><span class="op">)</span><span class="op">$</span><span class="va">residuals</span></span>
+<span><span class="fu">tseries</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tseries/man/adf.test.html">adf.test</a></span><span class="op">(</span><span class="va">U2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Augmented Dickey-Fuller Test
 #&gt; 
@@ -1112,19 +989,15 @@ Y_t = a + bX_t + u_t.
 #&gt; alternative hypothesis: stationary</code></pre>
 </div>
 </div>
-</section>
-<section id="johansen-test" class="level3" data-number="8.3.2">
-<h3 data-number="8.3.2" class="anchored" data-anchor-id="johansen-test"><span class="header-section-number">8.3.2</span> Johansen test</h3>
+</section><section id="johansen-test" class="level3" data-number="8.3.2"><h3 data-number="8.3.2" class="anchored" data-anchor-id="johansen-test">
+<span class="header-section-number">8.3.2</span> Johansen test</h3>
 <p>The Johansen test allows for more than one cointegrating relationship. The null hypothesis for the trace test is that the number of cointegration vectors is <span class="math inline">\(r&lt;k\)</span>, vs.&nbsp;the alternative that <span class="math inline">\(r=k\)</span>. The testing proceeds sequentially for <span class="math inline">\(k=1,2,\dots\)</span>; and the first non-rejection of the null hypothesis is taken as an estimate of <span class="math inline">\(r\)</span>.</p>
 <p>Using the R package <code>urca</code>:</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(urca)</span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>vecm <span class="ot">&lt;-</span> <span class="fu">ca.jo</span>(<span class="fu">cbind</span>(Yt, Xt, Wt))</span>
-<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(vecm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
+<details><summary>Code</summary><div class="sourceCode" id="cb53"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">urca</span><span class="op">)</span></span>
+<span><span class="va">vecm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/urca/man/ca.jo.html">ca.jo</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">Yt</span>, <span class="va">Xt</span>, <span class="va">Wt</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/urca/man/summary-methods.html">summary</a></span><span class="op">(</span><span class="va">vecm</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt; ###################### 
 #&gt; # Johansen-Procedure # 
@@ -1160,10 +1033,8 @@ Y_t = a + bX_t + u_t.
 </div>
 </div>
 <p>If two time series are cointegrated, then the usual regression in <a href="#eq-longr">Equation&nbsp;<span>8.5</span></a> is the so-called long-run equilibrium relation or attractor, i.e., the relationship between <span class="math inline">\(X_t\)</span> and <span class="math inline">\(Y_t\)</span> can be explained by <a href="#eq-longr">Equation&nbsp;<span>8.5</span></a> in a long run. <a href="#eq-longr">Equation&nbsp;<span>8.5</span></a> is applied for estimation, not for testing <span class="citation" data-cites="Kirchgassner:Wolters:2007">(see Figure 6.1 in <a href="references.html#ref-Kirchgassner:Wolters:2007" role="doc-biblioref">Kirchgässner and Wolters 2007</a> on highly dispersed <span class="math inline">\(t\)</span>-statistic)</span>. The error correction model in <a href="#eq-ecm">Equation&nbsp;<span>8.4</span></a> should be estimated for testing <span class="citation" data-cites="Kirchgassner:Wolters:2007">(<span class="math inline">\(p\)</span>-values from the ECM can be used for testing, also see Chapter 6 in <a href="references.html#ref-Kirchgassner:Wolters:2007" role="doc-biblioref">Kirchgässner and Wolters 2007</a>)</span>.</p>
-</section>
-</section>
-<section id="conclusion" class="level2" data-number="8.4">
-<h2 data-number="8.4" class="anchored" data-anchor-id="conclusion"><span class="header-section-number">8.4</span> Conclusion</h2>
+</section></section><section id="conclusion" class="level2" data-number="8.4"><h2 data-number="8.4" class="anchored" data-anchor-id="conclusion">
+<span class="header-section-number">8.4</span> Conclusion</h2>
 <p>Now we can incorporate trend effects into our models, using the three considered approaches or by testing for cointegration and applying an error correction model. The next step would be to incorporate autocorrelation structure in the residuals (the simulated example considered here used independent normally distributed noise, so it was an artificial ideal case of no autocorrelation, whereas we usually encounter autocorrelations, e.g., see residual diagnostics in the examples in <a href="#sec-incorporateTime"><span>Section&nbsp;8.2.1</span></a>).</p>
 
 
@@ -1175,10 +1046,7 @@ Kirchgässner G, Wolters J (2007) <a href="https://doi.org/10.1007/978-3-540-732
 Wooldridge JM (2013) Introductory econometrics: A modern approach, 5th edn. Cengage Learning, Mason, OH, USA
 </div>
 </div>
-</section>
-
-</main> <!-- /main -->
-<script id="quarto-html-after-body" type="application/javascript">
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -1310,9 +1178,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
-</script>
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
       <a href="./l07_trendtest.html" class="pagination-link">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Trend Detection</span></span>
       </a>          

@@ -38,7 +38,8 @@ The R packages used in this book include (in alphabetic order):
 
 packages2cite <- sort(c(
     # 'car'
-    'dplyr'
+    'downlit'
+    ,'dplyr'
     ,'dynlm'
     ,'Ecdat'
     # ,'ecm'
@@ -70,7 +71,8 @@ packages2cite <- sort(c(
     ,'rmarkdown'
     ,'tseries'
     ,'TSstudio'
-    ,'urca'))
+    ,'urca'
+    ,'xml2'))
 
 # Install the packages, if missing
 new.packages <- packages2cite[!(packages2cite %in% installed.packages()[,"Package"])]

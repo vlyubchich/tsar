@@ -46,7 +46,7 @@ appendix-style: default
 format:
     html:
         code-fold: true
-        # code-link: true
+        code-link: true
         theme: cosmo
         fig-width: 8
         fig-height: 5

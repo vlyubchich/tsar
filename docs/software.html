@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.2.280">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-
-
 <title>Time Series Analysis - Software</title>
 <style>
 code{white-space: pre-wrap;}
@@ -104,7 +101,6 @@ div.csl-indent {
 }
 </style>
 
-
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
@@ -123,8 +119,7 @@ div.csl-indent {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
-<script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -143,28 +138,19 @@ div.csl-indent {
     "search-submit-button-title": "Submit"
   }
 }</script>
-
-
 </head>
-
 <body class="nav-sidebar floating">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-    <div class="container-fluid d-flex justify-content-between">
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
       <h1 class="quarto-secondary-nav-title">Software</h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
     </div>
-  </nav>
-</header>
-<!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Time Series Analysis</a> 
         <div class="sidebar-tools-main">
@@ -183,7 +169,7 @@ div.csl-indent {
       </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-        <li class="sidebar-item">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">Preface</a>
   </div>
@@ -255,8 +241,8 @@ div.csl-indent {
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./s1_wls.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Weighted least squares</span></a>
   </div>
@@ -267,19 +253,14 @@ div.csl-indent {
   </div>
 </li>
       </ul>
-  </li>
+</li>
     </ul>
-    </div>
-</nav>
-<!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+</div>
+</nav><!-- margin-sidebar --><div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <h1 class="title d-none d-lg-block">Software</h1>
 </div>
 
@@ -293,26 +274,20 @@ div.csl-indent {
   </div>
   
 
-</header>
-
-<p>Examples were calculated in R version 4.2.2 (2022-10-31 ucrt) with an effort to use the most recent versions of R packages.</p>
+</header><p>Examples were calculated in R version 4.2.2 (2022-10-31 ucrt) with an effort to use the most recent versions of R packages.</p>
 <p>The codes load silently only a few packages:</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details><summary>Code</summary><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>All other packages are named before the function as in <code>forecast::ggAcf()</code> (this code calls the function <code>ggAcf()</code> from the package <code>forecast</code>) or called immediately before the necessary function use:</p>
+<p>All other packages are named before the function as in <code><a href="https://pkg.robjhyndman.com/forecast/reference/autoplot.acf.html">forecast::ggAcf()</a></code> (this code calls the function <code>ggAcf()</code> from the package <code>forecast</code>) or called immediately before the necessary function use:</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fable)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">as_tsibble</span>(Y) <span class="sc">%&gt;%</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">model</span>(<span class="fu">ARIMA</span>(Y <span class="sc">~</span> <span class="dv">1</span>, <span class="at">ic =</span> <span class="st">"bic"</span>))</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">report</span>(m)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details><summary>Code</summary><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://fable.tidyverts.org">fable</a></span><span class="op">)</span></span>
+<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tsibble.tidyverts.org/reference/as-tsibble.html">as_tsibble</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://fabletools.tidyverts.org/reference/model.html">model</a></span><span class="op">(</span><span class="fu"><a href="https://fable.tidyverts.org/reference/ARIMA.html">ARIMA</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="fl">1</span>, ic <span class="op">=</span> <span class="st">"bic"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://fabletools.tidyverts.org/reference/report.html">report</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>The R packages used in this book include (in alphabetic order):</p>
@@ -320,36 +295,102 @@ div.csl-indent {
 
 </div>
 <ul>
-<li><code>dplyr</code> <span class="citation" data-cites="R-dplyr">(<a href="references.html#ref-R-dplyr" role="doc-biblioref">Wickham et al. 2022b</a>)</span></li>
-<li><code>dynlm</code> <span class="citation" data-cites="R-dynlm">(<a href="references.html#ref-R-dynlm" role="doc-biblioref">Zeileis 2019</a>)</span></li>
-<li><code>Ecdat</code> <span class="citation" data-cites="R-Ecdat">(<a href="references.html#ref-R-Ecdat" role="doc-biblioref">Croissant and Graves 2022</a>)</span></li>
-<li><code>fable</code> <span class="citation" data-cites="R-fable">(<a href="references.html#ref-R-fable" role="doc-biblioref">O’Hara-Wild et al. 2022a</a>)</span></li>
-<li><code>feasts</code> <span class="citation" data-cites="R-feasts">(<a href="references.html#ref-R-feasts" role="doc-biblioref">O’Hara-Wild et al. 2022b</a>)</span></li>
-<li><code>fGarch</code> <span class="citation" data-cites="R-fGarch">(<a href="references.html#ref-R-fGarch" role="doc-biblioref">Wuertz et al. 2022</a>)</span></li>
-<li><code>FinTS</code> <span class="citation" data-cites="R-FinTS">(<a href="references.html#ref-R-FinTS" role="doc-biblioref">Graves 2019</a>)</span></li>
-<li><code>fma</code> <span class="citation" data-cites="R-fma">(<a href="references.html#ref-R-fma" role="doc-biblioref">Hyndman 2020</a>)</span></li>
-<li><code>forecast</code> <span class="citation" data-cites="R-forecast">(<a href="references.html#ref-R-forecast" role="doc-biblioref">Hyndman et al. 2022</a>)</span></li>
-<li><code>funtimes</code> <span class="citation" data-cites="R-funtimes">(<a href="references.html#ref-R-funtimes" role="doc-biblioref">Lyubchich et al. 2022</a>)</span></li>
-<li><code>gamlss</code> <span class="citation" data-cites="R-gamlss">(<a href="references.html#ref-R-gamlss" role="doc-biblioref">Stasinopoulos and Rigby 2022</a>)</span></li>
-<li><code>gamlss.util</code> <span class="citation" data-cites="R-gamlss.util">(<a href="references.html#ref-R-gamlss.util" role="doc-biblioref">Stasinopoulos et al. 2016</a>)</span></li>
-<li><code>GGally</code> <span class="citation" data-cites="R-GGally">(<a href="references.html#ref-R-GGally" role="doc-biblioref">Schloerke et al. 2021</a>)</span></li>
-<li><code>ggplot2</code> <span class="citation" data-cites="R-ggplot2">(<a href="references.html#ref-R-ggplot2" role="doc-biblioref">Wickham et al. 2022a</a>)</span></li>
-<li><code>ggpubr</code> <span class="citation" data-cites="R-ggpubr">(<a href="references.html#ref-R-ggpubr" role="doc-biblioref">Kassambara 2022</a>)</span></li>
-<li><code>Kendall</code> <span class="citation" data-cites="R-Kendall">(<a href="references.html#ref-R-Kendall" role="doc-biblioref">McLeod 2022</a>)</span></li>
-<li><code>knitr</code> <span class="citation" data-cites="R-knitr">(<a href="references.html#ref-R-knitr" role="doc-biblioref">Xie 2022</a>)</span></li>
-<li><code>lawstat</code> <span class="citation" data-cites="R-lawstat">(<a href="references.html#ref-R-lawstat" role="doc-biblioref">Gastwirth et al. 2022</a>)</span></li>
-<li><code>lmtest</code> <span class="citation" data-cites="R-lmtest">(<a href="references.html#ref-R-lmtest" role="doc-biblioref">Hothorn et al. 2022</a>)</span></li>
-<li><code>lomb</code> <span class="citation" data-cites="R-lomb">(<a href="references.html#ref-R-lomb" role="doc-biblioref">Ruf et al. 2022</a>)</span></li>
-<li><code>nlme</code> <span class="citation" data-cites="R-nlme">(<a href="references.html#ref-R-nlme" role="doc-biblioref">Pinheiro et al. 2022</a>)</span></li>
-<li><code>patchwork</code> <span class="citation" data-cites="R-patchwork">(<a href="references.html#ref-R-patchwork" role="doc-biblioref">Pedersen 2022</a>)</span></li>
-<li><code>plotly</code> <span class="citation" data-cites="R-plotly">(<a href="references.html#ref-R-plotly" role="doc-biblioref">Sievert et al. 2022</a>)</span></li>
-<li><code>pracma</code> <span class="citation" data-cites="R-pracma">(<a href="references.html#ref-R-pracma" role="doc-biblioref">Borchers 2022</a>)</span></li>
-<li><code>randtests</code> <span class="citation" data-cites="R-randtests">(<a href="references.html#ref-R-randtests" role="doc-biblioref">Caeiro and Mateus 2022</a>)</span></li>
-<li><code>readr</code> <span class="citation" data-cites="R-readr">(<a href="references.html#ref-R-readr" role="doc-biblioref">Wickham et al. 2022c</a>)</span></li>
-<li><code>rmarkdown</code> <span class="citation" data-cites="R-rmarkdown">(<a href="references.html#ref-R-rmarkdown" role="doc-biblioref">Allaire et al. 2022</a>)</span></li>
-<li><code>tseries</code> <span class="citation" data-cites="R-tseries">(<a href="references.html#ref-R-tseries" role="doc-biblioref">Trapletti and Hornik 2022</a>)</span></li>
-<li><code>TSstudio</code> <span class="citation" data-cites="R-TSstudio">(<a href="references.html#ref-R-TSstudio" role="doc-biblioref">Krispin 2020</a>)</span></li>
-<li><code>urca</code> <span class="citation" data-cites="R-urca">(<a href="references.html#ref-R-urca" role="doc-biblioref">Pfaff 2022</a>)</span></li>
+<li>
+<code>downlit</code> <span class="citation" data-cites="R-downlit">(<a href="references.html#ref-R-downlit" role="doc-biblioref">Wickham 2022</a>)</span>
+</li>
+<li>
+<code>dplyr</code> <span class="citation" data-cites="R-dplyr">(<a href="references.html#ref-R-dplyr" role="doc-biblioref">Wickham et al. 2022b</a>)</span>
+</li>
+<li>
+<code>dynlm</code> <span class="citation" data-cites="R-dynlm">(<a href="references.html#ref-R-dynlm" role="doc-biblioref">Zeileis 2019</a>)</span>
+</li>
+<li>
+<code>Ecdat</code> <span class="citation" data-cites="R-Ecdat">(<a href="references.html#ref-R-Ecdat" role="doc-biblioref">Croissant and Graves 2022</a>)</span>
+</li>
+<li>
+<code>fable</code> <span class="citation" data-cites="R-fable">(<a href="references.html#ref-R-fable" role="doc-biblioref">O’Hara-Wild et al. 2022a</a>)</span>
+</li>
+<li>
+<code>feasts</code> <span class="citation" data-cites="R-feasts">(<a href="references.html#ref-R-feasts" role="doc-biblioref">O’Hara-Wild et al. 2022b</a>)</span>
+</li>
+<li>
+<code>fGarch</code> <span class="citation" data-cites="R-fGarch">(<a href="references.html#ref-R-fGarch" role="doc-biblioref">Wuertz et al. 2022</a>)</span>
+</li>
+<li>
+<code>FinTS</code> <span class="citation" data-cites="R-FinTS">(<a href="references.html#ref-R-FinTS" role="doc-biblioref">Graves 2019</a>)</span>
+</li>
+<li>
+<code>fma</code> <span class="citation" data-cites="R-fma">(<a href="references.html#ref-R-fma" role="doc-biblioref">Hyndman 2020</a>)</span>
+</li>
+<li>
+<code>forecast</code> <span class="citation" data-cites="R-forecast">(<a href="references.html#ref-R-forecast" role="doc-biblioref">Hyndman et al. 2022</a>)</span>
+</li>
+<li>
+<code>funtimes</code> <span class="citation" data-cites="R-funtimes">(<a href="references.html#ref-R-funtimes" role="doc-biblioref">Lyubchich et al. 2022</a>)</span>
+</li>
+<li>
+<code>gamlss</code> <span class="citation" data-cites="R-gamlss">(<a href="references.html#ref-R-gamlss" role="doc-biblioref">Stasinopoulos and Rigby 2022</a>)</span>
+</li>
+<li>
+<code>gamlss.util</code> <span class="citation" data-cites="R-gamlss.util">(<a href="references.html#ref-R-gamlss.util" role="doc-biblioref">Stasinopoulos et al. 2016</a>)</span>
+</li>
+<li>
+<code>GGally</code> <span class="citation" data-cites="R-GGally">(<a href="references.html#ref-R-GGally" role="doc-biblioref">Schloerke et al. 2021</a>)</span>
+</li>
+<li>
+<code>ggplot2</code> <span class="citation" data-cites="R-ggplot2">(<a href="references.html#ref-R-ggplot2" role="doc-biblioref">Wickham et al. 2022a</a>)</span>
+</li>
+<li>
+<code>ggpubr</code> <span class="citation" data-cites="R-ggpubr">(<a href="references.html#ref-R-ggpubr" role="doc-biblioref">Kassambara 2022</a>)</span>
+</li>
+<li>
+<code>Kendall</code> <span class="citation" data-cites="R-Kendall">(<a href="references.html#ref-R-Kendall" role="doc-biblioref">McLeod 2022</a>)</span>
+</li>
+<li>
+<code>knitr</code> <span class="citation" data-cites="R-knitr">(<a href="references.html#ref-R-knitr" role="doc-biblioref">Xie 2022</a>)</span>
+</li>
+<li>
+<code>lawstat</code> <span class="citation" data-cites="R-lawstat">(<a href="references.html#ref-R-lawstat" role="doc-biblioref">Gastwirth et al. 2022</a>)</span>
+</li>
+<li>
+<code>lmtest</code> <span class="citation" data-cites="R-lmtest">(<a href="references.html#ref-R-lmtest" role="doc-biblioref">Hothorn et al. 2022</a>)</span>
+</li>
+<li>
+<code>lomb</code> <span class="citation" data-cites="R-lomb">(<a href="references.html#ref-R-lomb" role="doc-biblioref">Ruf et al. 2022</a>)</span>
+</li>
+<li>
+<code>nlme</code> <span class="citation" data-cites="R-nlme">(<a href="references.html#ref-R-nlme" role="doc-biblioref">Pinheiro et al. 2022</a>)</span>
+</li>
+<li>
+<code>patchwork</code> <span class="citation" data-cites="R-patchwork">(<a href="references.html#ref-R-patchwork" role="doc-biblioref">Pedersen 2022</a>)</span>
+</li>
+<li>
+<code>plotly</code> <span class="citation" data-cites="R-plotly">(<a href="references.html#ref-R-plotly" role="doc-biblioref">Sievert et al. 2022</a>)</span>
+</li>
+<li>
+<code>pracma</code> <span class="citation" data-cites="R-pracma">(<a href="references.html#ref-R-pracma" role="doc-biblioref">Borchers 2022</a>)</span>
+</li>
+<li>
+<code>randtests</code> <span class="citation" data-cites="R-randtests">(<a href="references.html#ref-R-randtests" role="doc-biblioref">Caeiro and Mateus 2022</a>)</span>
+</li>
+<li>
+<code>readr</code> <span class="citation" data-cites="R-readr">(<a href="references.html#ref-R-readr" role="doc-biblioref">Wickham et al. 2022c</a>)</span>
+</li>
+<li>
+<code>rmarkdown</code> <span class="citation" data-cites="R-rmarkdown">(<a href="references.html#ref-R-rmarkdown" role="doc-biblioref">Allaire et al. 2022</a>)</span>
+</li>
+<li>
+<code>tseries</code> <span class="citation" data-cites="R-tseries">(<a href="references.html#ref-R-tseries" role="doc-biblioref">Trapletti and Hornik 2022</a>)</span>
+</li>
+<li>
+<code>TSstudio</code> <span class="citation" data-cites="R-TSstudio">(<a href="references.html#ref-R-TSstudio" role="doc-biblioref">Krispin 2020</a>)</span>
+</li>
+<li>
+<code>urca</code> <span class="citation" data-cites="R-urca">(<a href="references.html#ref-R-urca" role="doc-biblioref">Pfaff 2022</a>)</span>
+</li>
+<li>
+<code>xml2</code> <span class="citation" data-cites="R-xml2">(<a href="references.html#ref-R-xml2" role="doc-biblioref">Wickham et al. 2021</a>)</span>
+</li>
 </ul>
 
 
@@ -426,6 +467,9 @@ Stasinopoulos M, Rigby B, Eilers P (2016) Gamlss.util: GAMLSS utilities. R packa
 <div id="ref-R-tseries" class="csl-entry" role="doc-biblioentry">
 Trapletti A, Hornik K (2022) Tseries: Time series analysis and computational finance. R package version 0.10-52, <a href="https://CRAN.R-project.org/package=tseries">https://CRAN.R-project.org/package=tseries</a>
 </div>
+<div id="ref-R-downlit" class="csl-entry" role="doc-biblioentry">
+Wickham H (2022) Downlit: Syntax highlighting and automatic linking. R package version 0.4.2, <a href="https://CRAN.R-project.org/package=downlit">https://CRAN.R-project.org/package=downlit</a>
+</div>
 <div id="ref-R-ggplot2" class="csl-entry" role="doc-biblioentry">
 Wickham H, Chang W, Henry L, et al (2022a) ggplot2: Create elegant data visualisations using the grammar of graphics. R package version 3.4.0, <a href="https://CRAN.R-project.org/package=ggplot2">https://CRAN.R-project.org/package=ggplot2</a>
 </div>
@@ -434,6 +478,9 @@ Wickham H, François R, Henry L, Müller K (2022b) Dplyr: A grammar of data mani
 </div>
 <div id="ref-R-readr" class="csl-entry" role="doc-biblioentry">
 Wickham H, Hester J, Bryan J (2022c) Readr: Read rectangular text data. R package version 2.1.3, <a href="https://CRAN.R-project.org/package=readr">https://CRAN.R-project.org/package=readr</a>
+</div>
+<div id="ref-R-xml2" class="csl-entry" role="doc-biblioentry">
+Wickham H, Hester J, Ooms J (2021) xml2: Parse XML. R package version 1.3.3, <a href="https://CRAN.R-project.org/package=xml2">https://CRAN.R-project.org/package=xml2</a>
 </div>
 <div id="ref-R-fGarch" class="csl-entry" role="doc-biblioentry">
 Wuertz D, Chalabi Y, Setz T, Maechler M (2022) fGarch: Rmetrics - autoregressive conditional heteroskedastic modelling. R package version 4022.89, <a href="https://www.rmetrics.org">https://www.rmetrics.org</a>
@@ -446,8 +493,7 @@ Zeileis A (2019) Dynlm: Dynamic linear regression. R package version 0.3-6, <a h
 </div>
 </div>
 
-</main> <!-- /main -->
-<script id="quarto-html-after-body" type="application/javascript">
+</main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -579,9 +625,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
-</script>
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
       <a href="./l10_spectral.html" class="pagination-link">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Spectral Analysis</span></span>
       </a>          
