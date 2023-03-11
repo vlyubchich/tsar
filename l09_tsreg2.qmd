@@ -251,7 +251,7 @@ Implement a model
 $$
 \sqrt{Landings_t} = \beta_0 + \beta_{1} AMO_{t-7} + \epsilon_{t},
 $$
-where $\epsilon_{t} \sim$ ARMA($p,q$), and the orders $p$ and $q$ are selected automatically based on Akaike information criterion
+where $\epsilon_{t} \sim$ ARMA($p,q$), and the orders $p$ and $q$ are selected automatically based on Akaike information criterion.
 
 ```{r}
 library(fable)
@@ -403,6 +403,8 @@ Insurance %>%
 Fit a GARMA model relating the weekly number of insurance claims to the total precipitation during that and previous weeks.
 
 ```{r}
+#| code-fold: false
+
 # The model function doesn't accept NAs, so remove them
 Insurance_noNA <- na.omit(Insurance)
 
@@ -435,23 +437,25 @@ Refit the GARMA model specifying these orders.
 Then verify that the temporal dependence in residuals was removed (@fig-m03zipACF), and assess other assumptions (@fig-m03zip), including homogeneity and normality of the quantile residuals.
 
 ```{r}
+#| code-fold: false
+
 set.seed(12345)
-m03zip <- garmaFit(Claims ~ Precipitation + Week + Precipitation_lag1
+m30zip <- garmaFit(Claims ~ Precipitation + Week + Precipitation_lag1
                 ,order = c(3, 0)
                 ,family = ZIP
                 ,data = Insurance_noNA)
-summary(m03zip)
+summary(m30zip)
 ```
 
 ```{r}
 #| label: fig-m03zipACF
 #| fig-cap: "ACF and PACF plots of the GARMA(0,3) model residuals based on ZIP distribution."
 
-p1 <- forecast::ggAcf(m03zip$residuals) +
+p1 <- forecast::ggAcf(m30zip$residuals) +
     ggtitle("") +
     xlab("Lag (weeks)") +
     theme_light()
-p2 <- forecast::ggAcf(m03zip$residuals, type = "partial") +
+p2 <- forecast::ggAcf(m30zip$residuals, type = "partial") +
     ggtitle("") +
     xlab("Lag (weeks)") +
     theme_light()
@@ -465,7 +469,7 @@ p1 + p2 +
 #| fig-cap: "Default diagnostics of the GARMA(0,3) model residuals based on ZIP distribution."
 #| fig-height: 7
 
-plot(m03zip)
+plot(m30zip)
 ```
 
 See @Dunn:Smyth:1996 for the details on randomized quantile residuals. 
@@ -476,6 +480,8 @@ Here we try one other distribution appropriate for modeling overdispersed count 
 See the model summary below and the verification of residuals in @fig-m03nbiACF and @fig-m03nbi.
 
 ```{r}
+#| code-fold: false
+
 set.seed(12345)
 m03nbi <- garmaFit(Claims ~ Precipitation + Week + Precipitation_lag1
                 ,order = c(0, 3)
@@ -571,6 +577,8 @@ A quick test has been performed to check that the time series are stationary and
 We can use the series in @eq-GrangerModel.
 
 ```{r}
+#| code-fold: false
+
 lmtest::grangertest(Claims_ln ~ Precipitation 
                     ,order = 1
                     ,data = Insurance_noNA)
@@ -580,6 +588,8 @@ The low $p$-value shows that precipitation is a Granger cause of the number of h
 Now test the reverse relationship.
 
 ```{r}
+#| code-fold: false
+
 lmtest::grangertest(Precipitation ~ Claims_ln  
                     ,order = 1
                     ,data = Insurance_noNA)
@@ -592,6 +602,8 @@ The function `lmtest::grangertest()` does not allow us to set `order = 0` (to te
 First, to show that 'manual' results match the `lmtest::grangertest()` output, repeat the test above using two nested models with lag 1.
 
 ```{r}
+#| code-fold: false
+
 M1 <- lm(Claims_ln ~ dplyr::lag(Claims_ln, 1) + dplyr::lag(Precipitation, 1)
          ,data = Insurance_noNA)
 M2 <- lm(Claims_ln ~ dplyr::lag(Claims_ln, 1)
@@ -601,11 +613,13 @@ anova(M1, M2)
 
 The results match.
 
-Second, test instantaneous Granger causality in the same manner.
+Second, test the instantaneous Granger causality in the same manner.
 
 ```{r}
-M3 <- lm(Claims_ln ~ dplyr::lag(Claims_ln, 1) + dplyr::lag(Precipitation, 1) + Precipitation
-         ,data = Insurance_noNA)
+#| code-fold: false
+
+M3 <- lm(Claims_ln ~ dplyr::lag(Claims_ln, 1) + dplyr::lag(Precipitation, 1) + 
+             Precipitation, data = Insurance_noNA)
 M4 <- lm(Claims_ln ~ dplyr::lag(Claims_ln, 1) + dplyr::lag(Precipitation, 1)
          ,data = Insurance_noNA)
 anova(M3, M4)

@@ -45,6 +45,8 @@ y <- 3 - 2 * x + rnorm(n, 0, k*x^2)
 The coefficients estimated using ordinary least squares (OLS):
 
 ```{r}
+#| code-fold: false
+
 fit_ols <- lm(y ~ x)
 summary(fit_ols)
 ```
@@ -74,6 +76,8 @@ p1 + p2 +
 To stabilize the variance 'manually,' transform the variables according to @eq-mod1W and refit the model:
 
 ```{r}
+#| code-fold: false
+
 Y.t <- y/x
 X.t <- 1/x
 fit_wls <- lm(Y.t ~ X.t)
@@ -122,6 +126,8 @@ To apply @eq-wls in R, specify the argument `weights`, and remember to take an i
 Note that the coefficients are now labeled as expected.
 
 ```{r}
+#| code-fold: false
+
 fit_wls2 <- lm(y ~ x, weights = 1/x^2)
 summary(fit_wls2)
 ```
@@ -136,6 +142,8 @@ We skip those cases for now and revisit our data example from @sec-regression.
 First, use OLS to estimate the simple linear regression exploring dishwasher shipments (DISH) and private residential investments (RES) for several years.
 
 ```{r}
+#| code-fold: false
+
 D <- read.delim("./data/dish.txt") %>% 
     rename(Year = YEAR)
 modDish_ols <- lm(DISH ~ RES, data = D)
@@ -158,6 +166,8 @@ ggplot(D, aes(x = RES, y = rstandard(modDish_ols))) +
 Apply the WLS:
 
 ```{r}
+#| code-fold: false
+
 modDish_wls <- lm(DISH ~ RES, data = D, weights = RES^2)
 ```
 
@@ -187,9 +197,11 @@ p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```
 
-However, autocorrelation is still present, which violates another assumption of the OLS and WLS methods:
+However, the residuals are still autocorrelated, which violates another assumption of the OLS and WLS methods:
 
 ```{r}
+#| code-fold: false
+
 lawstat::runs.test(rstandard(modDish_wls))
 ```
 :::

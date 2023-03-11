@@ -13,7 +13,7 @@ options(digits = 3)
 
 # Generalized least squares {#sec-gls}
 
-We are coming back to time series data (ordered by $t$), thus, @eq-mod1 will be written with time indices $t$ as
+Here we use time series data (ordered by $t$), thus, @eq-mod1 will be written with the time indices $t$ as
 $$
 y_t=\beta_0+\beta_1x_t+\varepsilon_t,
 $${#eq-mod1t}
@@ -100,6 +100,8 @@ p1 + p2 +
 Based on the runs test, there is not enough evidence of autocorrelation in the new residuals:
 
 ```{r}
+#| code-fold: false
+
 lawstat::runs.test(rstandard(modDish_ar1))
 ```
 :::
@@ -115,6 +117,8 @@ In the WLS approach, all the off-diagonal entries of $\boldsymbol{\Sigma}$ are 0
 We can use the function `nlme::gls()` and specify the `correlation` structure to avoid iterating the steps from the previous example manually:
 
 ```{r}
+#| code-fold: false
+
 modDish_ar1_v2 <- nlme::gls(DISH ~ RES
                             ,correlation = nlme::corAR1(form = ~Year)
                             ,data = D)

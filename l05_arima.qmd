@@ -198,6 +198,8 @@ where $Y_t$ represents the ice breakup dates in the year $t$, $\theta_1$ is the 
 We can now estimate the model, for example, using `stats::arima()`.
 
 ```{r}
+#| code-fold: false
+
 mod_baikal <- stats::arima(iceoff, order = c(0, 1, 1))
 mod_baikal
 ```
@@ -205,6 +207,8 @@ mod_baikal
 We can also check the orders selected automatically: 
 
 ```{r}
+#| code-fold: false
+
 forecast::auto.arima(iceoff)
 ```
 
@@ -356,6 +360,8 @@ Overall, our analysis suggested that SARIMA(1,1,1)(1,1,0) or SARIMA(1,1,1)(0,1,1
 For example, estimate SARIMA(1,1,1)(0,1,1):
 
 ```{r}
+#| code-fold: false
+
 mod_air <- stats::arima(Yt, order = c(1, 1, 1),
                         seasonal = list(order = c(0, 1, 1),
                                         period = 12))
@@ -402,6 +408,8 @@ where $X_t = \lg(AirPassengers)$ and $Z_t\sim \mathrm{WN}(0,\sigma^2)$.
 Below are results based on the automatic selection of the orders:
 
 ```{r}
+#| code-fold: false
+
 forecast::auto.arima(Yt)
 ```
 

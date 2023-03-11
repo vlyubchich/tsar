@@ -59,6 +59,8 @@ In finite samples, we may observe that a point estimate of the correlation coeff
 See the results (confidence interval and $p$-value) from the correlation $t$-test below:
 
 ```{r}
+#| code-fold: false
+
 cor.test(Xt, Yt)
 ```
 
@@ -90,6 +92,8 @@ p1 + p2 +
 After adding trends to each of the time series, the correlation of $X_t$ and $Y_t$ is strong and statistically significant, but this is not necessarily because these series are so strongly related to each other. 
 
 ```{r}
+#| code-fold: false
+
 cor.test(Xt, Yt)
 ```
 
@@ -130,6 +134,8 @@ Based on the time series plots (@fig-TSwithTrends), a linear time trend would fi
 Alternatively, e.g., if we observed parabolic structure, we could include $t+t^2$ or another form of trend.
 
 ```{r}
+#| code-fold: false
+
 t <- c(1:T)
 mod_time <- lm(Yt ~ Xt + t)
 summary(mod_time)
@@ -161,6 +167,8 @@ where $e_{(Y)t}$ and $e_{(X)t}$ are the trend residuals for the series $Y_t$ and
 After the trend coefficients $a_0$, $a_1$, $b_0$, and $b_1$ are estimated,
 
 ```{r}
+#| code-fold: false
+
 MY <- lm(Yt ~ t)
 MX <- lm(Xt ~ t)
 ```
@@ -196,6 +204,8 @@ $$
 $$
 
 ```{r}
+#| code-fold: false
+
 mod_devTrend <- lm(MY$residuals ~ MX$residuals)
 summary(mod_devTrend)
 ```
@@ -218,7 +228,10 @@ Here, however, we will use the rule of thumb: for time trends looking linear (ou
 After differencing, the series should look stationary.
 
 The first-order differences for our series (@fig-TSdiffed) can be calculated as follows:
+
 ```{r}
+#| code-fold: false
+
 D1X <- diff(Xt)
 D1Y <- diff(Yt)
 ```
@@ -244,6 +257,8 @@ $$
 $$
 
 ```{r}
+#| code-fold: false
+
 mod_diff <- lm(D1Y ~ D1X)
 summary(mod_diff)
 ```
@@ -260,6 +275,8 @@ Y_t = \beta_0 + \beta_1X_t + \epsilon_t.
 $$
 
 ```{r}
+#| code-fold: false
+
 badModel <- lm(Yt ~ Xt)
 summary(badModel)
 ```
@@ -302,11 +319,15 @@ $${#eq-dishtimetrend}
 see the residual diagnostics below and in @fig-dishtimetrend. 
 
 ```{r}
+#| code-fold: false
+
 M_time <- lm(DISH ~ RES + Year, data = D)
 summary(M_time)
 ```
 
 ```{r}
+#| code-fold: false
+
 shapiro.test(M_time$residuals)
 lawstat::runs.test(M_time$residuals, plot.it = FALSE)
 ```
@@ -341,6 +362,8 @@ $${#eq-dishdiff}
 see the residual diagnostics below and in @fig-dishdiff. 
 
 ```{r}
+#| code-fold: false
+
 D_DISH <- diff(D$DISH)
 D_RES <- diff(D$RES)
 M_diff <- lm(D_DISH ~ D_RES)
@@ -368,6 +391,8 @@ p1 + p2 + p3 +
 ```
 
 ```{r}
+#| code-fold: false
+
 shapiro.test(M_diff$residuals)
 lawstat::runs.test(M_diff$residuals, plot.it = FALSE)
 ```
@@ -461,6 +486,8 @@ p1 + p2 +
 Apply unit-root test to check the integration order of each series, using the R package `tseries`:
 
 ```{r}
+#| code-fold: false
+
 tseries::adf.test(Xt)
 tseries::adf.test(diff(Xt))
 tseries::adf.test(Yt)
@@ -477,6 +504,8 @@ $${#eq-longr}
 The vector $[1, -b]$ is the cointegration vector.
 
 ```{r}
+#| code-fold: false
+
 Ut <- lm(Yt ~ Xt)$residuals
 tseries::adf.test(Ut)
 ```
@@ -486,6 +515,8 @@ While each of the time series $X_t$ and $Y_t$ is I(1), the resulting residual se
 Apply a simple error correction model (with $n_X = n_Y = 1$), using the R package `dynlm` or just specify lags using the package `dplyr`:
 
 ```{r}
+#| code-fold: false
+
 # Error correction term
 ect <- Ut[-length(Ut)]
 
@@ -497,6 +528,8 @@ dx <- diff(Xt)
 Model using `dynlm::dynlm()`:
  
 ```{r}
+#| code-fold: false
+
 library(dynlm)
 ecmdat1 <- cbind(dy, dx, ect)
 ecm1 <- dynlm(dy ~ L(ect, 1) + L(dy, 1) + L(dx, 1), data = ecmdat1)
@@ -506,7 +539,11 @@ summary(ecm1)
 Model using `lm()` and `dplyr::lag()`:
 
 ```{r}
-ecm2 <- lm(dy ~ dplyr::lag(ect, 1) + dplyr::lag(as.vector(dy), 1) + dplyr::lag(as.vector(dx), 1))
+#| code-fold: false
+
+ecm2 <- lm(dy ~ dplyr::lag(ect, 1) + 
+               dplyr::lag(as.vector(dy), 1) + 
+               dplyr::lag(as.vector(dx), 1))
 summary(ecm2)
 ```
 
@@ -518,6 +555,8 @@ Below is an example of another I(1) process $W_t$ but with a stochastic trend di
 In this case, the linear combination of individually integrated $W_t$ and $X_t$ does not produce a stationary time series, thus, $W_t$ and $X_t$ are not cointegrated.
 
 ```{r}
+#| code-fold: false
+
 U2 <- lm(Wt ~ Xt)$residuals
 tseries::adf.test(U2)
 ```
@@ -531,6 +570,8 @@ The testing proceeds sequentially for $k=1,2,\dots$; and the first non-rejection
 
 Using the R package `urca`:
 ```{r}
+#| code-fold: false
+
 library(urca)
 vecm <- ca.jo(cbind(Yt, Xt, Wt))
 summary(vecm)

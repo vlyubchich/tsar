@@ -171,6 +171,8 @@ The weighting coefficients for a Daniell kernel with $m = 2$ can be checked usin
 In the output, the indices in `coef[ ]` refer to the time difference from the center of the average at the time $t$.
 
 ```{r}
+#| code-fold: false
+
 kernel("daniell", m = 2)
 ```
 
@@ -186,6 +188,8 @@ $$
 List the weighting coefficients:
 
 ```{r}
+#| code-fold: false
+
 kernel("modified.daniell", m = 2)
 ```
 
@@ -199,6 +203,8 @@ $$
 The weights for averaging the original data for convoluted Daniell kernels with $m = 2$ in both smooths will be
 
 ```{r}
+#| code-fold: false
+
 kernel("daniell", m = c(2, 2))
 kernel("modified.daniell", m = c(2, 2))
 ```
@@ -217,6 +223,8 @@ The series should be detrended before a spectral analysis.
 For demonstration purposes, compute periodogram for the raw data and log-transformed and detrended.
 
 ```{r}
+#| code-fold: false
+
 # Fit a quadratic trend to log-transformed data
 t <- as.vector(time(AirPassengers))
 mod <- lm(log10(AirPassengers) ~ poly(t, degree = 2))
@@ -308,7 +316,7 @@ This method was originally developed for the analysis of unevenly-spaced astrono
 ## Example: NH4 concentration in wastewater system
 
 For example, consider a time series `imputeTS::tsNH4` of NH4 concentration in a wastewater system (@fig-NH4). 
-This time series is regularly spaced (every 10 minutes) but some of the observations are missing. 
+This time series contains observations from regular 10-minute intervals, but some of the observations are missing. 
 
 ```{r}
 #| label: fig-NH4
@@ -323,6 +331,8 @@ forecast::autoplot(imputeTS::tsNH4) +
 Save the data in a format acceptable by the Lomb--Scargle function. 
 
 ```{r}
+#| code-fold: false
+
 D <- data.frame(NH4 = as.vector(imputeTS::tsNH4),
                 Time = as.vector(time(imputeTS::tsNH4)))
 ```

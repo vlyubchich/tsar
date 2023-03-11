@@ -457,6 +457,8 @@ In base-R plots, the lags in ACF plots are measured in the number of periods.
 The period information (or frequency, i.e., the number of observations per period) is saved in the format `ts` in R:
 
 ```{r}
+#| code-fold: false
+
 is.ts(births)
 frequency(births)
 ```
@@ -471,7 +473,6 @@ Hence, here the ACF at lag 0.5 (@fig-ACFs A) means autocorrelation with the lag 
 #| fig-cap: "In base-R graphics, the x-axis labels in ACF plots differ depending on the input format."
 
 par(mar = c(4, 4, 3, 1) + 0.1, mfrow = c(1, 2))
-par(pty = "m")
 
 acf(births, lag.max = 37, las = 1, main = "A) Input is a ts object")
 acf(as.numeric(births), lag.max = 37, las = 1, main = "B) Input is a numeric vector")
@@ -485,7 +486,7 @@ Setting `frequency = 365.25` for daily data could be an option (although not ver
 Converting to the `ts` format usually is not required for analysis. 
 Most of the time we use plain numeric vectors and data frames in R.
 
-Contributed R packages offer additional formats for time series, e.g., see packages `xts` and `zoo`.
+Contributed R packages offer additional formats for time series, e.g., see the packages `xts` and `zoo`.
 :::
 
 ACF measures the correlation between $X_t$ and $X_{t+h}$.
@@ -558,22 +559,6 @@ p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```
 :::
-
-A deterministic linear trend can be also eliminated by differencing. 
-For example, consider a time series $X-t$ with a deterministic linear trend:
-$$
-X_t = a + b t + Z_t,
-$$
-where $Z_t \sim \mathrm{WN}(0,\sigma^2)$.
-The first-order differences of $X_t$ remove the linear trend:
-$$
-\begin{align}
-(1 - B)X_t &= X_t - X_{t-1} \\
-&= a + b t + Z_t - (a + b (t - 1) + Z_{t-1}) \\
-&= a + b t + Z_t - a - b t + b - Z_{t-1} \\
-&= b + Z_t + Z_{t-1}.
-\end{align}
-$$
 
 
 ## Conclusion

@@ -225,6 +225,8 @@ We have seen in @fig-CADACF the autocorrelation of squared log returns.
 Now apply the formal LM test.
 
 ```{r}
+#| code-fold: false
+
 m <- 12
 FinTS::ArchTest(CAD$lnR, lags = m)
 ```
@@ -233,6 +235,8 @@ The LM test implemented in the function `FinTS::ArchTest()` detects the presence
 In base R, the same results can be obtained by running the $F$ test as follows:
 
 ```{r}
+#| code-fold: false
+
 mat <- embed(CAD$lnR^2, m + 1)
 mod <- lm(mat[,1] ~ mat[,-1])
 anova(mod)
@@ -247,6 +251,8 @@ Let's estimate a GARCH(1,1) model for these data, using the conditional ML metho
 Note that `omega` in the results below is denoted $a_0$ in our equations (the intercept in the variance model):
 
 ```{r}
+#| code-fold: false
+
 library(fGarch)
 garch11 <- fGarch::garchFit(lnR ~ garch(1, 1), 
                             data = CAD, trace = FALSE)
@@ -287,6 +293,8 @@ Based on the plots, autocorrelations were effectively removed, but the assumptio
 To account for the heavy tails, we change the conditional distribution from normal to the standardized Student $t$-distribution (see `?fGarch::std`).
 
 ```{r}
+#| code-fold: false
+
 garch11t <- fGarch::garchFit(lnR ~ garch(1, 1),
                              data = CAD, trace = FALSE, 
                              cond.dist = "std")

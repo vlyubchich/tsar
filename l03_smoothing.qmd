@@ -97,6 +97,8 @@ While the data are monthly, the seasonal component is not visible:
 Therefore, we apply @eq-movav treating the shampoo time series as non-seasonal data.
 
 ```{r}
+#| code-fold: false
+
 # Get the data from the package fma
 shampoo <- fma::shampoo
 shampoo
@@ -131,12 +133,16 @@ For example, `forecast::ma()` has the default option `centre = TRUE`, and the `o
 Odd `order` and `centre = TRUE` correspond exactly to our definitions in @eq-movav:
 
 ```{r}
+#| code-fold: false
+
 forecast::ma(shampoo, order = 5)
 ```
 
 For example, `pracma::movavg()` averages the last `n` data points:
 
 ```{r}
+#| code-fold: false
+
 pracma::movavg(shampoo, n = 5)
 ```
 
@@ -144,6 +150,8 @@ The base-R function `stats::filter()` can also be used.
 Its odd window size and `sides = 2` correspond to our definitions in @eq-movav:
 
 ```{r}
+#| code-fold: false
+
 window_size <- 5
 stats::filter(shampoo, filter = 1/rep(window_size, window_size), sides = 2)
 ```
@@ -151,6 +159,8 @@ stats::filter(shampoo, filter = 1/rep(window_size, window_size), sides = 2)
 The `sides = 1` in `stats::filter()` corresponds to the `pracma::movavg()` results above:
 
 ```{r}
+#| code-fold: false
+
 stats::filter(shampoo, filter = 1/rep(window_size, window_size), sides = 1)
 ```
 
@@ -266,6 +276,8 @@ To replicate the behavior of the function `stats::decompose()` or tune the outpu
 For example, @fig-SecchiDecompose shows a wiggly trend that we might want to smooth more, using a bigger window, such as 24 months instead of 12 months.
 
 ```{r}
+#| code-fold: false
+
 Yt <- Secchi
 t <- as.vector(time(Yt))
 month <- as.factor(cycle(Yt))
@@ -277,14 +289,14 @@ Mt <- stats::filter(Yt,
                                  2*window_size), 
                     sides = 2)
 
-# 2. Estimate of a cycle, corrected to sum up to 0
+# 2. Estimate of the seasonality, corrected to sum up to 0
 St <- tapply(Yt - Mt, month, mean, na.rm = TRUE)
 St
 sum(St)
 St_star <- St - sum(St)/12
 sum(St_star)
 
-# 3. Refine trend estimate
+# 3. Refined trend estimate
 Mt_star <- stats::filter(Yt - St_star[month], 
                     filter = 1/c(2*window_size, rep(window_size, window_size - 1), 
                                  2*window_size), 
@@ -377,6 +389,8 @@ Now use the Secchi time series (@fig-Secchi) and implement the procedure of detr
 ## Example: Secchi depth lowess-based decomposition
 
 ```{r}
+#| code-fold: false
+
 Yt <- Secchi
 t <- as.vector(time(Yt))
 month <- as.factor(cycle(Yt))
@@ -384,14 +398,14 @@ month <- as.factor(cycle(Yt))
 # 1. Initial trend estimate
 Mt <- loess(Yt ~ t, span = 0.25)$fitted
 
-# 2. Estimate of a cycle, corrected to sum up to 0
+# 2. Estimate of the seasonality, corrected to sum up to 0
 St <- tapply(Yt - Mt, month, mean)
 St
 sum(St)
 St_star <- St - sum(St)/12
 sum(St_star)
 
-# 3. Refine trend estimate
+# 3. Refined trend estimate
 Mt_star <- loess((Yt - St_star[month]) ~ t, span = 0.25)$fitted
 
 # 4. Noise
@@ -671,6 +685,8 @@ pAirPassengers + p2 +
 Comparison of various exponential smoothing techniques for the `AirPassengers` data:
 
 ```{r}
+#| code-fold: false
+
 m1 <- HoltWinters(AirPassengers, beta = FALSE, gamma = FALSE)
 m1$SSE
 c(m1$alpha, m1$beta, m1$gamma)
@@ -749,6 +765,8 @@ It is easy to make such a time series stationary by modeling and extracting the 
 Continue using the `AirPassengers` data and fit linear and quadratic trends.
 
 ```{r}
+#| code-fold: false
+
 t <- as.vector(time(AirPassengers))
 t2 <- t^2
 tm1 <- lm(AirPassengers ~ t)
@@ -847,6 +865,8 @@ This categorical variable should be saved as a `factor`.
 Then we apply the OLS method to find the model coefficients (see results in @fig-airpassangersRegTrendSeas):
 
 ```{r}
+#| code-fold: false
+
 Month <- as.factor(cycle(AirPassengers))
 m <- lm(log(AirPassengers) ~ poly(t, degree = 2) + Month)
 summary(m)
@@ -907,6 +927,8 @@ $$
 Calculate the predictors and estimate the model in R (see results in @fig-airpassangersRegTrendFourier):
 
 ```{r}
+#| code-fold: false
+
 month <- as.numeric(cycle(AirPassengers))
 cos1 <- cos(2 * pi * month / 12)
 sin1 <- sin(2 * pi * month / 12)
@@ -1024,6 +1046,22 @@ p6 <- forecast::ggAcf(diff(shampoo, differences = 2)) +
     plot_annotation(tag_levels = 'A')
 ```
 :::
+
+A deterministic linear trend can be also eliminated by differencing. 
+For example, consider a time series $X-t$ with a deterministic linear trend:
+$$
+X_t = a + b t + Z_t,
+$$
+where $Z_t \sim \mathrm{WN}(0,\sigma^2)$.
+The first-order differences of $X_t$ remove the linear trend:
+$$
+\begin{align}
+(1 - B)X_t &= X_t - X_{t-1} \\
+&= a + b t + Z_t - (a + b (t - 1) + Z_{t-1}) \\
+&= a + b t + Z_t - a - b t + b - Z_{t-1} \\
+&= b + Z_t + Z_{t-1}.
+\end{align}
+$$
 
 ::: {.callout-note icon=false}
 

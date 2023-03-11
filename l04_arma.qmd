@@ -924,6 +924,8 @@ With so many choices, we need some quantitative criteria to select the best mode
 The code below uses a 'manual' approach of calculating Akaike and Bayesian information criteria (AIC and BIC) to select the model from the specified set, but see the next section for R functions that do it more automatically.
 
 ```{r}
+#| code-fold: false
+
 # Combinations of p and q, without p = q = 0
 results <- expand.grid(p = c(0, 1, 2), q = c(0, 1, 2))[-1, ] 
 for (i in 1:nrow(results)) {
@@ -940,6 +942,8 @@ results
 For example, the function `stats::ar()` by default uses the Yule--Walker method to estimate the coefficients and AIC to select the best order for AR($p$) model, where the maximum of $p$ can be set by the user.
 
 ```{r}
+#| code-fold: false
+
 ar(Y, order.max = 11)
 ```
 
@@ -948,12 +952,15 @@ It adds a difference-based estimator by @Hall:VanKeilegom:2003, which is now use
 The selection is still done only for the order $p$ in AR($p$), without considering the possibility of MA terms.
 
 ```{r}
-# Order selection with BIC and estimation with HVK
+#| code-fold: false
+
 funtimes::ARest(Y)
 ```
 
 To check the correspondence with `stats::ar()`, change the method and fix the `ar.order` (turn off its automatic selection):
 ```{r}
+#| code-fold: false
+
 funtimes::ARest(Y, ar.method = "yw", ar.order = 2, BIC = FALSE)
 ```
 
@@ -967,6 +974,8 @@ This function is a successor of the function `forecast::auto.arima()` and is pro
 It allows to fit and select not only ARMA($p,q$) models, but also more complex models that will be described later in the course.
 
 ```{r}
+#| code-fold: false
+
 library(fable)
 m <- as_tsibble(Y) %>% 
     model(ARIMA(Y ~ 1, ic = "bic"))

@@ -224,6 +224,8 @@ Statistical software packages usually provide exact $p$-values based on the null
 Apply the Durbin--Watson test to the residuals from the dishwashers example, i.e., `DISH` vs. `RES`, using the R package `lmtest`.
 
 ```{r}
+#| code-fold: false
+
 lmtest::dwtest(D$DISH ~ D$RES, alternative = "greater")
 ```
 
@@ -272,9 +274,9 @@ Runs test allows assessing only the first-order serial correlation in the residu
 ```{r}
 #| label: fig-Runs
 #| fig-cap: "Runs tests and plots of independent normally distributed simulations $x_t$ and the `DISH` residuals."
+#| code-fold: false
 
-par(mar = c(4, 5, 1, 1) + 0.1, mgp = c(3, 1, 0), mfrow = c(1, 2))
-par(pty = "m")
+par(mfrow = c(1, 2))
 lawstat::runs.test(x, plot.it = TRUE)
 lawstat::runs.test(mod1$residuals, plot.it = TRUE)
 ```
@@ -339,7 +341,7 @@ Then we will call $x_{(\alpha)}$ the $\alpha$th *(population) quantile* of $X$.
 Note that any normal distribution has this uniqueness property. 
 If we consider a standard normal $Z \sim N(0, 1)$, then some well-known quantiles are:
 
-* $z_{(0.5)} = 0$ (the median, `qnorm(0.5, mean = 0, sd = 1)`)
+* $z_{(0.5)} = 0$ (the median), `qnorm(0.5, mean = 0, sd = 1)`
 * $z_{(0.05)} = -1.645$ and $z_{(0.95)} = 1.645$
 * $z_{(0.025)} = -1.96$ and $z_{(0.975)} = 1.96$
 
@@ -431,6 +433,8 @@ The SW statistic requires the sample size $n$ to be between 7 and 2000.
 Based on the $p$-values below, we cannot reject the null hypothesis of normality in both cases.
 
 ```{r}
+#| code-fold: false
+
 shapiro.test(x)
 shapiro.test(mod1$residuals)
 ```
@@ -583,6 +587,8 @@ where $X_{t,1}$ is the private residential investment `RES`; $X_{t,2}$ is the du
 Now we apply the OLS method to estimate the coefficients $\beta_{0}$, $\beta_{1}$, and $\beta_{2}$ using the function `lm()`.
 
 ```{r}
+#| code-fold: false
+
 mod2 <- lm(DISH ~ RES + DUR, data = D)
 summary(mod2)
 ```
@@ -614,16 +620,22 @@ p1 + p2 +
 Check that the residuals $\epsilon_{t}$ are uncorrelated (the Durbin--Watson and the runs tests):
 
 ```{r}
+#| code-fold: false
+
 lmtest::dwtest(D$DISH ~ D$RES + D$DUR)
 ```
 
 ```{r}
+#| code-fold: false
+
 lawstat::runs.test(mod2$residuals, plot.it = FALSE)
 ```
 
 Check that the residuals $\epsilon_{t}$ are normally distributed using the Q-Q plot (@fig-QQ2) and Shapiro--Wilk test.
 
 ```{r}
+#| code-fold: false
+
 shapiro.test(mod2$residuals)
 ```
 
@@ -652,8 +664,10 @@ For example, assume that we need to predict the future unit factory shipments of
 Supply new values of independent variables and use the function `predict()`.
 
 ```{r}
+#| code-fold: false
+
 newData <- data.frame(RES = c(100), DUR = c(150))
-predict(mod2, newData, se.fit = TRUE, interval = "prediction", level = 0.95)
+predict(mod2, newData, se.fit = TRUE, interval = "prediction")
 ```
 
 
@@ -678,6 +692,8 @@ The statistical techniques we will learn aim to model or extract as much informa
 Alternative versions of the runs test are available, e.g., in the package `randtests`.
 
 ```{r}
+#| code-fold: false
+
 randtests::runs.test(mod2$residuals)
 ```
 
@@ -689,6 +705,8 @@ The logic behind the difference sign test is that in a random process, there wil
 We may see (@fig-DishResiduals and @fig-DishResiduals2), it is the case for our residuals, even though we have no cyclic component, but have a rise followed by a decline.
 
 ```{r}
+#| code-fold: false
+
 randtests::difference.sign.test(x)
 randtests::difference.sign.test(mod1$residuals)
 randtests::difference.sign.test(mod2$residuals)

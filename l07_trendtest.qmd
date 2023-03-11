@@ -75,6 +75,8 @@ forecast::autoplot(Y) +
 Apply the $t$-test to this time series $Y_t$:
 
 ```{r}
+#| code-fold: false
+
 t <- 1:length(Y)
 mod <- lm(Y ~ t)
 summary(mod)
@@ -121,6 +123,8 @@ To apply the test, use the package `Kendall`.
 Also, note the statement about bootstrap in the help file for the function `Kendall::MannKendall()`.
 
 ```{r}
+#| code-fold: false
+
 Kendall::MannKendall(Y)
 ```
 
@@ -243,6 +247,8 @@ $H_1$: linear trend ($t$-test) or monotonic trend (Mann--Kendall test)
 Apply the sieve-bootstrapped tests to our time series data, using the package `funtimes`:
 
 ```{r}
+#| code-fold: false
+
 funtimes::notrend_test(Y, ar.method = "yw")
 funtimes::notrend_test(Y, test = "MK", ar.method = "yw")
 ```
@@ -296,6 +302,8 @@ The WAVK test is implemented in the package `funtimes` with the same sieve boots
 It tests the null hypothesis of no trend vs. the alternative of (non)monotonic trend.
 
 ```{r}
+#| code-fold: false
+
 funtimes::notrend_test(Y, test = "WAVK", ar.method = "yw")
 ```
 
@@ -303,6 +311,8 @@ Also, the version of the test with the hybrid bootstrap by @Lyubchich:etal:2013:
 This version allows the user to specify different alternatives.
 
 ```{r}
+#| code-fold: false
+
 # The null hypothesis is the same as above, no trend (constant trend)
 funtimes::wavk_test(Y ~ 1, 
                     factor.length = "adaptive.selection", 
@@ -418,6 +428,8 @@ p6 <- forecast::ggAcf(D2) +
 Now apply the test, potentially several times, to identify the order $d$.
 
 ```{r}
+#| code-fold: false
+
 tseries::adf.test(Yt)
 ```
 
@@ -425,6 +437,8 @@ With the high $p$-value, we cannot reject the $H_0$ of a unit root.
 Apply the test again on the differenced series.
 
 ```{r}
+#| code-fold: false
+
 tseries::adf.test(diff(Yt))
 ```
 
@@ -432,6 +446,8 @@ Same result.
 Difference once more and re-apply the test.
 
 ```{r}
+#| code-fold: false
+
 tseries::adf.test(diff(Yt, differences = 2))
 ```
 
@@ -445,6 +461,8 @@ Depending on what we know or assume about the process, we may add an intercept o
 In R, it can be done manually or with functions from the package `urca`:
 
 ```{r}
+#| code-fold: false
+
 library(urca)
 ADF <- ur.df(Yt, type = "drift", selectlags = "AIC")
 summary(ADF)
@@ -458,6 +476,8 @@ From the results above, the inclusion of the intercept (`"drift"`) in the test m
 Now try adding a trend (`type = "trend"` adds the intercept automatically).
 
 ```{r}
+#| code-fold: false
+
 ADF <- ur.df(Yt, type = "trend", selectlags = "AIC")
 summary(ADF)
 ADF <- ur.df(diff(Yt), type = "trend", selectlags = "AIC")
