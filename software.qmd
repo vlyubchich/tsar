@@ -13,6 +13,7 @@ The codes load silently only a few packages:
 ```{r}
 #| eval: false
 #| echo: true
+#| code-fold: false
 
 library(dplyr)
 library(ggplot2)
@@ -24,6 +25,7 @@ All other packages are named before the function as in `forecast::ggAcf()` (this
 ```{r}
 #| eval: false
 #| echo: true
+#| code-fold: false
 
 library(fable)
 m <- as_tsibble(Y) %>%

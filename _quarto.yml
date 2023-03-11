@@ -3,15 +3,16 @@ project:
     output-dir: docs
 
 book:
-    title: "Time Series Analysis"
-    subtitle: "Lecture Notes with Examples in R"
-    author: "V. Lyubchich and Y. R. Gel"
-    date: today
+    title: Time Series Analysis
+    subtitle: Lecture Notes with Examples in R
+    author: V. Lyubchich and Y. R. Gel
+    # date: today
     date-format: iso
     favicon: TSAfav.png
-    # number-sections: true
-    # repo-url: https://github.com/vlyubchich/lectures_ts/
-  # repo-actions: [edit, issue]
+    cover-image: TSAcov.png
+    repo-url: https://github.com/vlyubchich/tsar/
+    repo-branch: master
+    repo-actions: [edit, issue]
   # downloads: [pdf, epub]
   # sharing: [twitter, facebook]
     page-navigation: true
@@ -30,7 +31,7 @@ book:
         - l08_tsreg1.qmd
         - l09_tsreg2.qmd
         - l10_spectral.qmd
-        - conclusion.qmd
+        # - conclusion.qmd
         - software.qmd
         - references.qmd
     appendices:
@@ -40,7 +41,7 @@ book:
 bibliography:
     - references.bib
     - refpackages.bib
-csl: C:/Users/Slava/Documents/lectures_ts/springerbasicVL.csl
+csl: C:/Users/Slava/Documents/tsar/springerbasicVL.csl
 
 appendix-style: default
 
