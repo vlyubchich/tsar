@@ -1,13 +1,11 @@
 # Wishlist for lectures and examples
 - after GARMA, add about GAMLSS (see the example file on Chesapeake Bay)
 - make causality a separate lecture #10, add on diff-in-diff with cannabis example.
-- add wavelets in spectral Time-Frequency estimation, see Hali's emails
-https://rstudio-pubs-static.s3.amazonaws.com/9428_1197bd003ebd43c49b429f22ea4f36e5.html
 - add example coverage calculations Lect 2 or ARIMA
 - add a lecture on panel data analysis
 - add that tsa::arimax is a transfer function, not ARIMAX model
 - add about ts bootstrap (sieve, block) in l07
-- add video lectures
+
 
 # To-dos
 - check that all materials transferred from main.pdf
@@ -115,3 +113,7 @@ text
 | Reject $H_{0}$, positive autocorrelation | Neither accept $H_{1}$ or reject $H_{0}$ | Do not reject $H_{0}$ | Neither accept $H_{1}$ or reject $H_{0}$ | Reject $H_{0}$, negative autocorrelation |
 
 : Regions of rejection of the null hypothesis for the Durbin--Watson test {#tbl-DW}
+
+
+Collapse All — Alt+O.
+Expand All — Shift+Alt+O.

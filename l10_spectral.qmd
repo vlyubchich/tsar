@@ -18,8 +18,8 @@ You should be able to recognize features of time series from a periodogram simil
 
 **Objectives**
 
-1. Describe the mechanics of Fourier transformation for time series.
-1. Present results of spectrum calculations using a periodogram.
+1. Describe the mechanics of Fourier transform for time series.
+1. Present results of spectrum calculations using a periodogram or spectrogram.
 1. Give examples of smoothed periodograms.
 1. Demonstrate the use of the Lomb--Scargle periodogram for analysis of unequally-spaced time series.
 
@@ -93,6 +93,14 @@ The above theory can be extended to the simultaneous estimation of several perio
 
 
 ## Periodogram
+
+The *Fourier transform* uses Fourier series, such as the pairs of sines and cosines with different periods, to describe the frequencies present in the original time series. 
+
+The Fourier transform applied to an equally-spaced time series $Y_t$ (where $t = 1,\dots,T$) is also called the *discrete Fourier transform* (DFT) because the time is discrete (not the values $Y_t$).
+
+To reduce the computational complexity of DFT and speed up the computations, one of the *fast Fourier transform* (FFT) algorithms is typically used. 
+
+The results of the Fourier transform are shown in a periodogram that describes the spectral properties of the signal.
 
 The periodogram is defined as
 $$
@@ -244,7 +252,7 @@ After detrending the data (@fig-airpassangersFFT C), the spectrum at frequency 1
 
 ```{r}
 #| label: fig-airpassangersFFT
-#| fig-cap: "Monthly `AirPassengers` time series, log-transformed and detrended, and corresponding fast Fourier transformations."
+#| fig-cap: "Monthly `AirPassengers` time series, log-transformed and detrended, and the corresponding fast Fourier transforms."
 #| fig-height: 7
 
 pAirPassengers <- forecast::autoplot(AirPassengers, col = "grey50") + 
@@ -359,6 +367,125 @@ lomb::lsp(D$NH4, times = D$Time, type = "period", alpha = 0.05, main = "")
 :::
 
 
+## Frequency estimation in time
+
+The assumption of a whole time series having a constant spectrum might be very limiting for the analysis of long time series. 
+An estimation of frequencies locally in time allows us to study how the spectrum changes in time, and also detect smaller (short-lived) signals that would be averaged out otherwise. 
+A straightforward solution is to separate the time series into windows (sub-periods) and estimate a spectrum in each such window. 
+
+The windowed analysis makes sense when in each window we have enough observations to estimate the frequencies. 
+As a guide, we should have at least two observations per period to be able to represent the signal in the discrete Fourier transform. 
+For example, we cannot estimate the seasonality if we sample once per year -- this is our *sampling rate* or *sampling frequency* $F_s$. 
+To start identifying seasonal periodicity, our sampling rate should be at least 2 samples per year. 
+The highest frequency we can work with is limited by the *Nyquist frequency*
+$$
+F_N = \frac{F_s}{2},
+$$
+which is half of the sampling frequency.
+
+After applying the FFT in each window, the results can be visualized in a *spectrogram*.
+The spectrogram combines information from multiple periodograms: it shows time on the $x$-axis, frequency on the $y$-axis, and the corresponding spectrum power as the color.
+
+::: {.callout-note icon=false}
+
+## Example: Spectrograms for the NAO
+
+Consider a long time series of the North Atlantic Oscillation (NAO) index obtained from an ensemble of 100 model-constrained NAO reconstructions (@fig-NAO).
+
+```{r}
+NAOdf <- readr::read_csv("./data/NAO.csv", skip = 12, show_col_types = FALSE) %>% 
+    rename(NAOproxy = nao_mc_mean) %>% 
+    select(Year, NAOproxy) %>% 
+    arrange(Year)
+NAO <- ts(NAOdf$NAOproxy, start = NAOdf$Year[1])
+spec_raw <- spec.pgram(NAO, detrend = FALSE, plot = FALSE, spans = 3)
+
+# Find the frequency with the max power
+fmax <- spec_raw$freq[which.max(spec_raw$spec)]
+```
+
+```{r}
+#| label: fig-NAO
+#| fig-cap: "North Atlantic Oscillation (NAO) winter index (December, January, and February) calculated as the mean of 100 model-constrained NAO reconstructions, along with its smoothed periodograms. The dashed lines denote the maximal magnitude of the spectrum."
+#| fig-height: 7
+
+p1 <- forecast::autoplot(NAO) +
+    xlab("Year") +
+    ylab("NAO") +
+    theme_light()
+p2 <- data.frame(Spectrum = spec_raw$spec, 
+                 Frequency = spec_raw$freq) %>% 
+    ggplot(aes(x = Frequency, y = Spectrum)) +
+    scale_y_continuous(trans = 'log10') +
+    geom_vline(xintercept = fmax, col = "blue", lty = 2) + 
+    geom_line() + 
+    ggtitle("") +
+    theme_light()
+p3 <- data.frame(Spectrum = spec_raw$spec, 
+                 Period = 1/spec_raw$freq) %>% 
+    ggplot(aes(x = Period, y = Spectrum)) +
+    scale_y_continuous(trans = 'log10') +
+    geom_vline(xintercept = 1/fmax, col = "blue", lty = 2) +
+    geom_line() + 
+    ggtitle("") +
+    theme_light()
+p1 / (p2 + p3) + 
+    plot_annotation(tag_levels = 'A')
+```
+
+This is an annual time series, hence the sampling frequency $F_s = 1$. 
+From the global FFT, the identified frequency with maximal power is `r fmax` year$^{-1}$, which is equivalent to the period of about `r round(1/fmax, 1)` years.
+We will set the window for the FFT and calculate the spectrogram.
+Note that we can use overlapping windows for a smoother picture.
+
+```{r}
+#| code-fold: false
+
+# Set the window size (years), for applying the FFT in each window
+window_size = 30
+
+# Compute the spectrogram
+SP <- signal::specgram(x = NAO,
+                       n = window_size,
+                       overlap = window_size/3,
+                       Fs = 1)
+```
+
+See the spectrograms in @fig-NAOspect and compare them with the time series plot in @fig-NAO A.
+
+```{r}
+#| label: fig-NAOspect
+#| fig-cap: "Spectrograms for North Atlantic Oscillation (NAO) winter index."
+
+par(mfrow = c(1, 2))
+
+# Plot the spectrogram without decorations
+print(SP, main = "A) Raw results")
+
+# Discard phase information
+P <- abs(SP$S)
+
+# Normalize the spectrum to the range [0, 1]
+P <- P - min(P)
+P <- P/max(P)
+
+# Extract time
+Years <- time(NAO)[SP$t]
+
+# Plot the spectrogram after processing
+oce::imagep(x = Years,
+            y = SP$f,
+            z = t(P),
+            col = oce::oce.colorsViridis,
+            ylab = expression(Frequency~(y^-1 )),
+            xlab = "Year",
+            main = "B) After normalization and adding colors",
+            drawPalette = TRUE,
+            decimate = FALSE)
+```
+:::
+
+
 ## Conclusion
 
 For challenging problems, smoothing, multitapering, linear filtering, (repeated) pre-whitening, and Lomb--Scargle can be used together. 
@@ -369,3 +496,25 @@ It is extremely difficult to derive the significance of a weak periodicity from 
 Do not believe analytical estimates (e.g., exponential probability), as they rarely apply to real data. 
 It is essential to make simulations, typically permuting or bootstrapping the data keeping the observing times fixed. 
 Simulations of the final model with the observation times are also advised.
+
+
+## Appendix
+
+**Wavelet analysis**
+
+An alternative to the windowed FFT is the wavelet analysis, which also estimates the strength of time series variations for different frequencies and times.
+*Wavelet* is a 'small wave' or function $\psi(t)$ approximating the variations. 
+Popular wavelet functions are Meyer, Morlet, and Mexican hat.
+
+@fig-NAOwv shows the results of using the Morlet wavelet to process the NAO time series.
+
+```{r}
+#| label: fig-NAOwv
+#| fig-cap: "Wavelet analysis of the North Atlantic Oscillation (NAO) winter index."
+#| fig-height: 9
+
+library(dplR)
+wv <- morlet(y1 = NAOdf$NAOproxy, x1 = NAOdf$Year)
+levs <- quantile(wv$Power, probs = c(0, 0.5, 0.75, 0.9, 0.95, 1))
+wavelet.plot(wv, wavelet.levels = levs)
+```

@@ -29,7 +29,8 @@ Yulia R. Gel is a Professor of Statistics at the University of Texas at Dallas.
 
 ## Citation {.unnumbered}
 
-Lyubchich, V. and Gel, Y. R. (`r substr(Sys.Date(), 1, 4)`) Time Series Analysis: Lecture Notes with Examples in R. Edition `r substr(Sys.Date(), 1, 7)`.
+Lyubchich, V. and Gel, Y. R. (`r substr(Sys.Date(), 1, 4)`) Time Series Analysis: Lecture Notes with Examples in R. Edition `r substr(Sys.Date(), 1, 7)`. 
+<https://vlyubchich.github.io/tsar/>
 
 
 ## License {.unnumbered}
