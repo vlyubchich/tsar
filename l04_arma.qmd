@@ -61,20 +61,24 @@ $\mathrm{E}(X_t) = 0$ for all $t$ $\Rightarrow$ $\mathrm{E}(X_t)$ is independent
 
 Now check the autocovariance
 $$
-\mathrm{cov}(X_t, X_{t+h}) =
+\begin{align}
+\mathrm{cov}(X_t, X_{t+h}) &=
 \begin{cases}
 \mathrm{cov}(X_t, X_t) & \text{if } h = 0\\
 0                      & \text{otherwise}
-\end{cases} =
+\end{cases} \\
+& =
 \begin{cases}
 \mathrm{var}(X_t) & \text{if } h = 0\\
 0                 & \text{otherwise}
-\end{cases} =
+\end{cases} \\
+& =
 \begin{cases}
 \sigma^2 & \text{if } h = 0\\
 0        & \text{otherwise}
 \end{cases}
-$$  
+\end{align}
+$$
 
 $\Rightarrow$ $\mathrm{cov}(X_t, X_{t+h})$ does not depend on $t$, depends only on $h$.
 
@@ -130,8 +134,8 @@ Some R plotting functions show results for the zero lag (e.g., `acf()`), some do
 
 ## Example: Check the stationarity of random walk
 
-Check the same for random walk $S_t$. 
-$S_t = \sum_{i=1}^t{X_t}$, where $X_t \sim \text{i.i.d.}(0,\sigma^2)$.
+Check the stationarity of the random walk $S_t$. 
+$S_t = \sum_{i=1}^t{X_t}$, where $X_t \sim \text{i.i.d.}(0,\sigma^2)$, and $S_0 = 0$.
 
 $\mathrm{E}(S_t) = \mathrm{E}(\sum_{i=1}^t{X_t}) = 0$ $\Rightarrow$ $\mathrm{E}(X_t)$ does not depend on $t$.
 
@@ -152,11 +156,11 @@ Also, notice that $S_t = S_{t-1} + X_t$, that is, $S_t$ is a nonstationary AR(1)
 :::
 
 Random walk patterns are widely found in nature, for example, in the phenomenon of Brownian motion.
-Notice the linear decay in ACF of nonstationary time series (@fig-rw).
-
+Notice the slow linear decay in the ACF of nonstationary time series (@fig-rw)
 $$
-S_t = \sum_{i = 1}^t X_i,\; \text{where}\; X_t \sim \mathrm{i.i.d.}(0, \sigma^2);\; \sigma = 2.
+S_t = \sum_{i = 1}^t X_i,
 $${#eq-rw}
+where $X_t \sim \mathrm{i.i.d.}(0, \sigma^2)$ and $\sigma = 2$.
 
 ```{r}
 #| label: fig-rw
@@ -183,9 +187,9 @@ p3 + p4 + p5 +
 Random walk may look very different if the i.i.d. process has a non-zero mean. 
 Here is a random walk with drift (@fig-rw2):
 $$
-S_t = \sum_{i = 1}^t X_i,\; \text{where}\; X_t \sim \mathrm{i.i.d.}(a, \sigma^2);\; a = 0.2,\; \sigma = 2.
+S_t = \sum_{i = 1}^t X_i,
 $${#eq-rw2}
-
+where $X_t \sim \mathrm{i.i.d.}(a, \sigma^2)$, $a = 0.2$, and $\sigma = 2$.
 
 ```{r}
 #| label: fig-rw2
@@ -261,14 +265,14 @@ We shall see later that all AR processes require some condition of this nature.
 
 ::: {.callout-note icon=false}
         
-## Example: Check stationarity of AR(1)
+## Example: Check the stationarity of AR(1)
 
-Show that AR(1) process $Y_t$ is stationary, $Y_t = \phi Y_{t-1} + Z_t$, $|\phi| < 1$, $Z_t \sim \mathrm{WN}(0, \sigma^2)$.
+Check that the AR(1) process $Y_t$ is stationary, given that $Y_t = \phi Y_{t-1} + \epsilon_t$, $|\phi| < 1$, and $\epsilon_t \sim \mathrm{WN}(0, \sigma^2)$.
 
 $$
 \begin{split}
-\mathrm{E}(Y_t) &= \mathrm{E}(\phi Y_{t-1} + Z_t)\\
-& = \phi \mathrm{E}(Y_{t-1}) + \mathrm{E}(Z_t)\\
+\mathrm{E}(Y_t) &= \mathrm{E}(\phi Y_{t-1} + \epsilon_t)\\
+& = \phi \mathrm{E}(Y_{t-1}) + \mathrm{E}(\epsilon_t)\\
 & = \phi^2 \mathrm{E}(Y_{t-2}) + 0\\
 & = \phi^3 \mathrm{E}(Y_{t-3})\\
 & = \dots\\
@@ -278,32 +282,32 @@ $$
 $$
 Therefore, the mean of $Y_t$ does not depend on time.
 
-Now check autocovariance. 
+Now check the autocovariance. 
 For $h=0$, $\mathrm{cov}(Y_t, Y_{t}) = \mathrm{var}(Y_t) = \sigma^2_Y$, which is derived in @eq-ar1var and does not depend on time.
 
 For $h \neq 0$,
 $$
 \begin{split}
-\mathrm{cov}(Y_t, Y_{t-h}) &= \mathrm{cov}(\phi Y_{t-1} + Z_t, Y_{t-h})\\
-& = \mathrm{cov}(\phi Y_{t-1}, Y_{t-h}) + \mathrm{cov}(Z_t, Y_{t-h})\\
+\mathrm{cov}(Y_t, Y_{t-h}) &= \mathrm{cov}(\phi Y_{t-1} + \epsilon_t, Y_{t-h})\\
+& = \mathrm{cov}(\phi Y_{t-1}, Y_{t-h}) + \mathrm{cov}(\epsilon_t, Y_{t-h})\\
 & = \phi \mathrm{cov}(Y_{t-1}, Y_{t-h}) + 0\\
-& = \phi \mathrm{cov}(\phi Y_{t-2} + Z_{t-1}, Y_{t-h})\\
+& = \phi \mathrm{cov}(\phi Y_{t-2} + \epsilon_{t-1}, Y_{t-h})\\
 & = \phi^2 \gamma_Y(h-2)\\
 & = \dots\\
 & = \phi^h \gamma_Y(0) \\
 & = \phi^h \sigma_Y^2,
 \end{split}
 $$
-thus autocovariance does not depend on time, depends on lag $h$.
+thus the autocovariance does not depend on time, depends only on lag $h$.
 
 Both conditions for weak stationarity are satisfied, the $Y_t$ specified above is weakly stationary.
 :::
 
 ::: {.callout-note}
-Additionally, see that the ACF of this process
+Additionally, see that the ACF of the AR(1) process
 $$
 \rho_Y(h) = \frac{\gamma_Y(h)}{\gamma_Y(0)} = \frac{\phi^h \gamma_Y(0)}{\gamma_Y(0)} = \phi^h
-$$
+$${#eq-arACF}
 shows exponential decay. Remember this about AR processes.
 :::
 
@@ -355,15 +359,19 @@ To identify the decay, we need the $p$ starting correlations $\rho(1), \rho(2), 
 **PACF of AR processes**
 
 An AR($p$) model implies $Y_{t+h} = \sum_{i=1}^p\phi_{i} Y_{t + h - i} + \epsilon_{t+h}$, where the roots of $\phi(\lambda)$ are outside the unit circle.
-When $h > p$, the regression of $Y_{t+h}$ on $\{ Y_{t+1},\dots, Y_{t+h-1}\}$, is
+When $h > p$, the regression of $Y_{t+h}$ on $\{ Y_{t+1},\dots, Y_{t+h-1}\}$ is
 $$
 \hat{Y}_{t+h} = \sum^p_{i=1} \phi_i Y_{t+h-i}.
 $$
 Thus, when $h > p$,
 $$
-\rho_{hh} = \mathrm{cor}(Y_{t+h}-\hat{Y}_{t+h}, Y_t - \hat{Y}_t) = \mathrm{cor}(\epsilon_{t+h}, Y_t - \hat{Y}_t) = 0,
+\begin{align}
+\rho_{hh} &= \mathrm{cor}(Y_{t+h}-\hat{Y}_{t+h}, Y_t - \hat{Y}_t) \\
+& = \mathrm{cor}(\epsilon_{t+h}, Y_t - \hat{Y}_t) \\
+& = 0,
+\end{align}
 $$
-because, by the causality of the process, $Y_t - \hat{Y}_t$, depends only on $\{ \epsilon_{t+h-1}, \epsilon_{t+h-2},\dots \}$.
+because, by the causality of the process, the difference $Y_t - \hat{Y}_t$ depends only on $\{ \epsilon_{t+h-1}, \epsilon_{t+h-2},\dots \}$.
 
 When $h\leqslant p$, $\rho_{hh}$ is not zero, and $\rho_{11}, \dots, \rho_{p-1,p-1}$ are not necessarily zero.
 
@@ -371,10 +379,41 @@ When $h\leqslant p$, $\rho_{hh}$ is not zero, and $\rho_{11}, \dots, \rho_{p-1,p
 The important conclusion is that the PACF of an AR($p$) process necessarily cuts off (PACF = 0) after lag $p$.
 :::
 
+::: {.callout-note icon=false}
+
+## Example: PACF of AR(1) process
+
+For an AR(1) process, the best linear predictor $P(X_{n + 1} | X_n) = \phi X_n$.
+
+For $h = 0$, $\rho_{00} = 1$.  
+For $h = 1$, $\rho_{11} = \mathrm{cor}(X_t, X_{t+1}) = \phi$ (no intermediate lags, see @eq-arACF).  
+For $h = 2$, note that $X_{t+2} = \phi X_{t+1} + \epsilon_{t+2}$, then
+$$
+\begin{align}
+\rho_{22} &= \mathrm{cor}(X_t - P(X_t | X_{t+1}), X_{t+2} - P(X_{t+2} | X_{t+1})) \\
+&= \mathrm{cor}(X_t - P(X_t | X_{t+1}), X_{t+2} - \phi X_{t+1})\\
+&= \mathrm{cor}(X_t - P(X_t | X_{t+1}), \epsilon_{t+2})\\
+&= 0
+\end{align}
+$$
+because the term $X_t - P(X_t | X_{t+1})$ is a function of $X_t$ and $X_{t+1}$ only, while $\epsilon_{t+2}$ is the future noise.
+
+Thus, for $X_t \sim$ AR(1), the PACF
+$$
+\rho_{hh} =
+\begin{cases}
+1 & \text{if } h = 0\\
+\phi & \text{if } h = 1\\
+0 & \text{if } h \geqslant 2
+\end{cases}
+$$
+:::
+
 See the plots for the following AR(1) process in @fig-ar1:
 $$
-X_t = \phi_1 X_{t-1} + \epsilon_t;\; \epsilon_t \sim N(0,\sigma^2);\; \phi_1=0.6,\; \sigma = 1.
+X_t = \phi_1 X_{t-1} + \epsilon_t,
 $${#eq-ar1}
+where $\epsilon_t \sim N(0,\sigma^2)$, $\phi_1=0.6$, and $\sigma = 1$.
 
 ```{r}
 #| label: fig-ar1
@@ -468,11 +507,7 @@ A process $X_{t}$, ($t = 0, \pm 1, \pm 2, \dots$) is said to be linear if it has
 $$
 X_{t} = \mu + \sum^{\infty}_{r = - \infty} c_{r} \epsilon_{t - r},
 $$
-where
-
-* $\mu$ is a common mean,
-* $c_{r}$ is a sequence of fixed constants,
-* $\epsilon_{t}$ are uncorrelated random variables with mean 0 and common variance.
+where $\mu$ is a common mean, $c_{r}$ is a sequence of fixed constants, and $\epsilon_{t}$ are uncorrelated random variables with mean 0 and common variance.
 
 We assume $\sum c^{2}_{r} < \infty$ to ensure that the variances of the individual $X_{t}$ are finite (stationarity and existence condition). 
 Then the process $X_{t}$ is necessarily (weakly) stationary.
@@ -482,9 +517,9 @@ For example, see the case of normally distributed $\epsilon_{t}$.
 
 If $c_r = 0$ for all $r < 0$, $X_t$ is called *causal* (i.e., the process at the time $t$ does not depend on the future, yet unobserved, values of $\epsilon_{t}$).
 
-The representation of a causal stationary process $X_{t}$ with zero mean in the form
+The representation of a causal stationary process (depending only on the past) $X_{t}$ with zero mean in the form
 $$
-X_{t} = \sum^{\infty}_{r = 0}  c_{r} \epsilon_{t - r},
+X_{t} = \sum^{\infty}_{r = 0} c_{r} \epsilon_{t - r},
 $${#eq-YuleWald}
 where $\epsilon_{t} \sim \mathrm{WN}(0, \sigma^{2}$) and $\sum c^{2}_{r} < \infty$, is sometimes called *the Yule--Wald representation*.
 
@@ -542,11 +577,11 @@ $$
 \begin{split}
 \gamma_Y(h) & = \mathrm{cov}(Y_{t}, Y_{t+h}) = \mathrm{cov} \left( \sum^{q}_{r = 0} \theta_{r }\epsilon_{t - r}, \sum^{q}_{\ell = 0} \theta_{\ell} \epsilon_{t + h - \ell} \right) \\
 \\
-& =  \sum^{q}_{r = 0} \sum^{q}_{\ell = 0} \mathrm{cov} \left( \theta_{r } \epsilon_{t - r},  \theta_{\ell} \epsilon_{t + h - \ell} \right) \\
+& = \sum^{q}_{r = 0} \sum^{q}_{\ell = 0} \mathrm{cov} \left( \theta_{r } \epsilon_{t - r},  \theta_{\ell} \epsilon_{t + h - \ell} \right) \\
 \\
-& =   \sum^{q}_{r = 0}   \sum^{q}_{\ell = 0} \theta_{r } \theta_{\ell} \mathrm{cov}  \left( \epsilon_{t - r}, \epsilon_{t - r}  \right) ~~ \text{since cov} \left( \epsilon_{u}, \epsilon_{v}  \right) = 0 ~ \text{unless} ~ u = v \\
+& = \sum^{q}_{r = 0} \sum^{q}_{\ell = 0} \theta_{r } \theta_{\ell} \mathrm{cov}  \left( \epsilon_{t - r}, \epsilon_{t - r}  \right) ~~ \text{since cov} \left( \epsilon_{u}, \epsilon_{v}  \right) = 0 ~ \text{unless} ~ u = v \\
 \\
-& =  \sigma_{\epsilon}^{2} \sum^{q}_{r = 0} \theta_{r} \theta_{r+h}.
+& = \sigma_{\epsilon}^{2} \sum^{q}_{r = 0} \theta_{r} \theta_{r+h}.
 \end{split}
 $$
 Note that the case of no time shift between the noise series, i.e., when $t-r = t+h-l$, leads to $l=r+h$, which is used in the last row.
@@ -600,31 +635,49 @@ Moreover, since white noise has the property that $\mathrm{cov} (\epsilon_{u}, \
 
 ::: {.callout-note icon=false}
         
-## Example: Calculate ACF of MA($q$)
+## Example: ACVF and ACF of MA(1)
 
 Consider an MA(1) model. 
 Let $h \geqslant 0$. 
 Applying the covariance properties we obtain the general expression:
 $$
 \begin{split}
-\gamma(h) & =  \mathrm{cov}\left( Y_{t}, Y_{t - h} \right) =  \mathrm{cov} \left( \epsilon_{t} + \theta_{1} \epsilon_{t - 1}, \epsilon_{t - h} + \theta_{1} \epsilon_{t - h - 1}  \right) \\
+\gamma(h) & = \mathrm{cov}\left( Y_{t}, Y_{t - h} \right) \\
+& = \mathrm{cov} \left( \epsilon_{t} + \theta_{1} \epsilon_{t - 1},\; \epsilon_{t - h} + \theta_{1} \epsilon_{t - h - 1}  \right) \\
 & =  \mathrm{cov} \left( \epsilon_{t},  \epsilon_{t - h} \right) + \theta_{1} \mathrm{cov} \left(  \epsilon_{t},  \epsilon_{t - h - 1}  \right) + \theta_{1} \mathrm{cov} \left( \epsilon_{t - 1}, \epsilon_{t - h} \right) + \theta^{2}_{1} \mathrm{cov} \left(\epsilon_{t - 1}, \epsilon_{t - h - 1} \right).
 \end{split}
 $$
 
 Note that the covariances in the last line of the above expression will be nonzero if the time indices match up. 
-Plugging different values of $h$ into the above equation we obtain
+By plugging different values of $h$ into the above equation, we obtain
 $$
-\begin{split}
-h  =  0 &\rightarrow \gamma(0) =   \mathrm{cov} \left( \epsilon_{t},   \epsilon_{t} \right)  + 0 + 0 + \theta^{2}_{1}  \mathrm{cov} \left( \epsilon_{t - 1},  \epsilon_{t - 1}  \right) = \sigma^{2} + \theta^{2}_{1} \sigma^{2} = \sigma^{2} \left( 1 + \theta^{2}_{1} \right). \\
+\begin{align}
+h  =  0 \rightarrow \gamma(0) &= \mathrm{cov} \left( \epsilon_{t}, \epsilon_{t} \right) + 0 + 0 + \theta^{2}_{1} \mathrm{cov} \left( \epsilon_{t - 1}, \epsilon_{t - 1} \right) \\
+&= \sigma^{2} + \theta^{2}_{1} \sigma^{2} \\
+&= \sigma^{2} \left( 1 + \theta^{2}_{1} \right). \\
 \\
-h  =  1 &\rightarrow \gamma(1) = 0 + 0 + \theta_{1}  \mathrm{cov} \left( \epsilon_{t - 1},  \epsilon_{t - 1}  \right) + 0 = \sigma^{2} \theta_{1}.\\
+h = 1 \rightarrow \gamma(1) &= 0 + 0 + \theta_{1} \mathrm{cov} \left( \epsilon_{t - 1}, \epsilon_{t - 1} \right) + 0 \\
+&= \sigma^{2} \theta_{1}.\\
 \\
-h \geqslant 2 &\rightarrow \gamma(h) = 0 + 0 + 0 + 0 = 0.
-\end{split}
+h \geqslant 2 \rightarrow \gamma(h) &= 0 + 0 + 0 + 0 \\
+&= 0.
+\end{align}
 $$
 
-This method generalizes easily to computing covariances for MA($q$) models of higher order.
+This method generalizes easily to computing autocovariances for MA($q$) models of higher orders.
+
+Recall that ACF is the ACVF standardized by the variance (which is the ACVF at lag zero), hence the ACF
+$$
+\begin{align}
+\rho(h) &= \frac{\gamma(h)}{\gamma(0)} \\
+&= 
+\begin{cases}
+1 & \text{if } h = 0 \\
+\frac{\theta_1}{1 + \theta^2_1} & \text{if } h = 1 \\
+0 & \text{if } h > 1
+\end{cases}
+\end{align}
+$$
 :::
 
 ::: {.callout-note}
@@ -656,9 +709,9 @@ The computations are done via a recursive formula.
 Similar to AR(1) examples above, now consider two sets of plots for MA(1) processes with a positive and negative coefficient. 
 For the MA(1) process 
 $$
-X_t = \theta_1 \epsilon_{t-1} + \epsilon_t;\; \epsilon_t \sim N(0,\sigma^2);\; \theta_1=0.3,\; \sigma = 1,
+X_t = \theta_1 \epsilon_{t-1} + \epsilon_t,
 $${#eq-ma1}
-see plots in @fig-ma1.
+where $\epsilon_t \sim N(0,\sigma^2)$, $\theta_1=0.3$, and $\sigma = 1$, see plots in @fig-ma1.
 
 ```{r}
 #| label: fig-ma1
@@ -697,9 +750,9 @@ p5 <- forecast::ggAcf(X, type = "partial") +
 
 For the MA(1) process with negative $\theta_1$,
 $$
-X_t = \theta_1 \epsilon_{t-1} + \epsilon_t;\; \epsilon_t \sim N(0,\sigma^2);\; \theta_1=-0.3,\; \sigma = 1,
+X_t = \theta_1 \epsilon_{t-1} + \epsilon_t,
 $${#eq-ma2}
-see plots in @fig-ma2.
+where $\epsilon_t \sim N(0,\sigma^2)$, $\theta_1=-0.3$, and $\sigma = 1$, see plots in @fig-ma2.
 
 ```{r}
 #| label: fig-ma2
@@ -743,8 +796,13 @@ An ARMA($p, q$) is a mixture of $p$ autoregressive components and $q$ moving ave
 It can be expressed as
 $$
 \phi^{p} (B)Y_{t} = \theta^{q} (B) \epsilon_{t},
+$${#eq-armapq}
+where $\epsilon_t$ is the zero-mean white noise with variance $\sigma^2$, $\phi^{p}(\lambda)$ and $\theta^{q}(\lambda)$ are the polynomials (without common roots) of degree $p$ and $q$, respectively.
+
+The ARMA($p, q$) @eq-armapq can be expanded as follows:
 $$
-where $\epsilon_{t}$ is white noise, $\phi^{p}(\lambda)$ and $\theta^{q}(\lambda)$ are the polynomials of degree $p$ and $q$, respectively.
+X_t - \phi_1 X_{t-1} - \dots - \phi_p X_{t-p} = \epsilon_t + \theta_1 \epsilon_{t-1} + \dots + \theta_q \epsilon_{t-q}.
+$$
 
 **ARMA(1,2)**
 

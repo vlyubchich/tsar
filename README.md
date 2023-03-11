@@ -13,7 +13,6 @@ https://rstudio-pubs-static.s3.amazonaws.com/9428_1197bd003ebd43c49b429f22ea4f36
 - check that all materials transferred from main.pdf
 - check the folders in MEES713, MEES713/check this.
 - check comments from past PDFs to fix typos
-- check hand notes
 - check missing materials from YRG's lectures
 
 

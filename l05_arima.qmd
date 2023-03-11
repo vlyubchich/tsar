@@ -71,12 +71,16 @@ X_t = \sum_{i=1}^t Y_i,
 $$
 where $Y_t \sim$ i.i.d.($0,\sigma^2$).
 This $X_t$ is the simplest example of integrated series. 
-The notation $X_t \sim $I(1) means $X_t$ is a first-order integrated series. 
+The notation $X_t \sim$ I(1) means $X_t$ is a first-order integrated series. 
 The differences of $X_t$
 $$
-(1 - B)X_t = X_t - X_{t-1} = Y_t
+\begin{align}
+(1 - B)X_t &= X_t - BX_t \\
+&= X_t - X_{t-1} \\
+&= Y_t
+\end{align}
 $$
-give us back the uncorrelated series $Y_t$, hence $X_t$ is an ARIMA(0,1,0) process.
+give us back the uncorrelated series $Y_t$, hence the process $X_t$ is an ARIMA(0,1,0) process.
 
 ::: {.callout-note}
 ARIMA($p, d, q$) processes with $d \geqslant 1$ are also called *difference-stationary* processes or processes with a *stochastic trend*.
@@ -265,7 +269,7 @@ $$
 = (1 + \theta_1B + \dots + \theta_qB^q) (1 + \Theta_1B^s + \dots + \Theta_QB^{sQ})Z_t,
 \end{split}
 $$ {#eq-sarima}
-where $D$ is the order of seasonal differences, $\Phi_1, \dots, \Phi_P$ are seasonal autoregression coefficients, $P$ is the seasonal autoregressive order, $\Theta_1, \dots, \Theta_q$ are seasonal moving average coefficients, $Q$ is the seasonal moving average order, and the rest of the terms are the same as in @eq-arima.
+where $D$ is the order of seasonal differences, $\Phi_1, \dots, \Phi_P$ are the seasonal autoregression coefficients, $P$ is the seasonal autoregressive order, $\Theta_1, \dots, \Theta_q$ are seasonal moving average coefficients, $Q$ is the seasonal moving average order, and the rest of the terms are the same as in @eq-arima.
 
 ::: {.callout-note icon=false}
 

@@ -1,0 +1,5 @@
+# Conclusion
+
+The material we have covered is just a tip of the iceberg.
+
+Remember that all predictive inference is based on the assumptions that the relationships between the variables and their dynamics will be the same in the future.

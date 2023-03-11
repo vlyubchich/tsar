@@ -488,6 +488,10 @@ Most of the time we use plain numeric vectors and data frames in R.
 Contributed R packages offer additional formats for time series, e.g., see packages `xts` and `zoo`.
 :::
 
+ACF measures the correlation between $X_t$ and $X_{t+h}$.
+The correlation can be due to a direct connection or through the intermediate steps $X_{t+1}, X_{t+2}, \dots, X_{t+h-1}$.
+Partial ACF looks at the correlation between $X_t$ and $X_{t+h}$ once the effect of intermediate steps is removed.
+
 
 ## Partial autocorrelation function
 
@@ -502,15 +506,26 @@ If the variables are multivariate normal, then this definition coincides with $\
 
 The partial autocorrelation function (PACF) of a stationary process, $X_t$, denoted $\rho_{hh}$, for $h = 1,2,\dots$, is
 $$
-\rho_{11} = \mathrm{cor}(X_{t+1}, X_t) = \rho(1)
+\rho_{11} = \mathrm{cor}(X_t, X_{t+1}) = \rho(1)
 $$
 and
 $$
-\rho_{hh} = \mathrm{cor}(X_{t+h} - \hat{X}_{t+h}, X_t - \hat{X}_t), \; h\geqslant 2.
+\rho_{hh} = \mathrm{cor}(X_t - \hat{X}_t, X_{t+h} - \hat{X}_{t+h}), \; h\geqslant 2.
 $$
 
-Both $(X_{t+h} - \hat{X}_{t+h})$ and $(X_t - \hat{X}_t)$ are uncorrelated with $\{ X_{t+1}, \dots, X_{t+h-1}\}$. 
-The PACF, $\rho_{hh}$, is the correlation between $X_{t+h}$ and $X_t$ with the linear dependence of everything between them, namely $\{ X_{t+1}, \dots, X_{t+h-1}\}$, on each, removed.
+Both $(X_t - \hat{X}_t)$ and $(X_{t+h} - \hat{X}_{t+h})$ are uncorrelated with $\{ X_{t+1}, \dots, X_{t+h-1}\}$. 
+The PACF, $\rho_{hh}$, is the correlation between $X_{t+h}$ and $X_t$ with the linear dependence of everything between them (intermediate lags), namely $\{ X_{t+1}, \dots, X_{t+h-1}\}$, on each, removed.
+
+In other notations, the PACF for the lag $h$ and predictions $P$ is
+$$
+\rho_{hh} =
+\begin{cases}
+1 & \text{if } h = 0 \\
+\mathrm{cor}(X_t, X_{t+1}) = \rho(1) & \text{if } h = 1 \\
+\mathrm{cor}(X_t - P(X_t | X_{t+1}, \dots, X_{t+h-1}), \\
+\quad\;\; X_{t+1} - P(X_{t+h} | X_{t+1}, \dots, X_{t+h-1})) & \text{if } h > 1.
+\end{cases}
+$$
 
 To obtain sample estimates of PACF in R, use `pacf(X)` or `acf(X, type = "partial")`.
 
@@ -543,6 +558,22 @@ p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```
 :::
+
+A deterministic linear trend can be also eliminated by differencing. 
+For example, consider a time series $X-t$ with a deterministic linear trend:
+$$
+X_t = a + b t + Z_t,
+$$
+where $Z_t \sim \mathrm{WN}(0,\sigma^2)$.
+The first-order differences of $X_t$ remove the linear trend:
+$$
+\begin{align}
+(1 - B)X_t &= X_t - X_{t-1} \\
+&= a + b t + Z_t - (a + b (t - 1) + Z_{t-1}) \\
+&= a + b t + Z_t - a - b t + b - Z_{t-1} \\
+&= b + Z_t + Z_{t-1}.
+\end{align}
+$$
 
 
 ## Conclusion
