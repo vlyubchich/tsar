@@ -8,9 +8,7 @@
 
 
 # To-dos
-- check that all materials transferred from main.pdf
 - check the folders in MEES713, MEES713/check this.
-- check comments from past PDFs to fix typos
 - check missing materials from YRG's lectures
 
 

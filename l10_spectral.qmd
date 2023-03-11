@@ -434,7 +434,7 @@ p1 / (p2 + p3) +
 ```
 
 This is an annual time series, hence the sampling frequency $F_s = 1$. 
-From the global FFT, the identified frequency with maximal power is `r fmax` year$^{-1}$, which is equivalent to the period of about `r round(1/fmax, 1)` years.
+From the global FFT results, the frequency with the maximal power is `r fmax` year$^{-1}$, which is equivalent to the period of about `r round(1/fmax, 1)` years.
 We will set the window for the FFT and calculate the spectrogram.
 Note that we can use overlapping windows for a smoother picture.
 

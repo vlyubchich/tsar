@@ -876,6 +876,8 @@ In practice, the final selection of ARMA's orders $p$ and $q$ (i.e., model speci
 * information criterion such as AIC or BIC or
 * forecast accuracy (e.g., PRMSE and PMAE of point forecasts for a testing set)
 
+Use the examples in @sec-acfpractice to practice the implementation of the rules in @tbl-arma.
+
 
 ## Example analysis
 
