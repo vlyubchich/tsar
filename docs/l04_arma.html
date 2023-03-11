@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.280">
+<meta name="generator" content="quarto-1.2.335">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>Time Series Analysis - 4&nbsp; Autoregressive Moving Average (ARMA) Models</title>
 <style>
@@ -156,6 +156,7 @@ div.csl-indent {
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Time Series Analysis</a> 
         <div class="sidebar-tools-main">
+    <a href="https://github.com/vlyubchich/tsar/" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
   <a href="" class="quarto-reader-toggle sidebar-tool" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
   <i class="bi"></i>
@@ -275,7 +276,7 @@ div.csl-indent {
   </ul>
 </li>
   <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="toc-section-number">4.8</span>  Conclusion</a></li>
-  </ul></nav>
+  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/vlyubchich/tsar/edit/master/l04_arma.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/vlyubchich/tsar/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
@@ -337,19 +338,23 @@ Example: Check the stationarity of white noise
 <p>Let <span class="math inline">\(X_t\)</span> be a white noise series, <span class="math inline">\(X_t \sim \mathrm{WN}(0, \sigma^2)\)</span>. Show that <span class="math inline">\(X_t\)</span> is weakly stationary.</p>
 <p><span class="math inline">\(\mathrm{E}(X_t) = 0\)</span> for all <span class="math inline">\(t\)</span> <span class="math inline">\(\Rightarrow\)</span> <span class="math inline">\(\mathrm{E}(X_t)\)</span> is independent of <span class="math inline">\(t\)</span>.</p>
 <p>Now check the autocovariance <span class="math display">\[
-\mathrm{cov}(X_t, X_{t+h}) =
+\begin{align}
+\mathrm{cov}(X_t, X_{t+h}) &amp;=
 \begin{cases}
 \mathrm{cov}(X_t, X_t) &amp; \text{if } h = 0\\
 0                      &amp; \text{otherwise}
-\end{cases} =
+\end{cases} \\
+&amp; =
 \begin{cases}
 \mathrm{var}(X_t) &amp; \text{if } h = 0\\
 0                 &amp; \text{otherwise}
-\end{cases} =
+\end{cases} \\
+&amp; =
 \begin{cases}
 \sigma^2 &amp; \text{if } h = 0\\
 0        &amp; \text{otherwise}
 \end{cases}
+\end{align}
 \]</span></p>
 <p><span class="math inline">\(\Rightarrow\)</span> <span class="math inline">\(\mathrm{cov}(X_t, X_{t+h})\)</span> does not depend on <span class="math inline">\(t\)</span>, depends only on <span class="math inline">\(h\)</span>.</p>
 <p>Both conditions of weak stationarity are satisfied, <span class="math inline">\(X_t\)</span> is weakly stationary.</p>
@@ -416,7 +421,7 @@ Example: Check the stationarity of random walk
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Check the same for random walk <span class="math inline">\(S_t\)</span>. <span class="math inline">\(S_t = \sum_{i=1}^t{X_t}\)</span>, where <span class="math inline">\(X_t \sim \text{i.i.d.}(0,\sigma^2)\)</span>.</p>
+<p>Check the stationarity of the random walk <span class="math inline">\(S_t\)</span>. <span class="math inline">\(S_t = \sum_{i=1}^t{X_t}\)</span>, where <span class="math inline">\(X_t \sim \text{i.i.d.}(0,\sigma^2)\)</span>, and <span class="math inline">\(S_0 = 0\)</span>.</p>
 <p><span class="math inline">\(\mathrm{E}(S_t) = \mathrm{E}(\sum_{i=1}^t{X_t}) = 0\)</span> <span class="math inline">\(\Rightarrow\)</span> <span class="math inline">\(\mathrm{E}(X_t)\)</span> does not depend on <span class="math inline">\(t\)</span>.</p>
 <p>Now check the autocovariance <span class="math display">\[
 \begin{split}
@@ -431,10 +436,9 @@ Example: Check the stationarity of random walk
 <p>Autocovariance of <span class="math inline">\(S_t\)</span> depends on time, <span class="math inline">\(S_t\)</span> is not stationary. Also, notice that <span class="math inline">\(S_t = S_{t-1} + X_t\)</span>, that is, <span class="math inline">\(S_t\)</span> is a nonstationary AR(1) process with <span class="math inline">\(\phi_1 = 1\)</span>.</p>
 </div>
 </div>
-<p>Random walk patterns are widely found in nature, for example, in the phenomenon of Brownian motion. Notice the linear decay in ACF of nonstationary time series (<a href="#fig-rw">Figure&nbsp;<span>4.2</span></a>).</p>
-<p><span id="eq-rw"><span class="math display">\[
-S_t = \sum_{i = 1}^t X_i,\; \text{where}\; X_t \sim \mathrm{i.i.d.}(0, \sigma^2);\; \sigma = 2.
-\tag{4.2}\]</span></span></p>
+<p>Random walk patterns are widely found in nature, for example, in the phenomenon of Brownian motion. Notice the slow linear decay in the ACF of nonstationary time series (<a href="#fig-rw">Figure&nbsp;<span>4.2</span></a>) <span id="eq-rw"><span class="math display">\[
+S_t = \sum_{i = 1}^t X_i,
+\tag{4.2}\]</span></span> where <span class="math inline">\(X_t \sim \mathrm{i.i.d.}(0, \sigma^2)\)</span> and <span class="math inline">\(\sigma = 2\)</span>.</p>
 <div class="cell">
 <details><summary>Code</summary><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Sample data</span></span>
 <span><span class="va">RW0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/ts.html">ts</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">)</span></span>
@@ -460,8 +464,8 @@ S_t = \sum_{i = 1}^t X_i,\; \text{where}\; X_t \sim \mathrm{i.i.d.}(0, \sigma^2)
 </div>
 </div>
 <p>Random walk may look very different if the i.i.d. process has a non-zero mean. Here is a random walk with drift (<a href="#fig-rw2">Figure&nbsp;<span>4.3</span></a>): <span id="eq-rw2"><span class="math display">\[
-S_t = \sum_{i = 1}^t X_i,\; \text{where}\; X_t \sim \mathrm{i.i.d.}(a, \sigma^2);\; a = 0.2,\; \sigma = 2.
-\tag{4.3}\]</span></span></p>
+S_t = \sum_{i = 1}^t X_i,
+\tag{4.3}\]</span></span> where <span class="math inline">\(X_t \sim \mathrm{i.i.d.}(a, \sigma^2)\)</span>, <span class="math inline">\(a = 0.2\)</span>, and <span class="math inline">\(\sigma = 2\)</span>.</p>
 <div class="cell">
 <details><summary>Code</summary><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Sample data</span></span>
 <span><span class="va">RW2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/ts.html">ts</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span><span class="op">(</span><span class="va">X</span> <span class="op">+</span> <span class="fl">0.2</span><span class="op">)</span><span class="op">)</span></span>
@@ -538,15 +542,15 @@ Note
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-caption-container flex-fill">
-Example: Check stationarity of AR(1)
+Example: Check the stationarity of AR(1)
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Show that AR(1) process <span class="math inline">\(Y_t\)</span> is stationary, <span class="math inline">\(Y_t = \phi Y_{t-1} + Z_t\)</span>, <span class="math inline">\(|\phi| &lt; 1\)</span>, <span class="math inline">\(Z_t \sim \mathrm{WN}(0, \sigma^2)\)</span>.</p>
+<p>Check that the AR(1) process <span class="math inline">\(Y_t\)</span> is stationary, given that <span class="math inline">\(Y_t = \phi Y_{t-1} + \epsilon_t\)</span>, <span class="math inline">\(|\phi| &lt; 1\)</span>, and <span class="math inline">\(\epsilon_t \sim \mathrm{WN}(0, \sigma^2)\)</span>.</p>
 <p><span class="math display">\[
 \begin{split}
-\mathrm{E}(Y_t) &amp;= \mathrm{E}(\phi Y_{t-1} + Z_t)\\
-&amp; = \phi \mathrm{E}(Y_{t-1}) + \mathrm{E}(Z_t)\\
+\mathrm{E}(Y_t) &amp;= \mathrm{E}(\phi Y_{t-1} + \epsilon_t)\\
+&amp; = \phi \mathrm{E}(Y_{t-1}) + \mathrm{E}(\epsilon_t)\\
 &amp; = \phi^2 \mathrm{E}(Y_{t-2}) + 0\\
 &amp; = \phi^3 \mathrm{E}(Y_{t-3})\\
 &amp; = \dots\\
@@ -554,19 +558,19 @@ Example: Check stationarity of AR(1)
 \lim_{N \rightarrow \infty} \mathrm{E}(Y_t) &amp;= \lim_{N \rightarrow \infty} \phi^N \mathrm{E}(Y_{t-N}) = 0
 \end{split}
 \]</span> Therefore, the mean of <span class="math inline">\(Y_t\)</span> does not depend on time.</p>
-<p>Now check autocovariance. For <span class="math inline">\(h=0\)</span>, <span class="math inline">\(\mathrm{cov}(Y_t, Y_{t}) = \mathrm{var}(Y_t) = \sigma^2_Y\)</span>, which is derived in <a href="#eq-ar1var">Equation&nbsp;<span>4.4</span></a> and does not depend on time.</p>
+<p>Now check the autocovariance. For <span class="math inline">\(h=0\)</span>, <span class="math inline">\(\mathrm{cov}(Y_t, Y_{t}) = \mathrm{var}(Y_t) = \sigma^2_Y\)</span>, which is derived in <a href="#eq-ar1var">Equation&nbsp;<span>4.4</span></a> and does not depend on time.</p>
 <p>For <span class="math inline">\(h \neq 0\)</span>, <span class="math display">\[
 \begin{split}
-\mathrm{cov}(Y_t, Y_{t-h}) &amp;= \mathrm{cov}(\phi Y_{t-1} + Z_t, Y_{t-h})\\
-&amp; = \mathrm{cov}(\phi Y_{t-1}, Y_{t-h}) + \mathrm{cov}(Z_t, Y_{t-h})\\
+\mathrm{cov}(Y_t, Y_{t-h}) &amp;= \mathrm{cov}(\phi Y_{t-1} + \epsilon_t, Y_{t-h})\\
+&amp; = \mathrm{cov}(\phi Y_{t-1}, Y_{t-h}) + \mathrm{cov}(\epsilon_t, Y_{t-h})\\
 &amp; = \phi \mathrm{cov}(Y_{t-1}, Y_{t-h}) + 0\\
-&amp; = \phi \mathrm{cov}(\phi Y_{t-2} + Z_{t-1}, Y_{t-h})\\
+&amp; = \phi \mathrm{cov}(\phi Y_{t-2} + \epsilon_{t-1}, Y_{t-h})\\
 &amp; = \phi^2 \gamma_Y(h-2)\\
 &amp; = \dots\\
 &amp; = \phi^h \gamma_Y(0) \\
 &amp; = \phi^h \sigma_Y^2,
 \end{split}
-\]</span> thus autocovariance does not depend on time, depends on lag <span class="math inline">\(h\)</span>.</p>
+\]</span> thus the autocovariance does not depend on time, depends only on lag <span class="math inline">\(h\)</span>.</p>
 <p>Both conditions for weak stationarity are satisfied, the <span class="math inline">\(Y_t\)</span> specified above is weakly stationary.</p>
 </div>
 </div>
@@ -580,9 +584,9 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Additionally, see that the ACF of this process <span class="math display">\[
+<p>Additionally, see that the ACF of the AR(1) process <span id="eq-arACF"><span class="math display">\[
 \rho_Y(h) = \frac{\gamma_Y(h)}{\gamma_Y(0)} = \frac{\phi^h \gamma_Y(0)}{\gamma_Y(0)} = \phi^h
-\]</span> shows exponential decay. Remember this about AR processes.</p>
+\tag{4.5}\]</span></span> shows exponential decay. Remember this about AR processes.</p>
 </div>
 </div>
 <p><strong>AR(<span class="math inline">\(p\)</span>) model</strong></p>
@@ -591,14 +595,14 @@ Note
 Y_{t} &amp;= \phi_{1} Y_{t  - 1} + \phi_{2} Y_{t - 2} + \dots + \phi_{p} Y_{t - p} + \epsilon_{t} \\
 &amp;=\sum_{i=1}^p\phi_iY_{t-i} + \epsilon_t
 \end{split}
-\tag{4.5}\]</span></span> with <span class="math inline">\(\epsilon_{t}\)</span> independent of <span class="math inline">\(Y_{t - k}, \dots , Y_{t - 1}\)</span>; <span class="math inline">\(p \in \mathbb{N}^{+}\)</span>. This model is called <em>an autoregressive model of order</em> <span class="math inline">\(p\)</span>, or simply <em>an AR(<span class="math inline">\(p\)</span>) model</em>.</p>
+\tag{4.6}\]</span></span> with <span class="math inline">\(\epsilon_{t}\)</span> independent of <span class="math inline">\(Y_{t - k}, \dots , Y_{t - 1}\)</span>; <span class="math inline">\(p \in \mathbb{N}^{+}\)</span>. This model is called <em>an autoregressive model of order</em> <span class="math inline">\(p\)</span>, or simply <em>an AR(<span class="math inline">\(p\)</span>) model</em>.</p>
 <p>Similarly to AR(1), every AR(<span class="math inline">\(p\)</span>) model may be rewritten as <span class="math display">\[
 \left(1 -  \sum^{p}_{i = 1} \phi_{i} B^{i} \right) Y_{t} = \epsilon_{t},
 \]</span> or in more compact notation as <span class="math display">\[
 \phi (B) Y_t = \epsilon_t,
 \]</span> where <span class="math inline">\(\phi(\lambda)\)</span> is the polynomial <span class="math inline">\(\phi(\lambda) = 1 - \phi_{1} \lambda - \phi_{2} \lambda^{2} - \dots - \phi_{p} \lambda^{p}\)</span>.</p>
 <p>The stationarity condition for AR(<span class="math inline">\(p\)</span>) model is defined through the polynomial <span class="math inline">\(\phi(\lambda)\)</span>. Specifically, <em>all the roots of the function <span class="math inline">\(\phi(\lambda)\)</span> lie outside the unit circle in the complex plane</em>.</p>
-<p>To compute ACVF and ACF for the AR(<span class="math inline">\(p\)</span>) model, multiplying both sides of <a href="#eq-ARp">Equation&nbsp;<span>4.5</span></a> by <span class="math inline">\(Y_{t - k}\)</span> for <span class="math inline">\(k \geqslant p\)</span> and taking expectations yields <span class="math display">\[
+<p>To compute ACVF and ACF for the AR(<span class="math inline">\(p\)</span>) model, multiplying both sides of <a href="#eq-ARp">Equation&nbsp;<span>4.6</span></a> by <span class="math inline">\(Y_{t - k}\)</span> for <span class="math inline">\(k \geqslant p\)</span> and taking expectations yields <span class="math display">\[
 \begin{split}
 \mathrm{E} \left( Y_{t} Y_{t - k} \right) &amp; =  \mathrm{E} \left( \phi_{1} Y_{t-1} Y_{t-k} + \phi_{2} Y_{t-2} Y_{t-k} + \dots + \phi_{p} Y_{t -p} Y_{t - k} + \epsilon_{t} Y_{t -k} \right) \\
 &amp; =  \phi_{1}  \mathrm{E} \left( Y_{t  - 1} Y_{t - k} \right) + \phi_{2} \mathrm{E} \left( Y_{t - 2} Y_{t - k} \right) + \dots+ \phi_{p} \mathrm{E} \left(Y_{t - p} Y_{t - k} \right) + \mathrm{E} \left( \epsilon_{t} Y_{t  - k} \right).
@@ -611,11 +615,15 @@ Y_{t} &amp;= \phi_{1} Y_{t  - 1} + \phi_{2} Y_{t - 2} + \dots + \phi_{p} Y_{t - 
 \]</span></p>
 <p>To identify the decay, we need the <span class="math inline">\(p\)</span> starting correlations <span class="math inline">\(\rho(1), \rho(2), \dots, \rho(p)\)</span>, which we can find from the parameters <span class="math inline">\(\phi_{1}, \phi_{2}, \dots, \phi_{p}\)</span>.</p>
 <p><strong>PACF of AR processes</strong></p>
-<p>An AR(<span class="math inline">\(p\)</span>) model implies <span class="math inline">\(Y_{t+h} = \sum_{i=1}^p\phi_{i} Y_{t + h - i} + \epsilon_{t+h}\)</span>, where the roots of <span class="math inline">\(\phi(\lambda)\)</span> are outside the unit circle. When <span class="math inline">\(h &gt; p\)</span>, the regression of <span class="math inline">\(Y_{t+h}\)</span> on <span class="math inline">\(\{ Y_{t+1},\dots, Y_{t+h-1}\}\)</span>, is <span class="math display">\[
+<p>An AR(<span class="math inline">\(p\)</span>) model implies <span class="math inline">\(Y_{t+h} = \sum_{i=1}^p\phi_{i} Y_{t + h - i} + \epsilon_{t+h}\)</span>, where the roots of <span class="math inline">\(\phi(\lambda)\)</span> are outside the unit circle. When <span class="math inline">\(h &gt; p\)</span>, the regression of <span class="math inline">\(Y_{t+h}\)</span> on <span class="math inline">\(\{ Y_{t+1},\dots, Y_{t+h-1}\}\)</span> is <span class="math display">\[
 \hat{Y}_{t+h} = \sum^p_{i=1} \phi_i Y_{t+h-i}.
 \]</span> Thus, when <span class="math inline">\(h &gt; p\)</span>, <span class="math display">\[
-\rho_{hh} = \mathrm{cor}(Y_{t+h}-\hat{Y}_{t+h}, Y_t - \hat{Y}_t) = \mathrm{cor}(\epsilon_{t+h}, Y_t - \hat{Y}_t) = 0,
-\]</span> because, by the causality of the process, <span class="math inline">\(Y_t - \hat{Y}_t\)</span>, depends only on <span class="math inline">\(\{ \epsilon_{t+h-1}, \epsilon_{t+h-2},\dots \}\)</span>.</p>
+\begin{align}
+\rho_{hh} &amp;= \mathrm{cor}(Y_{t+h}-\hat{Y}_{t+h}, Y_t - \hat{Y}_t) \\
+&amp; = \mathrm{cor}(\epsilon_{t+h}, Y_t - \hat{Y}_t) \\
+&amp; = 0,
+\end{align}
+\]</span> because, by the causality of the process, the difference <span class="math inline">\(Y_t - \hat{Y}_t\)</span> depends only on <span class="math inline">\(\{ \epsilon_{t+h-1}, \epsilon_{t+h-2},\dots \}\)</span>.</p>
 <p>When <span class="math inline">\(h\leqslant p\)</span>, <span class="math inline">\(\rho_{hh}\)</span> is not zero, and <span class="math inline">\(\rho_{11}, \dots, \rho_{p-1,p-1}\)</span> are not necessarily zero.</p>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
@@ -630,9 +638,40 @@ Note
 <p>The important conclusion is that the PACF of an AR(<span class="math inline">\(p\)</span>) process necessarily cuts off (PACF = 0) after lag <span class="math inline">\(p\)</span>.</p>
 </div>
 </div>
+<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Example: PACF of AR(1) process
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For an AR(1) process, the best linear predictor <span class="math inline">\(P(X_{n + 1} | X_n) = \phi X_n\)</span>.</p>
+<p>For <span class="math inline">\(h = 0\)</span>, <span class="math inline">\(\rho_{00} = 1\)</span>.<br>
+For <span class="math inline">\(h = 1\)</span>, <span class="math inline">\(\rho_{11} = \mathrm{cor}(X_t, X_{t+1}) = \phi\)</span> (no intermediate lags, see <a href="#eq-arACF">Equation&nbsp;<span>4.5</span></a>).<br>
+For <span class="math inline">\(h = 2\)</span>, note that <span class="math inline">\(X_{t+2} = \phi X_{t+1} + \epsilon_{t+2}\)</span>, then <span class="math display">\[
+\begin{align}
+\rho_{22} &amp;= \mathrm{cor}(X_t - P(X_t | X_{t+1}), X_{t+2} - P(X_{t+2} | X_{t+1})) \\
+&amp;= \mathrm{cor}(X_t - P(X_t | X_{t+1}), X_{t+2} - \phi X_{t+1})\\
+&amp;= \mathrm{cor}(X_t - P(X_t | X_{t+1}), \epsilon_{t+2})\\
+&amp;= 0
+\end{align}
+\]</span> because the term <span class="math inline">\(X_t - P(X_t | X_{t+1})\)</span> is a function of <span class="math inline">\(X_t\)</span> and <span class="math inline">\(X_{t+1}\)</span> only, while <span class="math inline">\(\epsilon_{t+2}\)</span> is the future noise.</p>
+<p>Thus, for <span class="math inline">\(X_t \sim\)</span> AR(1), the PACF <span class="math display">\[
+\rho_{hh} =
+\begin{cases}
+1 &amp; \text{if } h = 0\\
+\phi &amp; \text{if } h = 1\\
+0 &amp; \text{if } h \geqslant 2
+\end{cases}
+\]</span></p>
+</div>
+</div>
 <p>See the plots for the following AR(1) process in <a href="#fig-ar1">Figure&nbsp;<span>4.4</span></a>: <span id="eq-ar1"><span class="math display">\[
-X_t = \phi_1 X_{t-1} + \epsilon_t;\; \epsilon_t \sim N(0,\sigma^2);\; \phi_1=0.6,\; \sigma = 1.
-\tag{4.6}\]</span></span></p>
+X_t = \phi_1 X_{t-1} + \epsilon_t,
+\tag{4.7}\]</span></span> where <span class="math inline">\(\epsilon_t \sim N(0,\sigma^2)\)</span>, <span class="math inline">\(\phi_1=0.6\)</span>, and <span class="math inline">\(\sigma = 1\)</span>.</p>
 <div class="cell">
 <details><summary>Code</summary><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Theoretical ACF, PACF</span></span>
 <span><span class="va">phi</span> <span class="op">&lt;-</span> <span class="fl">0.6</span></span>
@@ -665,14 +704,14 @@ X_t = \phi_1 X_{t-1} + \epsilon_t;\; \epsilon_t \sim N(0,\sigma^2);\; \phi_1=0.6
 </details><div class="cell-output-display">
 <div id="fig-ar1" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure"><p><img src="l04_arma_files/figure-html/fig-ar1-1.png" class="img-fluid figure-img" width="768"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;4.4: AR(1) process as specified in <a href="#eq-ar1">Equation&nbsp;<span>4.6</span></a>.</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;4.4: AR(1) process as specified in <a href="#eq-ar1">Equation&nbsp;<span>4.7</span></a>.</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
 <p>See the plots for the following AR(1) process in <a href="#fig-ar2">Figure&nbsp;<span>4.5</span></a> (only the coefficient <span class="math inline">\(\phi_1\)</span> changed from the previous specification): <span id="eq-ar2"><span class="math display">\[
 X_t = \phi_1 X_{t-1} + \epsilon_t;\; \epsilon_t \sim N(0,\sigma^2);\; \phi_1=-0.6,\; \sigma = 1.
-\tag{4.7}\]</span></span></p>
+\tag{4.8}\]</span></span></p>
 <div class="cell">
 <details><summary>Code</summary><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Theoretical ACF, PACF</span></span>
 <span><span class="va">phi</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">0.6</span></span>
@@ -705,7 +744,7 @@ X_t = \phi_1 X_{t-1} + \epsilon_t;\; \epsilon_t \sim N(0,\sigma^2);\; \phi_1=-0.
 </details><div class="cell-output-display">
 <div id="fig-ar2" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure"><p><img src="l04_arma_files/figure-html/fig-ar2-1.png" class="img-fluid figure-img" width="768"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;4.5: AR(1) process as specified in <a href="#eq-ar2">Equation&nbsp;<span>4.7</span></a>.</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;4.5: AR(1) process as specified in <a href="#eq-ar2">Equation&nbsp;<span>4.8</span></a>.</figcaption><p></p>
 </figure>
 </div>
 </div>
@@ -716,28 +755,20 @@ X_t = \phi_1 X_{t-1} + \epsilon_t;\; \epsilon_t \sim N(0,\sigma^2);\; \phi_1=-0.
 <span class="header-section-number">4.3</span> The Yule–Wold representation and linear processes</h2>
 <p>A process <span class="math inline">\(X_{t}\)</span>, (<span class="math inline">\(t = 0, \pm 1, \pm 2, \dots\)</span>) is said to be linear if it has a representation of the form <span class="math display">\[
 X_{t} = \mu + \sum^{\infty}_{r = - \infty} c_{r} \epsilon_{t - r},
-\]</span> where</p>
-<ul>
-<li>
-<span class="math inline">\(\mu\)</span> is a common mean,</li>
-<li>
-<span class="math inline">\(c_{r}\)</span> is a sequence of fixed constants,</li>
-<li>
-<span class="math inline">\(\epsilon_{t}\)</span> are uncorrelated random variables with mean 0 and common variance.</li>
-</ul>
+\]</span> where <span class="math inline">\(\mu\)</span> is a common mean, <span class="math inline">\(c_{r}\)</span> is a sequence of fixed constants, and <span class="math inline">\(\epsilon_{t}\)</span> are uncorrelated random variables with mean 0 and common variance.</p>
 <p>We assume <span class="math inline">\(\sum c^{2}_{r} &lt; \infty\)</span> to ensure that the variances of the individual <span class="math inline">\(X_{t}\)</span> are finite (stationarity and existence condition). Then the process <span class="math inline">\(X_{t}\)</span> is necessarily (weakly) stationary.</p>
 <p>If we also require that <span class="math inline">\(\epsilon_{t}\)</span> are identically distributed, then <span class="math inline">\(X_{t}\)</span> is strictly stationary. For example, see the case of normally distributed <span class="math inline">\(\epsilon_{t}\)</span>.</p>
 <p>If <span class="math inline">\(c_r = 0\)</span> for all <span class="math inline">\(r &lt; 0\)</span>, <span class="math inline">\(X_t\)</span> is called <em>causal</em> (i.e., the process at the time <span class="math inline">\(t\)</span> does not depend on the future, yet unobserved, values of <span class="math inline">\(\epsilon_{t}\)</span>).</p>
-<p>The representation of a causal stationary process <span class="math inline">\(X_{t}\)</span> with zero mean in the form <span id="eq-YuleWald"><span class="math display">\[
-X_{t} = \sum^{\infty}_{r = 0}  c_{r} \epsilon_{t - r},
-\tag{4.8}\]</span></span> where <span class="math inline">\(\epsilon_{t} \sim \mathrm{WN}(0, \sigma^{2}\)</span>) and <span class="math inline">\(\sum c^{2}_{r} &lt; \infty\)</span>, is sometimes called <em>the Yule–Wald representation</em>.</p>
+<p>The representation of a causal stationary process (depending only on the past) <span class="math inline">\(X_{t}\)</span> with zero mean in the form <span id="eq-YuleWald"><span class="math display">\[
+X_{t} = \sum^{\infty}_{r = 0} c_{r} \epsilon_{t - r},
+\tag{4.9}\]</span></span> where <span class="math inline">\(\epsilon_{t} \sim \mathrm{WN}(0, \sigma^{2}\)</span>) and <span class="math inline">\(\sum c^{2}_{r} &lt; \infty\)</span>, is sometimes called <em>the Yule–Wald representation</em>.</p>
 </section><section id="moving-average-ma-models" class="level2" data-number="4.4"><h2 data-number="4.4" class="anchored" data-anchor-id="moving-average-ma-models">
 <span class="header-section-number">4.4</span> Moving average (MA) models</h2>
 <p><strong>MA(1) model</strong></p>
 <p>A zero mean stationary process <span class="math inline">\(Y_{t}\)</span> is called a moving average process of order 1, or <em>an MA(1) model</em>, if <span class="math inline">\(Y_{t}\)</span> satisfies <span class="math display">\[
 Y_{t} = \epsilon_{t} + \theta_{1}  \epsilon_{t - 1},
 \]</span> where <span class="math inline">\(\epsilon_{t}\)</span> is white noise.</p>
-<p>In other words, an MA(1) process has <span class="math inline">\(c_{r} = 0\)</span> for every <span class="math inline">\(r &gt; 1\)</span> in its Yule–Wold representation <a href="#eq-YuleWald">Equation&nbsp;<span>4.8</span></a>.</p>
+<p>In other words, an MA(1) process has <span class="math inline">\(c_{r} = 0\)</span> for every <span class="math inline">\(r &gt; 1\)</span> in its Yule–Wold representation <a href="#eq-YuleWald">Equation&nbsp;<span>4.9</span></a>.</p>
 <p>The MA(1) model may be rewritten as <span class="math display">\[
 Y_{t} = (1 + \theta_{1} B) \epsilon_{t},
 \]</span> or in the compact form <span class="math display">\[
@@ -761,11 +792,11 @@ Y_{t} = \sum^{q}_{r = 0} \theta_{r} \epsilon_{t - r},
 \begin{split}
 \gamma_Y(h) &amp; = \mathrm{cov}(Y_{t}, Y_{t+h}) = \mathrm{cov} \left( \sum^{q}_{r = 0} \theta_{r }\epsilon_{t - r}, \sum^{q}_{\ell = 0} \theta_{\ell} \epsilon_{t + h - \ell} \right) \\
 \\
-&amp; =  \sum^{q}_{r = 0} \sum^{q}_{\ell = 0} \mathrm{cov} \left( \theta_{r } \epsilon_{t - r},  \theta_{\ell} \epsilon_{t + h - \ell} \right) \\
+&amp; = \sum^{q}_{r = 0} \sum^{q}_{\ell = 0} \mathrm{cov} \left( \theta_{r } \epsilon_{t - r},  \theta_{\ell} \epsilon_{t + h - \ell} \right) \\
 \\
-&amp; =   \sum^{q}_{r = 0}   \sum^{q}_{\ell = 0} \theta_{r } \theta_{\ell} \mathrm{cov}  \left( \epsilon_{t - r}, \epsilon_{t - r}  \right) ~~ \text{since cov} \left( \epsilon_{u}, \epsilon_{v}  \right) = 0 ~ \text{unless} ~ u = v \\
+&amp; = \sum^{q}_{r = 0} \sum^{q}_{\ell = 0} \theta_{r } \theta_{\ell} \mathrm{cov}  \left( \epsilon_{t - r}, \epsilon_{t - r}  \right) ~~ \text{since cov} \left( \epsilon_{u}, \epsilon_{v}  \right) = 0 ~ \text{unless} ~ u = v \\
 \\
-&amp; =  \sigma_{\epsilon}^{2} \sum^{q}_{r = 0} \theta_{r} \theta_{r+h}.
+&amp; = \sigma_{\epsilon}^{2} \sum^{q}_{r = 0} \theta_{r} \theta_{r+h}.
 \end{split}
 \]</span> Note that the case of no time shift between the noise series, i.e., when <span class="math inline">\(t-r = t+h-l\)</span>, leads to <span class="math inline">\(l=r+h\)</span>, which is used in the last row.</p>
 <p>Hence, <span id="eq-MAacvf"><span class="math display">\[
@@ -775,9 +806,9 @@ Y_{t} = \sum^{q}_{r = 0} \theta_{r} \epsilon_{t - r},
 0 &amp; \text{for} &amp; h &gt; q.
 \end{array}
 \right.
-\tag{4.9}\]</span></span></p>
+\tag{4.10}\]</span></span></p>
 <p>This leads us to the most important result about the correlation structure for MA(<span class="math inline">\(q\)</span>) processes. For an MA(<span class="math inline">\(q\)</span>) process, <span class="math inline">\(\gamma(h) = 0\)</span> for all <span class="math inline">\(h &gt; q\)</span>. Equivalently, the ACF has <span class="math inline">\(q\)</span> ‘starting’ correlations or spikes, <span class="math inline">\(\rho(1), \rho(2), \dots, \rho(q)\)</span>, and then <span class="math inline">\(\rho(h) = 0\)</span> for <span class="math inline">\(h &gt; q\)</span>. We say that the ACF ‘cuts off’ after the lag <span class="math inline">\(q\)</span>.</p>
-<p>Now compute the actual values of the starting correlations <span class="math inline">\(\rho(1), \dots, \rho(q)\)</span> in terms of the parameters <span class="math inline">\(\theta_{0} = 1, \theta_{1}, \theta_{2}, \dots, \theta_{q}\)</span>. Using <a href="#eq-MAacvf">Equation&nbsp;<span>4.9</span></a>, we get</p>
+<p>Now compute the actual values of the starting correlations <span class="math inline">\(\rho(1), \dots, \rho(q)\)</span> in terms of the parameters <span class="math inline">\(\theta_{0} = 1, \theta_{1}, \theta_{2}, \dots, \theta_{q}\)</span>. Using <a href="#eq-MAacvf">Equation&nbsp;<span>4.10</span></a>, we get</p>
 <ul>
 <li>
 <p>For the MA(1) model <span class="math inline">\(q = 1\)</span>. Hence <span class="math display">\[
@@ -807,26 +838,42 @@ h  =  2 &amp;\rightarrow \gamma(2) = \sigma^{2} \sum^{0}_{r=0}  \theta_{r} \thet
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-caption-container flex-fill">
-Example: Calculate ACF of MA(<span class="math inline">\(q\)</span>)
+Example: ACVF and ACF of MA(1)
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <p>Consider an MA(1) model. Let <span class="math inline">\(h \geqslant 0\)</span>. Applying the covariance properties we obtain the general expression: <span class="math display">\[
 \begin{split}
-\gamma(h) &amp; =  \mathrm{cov}\left( Y_{t}, Y_{t - h} \right) =  \mathrm{cov} \left( \epsilon_{t} + \theta_{1} \epsilon_{t - 1}, \epsilon_{t - h} + \theta_{1} \epsilon_{t - h - 1}  \right) \\
+\gamma(h) &amp; = \mathrm{cov}\left( Y_{t}, Y_{t - h} \right) \\
+&amp; = \mathrm{cov} \left( \epsilon_{t} + \theta_{1} \epsilon_{t - 1},\; \epsilon_{t - h} + \theta_{1} \epsilon_{t - h - 1}  \right) \\
 &amp; =  \mathrm{cov} \left( \epsilon_{t},  \epsilon_{t - h} \right) + \theta_{1} \mathrm{cov} \left(  \epsilon_{t},  \epsilon_{t - h - 1}  \right) + \theta_{1} \mathrm{cov} \left( \epsilon_{t - 1}, \epsilon_{t - h} \right) + \theta^{2}_{1} \mathrm{cov} \left(\epsilon_{t - 1}, \epsilon_{t - h - 1} \right).
 \end{split}
 \]</span></p>
-<p>Note that the covariances in the last line of the above expression will be nonzero if the time indices match up. Plugging different values of <span class="math inline">\(h\)</span> into the above equation we obtain <span class="math display">\[
-\begin{split}
-h  =  0 &amp;\rightarrow \gamma(0) =   \mathrm{cov} \left( \epsilon_{t},   \epsilon_{t} \right)  + 0 + 0 + \theta^{2}_{1}  \mathrm{cov} \left( \epsilon_{t - 1},  \epsilon_{t - 1}  \right) = \sigma^{2} + \theta^{2}_{1} \sigma^{2} = \sigma^{2} \left( 1 + \theta^{2}_{1} \right). \\
+<p>Note that the covariances in the last line of the above expression will be nonzero if the time indices match up. By plugging different values of <span class="math inline">\(h\)</span> into the above equation, we obtain <span class="math display">\[
+\begin{align}
+h  =  0 \rightarrow \gamma(0) &amp;= \mathrm{cov} \left( \epsilon_{t}, \epsilon_{t} \right) + 0 + 0 + \theta^{2}_{1} \mathrm{cov} \left( \epsilon_{t - 1}, \epsilon_{t - 1} \right) \\
+&amp;= \sigma^{2} + \theta^{2}_{1} \sigma^{2} \\
+&amp;= \sigma^{2} \left( 1 + \theta^{2}_{1} \right). \\
 \\
-h  =  1 &amp;\rightarrow \gamma(1) = 0 + 0 + \theta_{1}  \mathrm{cov} \left( \epsilon_{t - 1},  \epsilon_{t - 1}  \right) + 0 = \sigma^{2} \theta_{1}.\\
+h = 1 \rightarrow \gamma(1) &amp;= 0 + 0 + \theta_{1} \mathrm{cov} \left( \epsilon_{t - 1}, \epsilon_{t - 1} \right) + 0 \\
+&amp;= \sigma^{2} \theta_{1}.\\
 \\
-h \geqslant 2 &amp;\rightarrow \gamma(h) = 0 + 0 + 0 + 0 = 0.
-\end{split}
+h \geqslant 2 \rightarrow \gamma(h) &amp;= 0 + 0 + 0 + 0 \\
+&amp;= 0.
+\end{align}
 \]</span></p>
-<p>This method generalizes easily to computing covariances for MA(<span class="math inline">\(q\)</span>) models of higher order.</p>
+<p>This method generalizes easily to computing autocovariances for MA(<span class="math inline">\(q\)</span>) models of higher orders.</p>
+<p>Recall that ACF is the ACVF standardized by the variance (which is the ACVF at lag zero), hence the ACF <span class="math display">\[
+\begin{align}
+\rho(h) &amp;= \frac{\gamma(h)}{\gamma(0)} \\
+&amp;=
+\begin{cases}
+1 &amp; \text{if } h = 0 \\
+\frac{\theta_1}{1 + \theta^2_1} &amp; \text{if } h = 1 \\
+0 &amp; \text{if } h &gt; 1
+\end{cases}
+\end{align}
+\]</span></p>
 </div>
 </div>
 <div class="callout-note callout callout-style-default callout-captioned">
@@ -862,8 +909,8 @@ Note
 </div>
 <p>We do not have to compute the PACF by performing numerous regressions first. The computations are done via a recursive formula.</p>
 <p>Similar to AR(1) examples above, now consider two sets of plots for MA(1) processes with a positive and negative coefficient. For the MA(1) process <span id="eq-ma1"><span class="math display">\[
-X_t = \theta_1 \epsilon_{t-1} + \epsilon_t;\; \epsilon_t \sim N(0,\sigma^2);\; \theta_1=0.3,\; \sigma = 1,
-\tag{4.10}\]</span></span> see plots in <a href="#fig-ma1">Figure&nbsp;<span>4.6</span></a>.</p>
+X_t = \theta_1 \epsilon_{t-1} + \epsilon_t,
+\tag{4.11}\]</span></span> where <span class="math inline">\(\epsilon_t \sim N(0,\sigma^2)\)</span>, <span class="math inline">\(\theta_1=0.3\)</span>, and <span class="math inline">\(\sigma = 1\)</span>, see plots in <a href="#fig-ma1">Figure&nbsp;<span>4.6</span></a>.</p>
 <div class="cell">
 <details><summary>Code</summary><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Theoretical ACF, PACF</span></span>
 <span><span class="va">theta</span> <span class="op">&lt;-</span> <span class="fl">0.3</span></span>
@@ -896,14 +943,14 @@ X_t = \theta_1 \epsilon_{t-1} + \epsilon_t;\; \epsilon_t \sim N(0,\sigma^2);\; \
 </details><div class="cell-output-display">
 <div id="fig-ma1" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure"><p><img src="l04_arma_files/figure-html/fig-ma1-1.png" class="img-fluid figure-img" width="768"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;4.6: MA(1) as specified in <a href="#eq-ma1">Equation&nbsp;<span>4.10</span></a>.</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;4.6: MA(1) as specified in <a href="#eq-ma1">Equation&nbsp;<span>4.11</span></a>.</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
 <p>For the MA(1) process with negative <span class="math inline">\(\theta_1\)</span>, <span id="eq-ma2"><span class="math display">\[
-X_t = \theta_1 \epsilon_{t-1} + \epsilon_t;\; \epsilon_t \sim N(0,\sigma^2);\; \theta_1=-0.3,\; \sigma = 1,
-\tag{4.11}\]</span></span> see plots in <a href="#fig-ma2">Figure&nbsp;<span>4.7</span></a>.</p>
+X_t = \theta_1 \epsilon_{t-1} + \epsilon_t,
+\tag{4.12}\]</span></span> where <span class="math inline">\(\epsilon_t \sim N(0,\sigma^2)\)</span>, <span class="math inline">\(\theta_1=-0.3\)</span>, and <span class="math inline">\(\sigma = 1\)</span>, see plots in <a href="#fig-ma2">Figure&nbsp;<span>4.7</span></a>.</p>
 <div class="cell">
 <details><summary>Code</summary><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Theoretical ACF, PACF</span></span>
 <span><span class="va">theta</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">0.3</span></span>
@@ -936,16 +983,19 @@ X_t = \theta_1 \epsilon_{t-1} + \epsilon_t;\; \epsilon_t \sim N(0,\sigma^2);\; \
 </details><div class="cell-output-display">
 <div id="fig-ma2" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure"><p><img src="l04_arma_files/figure-html/fig-ma2-1.png" class="img-fluid figure-img" width="768"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;4.7: MA(1) as specified in <a href="#eq-ma2">Equation&nbsp;<span>4.11</span></a>.</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;4.7: MA(1) as specified in <a href="#eq-ma2">Equation&nbsp;<span>4.12</span></a>.</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
 </section><section id="arma" class="level2" data-number="4.5"><h2 data-number="4.5" class="anchored" data-anchor-id="arma">
 <span class="header-section-number">4.5</span> ARMA</h2>
-<p>An ARMA(<span class="math inline">\(p, q\)</span>) is a mixture of <span class="math inline">\(p\)</span> autoregressive components and <span class="math inline">\(q\)</span> moving average components. It can be expressed as <span class="math display">\[
+<p>An ARMA(<span class="math inline">\(p, q\)</span>) is a mixture of <span class="math inline">\(p\)</span> autoregressive components and <span class="math inline">\(q\)</span> moving average components. It can be expressed as <span id="eq-armapq"><span class="math display">\[
 \phi^{p} (B)Y_{t} = \theta^{q} (B) \epsilon_{t},
-\]</span> where <span class="math inline">\(\epsilon_{t}\)</span> is white noise, <span class="math inline">\(\phi^{p}(\lambda)\)</span> and <span class="math inline">\(\theta^{q}(\lambda)\)</span> are the polynomials of degree <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span>, respectively.</p>
+\tag{4.13}\]</span></span> where <span class="math inline">\(\epsilon_t\)</span> is the zero-mean white noise with variance <span class="math inline">\(\sigma^2\)</span>, <span class="math inline">\(\phi^{p}(\lambda)\)</span> and <span class="math inline">\(\theta^{q}(\lambda)\)</span> are the polynomials (without common roots) of degree <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span>, respectively.</p>
+<p>The ARMA(<span class="math inline">\(p, q\)</span>) <a href="#eq-armapq">Equation&nbsp;<span>4.13</span></a> can be expanded as follows: <span class="math display">\[
+X_t - \phi_1 X_{t-1} - \dots - \phi_p X_{t-p} = \epsilon_t + \theta_1 \epsilon_{t-1} + \dots + \theta_q \epsilon_{t-q}.
+\]</span></p>
 <p><strong>ARMA(1,2)</strong></p>
 <p>Short notation <span class="math inline">\(\phi^{1} (B)Y_{t} = \theta^{2} (B) \epsilon_{t}\)</span> expands to <span class="math display">\[
 \left(1 - \phi_{1} B \right) Y_{t} = \left( 1 + \theta_{1} B + \theta_{2} B^{2} \right) \epsilon_{t}

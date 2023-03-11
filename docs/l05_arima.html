@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.280">
+<meta name="generator" content="quarto-1.2.335">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>Time Series Analysis - 5&nbsp; Autoregressive Integrated Moving Average (ARIMA) Models</title>
 <style>
@@ -156,6 +156,7 @@ div.csl-indent {
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Time Series Analysis</a> 
         <div class="sidebar-tools-main">
+    <a href="https://github.com/vlyubchich/tsar/" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
   <a href="" class="quarto-reader-toggle sidebar-tool" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
   <i class="bi"></i>
@@ -267,7 +268,7 @@ div.csl-indent {
   <li><a href="#seasonal-arima-sarima" id="toc-seasonal-arima-sarima" class="nav-link" data-scroll-target="#seasonal-arima-sarima"><span class="toc-section-number">5.3</span>  Seasonal ARIMA (SARIMA)</a></li>
   <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="toc-section-number">5.4</span>  Conclusion</a></li>
   <li><a href="#appendix" id="toc-appendix" class="nav-link" data-scroll-target="#appendix"><span class="toc-section-number">5.5</span>  Appendix</a></li>
-  </ul></nav>
+  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/vlyubchich/tsar/edit/master/l05_arima.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/vlyubchich/tsar/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
@@ -331,9 +332,13 @@ Note
 <p>In our lectures, we deal with time series defined using discrete times <span class="math inline">\(t\)</span> (for example, years), so yearly income is <span class="math inline">\(Y_t\)</span>, and the total income over several years can be obtained by summing the individual annual incomes, <span class="math inline">\(\sum Y_t\)</span>. Hence, here we integrate by summation.</p>
 <p>Recall the definition of random walk series, which is a cumulative sum of i.i.d. noise: <span class="math display">\[
 X_t = \sum_{i=1}^t Y_i,
-\]</span> where <span class="math inline">\(Y_t \sim\)</span> i.i.d.(<span class="math inline">\(0,\sigma^2\)</span>). This <span class="math inline">\(X_t\)</span> is the simplest example of integrated series. The notation $X_t $I(1) means <span class="math inline">\(X_t\)</span> is a first-order integrated series. The differences of <span class="math inline">\(X_t\)</span> <span class="math display">\[
-(1 - B)X_t = X_t - X_{t-1} = Y_t
-\]</span> give us back the uncorrelated series <span class="math inline">\(Y_t\)</span>, hence <span class="math inline">\(X_t\)</span> is an ARIMA(0,1,0) process.</p>
+\]</span> where <span class="math inline">\(Y_t \sim\)</span> i.i.d.(<span class="math inline">\(0,\sigma^2\)</span>). This <span class="math inline">\(X_t\)</span> is the simplest example of integrated series. The notation <span class="math inline">\(X_t \sim\)</span> I(1) means <span class="math inline">\(X_t\)</span> is a first-order integrated series. The differences of <span class="math inline">\(X_t\)</span> <span class="math display">\[
+\begin{align}
+(1 - B)X_t &amp;= X_t - BX_t \\
+&amp;= X_t - X_{t-1} \\
+&amp;= Y_t
+\end{align}
+\]</span> give us back the uncorrelated series <span class="math inline">\(Y_t\)</span>, hence the process <span class="math inline">\(X_t\)</span> is an ARIMA(0,1,0) process.</p>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -542,7 +547,7 @@ Note
 (1 - B)^d (1 - \phi_1B - \dots - \phi_pB^p) (1 - B^s)^D (1 - \Phi_1B^s - \dots - \Phi_PB^{sP}) X_t \\
 = (1 + \theta_1B + \dots + \theta_qB^q) (1 + \Theta_1B^s + \dots + \Theta_QB^{sQ})Z_t,
 \end{split}
-\tag{5.2}\]</span></span> where <span class="math inline">\(D\)</span> is the order of seasonal differences, <span class="math inline">\(\Phi_1, \dots, \Phi_P\)</span> are seasonal autoregression coefficients, <span class="math inline">\(P\)</span> is the seasonal autoregressive order, <span class="math inline">\(\Theta_1, \dots, \Theta_q\)</span> are seasonal moving average coefficients, <span class="math inline">\(Q\)</span> is the seasonal moving average order, and the rest of the terms are the same as in <a href="#eq-arima">Equation&nbsp;<span>5.1</span></a>.</p>
+\tag{5.2}\]</span></span> where <span class="math inline">\(D\)</span> is the order of seasonal differences, <span class="math inline">\(\Phi_1, \dots, \Phi_P\)</span> are the seasonal autoregression coefficients, <span class="math inline">\(P\)</span> is the seasonal autoregressive order, <span class="math inline">\(\Theta_1, \dots, \Theta_q\)</span> are seasonal moving average coefficients, <span class="math inline">\(Q\)</span> is the seasonal moving average order, and the rest of the terms are the same as in <a href="#eq-arima">Equation&nbsp;<span>5.1</span></a>.</p>
 <div class="callout-note callout callout-style-default no-icon callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
