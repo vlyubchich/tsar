@@ -1,0 +1,116 @@
+---
+output: html_document
+editor_options:
+    chunk_output_type: console
+---
+
+```{r, echo=FALSE}
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+options(digits = 3)
+```
+
+# Practice exercises
+
+## ARMA practice {#sec-acfpractice}
+
+Below are several examples of time series with their ACF and PACF plots. 
+For each example time series, use the plots to decide whether an ARMA($p, q$) model is appropriate, and if so, suggest the orders $p$ and $q$. 
+Use @tbl-arma for help.
+
+```{r}
+#| echo: false
+#| fig-height: 3
+
+T = 300
+
+par(mar = c(4, 4, 1, 0) + 0.1, mgp = c(2.5, 1, 0), mfrow = c(1, 3))
+par(pty = "m")
+
+set.seed(1)
+Yt <- arima.sim(list(order = c(0, 0, 1), ma = c(0.5)), n = T)
+plot.ts(Yt, las = 1, main = "Example 1")
+acf(Yt, las = 1, main = "")
+pacf(Yt, las = 1, main = "")
+
+set.seed(2)
+Yt <- arima.sim(list(order = c(1, 0, 1), ar = c(0.5), ma = c(0.5)), n = T)
+plot.ts(Yt, las = 1, main = "Example 2")
+acf(Yt, las = 1, main = "")
+pacf(Yt, las = 1, main = "")
+
+set.seed(3)
+Yt <- arima.sim(list(order = c(3, 0, 0), ar = c(0.5, 0.3, 0.15)), n = T)
+plot.ts(Yt, las = 1, main = "Example 3")
+acf(Yt, las = 1, main = "")
+pacf(Yt, las = 1, main = "")
+
+set.seed(4)
+Yt <- arima.sim(list(order = c(3, 0, 0), ar = c(-0.5, -0.3, 0.1)), n = T)
+plot.ts(Yt, las = 1, main = "Example 4")
+acf(Yt, las = 1, main = "")
+pacf(Yt, las = 1, main = "")
+
+set.seed(5)
+Yt <- arima.sim(list(order = c(1, 0, 0), ar = c(-0.5)), n = T)
+plot.ts(Yt, las = 1, main = "Example 5")
+acf(Yt, las = 1, main = "")
+pacf(Yt, las = 1, main = "")
+
+set.seed(6)
+Yt <- arima.sim(list(order = c(0, 0, 2), ma = c(0.5, 0.3)), n = T)
+plot.ts(Yt, las = 1, main = "Example 6")
+acf(Yt, las = 1, main = "")
+pacf(Yt, las = 1, main = "")
+
+set.seed(7)
+Yt <- arima.sim(list(order = c(0, 0, 1), ma = c(-0.5)), n = T)
+plot.ts(Yt, las = 1, main = "Example 7")
+acf(Yt, las = 1, main = "")
+pacf(Yt, las = 1, main = "")
+
+set.seed(8)
+Yt <- arima.sim(list(order = c(1, 1, 1), ar = c(0.2), ma = c(-0.5)), n = T)
+plot.ts(Yt, las = 1, main = "Example 8")
+acf(Yt, las = 1, main = "")
+pacf(Yt, las = 1, main = "")
+
+set.seed(9)
+Yt <- arima.sim(list(order = c(3, 0, 2), ar = c(0.3, 0.2, 0.1), ma = c(0.1, 0.1)), n = T)
+plot.ts(Yt, las = 1, main = "Example 9")
+acf(Yt, las = 1, main = "")
+pacf(Yt, las = 1, main = "")
+
+set.seed(10)
+Yt <- arima.sim(list(order = c(3, 0, 0), ar = c(0.3, -0.4, 0.3)), n = T)
+plot.ts(Yt, las = 1, main = "Example 10")
+acf(Yt, las = 1, main = "")
+pacf(Yt, las = 1, main = "")
+```
+
+
+## Trend practice {#sec-trendpractice}
+
+Answer whether each of these statements is true or false.
+
+
+1. If ACF values at the first ten lags are statistically significant, then the time series is not stationary.
+1. If $X_t$ is an ARIMA$(p,d,q)$ process, then $(1-B)^d X_t$ is an ARMA$(p,q)$ process.
+1. Slowly decaying ACF is a sign of nonstationarity.
+1. If a hypothesis $H_1$ of a linear trend was accepted for the series $U_t$, $t = 1, \dots, T$, it will be also accepted for the subsets $U_{t'}$, where $t' = j, \dots, k$; $j<k$, and $j,k < T$.
+1. Unit root tests can be applied to determine the appropriate order of differencing $d$.
+1. A time series that exhibits a quadratic-looking trend can be made stationary (detrended) using the Box--Cox transformation with the power parameter $\lambda = 2$.
+1. ARIMA(0,1,0) model is a random walk.
+1. For the backshift operator $B$, $(1-B)^dX_t = (1-B^d)X_t$.
+1. A linear time trend can be eliminated by differencing the time series once or twice.
+1. Trend functions (e.g., $X_t = 0.35 + 0.11t + \epsilon_t$, where $\epsilon_t$ are uncorrelated errors) express the changes in the process $\{X_t\}$ caused by time.
+1. Time series should be differenced just enough times to remove a stochastic trend. Differencing too many times causes problems.
+1. Autocorrelation in observations affects results of the $t$-test and Mann--Kendall test.
+1. The Mann--Kendall test focuses on a more general class of trends than the $t$-test does.
+1. The null hypothesis of the augmented Dickey--Fuller test is no unit root (stationarity).
+1. ARIMA$(p,d,q)$ is a difference-stationary process.
+1. Bootstrapping allows us to replicate the finite-sample distribution of the test statistic.
+1. To detrend a time series, the difference operator should be applied with the same lag(s) at which the sample ACF has statistically significant values.
+1. One of the correct ways to run regression on the time series $Y_t$ and $X_t$ with trends is to detrend these time series before fitting the regression model.
+1. In practice, it is seldom necessary to go beyond second-order differences for detrending a time series.

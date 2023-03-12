@@ -31,12 +31,12 @@ book:
         - l08_tsreg1.qmd
         - l09_tsreg2.qmd
         - l10_spectral.qmd
-        # - conclusion.qmd
         - software.qmd
         - references.qmd
     appendices:
         - s1_wls.qmd
         - s2_gls.qmd
+        - s_practice.qmd
 
 bibliography:
     - references.bib
