@@ -255,6 +255,11 @@ div.csl-indent {
   <a href="./s2_gls.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Generalized least squares</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./s_practice.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Practice exercises</span></a>
+  </div>
+</li>
       </ul>
 </li>
     </ul>
@@ -268,7 +273,9 @@ div.csl-indent {
   <li><a href="#periodogram" id="toc-periodogram" class="nav-link" data-scroll-target="#periodogram"><span class="toc-section-number">10.3</span>  Periodogram</a></li>
   <li><a href="#smoothing" id="toc-smoothing" class="nav-link" data-scroll-target="#smoothing"><span class="toc-section-number">10.4</span>  Smoothing</a></li>
   <li><a href="#periodogram-for-unequally-spaced-time-series" id="toc-periodogram-for-unequally-spaced-time-series" class="nav-link" data-scroll-target="#periodogram-for-unequally-spaced-time-series"><span class="toc-section-number">10.5</span>  Periodogram for unequally-spaced time series</a></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="toc-section-number">10.6</span>  Conclusion</a></li>
+  <li><a href="#frequency-estimation-in-time" id="toc-frequency-estimation-in-time" class="nav-link" data-scroll-target="#frequency-estimation-in-time"><span class="toc-section-number">10.6</span>  Frequency estimation in time</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="toc-section-number">10.7</span>  Conclusion</a></li>
+  <li><a href="#appendix" id="toc-appendix" class="nav-link" data-scroll-target="#appendix"><span class="toc-section-number">10.8</span>  Appendix</a></li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/vlyubchich/tsar/edit/master/l10_spectral.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/vlyubchich/tsar/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
@@ -294,8 +301,8 @@ div.csl-indent {
 <p>The goal of this lecture is to learn how to view time series from the frequency perspective. You should be able to recognize features of time series from a periodogram similar to how we did it using plots of the autocorrelation function (ACF).</p>
 <p><strong>Objectives</strong></p>
 <ol type="1">
-<li>Describe the mechanics of Fourier transformation for time series.</li>
-<li>Present results of spectrum calculations using a periodogram.</li>
+<li>Describe the mechanics of Fourier transform for time series.</li>
+<li>Present results of spectrum calculations using a periodogram or spectrogram.</li>
 <li>Give examples of smoothed periodograms.</li>
 <li>Demonstrate the use of the Lomb–Scargle periodogram for analysis of unequally-spaced time series.</li>
 </ol>
@@ -349,6 +356,10 @@ R_T(\omega_j)=\frac{T}{2}\left( \hat{A}^2+\hat{B}^2 \right).
 \]</span> If the <span class="math inline">\(\epsilon_t \sim N(0, \sigma^2)\)</span>, then it follows that <span class="math inline">\(\hat{A}\)</span> and <span class="math inline">\(\hat{B}\)</span> are also independent normal, each with the variance <span class="math inline">\(2\sigma^2/T\)</span>, so under the null hypothesis of <span class="math inline">\(A = B = 0\)</span> we find that <span class="math display">\[\frac{R_T(\omega_j)}{\sigma^2}\sim \chi_2^2\]</span> or equivalently that <span class="math inline">\(R_T(\omega_j)/(2\sigma^2)\)</span> has an exponential distribution with mean 1. The above theory can be extended to the simultaneous estimation of several periodic components.</p>
 </section><section id="periodogram" class="level2" data-number="10.3"><h2 data-number="10.3" class="anchored" data-anchor-id="periodogram">
 <span class="header-section-number">10.3</span> Periodogram</h2>
+<p>The <em>Fourier transform</em> uses Fourier series, such as the pairs of sines and cosines with different periods, to describe the frequencies present in the original time series.</p>
+<p>The Fourier transform applied to an equally-spaced time series <span class="math inline">\(Y_t\)</span> (where <span class="math inline">\(t = 1,\dots,T\)</span>) is also called the <em>discrete Fourier transform</em> (DFT) because the time is discrete (not the values <span class="math inline">\(Y_t\)</span>).</p>
+<p>To reduce the computational complexity of DFT and speed up the computations, one of the <em>fast Fourier transform</em> (FFT) algorithms is typically used.</p>
+<p>The results of the Fourier transform are shown in a periodogram that describes the spectral properties of the signal.</p>
 <p>The periodogram is defined as <span class="math display">\[
 I_T(\omega) = \frac{1}{2\pi T}\left| \sum_{t=1}^T Y_te^{i\omega t} \right|^2,
 \]</span> which is an approximately unbiased estimator of the spectral density <span class="math inline">\(f\)</span>.</p>
@@ -396,8 +407,8 @@ Note
 \]</span></p>
 <p>The weighting coefficients for a Daniell kernel with <span class="math inline">\(m = 2\)</span> can be checked using the function <code><a href="https://rdrr.io/r/stats/kernel.html">kernel()</a></code>. In the output, the indices in <code>coef[ ]</code> refer to the time difference from the center of the average at the time <span class="math inline">\(t\)</span>.</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/kernel.html">kernel</a></span><span class="op">(</span><span class="st">"daniell"</span>, m <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/kernel.html">kernel</a></span><span class="op">(</span><span class="st">"daniell"</span>, m <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; Daniell(2) 
 #&gt; coef[-2] = 0.2
 #&gt; coef[-1] = 0.2
@@ -414,8 +425,8 @@ Note
 \]</span></p>
 <p>List the weighting coefficients:</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/kernel.html">kernel</a></span><span class="op">(</span><span class="st">"modified.daniell"</span>, m <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/kernel.html">kernel</a></span><span class="op">(</span><span class="st">"modified.daniell"</span>, m <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; mDaniell(2) 
 #&gt; coef[-2] = 0.125
 #&gt; coef[-1] = 0.250
@@ -429,8 +440,8 @@ Note
 \]</span></p>
 <p>The weights for averaging the original data for convoluted Daniell kernels with <span class="math inline">\(m = 2\)</span> in both smooths will be</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/kernel.html">kernel</a></span><span class="op">(</span><span class="st">"daniell"</span>, m <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/kernel.html">kernel</a></span><span class="op">(</span><span class="st">"daniell"</span>, m <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; Daniell(2,2) 
 #&gt; coef[-4] = 0.04
 #&gt; coef[-3] = 0.08
@@ -442,8 +453,8 @@ Note
 #&gt; coef[ 3] = 0.08
 #&gt; coef[ 4] = 0.04</code></pre>
 </div>
-<details><summary>Code</summary><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/kernel.html">kernel</a></span><span class="op">(</span><span class="st">"modified.daniell"</span>, m <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/kernel.html">kernel</a></span><span class="op">(</span><span class="st">"modified.daniell"</span>, m <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; mDaniell(2,2) 
 #&gt; coef[-4] = 0.0156
 #&gt; coef[-3] = 0.0625
@@ -471,7 +482,7 @@ Example: Spectral analysis of the airline passenger data
 <p>Recall the airline passenger time series (<a href="l03_smoothing.html#fig-airpassangers">Figure&nbsp;<span>3.12</span></a>) that has an increasing trend and strong multiplicative seasonality.</p>
 <p>The series should be detrended before a spectral analysis. For demonstration purposes, compute periodogram for the raw data and log-transformed and detrended.</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Fit a quadratic trend to log-transformed data</span></span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Fit a quadratic trend to log-transformed data</span></span>
 <span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/time.html">time</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log10</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html">poly</a></span><span class="op">(</span><span class="va">t</span>, degree <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/ts.html">ts</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span></span>
@@ -480,7 +491,6 @@ Example: Spectral analysis of the airline passenger data
 <span><span class="co"># Compute spectra</span></span>
 <span><span class="va">spec_raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/spec.pgram.html">spec.pgram</a></span><span class="op">(</span><span class="va">AirPassengers</span>, detrend <span class="op">=</span> <span class="cn">FALSE</span>, plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">spec_log_detrend</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/spec.pgram.html">spec.pgram</a></span><span class="op">(</span><span class="va">res</span>, detrend <span class="op">=</span> <span class="cn">FALSE</span>, plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 <p>The <span class="math inline">\(x\)</span>-axes of the periodograms correspond to <span class="math inline">\(\omega / (2\pi)\)</span> or the number of cycles per the time series period specified in the <code>ts</code> object (12 months). If the frequency of 12 was not specified for this time series, the <span class="math inline">\(x\)</span>-axes would be different, and the first spectrum peak would correspond to <span class="math inline">\(\approx 0.08\)</span>.</p>
 <p><a href="#fig-airpassangersFFT">Figure&nbsp;<span>10.1</span></a> B shows that the spectrum of the raw data is dominated by low frequencies (trend). After detrending the data (<a href="#fig-airpassangersFFT">Figure&nbsp;<span>10.1</span></a> C), the spectrum at frequency 1 (meaning one cycle per year) is the dominant one.</p>
@@ -514,7 +524,7 @@ Example: Spectral analysis of the airline passenger data
 </details><div class="cell-output-display">
 <div id="fig-airpassangersFFT" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure"><p><img src="l10_spectral_files/figure-html/fig-airpassangersFFT-1.png" class="img-fluid figure-img" width="768"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;10.1: Monthly <code>AirPassengers</code> time series, log-transformed and detrended, and corresponding fast Fourier transformations.</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;10.1: Monthly <code>AirPassengers</code> time series, log-transformed and detrended, and the corresponding fast Fourier transforms.</figcaption><p></p>
 </figure>
 </div>
 </div>
@@ -561,7 +571,7 @@ Example: NH4 concentration in wastewater system
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>For example, consider a time series <code><a href="https://SteffenMoritz.github.io/imputeTS/reference/tsNH4.html">imputeTS::tsNH4</a></code> of NH4 concentration in a wastewater system (<a href="#fig-NH4">Figure&nbsp;<span>10.4</span></a>). This time series is regularly spaced (every 10 minutes) but some of the observations are missing.</p>
+<p>For example, consider a time series <code><a href="https://SteffenMoritz.github.io/imputeTS/reference/tsNH4.html">imputeTS::tsNH4</a></code> of NH4 concentration in a wastewater system (<a href="#fig-NH4">Figure&nbsp;<span>10.4</span></a>). This time series contains observations from regular 10-minute intervals, but some of the observations are missing.</p>
 <div class="cell">
 <details><summary>Code</summary><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="fu">imputeTS</span><span class="fu">::</span><span class="va"><a href="https://SteffenMoritz.github.io/imputeTS/reference/tsNH4.html">tsNH4</a></span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Day"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -577,9 +587,8 @@ Example: NH4 concentration in wastewater system
 </div>
 <p>Save the data in a format acceptable by the Lomb–Scargle function.</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">D</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>NH4 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="fu">imputeTS</span><span class="fu">::</span><span class="va"><a href="https://SteffenMoritz.github.io/imputeTS/reference/tsNH4.html">tsNH4</a></span><span class="op">)</span>,</span>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">D</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>NH4 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="fu">imputeTS</span><span class="fu">::</span><span class="va"><a href="https://SteffenMoritz.github.io/imputeTS/reference/tsNH4.html">tsNH4</a></span><span class="op">)</span>,</span>
 <span>                Time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/time.html">time</a></span><span class="op">(</span><span class="fu">imputeTS</span><span class="fu">::</span><span class="va"><a href="https://SteffenMoritz.github.io/imputeTS/reference/tsNH4.html">tsNH4</a></span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 <p>If needed, <code>na.omit(D)</code> can be used to remove the rows with missing values.</p>
 <p><a href="#fig-NH4lombf">Figure&nbsp;<span>10.5</span></a> and <a href="#fig-NH4lombp">Figure&nbsp;<span>10.6</span></a> show periodograms calculated based on these data. Note that the function <code><a href="https://rdrr.io/pkg/lomb/man/lsp.html">lomb::lsp()</a></code> has arguments adjusting the span of the frequencies and significance level.</p>
@@ -606,10 +615,137 @@ Example: NH4 concentration in wastewater system
 </div>
 </div>
 </div>
-</section><section id="conclusion" class="level2" data-number="10.6"><h2 data-number="10.6" class="anchored" data-anchor-id="conclusion">
-<span class="header-section-number">10.6</span> Conclusion</h2>
+</section><section id="frequency-estimation-in-time" class="level2" data-number="10.6"><h2 data-number="10.6" class="anchored" data-anchor-id="frequency-estimation-in-time">
+<span class="header-section-number">10.6</span> Frequency estimation in time</h2>
+<p>The assumption of a whole time series having a constant spectrum might be very limiting for the analysis of long time series. An estimation of frequencies locally in time allows us to study how the spectrum changes in time, and also detect smaller (short-lived) signals that would be averaged out otherwise. A straightforward solution is to separate the time series into windows (sub-periods) and estimate a spectrum in each such window.</p>
+<p>The windowed analysis makes sense when in each window we have enough observations to estimate the frequencies. As a guide, we should have at least two observations per period to be able to represent the signal in the discrete Fourier transform. For example, we cannot estimate the seasonality if we sample once per year – this is our <em>sampling rate</em> or <em>sampling frequency</em> <span class="math inline">\(F_s\)</span>. To start identifying seasonal periodicity, our sampling rate should be at least 2 samples per year. The highest frequency we can work with is limited by the <em>Nyquist frequency</em> <span class="math display">\[
+F_N = \frac{F_s}{2},
+\]</span> which is half of the sampling frequency.</p>
+<p>After applying the FFT in each window, the results can be visualized in a <em>spectrogram</em>. The spectrogram combines information from multiple periodograms: it shows time on the <span class="math inline">\(x\)</span>-axis, frequency on the <span class="math inline">\(y\)</span>-axis, and the corresponding spectrum power as the color.</p>
+<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Example: Spectrograms for the NAO
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Consider a long time series of the North Atlantic Oscillation (NAO) index obtained from an ensemble of 100 model-constrained NAO reconstructions (<a href="#fig-NAO">Figure&nbsp;<span>10.7</span></a>).</p>
+<div class="cell">
+<details><summary>Code</summary><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">NAOdf</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="st">"./data/NAO.csv"</span>, skip <span class="op">=</span> <span class="fl">12</span>, show_col_types <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>    <span class="fu">rename</span><span class="op">(</span>NAOproxy <span class="op">=</span> <span class="va">nao_mc_mean</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>    <span class="fu">select</span><span class="op">(</span><span class="va">Year</span>, <span class="va">NAOproxy</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>    <span class="fu">arrange</span><span class="op">(</span><span class="va">Year</span><span class="op">)</span></span>
+<span><span class="va">NAO</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/ts.html">ts</a></span><span class="op">(</span><span class="va">NAOdf</span><span class="op">$</span><span class="va">NAOproxy</span>, start <span class="op">=</span> <span class="va">NAOdf</span><span class="op">$</span><span class="va">Year</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">spec_raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/spec.pgram.html">spec.pgram</a></span><span class="op">(</span><span class="va">NAO</span>, detrend <span class="op">=</span> <span class="cn">FALSE</span>, plot <span class="op">=</span> <span class="cn">FALSE</span>, spans <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Find the frequency with the max power</span></span>
+<span><span class="va">fmax</span> <span class="op">&lt;-</span> <span class="va">spec_raw</span><span class="op">$</span><span class="va">freq</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.min.html">which.max</a></span><span class="op">(</span><span class="va">spec_raw</span><span class="op">$</span><span class="va">spec</span><span class="op">)</span><span class="op">]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details><summary>Code</summary><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">NAO</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Year"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">"NAO"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>Spectrum <span class="op">=</span> <span class="va">spec_raw</span><span class="op">$</span><span class="va">spec</span>, </span>
+<span>                 Frequency <span class="op">=</span> <span class="va">spec_raw</span><span class="op">$</span><span class="va">freq</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>    <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Frequency</span>, y <span class="op">=</span> <span class="va">Spectrum</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">scale_y_continuous</span><span class="op">(</span>trans <span class="op">=</span> <span class="st">'log10'</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">geom_vline</span><span class="op">(</span>xintercept <span class="op">=</span> <span class="va">fmax</span>, col <span class="op">=</span> <span class="st">"blue"</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>Spectrum <span class="op">=</span> <span class="va">spec_raw</span><span class="op">$</span><span class="va">spec</span>, </span>
+<span>                 Period <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="va">spec_raw</span><span class="op">$</span><span class="va">freq</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>    <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Period</span>, y <span class="op">=</span> <span class="va">Spectrum</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">scale_y_continuous</span><span class="op">(</span>trans <span class="op">=</span> <span class="st">'log10'</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">geom_vline</span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="va">fmax</span>, col <span class="op">=</span> <span class="st">"blue"</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">p1</span> <span class="op">/</span> <span class="op">(</span><span class="va">p2</span> <span class="op">+</span> <span class="va">p3</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">plot_annotation</span><span class="op">(</span>tag_levels <span class="op">=</span> <span class="st">'A'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<div id="fig-NAO" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure"><p><img src="l10_spectral_files/figure-html/fig-NAO-1.png" class="img-fluid figure-img" width="768"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;10.7: North Atlantic Oscillation (NAO) winter index (December, January, and February) calculated as the mean of 100 model-constrained NAO reconstructions, along with its smoothed periodograms. The dashed lines denote the maximal magnitude of the spectrum.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This is an annual time series, hence the sampling frequency <span class="math inline">\(F_s = 1\)</span>. From the global FFT results, the frequency with the maximal power is 0.019 year<span class="math inline">\(^{-1}\)</span>, which is equivalent to the period of about 53.3 years. We will set the window for the FFT and calculate the spectrogram. Note that we can use overlapping windows for a smoother picture.</p>
+<div class="cell">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Set the window size (years), for applying the FFT in each window</span></span>
+<span><span class="va">window_size</span> <span class="op">=</span> <span class="fl">30</span></span>
+<span></span>
+<span><span class="co"># Compute the spectrogram</span></span>
+<span><span class="va">SP</span> <span class="op">&lt;-</span> <span class="fu">signal</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/signal/man/specgram.html">specgram</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">NAO</span>,</span>
+<span>                       n <span class="op">=</span> <span class="va">window_size</span>,</span>
+<span>                       overlap <span class="op">=</span> <span class="va">window_size</span><span class="op">/</span><span class="fl">3</span>,</span>
+<span>                       Fs <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>See the spectrograms in <a href="#fig-NAOspect">Figure&nbsp;<span>10.8</span></a> and compare them with the time series plot in <a href="#fig-NAO">Figure&nbsp;<span>10.7</span></a> A.</p>
+<div class="cell">
+<details><summary>Code</summary><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Plot the spectrogram without decorations</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">SP</span>, main <span class="op">=</span> <span class="st">"A) Raw results"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Discard phase information</span></span>
+<span><span class="va">P</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">SP</span><span class="op">$</span><span class="va">S</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Normalize the spectrum to the range [0, 1]</span></span>
+<span><span class="va">P</span> <span class="op">&lt;-</span> <span class="va">P</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">P</span><span class="op">)</span></span>
+<span><span class="va">P</span> <span class="op">&lt;-</span> <span class="va">P</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">P</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Extract time</span></span>
+<span><span class="va">Years</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html">time</a></span><span class="op">(</span><span class="va">NAO</span><span class="op">)</span><span class="op">[</span><span class="va">SP</span><span class="op">$</span><span class="va">t</span><span class="op">]</span></span>
+<span></span>
+<span><span class="co"># Plot the spectrogram after processing</span></span>
+<span><span class="fu">oce</span><span class="fu">::</span><span class="fu"><a href="https://dankelley.github.io/oce/reference/imagep.html">imagep</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Years</span>,</span>
+<span>            y <span class="op">=</span> <span class="va">SP</span><span class="op">$</span><span class="va">f</span>,</span>
+<span>            z <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">P</span><span class="op">)</span>,</span>
+<span>            col <span class="op">=</span> <span class="fu">oce</span><span class="fu">::</span><span class="va"><a href="https://dankelley.github.io/oce/reference/oceColorsViridis.html">oce.colorsViridis</a></span>,</span>
+<span>            ylab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html">expression</a></span><span class="op">(</span><span class="va">Frequency</span><span class="op">~</span><span class="op">(</span><span class="va">y</span><span class="op">^</span><span class="op">-</span><span class="fl">1</span> <span class="op">)</span><span class="op">)</span>,</span>
+<span>            xlab <span class="op">=</span> <span class="st">"Year"</span>,</span>
+<span>            main <span class="op">=</span> <span class="st">"B) After normalization and adding colors"</span>,</span>
+<span>            drawPalette <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>            decimate <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<div id="fig-NAOspect" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure"><p><img src="l10_spectral_files/figure-html/fig-NAOspect-1.png" class="img-fluid figure-img" width="768"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;10.8: Spectrograms for North Atlantic Oscillation (NAO) winter index.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section><section id="conclusion" class="level2" data-number="10.7"><h2 data-number="10.7" class="anchored" data-anchor-id="conclusion">
+<span class="header-section-number">10.7</span> Conclusion</h2>
 <p>For challenging problems, smoothing, multitapering, linear filtering, (repeated) pre-whitening, and Lomb–Scargle can be used together. Beware that aperiodic but autoregressive processes produce peaks in spectral densities. Harmonic analysis is a complicated art rather than a straightforward procedure.</p>
 <p>It is extremely difficult to derive the significance of a weak periodicity from harmonic analysis. Do not believe analytical estimates (e.g., exponential probability), as they rarely apply to real data. It is essential to make simulations, typically permuting or bootstrapping the data keeping the observing times fixed. Simulations of the final model with the observation times are also advised.</p>
+</section><section id="appendix" class="level2" data-number="10.8"><h2 data-number="10.8" class="anchored" data-anchor-id="appendix">
+<span class="header-section-number">10.8</span> Appendix</h2>
+<p><strong>Wavelet analysis</strong></p>
+<p>An alternative to the windowed FFT is the wavelet analysis, which also estimates the strength of time series variations for different frequencies and times. <em>Wavelet</em> is a ‘small wave’ or function <span class="math inline">\(\psi(t)\)</span> approximating the variations. Popular wavelet functions are Meyer, Morlet, and Mexican hat.</p>
+<p><a href="#fig-NAOwv">Figure&nbsp;<span>10.9</span></a> shows the results of using the Morlet wavelet to process the NAO time series.</p>
+<div class="cell">
+<details><summary>Code</summary><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AndyBunn/dplR">dplR</a></span><span class="op">)</span></span>
+<span><span class="va">wv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/dplR/man/morlet.html">morlet</a></span><span class="op">(</span>y1 <span class="op">=</span> <span class="va">NAOdf</span><span class="op">$</span><span class="va">NAOproxy</span>, x1 <span class="op">=</span> <span class="va">NAOdf</span><span class="op">$</span><span class="va">Year</span><span class="op">)</span></span>
+<span><span class="va">levs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="va">wv</span><span class="op">$</span><span class="va">Power</span>, probs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="fl">0.9</span>, <span class="fl">0.95</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/dplR/man/wavelet.plot.html">wavelet.plot</a></span><span class="op">(</span><span class="va">wv</span>, wavelet.levels <span class="op">=</span> <span class="va">levs</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<div id="fig-NAOwv" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure"><p><img src="l10_spectral_files/figure-html/fig-NAOwv-1.png" class="img-fluid figure-img" width="768"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;10.9: Wavelet analysis of the North Atlantic Oscillation (NAO) winter index.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">

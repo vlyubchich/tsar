@@ -255,6 +255,11 @@ div.csl-indent {
   <a href="./s2_gls.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Generalized least squares</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./s_practice.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Practice exercises</span></a>
+  </div>
+</li>
       </ul>
 </li>
     </ul>
@@ -479,9 +484,9 @@ Example: Testing ARCH effects in USD/CAD log returns
 <div class="callout-body-container callout-body">
 <p>We have seen in <a href="#fig-CADACF">Figure&nbsp;<span>6.2</span></a> the autocorrelation of squared log returns. Now apply the formal LM test.</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fl">12</span></span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fl">12</span></span>
 <span><span class="fu">FinTS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/FinTS/man/ArchTest.html">ArchTest</a></span><span class="op">(</span><span class="va">CAD</span><span class="op">$</span><span class="va">lnR</span>, lags <span class="op">=</span> <span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  ARCH LM-test; Null hypothesis: no ARCH effects
 #&gt; 
@@ -491,10 +496,10 @@ Example: Testing ARCH effects in USD/CAD log returns
 </div>
 <p>The LM test implemented in the function <code><a href="https://rdrr.io/pkg/FinTS/man/ArchTest.html">FinTS::ArchTest()</a></code> detects the presence of ARCH effects (rejects the null hypothesis) when considering 12 lags. In base R, the same results can be obtained by running the <span class="math inline">\(F\)</span> test as follows:</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/embed.html">embed</a></span><span class="op">(</span><span class="va">CAD</span><span class="op">$</span><span class="va">lnR</span><span class="op">^</span><span class="fl">2</span>, <span class="va">m</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/embed.html">embed</a></span><span class="op">(</span><span class="va">CAD</span><span class="op">$</span><span class="va">lnR</span><span class="op">^</span><span class="fl">2</span>, <span class="va">m</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mat</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">~</span> <span class="va">mat</span><span class="op">[</span>,<span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/anova.html">anova</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; Analysis of Variance Table
 #&gt; 
 #&gt; Response: mat[, 1]
@@ -519,12 +524,12 @@ Example: GARCH model for USD/CAD log returns
 <div class="callout-body-container callout-body">
 <p>Let’s estimate a GARCH(1,1) model for these data, using the conditional ML method. Note that <code>omega</code> in the results below is denoted <span class="math inline">\(a_0\)</span> in our equations (the intercept in the variance model):</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://www.rmetrics.org">fGarch</a></span><span class="op">)</span></span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://www.rmetrics.org">fGarch</a></span><span class="op">)</span></span>
 <span><span class="va">garch11</span> <span class="op">&lt;-</span> <span class="fu">fGarch</span><span class="fu">::</span><span class="fu"><a href="https://geobosh.github.io/fGarchDoc/reference/garchFit.html">garchFit</a></span><span class="op">(</span><span class="va">lnR</span> <span class="op">~</span> <span class="fu">garch</span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, </span>
 <span>                            data <span class="op">=</span> <span class="va">CAD</span>, trace <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">garch11</span><span class="op">@</span><span class="va">description</span> <span class="op">&lt;-</span> <span class="st">"---"</span></span>
 <span><span class="va">garch11</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt; Title:
 #&gt;  GARCH Modelling 
@@ -595,12 +600,12 @@ Example: GARCH model for USD/CAD log returns
 <p>Based on the plots, autocorrelations were effectively removed, but the assumption of normality is violated – <a href="#fig-garch11QQ">Figure&nbsp;<span>6.4</span></a> shows heavy and almost symmetric tails in the distribution of GARCH residuals.</p>
 <p>To account for the heavy tails, we change the conditional distribution from normal to the standardized Student <span class="math inline">\(t\)</span>-distribution (see <code><a href="https://geobosh.github.io/fGarchDoc/reference/dist-std.html">?fGarch::std</a></code>).</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">garch11t</span> <span class="op">&lt;-</span> <span class="fu">fGarch</span><span class="fu">::</span><span class="fu"><a href="https://geobosh.github.io/fGarchDoc/reference/garchFit.html">garchFit</a></span><span class="op">(</span><span class="va">lnR</span> <span class="op">~</span> <span class="fu">garch</span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">garch11t</span> <span class="op">&lt;-</span> <span class="fu">fGarch</span><span class="fu">::</span><span class="fu"><a href="https://geobosh.github.io/fGarchDoc/reference/garchFit.html">garchFit</a></span><span class="op">(</span><span class="va">lnR</span> <span class="op">~</span> <span class="fu">garch</span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>                             data <span class="op">=</span> <span class="va">CAD</span>, trace <span class="op">=</span> <span class="cn">FALSE</span>, </span>
 <span>                             cond.dist <span class="op">=</span> <span class="st">"std"</span><span class="op">)</span></span>
 <span><span class="va">garch11t</span><span class="op">@</span><span class="va">description</span> <span class="op">&lt;-</span> <span class="st">"---"</span></span>
 <span><span class="va">garch11t</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt; Title:
 #&gt;  GARCH Modelling 

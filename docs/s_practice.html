@@ -4,8 +4,7 @@
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.2.335">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta name="author" content="V. Lyubchich and Y. R. Gel">
-<title>Time Series Analysis</title>
+<title>Time Series Analysis - Appendix C — Practice exercises</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -27,7 +26,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./l01_regression.html" rel="next">
+<link href="./s2_gls.html" rel="prev">
 <link href="./TSAfav.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -55,13 +54,13 @@ ul.task-list li input[type="checkbox"] {
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit"
   }
-}</script>
+}</script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 </head>
 <body class="nav-sidebar floating">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">Time Series Analysis</h1>
+      <h1 class="quarto-secondary-nav-title">Appendix C — Practice exercises</h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -90,7 +89,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">Preface</a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Preface</a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -173,7 +172,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./s_practice.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Practice exercises</span></a>
+  <a href="./s_practice.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Practice exercises</span></a>
   </div>
 </li>
       </ul>
@@ -184,47 +183,87 @@ ul.task-list li input[type="checkbox"] {
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#preface" id="toc-preface" class="nav-link active" data-scroll-target="#preface">Preface</a></li>
-  <li><a href="#authors" id="toc-authors" class="nav-link" data-scroll-target="#authors">Authors</a></li>
-  <li><a href="#citation" id="toc-citation" class="nav-link" data-scroll-target="#citation">Citation</a></li>
-  <li><a href="#license" id="toc-license" class="nav-link" data-scroll-target="#license">License</a></li>
-  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/vlyubchich/tsar/edit/master/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/vlyubchich/tsar/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<li><a href="#sec-acfpractice" id="toc-sec-acfpractice" class="nav-link active" data-scroll-target="#sec-acfpractice"><span class="toc-section-number">C.1</span>  ARMA practice</a></li>
+  <li><a href="#sec-trendpractice" id="toc-sec-trendpractice" class="nav-link" data-scroll-target="#sec-trendpractice"><span class="toc-section-number">C.2</span>  Trend practice</a></li>
+  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/vlyubchich/tsar/edit/master/s_practice.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/vlyubchich/tsar/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
-<h1 class="title d-none d-lg-block">Time Series Analysis</h1>
-<p class="subtitle lead">Lecture Notes with Examples in R</p>
+<h1 class="title d-none d-lg-block">Appendix C — Practice exercises</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>V. Lyubchich and Y. R. Gel </p>
-          </div>
-  </div>
     
   
     
   </div>
   
 
-</header>
-<section id="preface" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="preface">Preface</h2><p><img src="TSAcov.png" title="Time Series Analysis" class="quarto-cover-image img-fluid"></p>
-<p>This is a collection of lecture notes on applied time series analysis and forecasting using the statistical programming language R. Many of these lectures are based on the original notes by Y. R. Gel and C. Cutler for the course STAT-443 <em>Forecasting</em> (University of Waterloo, Canada) adapted and expanded by V. Lyubchich for the course MEES-713 <em>Environmental Statistics 2</em> (University of Maryland, USA).</p>
-<p>Each lecture starts by listing the learning objectives and required reading materials, with additional references in the text. The notes introduce the methods and give a few examples but are less detailed than the reading materials. The notes do not substitute a textbook.</p>
-<p>The audience is expected to be familiar with R programming and the following statistical concepts and methods: probability distributions, sampling inference and hypothesis testing, correlation analysis, and regression analysis (including simple and multiple linear regression, mixed-effects models, generalized linear models, and generalized additive models).</p>
-</section><section id="authors" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="authors">Authors</h2>
-<p>Vyacheslav Lyubchich is an Associate Research Professor at the University of Maryland Center for Environmental Science. <a href="https://www.umces.edu/vyacheslav-lyubchich" class="uri">https://www.umces.edu/vyacheslav-lyubchich</a></p>
-<p>Yulia R. Gel is a Professor of Statistics at the University of Texas at Dallas. <a href="https://personal.utdallas.edu/~yxg142030/" class="uri">https://personal.utdallas.edu/~yxg142030/</a></p>
-</section><section id="citation" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="citation">Citation</h2>
-<p>Lyubchich, V. and Gel, Y. R. (2023) Time Series Analysis: Lecture Notes with Examples in R. Edition 2023-03. <a href="https://vlyubchich.github.io/tsar/" class="uri">https://vlyubchich.github.io/tsar/</a></p>
-</section><section id="license" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="license">License</h2>
-<p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
-<p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png"></a></p>
+</header><div class="cell">
+
+</div>
+<section id="sec-acfpractice" class="level2" data-number="C.1"><h2 data-number="C.1" class="anchored" data-anchor-id="sec-acfpractice">
+<span class="header-section-number">C.1</span> ARMA practice</h2>
+<p>Below are several examples of time series with their ACF and PACF plots. For each example time series, use the plots to decide whether an ARMA(<span class="math inline">\(p, q\)</span>) model is appropriate, and if so, suggest the orders <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span>. Use <a href="l04_arma.html#tbl-arma">Table&nbsp;<span>4.1</span></a> for help.</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="s_practice_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="768"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="s_practice_files/figure-html/unnamed-chunk-2-2.png" class="img-fluid" width="768"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="s_practice_files/figure-html/unnamed-chunk-2-3.png" class="img-fluid" width="768"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="s_practice_files/figure-html/unnamed-chunk-2-4.png" class="img-fluid" width="768"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="s_practice_files/figure-html/unnamed-chunk-2-5.png" class="img-fluid" width="768"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="s_practice_files/figure-html/unnamed-chunk-2-6.png" class="img-fluid" width="768"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="s_practice_files/figure-html/unnamed-chunk-2-7.png" class="img-fluid" width="768"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="s_practice_files/figure-html/unnamed-chunk-2-8.png" class="img-fluid" width="768"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="s_practice_files/figure-html/unnamed-chunk-2-9.png" class="img-fluid" width="768"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="s_practice_files/figure-html/unnamed-chunk-2-10.png" class="img-fluid" width="768"></p>
+</div>
+</div>
+</section><section id="sec-trendpractice" class="level2" data-number="C.2"><h2 data-number="C.2" class="anchored" data-anchor-id="sec-trendpractice">
+<span class="header-section-number">C.2</span> Trend practice</h2>
+<p>Answer whether each of these statements is true or false.</p>
+<ol type="1">
+<li>If ACF values at the first ten lags are statistically significant, then the time series is not stationary.</li>
+<li>If <span class="math inline">\(X_t\)</span> is an ARIMA<span class="math inline">\((p,d,q)\)</span> process, then <span class="math inline">\((1-B)^d X_t\)</span> is an ARMA<span class="math inline">\((p,q)\)</span> process.</li>
+<li>Slowly decaying ACF is a sign of nonstationarity.</li>
+<li>If a hypothesis <span class="math inline">\(H_1\)</span> of a linear trend was accepted for the series <span class="math inline">\(U_t\)</span>, <span class="math inline">\(t = 1, \dots, T\)</span>, it will be also accepted for the subsets <span class="math inline">\(U_{t'}\)</span>, where <span class="math inline">\(t' = j, \dots, k\)</span>; <span class="math inline">\(j&lt;k\)</span>, and <span class="math inline">\(j,k &lt; T\)</span>.</li>
+<li>Unit root tests can be applied to determine the appropriate order of differencing <span class="math inline">\(d\)</span>.</li>
+<li>A time series that exhibits a quadratic-looking trend can be made stationary (detrended) using the Box–Cox transformation with the power parameter <span class="math inline">\(\lambda = 2\)</span>.</li>
+<li>ARIMA(0,1,0) model is a random walk.</li>
+<li>For the backshift operator <span class="math inline">\(B\)</span>, <span class="math inline">\((1-B)^dX_t = (1-B^d)X_t\)</span>.</li>
+<li>A linear time trend can be eliminated by differencing the time series once or twice.</li>
+<li>Trend functions (e.g., <span class="math inline">\(X_t = 0.35 + 0.11t + \epsilon_t\)</span>, where <span class="math inline">\(\epsilon_t\)</span> are uncorrelated errors) express the changes in the process <span class="math inline">\(\{X_t\}\)</span> caused by time.</li>
+<li>Time series should be differenced just enough times to remove a stochastic trend. Differencing too many times causes problems.</li>
+<li>Autocorrelation in observations affects results of the <span class="math inline">\(t\)</span>-test and Mann–Kendall test.</li>
+<li>The Mann–Kendall test focuses on a more general class of trends than the <span class="math inline">\(t\)</span>-test does.</li>
+<li>The null hypothesis of the augmented Dickey–Fuller test is no unit root (stationarity).</li>
+<li>ARIMA<span class="math inline">\((p,d,q)\)</span> is a difference-stationary process.</li>
+<li>Bootstrapping allows us to replicate the finite-sample distribution of the test statistic.</li>
+<li>To detrend a time series, the difference operator should be applied with the same lag(s) at which the sample ACF has statistically significant values.</li>
+<li>One of the correct ways to run regression on the time series <span class="math inline">\(Y_t\)</span> and <span class="math inline">\(X_t\)</span> with trends is to detrend these time series before fitting the regression model.</li>
+<li>In practice, it is seldom necessary to go beyond second-order differences for detrending a time series.</li>
+</ol>
 
 
 </section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
@@ -360,11 +399,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="./s2_gls.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Generalized least squares</span></span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./l01_regression.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Review of Linear Regression</span></span> <i class="bi bi-arrow-right-short"></i>
-      </a>
   </div>
 </nav>
 </div> <!-- /content -->

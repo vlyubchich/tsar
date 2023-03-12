@@ -253,6 +253,11 @@ div.csl-indent {
   <a href="./s2_gls.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Generalized least squares</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./s_practice.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Practice exercises</span></a>
+  </div>
+</li>
       </ul>
 </li>
     </ul>
@@ -307,9 +312,9 @@ Example: WLS applied ‘manually’
 </div>
 <p>The coefficients estimated using ordinary least squares (OLS):</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit_ols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit_ols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit_ols</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt; Call:
 #&gt; lm(formula = y ~ x)
@@ -356,11 +361,11 @@ Example: WLS applied ‘manually’
 </div>
 <p>To stabilize the variance ‘manually,’ transform the variables according to <a href="#eq-mod1W">Equation&nbsp;<span>A.2</span></a> and refit the model:</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">Y.t</span> <span class="op">&lt;-</span> <span class="va">y</span><span class="op">/</span><span class="va">x</span></span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">Y.t</span> <span class="op">&lt;-</span> <span class="va">y</span><span class="op">/</span><span class="va">x</span></span>
 <span><span class="va">X.t</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">/</span><span class="va">x</span></span>
 <span><span class="va">fit_wls</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Y.t</span> <span class="op">~</span> <span class="va">X.t</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit_wls</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt; Call:
 #&gt; lm(formula = Y.t ~ X.t)
@@ -417,9 +422,9 @@ WSS(\beta; w) = \sum_{i=1}^nw_i(y_i - x_i\beta)^2.
 \tag{A.3}\]</span></span></p>
 <p>To apply <a href="#eq-wls">Equation&nbsp;<span>A.3</span></a> in R, specify the argument <code>weights</code>, and remember to take an inverse. Note that the coefficients are now labeled as expected.</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit_wls2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span>, weights <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit_wls2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span>, weights <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit_wls2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt; Call:
 #&gt; lm(formula = y ~ x, weights = 1/x^2)
@@ -453,10 +458,9 @@ Example: Dishwasher shipments WLS model
 <div class="callout-body-container callout-body">
 <p>First, use OLS to estimate the simple linear regression exploring dishwasher shipments (DISH) and private residential investments (RES) for several years.</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">D</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.delim</a></span><span class="op">(</span><span class="st">"./data/dish.txt"</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">D</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.delim</a></span><span class="op">(</span><span class="st">"./data/dish.txt"</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>    <span class="fu">rename</span><span class="op">(</span>Year <span class="op">=</span> <span class="va">YEAR</span><span class="op">)</span></span>
 <span><span class="va">modDish_ols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">DISH</span> <span class="op">~</span> <span class="va">RES</span>, data <span class="op">=</span> <span class="va">D</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 <p>The plot in <a href="#fig-dishOLS">Figure&nbsp;<span>A.3</span></a> indicates that the variance might be decreasing with higher investments.</p>
 <div class="cell">
@@ -476,8 +480,7 @@ Example: Dishwasher shipments WLS model
 </div>
 <p>Apply the WLS:</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">modDish_wls</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">DISH</span> <span class="op">~</span> <span class="va">RES</span>, data <span class="op">=</span> <span class="va">D</span>, weights <span class="op">=</span> <span class="va">RES</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">modDish_wls</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">DISH</span> <span class="op">~</span> <span class="va">RES</span>, data <span class="op">=</span> <span class="va">D</span>, weights <span class="op">=</span> <span class="va">RES</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>In <a href="#fig-dishWLS">Figure&nbsp;<span>A.4</span></a> we see minor changes in the slope (better fit?).</p>
 <div class="cell">
@@ -507,10 +510,10 @@ Example: Dishwasher shipments WLS model
 </div>
 </div>
 </div>
-<p>However, autocorrelation is still present, which violates another assumption of the OLS and WLS methods:</p>
+<p>However, the residuals are still autocorrelated, which violates another assumption of the OLS and WLS methods:</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">lawstat</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lawstat/man/runs.test.html">runs.test</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">rstandard</a></span><span class="op">(</span><span class="va">modDish_wls</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">lawstat</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lawstat/man/runs.test.html">runs.test</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">rstandard</a></span><span class="op">(</span><span class="va">modDish_wls</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Runs Test - Two sided
 #&gt; 

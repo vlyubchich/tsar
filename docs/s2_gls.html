@@ -108,6 +108,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./s_practice.html" rel="next">
 <link href="./s1_wls.html" rel="prev">
 <link href="./TSAfav.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-html/quarto.js"></script>
@@ -252,6 +253,11 @@ div.csl-indent {
   <a href="./s2_gls.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Generalized least squares</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./s_practice.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Practice exercises</span></a>
+  </div>
+</li>
       </ul>
 </li>
     </ul>
@@ -277,7 +283,7 @@ div.csl-indent {
 </header><div class="cell">
 
 </div>
-<p>We are coming back to time series data (ordered by <span class="math inline">\(t\)</span>), thus, <a href="s1_wls.html#eq-mod1">Equation&nbsp;<span>A.1</span></a> will be written with time indices <span class="math inline">\(t\)</span> as <span id="eq-mod1t"><span class="math display">\[
+<p>Here we use time series data (ordered by <span class="math inline">\(t\)</span>), thus, <a href="s1_wls.html#eq-mod1">Equation&nbsp;<span>A.1</span></a> will be written with the time indices <span class="math inline">\(t\)</span> as <span id="eq-mod1t"><span class="math display">\[
 y_t=\beta_0+\beta_1x_t+\varepsilon_t,
 \tag{B.1}\]</span></span> where the regression errors at times <span class="math inline">\(t\)</span> and <span class="math inline">\(t-1\)</span> are <span id="eq-mod1error"><span class="math display">\[
 \begin{split}
@@ -388,8 +394,8 @@ Example: Dishwasher shipments model accounting for autocorrelation
 </div>
 <p>Based on the runs test, there is not enough evidence of autocorrelation in the new residuals:</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">lawstat</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lawstat/man/runs.test.html">runs.test</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">rstandard</a></span><span class="op">(</span><span class="va">modDish_ar1</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">lawstat</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lawstat/man/runs.test.html">runs.test</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">rstandard</a></span><span class="op">(</span><span class="va">modDish_ar1</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Runs Test - Two sided
 #&gt; 
@@ -404,11 +410,11 @@ Example: Dishwasher shipments model accounting for autocorrelation
 \tag{B.5}\]</span></span> where <span class="math inline">\(\boldsymbol{\Sigma}\)</span> is the covariance matrix. The method of weighted least squares (WLS; <a href="s1_wls.html"><span>Appendix&nbsp;A</span></a>) is just a special case of the GLS. In the WLS approach, all the off-diagonal entries of <span class="math inline">\(\boldsymbol{\Sigma}\)</span> are 0.</p>
 <p>We can use the function <code><a href="https://rdrr.io/pkg/nlme/man/gls.html">nlme::gls()</a></code> and specify the <code>correlation</code> structure to avoid iterating the steps from the previous example manually:</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">modDish_ar1_v2</span> <span class="op">&lt;-</span> <span class="fu">nlme</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/nlme/man/gls.html">gls</a></span><span class="op">(</span><span class="va">DISH</span> <span class="op">~</span> <span class="va">RES</span></span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">modDish_ar1_v2</span> <span class="op">&lt;-</span> <span class="fu">nlme</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/nlme/man/gls.html">gls</a></span><span class="op">(</span><span class="va">DISH</span> <span class="op">~</span> <span class="va">RES</span></span>
 <span>                            ,correlation <span class="op">=</span> <span class="fu">nlme</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/nlme/man/corAR1.html">corAR1</a></span><span class="op">(</span>form <span class="op">=</span> <span class="op">~</span><span class="va">Year</span><span class="op">)</span></span>
 <span>                            ,data <span class="op">=</span> <span class="va">D</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">modDish_ar1_v2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; Generalized least squares fit by REML
 #&gt;   Model: DISH ~ RES 
 #&gt;   Data: D 
@@ -597,6 +603,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="./s_practice.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Practice exercises</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

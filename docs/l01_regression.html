@@ -253,6 +253,11 @@ div.csl-indent {
   <a href="./s2_gls.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Generalized least squares</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./s_practice.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Practice exercises</span></a>
+  </div>
+</li>
       </ul>
 </li>
     </ul>
@@ -522,8 +527,8 @@ Example: Dishwasher residuals DW test
 <div class="callout-body-container callout-body">
 <p>Apply the Durbin–Watson test to the residuals from the dishwashers example, i.e., <code>DISH</code> vs.&nbsp;<code>RES</code>, using the R package <code>lmtest</code>.</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">lmtest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/dwtest.html">dwtest</a></span><span class="op">(</span><span class="va">D</span><span class="op">$</span><span class="va">DISH</span> <span class="op">~</span> <span class="va">D</span><span class="op">$</span><span class="va">RES</span>, alternative <span class="op">=</span> <span class="st">"greater"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">lmtest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/dwtest.html">dwtest</a></span><span class="op">(</span><span class="va">D</span><span class="op">$</span><span class="va">DISH</span> <span class="op">~</span> <span class="va">D</span><span class="op">$</span><span class="va">RES</span>, alternative <span class="op">=</span> <span class="st">"greater"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Durbin-Watson test
 #&gt; 
@@ -565,18 +570,17 @@ Example: Dishwasher residuals runs test
 </div>
 <div class="callout-body-container callout-body">
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.1</span>, mgp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>, mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>pty <span class="op">=</span> <span class="st">"m"</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu">lawstat</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lawstat/man/runs.test.html">runs.test</a></span><span class="op">(</span><span class="va">x</span>, plot.it <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Runs Test - Two sided
 #&gt; 
 #&gt; data:  x
 #&gt; Standardized Runs Statistic = -0.4, p-value = 0.7</code></pre>
 </div>
-<details><summary>Code</summary><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">lawstat</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lawstat/man/runs.test.html">runs.test</a></span><span class="op">(</span><span class="va">mod1</span><span class="op">$</span><span class="va">residuals</span>, plot.it <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">lawstat</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lawstat/man/runs.test.html">runs.test</a></span><span class="op">(</span><span class="va">mod1</span><span class="op">$</span><span class="va">residuals</span>, plot.it <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Runs Test - Two sided
 #&gt; 
@@ -648,7 +652,8 @@ Note
 \tag{1.1}\]</span></span> and no other value of <span class="math inline">\(x\)</span> satisfies <a href="#eq-prob">Equation&nbsp;<span>1.1</span></a>. Then we will call <span class="math inline">\(x_{(\alpha)}\)</span> the <span class="math inline">\(\alpha\)</span>th <em>(population) quantile</em> of <span class="math inline">\(X\)</span>. Note that any normal distribution has this uniqueness property. If we consider a standard normal <span class="math inline">\(Z \sim N(0, 1)\)</span>, then some well-known quantiles are:</p>
 <ul>
 <li>
-<span class="math inline">\(z_{(0.5)} = 0\)</span> (the median, <code>qnorm(0.5, mean = 0, sd = 1)</code>)</li>
+<span class="math inline">\(z_{(0.5)} = 0\)</span> (the median), <code>qnorm(0.5, mean = 0, sd = 1)</code>
+</li>
 <li>
 <span class="math inline">\(z_{(0.05)} = -1.645\)</span> and <span class="math inline">\(z_{(0.95)} = 1.645\)</span>
 </li>
@@ -727,16 +732,16 @@ Example: Dishwasher residuals normality test
 <div class="callout-body-container callout-body">
 <p>Based on the <span class="math inline">\(p\)</span>-values below, we cannot reject the null hypothesis of normality in both cases.</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/shapiro.test.html">shapiro.test</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/shapiro.test.html">shapiro.test</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Shapiro-Wilk normality test
 #&gt; 
 #&gt; data:  x
 #&gt; W = 0.9, p-value = 0.08</code></pre>
 </div>
-<details><summary>Code</summary><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/shapiro.test.html">shapiro.test</a></span><span class="op">(</span><span class="va">mod1</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/shapiro.test.html">shapiro.test</a></span><span class="op">(</span><span class="va">mod1</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Shapiro-Wilk normality test
 #&gt; 
@@ -851,9 +856,9 @@ Y_{t} = \beta_{0} + \beta_{1} X_{t,1} + \beta_{2} X_{t,2} + \epsilon_t,
 \]</span> where <span class="math inline">\(X_{t,1}\)</span> is the private residential investment <code>RES</code>; <span class="math inline">\(X_{t,2}\)</span> is the durable goods expenditures <code>DUR</code>.</p>
 <p>Now we apply the OLS method to estimate the coefficients <span class="math inline">\(\beta_{0}\)</span>, <span class="math inline">\(\beta_{1}\)</span>, and <span class="math inline">\(\beta_{2}\)</span> using the function <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code>.</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mod2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">DISH</span> <span class="op">~</span> <span class="va">RES</span> <span class="op">+</span> <span class="va">DUR</span>, data <span class="op">=</span> <span class="va">D</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mod2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">DISH</span> <span class="op">~</span> <span class="va">RES</span> <span class="op">+</span> <span class="va">DUR</span>, data <span class="op">=</span> <span class="va">D</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">mod2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt; Call:
 #&gt; lm(formula = DISH ~ RES + DUR, data = D)
@@ -901,8 +906,8 @@ Y_{t} = \beta_{0} + \beta_{1} X_{t,1} + \beta_{2} X_{t,2} + \epsilon_t,
 </div>
 <p>Check that the residuals <span class="math inline">\(\epsilon_{t}\)</span> are uncorrelated (the Durbin–Watson and the runs tests):</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">lmtest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/dwtest.html">dwtest</a></span><span class="op">(</span><span class="va">D</span><span class="op">$</span><span class="va">DISH</span> <span class="op">~</span> <span class="va">D</span><span class="op">$</span><span class="va">RES</span> <span class="op">+</span> <span class="va">D</span><span class="op">$</span><span class="va">DUR</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">lmtest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/dwtest.html">dwtest</a></span><span class="op">(</span><span class="va">D</span><span class="op">$</span><span class="va">DISH</span> <span class="op">~</span> <span class="va">D</span><span class="op">$</span><span class="va">RES</span> <span class="op">+</span> <span class="va">D</span><span class="op">$</span><span class="va">DUR</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Durbin-Watson test
 #&gt; 
@@ -912,8 +917,8 @@ Y_{t} = \beta_{0} + \beta_{1} X_{t,1} + \beta_{2} X_{t,2} + \epsilon_t,
 </div>
 </div>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">lawstat</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lawstat/man/runs.test.html">runs.test</a></span><span class="op">(</span><span class="va">mod2</span><span class="op">$</span><span class="va">residuals</span>, plot.it <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">lawstat</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lawstat/man/runs.test.html">runs.test</a></span><span class="op">(</span><span class="va">mod2</span><span class="op">$</span><span class="va">residuals</span>, plot.it <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Runs Test - Two sided
 #&gt; 
@@ -923,8 +928,8 @@ Y_{t} = \beta_{0} + \beta_{1} X_{t,1} + \beta_{2} X_{t,2} + \epsilon_t,
 </div>
 <p>Check that the residuals <span class="math inline">\(\epsilon_{t}\)</span> are normally distributed using the Q-Q plot (<a href="#fig-QQ2">Figure&nbsp;<span>1.7</span></a>) and Shapiro–Wilk test.</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/shapiro.test.html">shapiro.test</a></span><span class="op">(</span><span class="va">mod2</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/shapiro.test.html">shapiro.test</a></span><span class="op">(</span><span class="va">mod2</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Shapiro-Wilk normality test
 #&gt; 
@@ -958,9 +963,9 @@ Y_{t} = \beta_{0} + \beta_{1} X_{t,1} + \beta_{2} X_{t,2} + \epsilon_t,
 <p>For example, assume that we need to predict the future unit factory shipments of dishwashers (<code>DISH</code>) based on the private residential investment of 100 billion USD and durable goods expenditures of 150 billion USD.</p>
 <p>Supply new values of independent variables and use the function <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code>.</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">newData</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>RES <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, DUR <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">150</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">mod2</span>, <span class="va">newData</span>, se.fit <span class="op">=</span> <span class="cn">TRUE</span>, interval <span class="op">=</span> <span class="st">"prediction"</span>, level <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">newData</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>RES <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, DUR <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">150</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">mod2</span>, <span class="va">newData</span>, se.fit <span class="op">=</span> <span class="cn">TRUE</span>, interval <span class="op">=</span> <span class="st">"prediction"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; $fit
 #&gt;    fit  lwr  upr
 #&gt; 1 5559 4227 6891
@@ -985,8 +990,8 @@ Y_{t} = \beta_{0} + \beta_{1} X_{t,1} + \beta_{2} X_{t,2} + \epsilon_t,
 <span class="header-section-number">1.4</span> Appendix</h2>
 <p>Alternative versions of the runs test are available, e.g., in the package <code>randtests</code>.</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">randtests</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/randtests/man/runs.test.html">runs.test</a></span><span class="op">(</span><span class="va">mod2</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">randtests</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/randtests/man/runs.test.html">runs.test</a></span><span class="op">(</span><span class="va">mod2</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Runs Test
 #&gt; 
@@ -999,8 +1004,8 @@ Y_{t} = \beta_{0} + \beta_{1} X_{t,1} + \beta_{2} X_{t,2} + \epsilon_t,
 <p>The logic behind the difference sign test is that in a random process, there will be roughly the same number of ups (positive differences between consecutive values, i.e., <span class="math inline">\(X_t-X_{t-1}\)</span>) and downs (negative differences).</p>
 <p><span class="citation" data-cites="Brockwell:Davis:2002">Brockwell and Davis (<a href="references.html#ref-Brockwell:Davis:2002" role="doc-biblioref">2002</a>)</span>: “The difference-sign test must be used with caution. A set of observations exhibiting a strong cyclic component will pass the difference-sign test for randomness since roughly half of the observations will be points of increase.” We may see (<a href="#fig-DishResiduals">Figure&nbsp;<span>1.2</span></a> and <a href="#fig-DishResiduals2">Figure&nbsp;<span>1.6</span></a>), it is the case for our residuals, even though we have no cyclic component, but have a rise followed by a decline.</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">randtests</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/randtests/man/difference.sign.test.html">difference.sign.test</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">randtests</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/randtests/man/difference.sign.test.html">difference.sign.test</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Difference Sign Test
 #&gt; 
@@ -1008,8 +1013,8 @@ Y_{t} = \beta_{0} + \beta_{1} X_{t,1} + \beta_{2} X_{t,2} + \epsilon_t,
 #&gt; statistic = -2, n = 26, p-value = 0.1
 #&gt; alternative hypothesis: nonrandomness</code></pre>
 </div>
-<details><summary>Code</summary><div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">randtests</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/randtests/man/difference.sign.test.html">difference.sign.test</a></span><span class="op">(</span><span class="va">mod1</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">randtests</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/randtests/man/difference.sign.test.html">difference.sign.test</a></span><span class="op">(</span><span class="va">mod1</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Difference Sign Test
 #&gt; 
@@ -1017,8 +1022,8 @@ Y_{t} = \beta_{0} + \beta_{1} X_{t,1} + \beta_{2} X_{t,2} + \epsilon_t,
 #&gt; statistic = 0.3, n = 26, p-value = 0.7
 #&gt; alternative hypothesis: nonrandomness</code></pre>
 </div>
-<details><summary>Code</summary><div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">randtests</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/randtests/man/difference.sign.test.html">difference.sign.test</a></span><span class="op">(</span><span class="va">mod2</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">randtests</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/randtests/man/difference.sign.test.html">difference.sign.test</a></span><span class="op">(</span><span class="va">mod2</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Difference Sign Test
 #&gt; 

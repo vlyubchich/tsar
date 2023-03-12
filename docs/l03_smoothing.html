@@ -255,6 +255,11 @@ div.csl-indent {
   <a href="./s2_gls.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Generalized least squares</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./s_practice.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Practice exercises</span></a>
+  </div>
+</li>
       </ul>
 </li>
     </ul>
@@ -375,10 +380,10 @@ Example: Shampoo plots
 </ul>
 <p>Therefore, we apply <a href="#eq-movav">Equation&nbsp;<span>3.4</span></a> treating the shampoo time series as non-seasonal data.</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Get the data from the package fma</span></span>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Get the data from the package fma</span></span>
 <span><span class="va">shampoo</span> <span class="op">&lt;-</span> <span class="fu">fma</span><span class="fu">::</span><span class="va"><a href="https://pkg.robjhyndman.com/fma/reference/shampoo.html">shampoo</a></span></span>
 <span><span class="va">shampoo</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt;   Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
 #&gt; 1 266 146 183 119 180 168 232 224 193 123 336 186
 #&gt; 2 194 150 210 273 191 287 226 304 290 422 264 342
@@ -422,8 +427,8 @@ Note
 </div>
 <p>For example, <code><a href="https://pkg.robjhyndman.com/forecast/reference/ma.html">forecast::ma()</a></code> has the default option <code>centre = TRUE</code>, and the <code>order</code> argument represents the window size. Odd <code>order</code> and <code>centre = TRUE</code> correspond exactly to our definitions in <a href="#eq-movav">Equation&nbsp;<span>3.4</span></a>:</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/ma.html">ma</a></span><span class="op">(</span><span class="va">shampoo</span>, order <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/ma.html">ma</a></span><span class="op">(</span><span class="va">shampoo</span>, order <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt;   Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
 #&gt; 1  NA  NA 179 159 177 185 200 188 222 213 206 198
 #&gt; 2 215 203 204 222 238 256 260 306 301 324 332 362
@@ -432,17 +437,17 @@ Note
 </div>
 <p>For example, <code><a href="https://rdrr.io/pkg/pracma/man/movavg.html">pracma::movavg()</a></code> averages the last <code>n</code> data points:</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">pracma</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pracma/man/movavg.html">movavg</a></span><span class="op">(</span><span class="va">shampoo</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">pracma</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pracma/man/movavg.html">movavg</a></span><span class="op">(</span><span class="va">shampoo</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt;  [1] 266 206 198 179 179 159 177 185 200 188 222 213 206 198 215 203 204 222 238
 #&gt; [20] 256 260 306 301 324 332 362 341 376 387 407 434 452 501 516 544 559</code></pre>
 </div>
 </div>
 <p>The base-R function <code><a href="https://rdrr.io/r/stats/filter.html">stats::filter()</a></code> can also be used. Its odd window size and <code>sides = 2</code> correspond to our definitions in <a href="#eq-movav">Equation&nbsp;<span>3.4</span></a>:</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">window_size</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">window_size</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
 <span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">shampoo</span>, filter <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="va">window_size</span>, <span class="va">window_size</span><span class="op">)</span>, sides <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt;   Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
 #&gt; 1  NA  NA 179 159 177 185 200 188 222 213 206 198
 #&gt; 2 215 203 204 222 238 256 260 306 301 324 332 362
@@ -451,8 +456,8 @@ Note
 </div>
 <p>The <code>sides = 1</code> in <code><a href="https://rdrr.io/r/stats/filter.html">stats::filter()</a></code> corresponds to the <code><a href="https://rdrr.io/pkg/pracma/man/movavg.html">pracma::movavg()</a></code> results above:</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">shampoo</span>, filter <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="va">window_size</span>, <span class="va">window_size</span><span class="op">)</span>, sides <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">shampoo</span>, filter <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="va">window_size</span>, <span class="va">window_size</span><span class="op">)</span>, sides <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt;   Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
 #&gt; 1  NA  NA  NA  NA 179 159 177 185 200 188 222 213
 #&gt; 2 206 198 215 203 204 222 238 256 260 306 301 324
@@ -593,7 +598,7 @@ Example: Secchi depth manual simple moving average smoothing
 <div class="callout-body-container callout-body">
 <p>To replicate the behavior of the function <code><a href="https://rdrr.io/r/stats/decompose.html">stats::decompose()</a></code> or tune the outputs, use the following code. For example, <a href="#fig-SecchiDecompose">Figure&nbsp;<span>3.5</span></a> shows a wiggly trend that we might want to smooth more, using a bigger window, such as 24 months instead of 12 months.</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">Yt</span> <span class="op">&lt;-</span> <span class="va">Secchi</span></span>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">Yt</span> <span class="op">&lt;-</span> <span class="va">Secchi</span></span>
 <span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/time.html">time</a></span><span class="op">(</span><span class="va">Yt</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">month</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/time.html">cycle</a></span><span class="op">(</span><span class="va">Yt</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -604,25 +609,25 @@ Example: Secchi depth manual simple moving average smoothing
 <span>                                 <span class="fl">2</span><span class="op">*</span><span class="va">window_size</span><span class="op">)</span>, </span>
 <span>                    sides <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># 2. Estimate of a cycle, corrected to sum up to 0</span></span>
+<span><span class="co"># 2. Estimate of the seasonality, corrected to sum up to 0</span></span>
 <span><span class="va">St</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tapply.html">tapply</a></span><span class="op">(</span><span class="va">Yt</span> <span class="op">-</span> <span class="va">Mt</span>, <span class="va">month</span>, <span class="va">mean</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">St</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt;       1       2       3       4       5       6       7       8       9      10 
 #&gt; -0.0225  0.0869 -0.2469 -0.2791 -0.0748 -0.0379  0.1256  0.1831  0.1234  0.1150 
 #&gt;      11      12 
 #&gt;  0.0368 -0.0164</code></pre>
 </div>
-<details><summary>Code</summary><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">St</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">St</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; [1] -0.00673</code></pre>
 </div>
-<details><summary>Code</summary><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">St_star</span> <span class="op">&lt;-</span> <span class="va">St</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">St</span><span class="op">)</span><span class="op">/</span><span class="fl">12</span></span>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">St_star</span> <span class="op">&lt;-</span> <span class="va">St</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">St</span><span class="op">)</span><span class="op">/</span><span class="fl">12</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">St_star</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; [1] -3.82e-17</code></pre>
 </div>
-<details><summary>Code</summary><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># 3. Refine trend estimate</span></span>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># 3. Refined trend estimate</span></span>
 <span><span class="va">Mt_star</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">Yt</span> <span class="op">-</span> <span class="va">St_star</span><span class="op">[</span><span class="va">month</span><span class="op">]</span>, </span>
 <span>                    filter <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">*</span><span class="va">window_size</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="va">window_size</span>, <span class="va">window_size</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span>, </span>
 <span>                                 <span class="fl">2</span><span class="op">*</span><span class="va">window_size</span><span class="op">)</span>, </span>
@@ -633,7 +638,6 @@ Example: Secchi depth manual simple moving average smoothing
 <span></span>
 <span><span class="co"># Convert back to ts format for plotting</span></span>
 <span><span class="va">et</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/ts.html">ts</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="va">et</span><span class="op">)</span>, start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/start.html">start</a></span><span class="op">(</span><span class="va">Secchi</span><span class="op">)</span>, frequency <span class="op">=</span> <span class="fl">12</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 <p>See <a href="#fig-SecchiDeseasMA">Figure&nbsp;<span>3.6</span></a> for the results.</p>
 <div class="cell">
@@ -721,32 +725,32 @@ Example: Secchi depth lowess-based decomposition
 </div>
 <div class="callout-body-container callout-body">
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">Yt</span> <span class="op">&lt;-</span> <span class="va">Secchi</span></span>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">Yt</span> <span class="op">&lt;-</span> <span class="va">Secchi</span></span>
 <span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/time.html">time</a></span><span class="op">(</span><span class="va">Yt</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">month</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/time.html">cycle</a></span><span class="op">(</span><span class="va">Yt</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># 1. Initial trend estimate</span></span>
 <span><span class="va">Mt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/loess.html">loess</a></span><span class="op">(</span><span class="va">Yt</span> <span class="op">~</span> <span class="va">t</span>, span <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span><span class="op">$</span><span class="va">fitted</span></span>
 <span></span>
-<span><span class="co"># 2. Estimate of a cycle, corrected to sum up to 0</span></span>
+<span><span class="co"># 2. Estimate of the seasonality, corrected to sum up to 0</span></span>
 <span><span class="va">St</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tapply.html">tapply</a></span><span class="op">(</span><span class="va">Yt</span> <span class="op">-</span> <span class="va">Mt</span>, <span class="va">month</span>, <span class="va">mean</span><span class="op">)</span></span>
 <span><span class="va">St</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt;       1       2       3       4       5       6       7       8       9      10 
 #&gt; -0.0359  0.0457 -0.2483 -0.2683 -0.0716 -0.0129  0.1411  0.2024  0.1276  0.1108 
 #&gt;      11      12 
 #&gt;  0.0391 -0.0165</code></pre>
 </div>
-<details><summary>Code</summary><div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">St</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">St</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; [1] 0.0131</code></pre>
 </div>
-<details><summary>Code</summary><div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">St_star</span> <span class="op">&lt;-</span> <span class="va">St</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">St</span><span class="op">)</span><span class="op">/</span><span class="fl">12</span></span>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">St_star</span> <span class="op">&lt;-</span> <span class="va">St</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">St</span><span class="op">)</span><span class="op">/</span><span class="fl">12</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">St_star</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; [1] 3.47e-18</code></pre>
 </div>
-<details><summary>Code</summary><div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># 3. Refine trend estimate</span></span>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># 3. Refined trend estimate</span></span>
 <span><span class="va">Mt_star</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/loess.html">loess</a></span><span class="op">(</span><span class="op">(</span><span class="va">Yt</span> <span class="op">-</span> <span class="va">St_star</span><span class="op">[</span><span class="va">month</span><span class="op">]</span><span class="op">)</span> <span class="op">~</span> <span class="va">t</span>, span <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span><span class="op">$</span><span class="va">fitted</span></span>
 <span></span>
 <span><span class="co"># 4. Noise</span></span>
@@ -754,7 +758,6 @@ Example: Secchi depth lowess-based decomposition
 <span></span>
 <span><span class="co"># Convert back to ts format for plotting</span></span>
 <span><span class="va">et</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/ts.html">ts</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="va">et</span><span class="op">)</span>, start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/start.html">start</a></span><span class="op">(</span><span class="va">Secchi</span><span class="op">)</span>, frequency <span class="op">=</span> <span class="fl">12</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 <p>See <a href="#fig-SecchiDeseas">Figure&nbsp;<span>3.8</span></a> for the results.</p>
 <div class="cell">
@@ -993,42 +996,42 @@ Example: Airline passengers non-seasonal and seasonal exponential smoothing
 </div>
 <p>Comparison of various exponential smoothing techniques for the <code>AirPassengers</code> data:</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb37"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/HoltWinters.html">HoltWinters</a></span><span class="op">(</span><span class="va">AirPassengers</span>, beta <span class="op">=</span> <span class="cn">FALSE</span>, gamma <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/HoltWinters.html">HoltWinters</a></span><span class="op">(</span><span class="va">AirPassengers</span>, beta <span class="op">=</span> <span class="cn">FALSE</span>, gamma <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">m1</span><span class="op">$</span><span class="va">SSE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; [1] 162511</code></pre>
 </div>
-<details><summary>Code</summary><div class="sourceCode" id="cb39"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">m1</span><span class="op">$</span><span class="va">alpha</span>, <span class="va">m1</span><span class="op">$</span><span class="va">beta</span>, <span class="va">m1</span><span class="op">$</span><span class="va">gamma</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">m1</span><span class="op">$</span><span class="va">alpha</span>, <span class="va">m1</span><span class="op">$</span><span class="va">beta</span>, <span class="va">m1</span><span class="op">$</span><span class="va">gamma</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; [1] 1 0 0</code></pre>
 </div>
-<details><summary>Code</summary><div class="sourceCode" id="cb41"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/HoltWinters.html">HoltWinters</a></span><span class="op">(</span><span class="va">AirPassengers</span>, gamma <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/HoltWinters.html">HoltWinters</a></span><span class="op">(</span><span class="va">AirPassengers</span>, gamma <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">m2</span><span class="op">$</span><span class="va">SSE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; [1] 163634</code></pre>
 </div>
-<details><summary>Code</summary><div class="sourceCode" id="cb43"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">m2</span><span class="op">$</span><span class="va">alpha</span>, <span class="va">m2</span><span class="op">$</span><span class="va">beta</span>, <span class="va">m2</span><span class="op">$</span><span class="va">gamma</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">m2</span><span class="op">$</span><span class="va">alpha</span>, <span class="va">m2</span><span class="op">$</span><span class="va">beta</span>, <span class="va">m2</span><span class="op">$</span><span class="va">gamma</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt;   alpha    beta         
 #&gt; 1.00000 0.00322 0.00000</code></pre>
 </div>
-<details><summary>Code</summary><div class="sourceCode" id="cb45"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/HoltWinters.html">HoltWinters</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/HoltWinters.html">HoltWinters</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span>
 <span><span class="va">m3</span><span class="op">$</span><span class="va">SSE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; [1] 21860</code></pre>
 </div>
-<details><summary>Code</summary><div class="sourceCode" id="cb47"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">m3</span><span class="op">$</span><span class="va">alpha</span>, <span class="va">m3</span><span class="op">$</span><span class="va">beta</span>, <span class="va">m3</span><span class="op">$</span><span class="va">gamma</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">m3</span><span class="op">$</span><span class="va">alpha</span>, <span class="va">m3</span><span class="op">$</span><span class="va">beta</span>, <span class="va">m3</span><span class="op">$</span><span class="va">gamma</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt;  alpha   beta  gamma 
 #&gt; 0.2480 0.0345 1.0000</code></pre>
 </div>
-<details><summary>Code</summary><div class="sourceCode" id="cb49"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/HoltWinters.html">HoltWinters</a></span><span class="op">(</span><span class="va">AirPassengers</span>, seasonal <span class="op">=</span> <span class="st">"multiplicative"</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/HoltWinters.html">HoltWinters</a></span><span class="op">(</span><span class="va">AirPassengers</span>, seasonal <span class="op">=</span> <span class="st">"multiplicative"</span><span class="op">)</span></span>
 <span><span class="va">m4</span><span class="op">$</span><span class="va">SSE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; [1] 16571</code></pre>
 </div>
-<details><summary>Code</summary><div class="sourceCode" id="cb51"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">m4</span><span class="op">$</span><span class="va">alpha</span>, <span class="va">m4</span><span class="op">$</span><span class="va">beta</span>, <span class="va">m4</span><span class="op">$</span><span class="va">gamma</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">m4</span><span class="op">$</span><span class="va">alpha</span>, <span class="va">m4</span><span class="op">$</span><span class="va">beta</span>, <span class="va">m4</span><span class="op">$</span><span class="va">gamma</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt;  alpha   beta  gamma 
 #&gt; 0.2756 0.0327 0.8707</code></pre>
 </div>
@@ -1107,13 +1110,12 @@ Example: Airline passengers non-seasonal polynomial smoothing
 <div class="callout-body-container callout-body">
 <p>Continue using the <code>AirPassengers</code> data and fit linear and quadratic trends.</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb54"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/time.html">time</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/time.html">time</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">t2</span> <span class="op">&lt;-</span> <span class="va">t</span><span class="op">^</span><span class="fl">2</span></span>
 <span><span class="va">tm1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">AirPassengers</span> <span class="op">~</span> <span class="va">t</span><span class="op">)</span></span>
 <span><span class="va">tm2.1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">AirPassengers</span> <span class="op">~</span> <span class="va">t</span> <span class="op">+</span> <span class="va">t2</span><span class="op">)</span></span>
 <span><span class="va">tm2.2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">AirPassengers</span> <span class="op">~</span> <span class="va">t</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html">I</a></span><span class="op">(</span><span class="va">t</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">tm2.3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">AirPassengers</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html">poly</a></span><span class="op">(</span><span class="va">t</span>, degree <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 <p>After estimating the trend coefficients with OLS, visualize the results (<a href="#fig-airpassangersRegTrend">Figure&nbsp;<span>3.14</span></a>).</p>
 <div class="cell">
@@ -1211,10 +1213,10 @@ Note
 </div>
 <p>In R, it is enough to have <em>one</em> variable representing the seasons. This categorical variable should be saved as a <code>factor</code>. Then we apply the OLS method to find the model coefficients (see results in <a href="#fig-airpassangersRegTrendSeas">Figure&nbsp;<span>3.15</span></a>):</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb57"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">Month</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/time.html">cycle</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">Month</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/time.html">cycle</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html">poly</a></span><span class="op">(</span><span class="va">t</span>, degree <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span> <span class="va">Month</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt; Call:
 #&gt; lm(formula = log(AirPassengers) ~ poly(t, degree = 2) + Month)
@@ -1297,14 +1299,14 @@ sin_{2,t} &amp;= \sin(4 \pi \text{month}_t/12)
 \]</span></p>
 <p>Calculate the predictors and estimate the model in R (see results in <a href="#fig-airpassangersRegTrendFourier">Figure&nbsp;<span>3.16</span></a>):</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb60"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">month</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/time.html">cycle</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">month</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/time.html">cycle</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">cos1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html">cos</a></span><span class="op">(</span><span class="fl">2</span> <span class="op">*</span> <span class="va">pi</span> <span class="op">*</span> <span class="va">month</span> <span class="op">/</span> <span class="fl">12</span><span class="op">)</span></span>
 <span><span class="va">sin1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html">sin</a></span><span class="op">(</span><span class="fl">2</span> <span class="op">*</span> <span class="va">pi</span> <span class="op">*</span> <span class="va">month</span> <span class="op">/</span> <span class="fl">12</span><span class="op">)</span></span>
 <span><span class="va">cos2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html">cos</a></span><span class="op">(</span><span class="fl">4</span> <span class="op">*</span> <span class="va">pi</span> <span class="op">*</span> <span class="va">month</span> <span class="op">/</span> <span class="fl">12</span><span class="op">)</span></span>
 <span><span class="va">sin2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html">sin</a></span><span class="op">(</span><span class="fl">4</span> <span class="op">*</span> <span class="va">pi</span> <span class="op">*</span> <span class="va">month</span> <span class="op">/</span> <span class="fl">12</span><span class="op">)</span></span>
 <span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html">poly</a></span><span class="op">(</span><span class="va">t</span>, degree <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span> <span class="va">cos1</span> <span class="op">+</span> <span class="va">sin1</span> <span class="op">+</span> <span class="va">cos2</span> <span class="op">+</span> <span class="va">sin2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt; Call:
 #&gt; lm(formula = log(AirPassengers) ~ poly(t, degree = 2) + cos1 + 
@@ -1441,6 +1443,16 @@ Y^*_t = \Delta Y_t = (1 - B)Y_t = Y_t - Y_{t-1}.
 </div>
 </div>
 </div>
+<p>A deterministic linear trend can be also eliminated by differencing. For example, consider a time series <span class="math inline">\(X-t\)</span> with a deterministic linear trend: <span class="math display">\[
+X_t = a + b t + Z_t,
+\]</span> where <span class="math inline">\(Z_t \sim \mathrm{WN}(0,\sigma^2)\)</span>. The first-order differences of <span class="math inline">\(X_t\)</span> remove the linear trend: <span class="math display">\[
+\begin{align}
+(1 - B)X_t &amp;= X_t - X_{t-1} \\
+&amp;= a + b t + Z_t - (a + b (t - 1) + Z_{t-1}) \\
+&amp;= a + b t + Z_t - a - b t + b - Z_{t-1} \\
+&amp;= b + Z_t + Z_{t-1}.
+\end{align}
+\]</span></p>
 <div class="callout-note callout callout-style-default no-icon callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
