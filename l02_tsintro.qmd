@@ -537,6 +537,10 @@ To report a partial correlation, for example, of 0.2 at lag 3, one could say som
 (depending on the application, the correlation of 0.2 can be considered weak or moderate strength) or
 '*After accounting for autocorrelation at intermediate lags 1 and 2, the linear relationship at lag 3 can explain 4% of the remaining variability.*'
 
+The partial autocorrelation coefficients of i.i.d. time series are asymptotically distributed as $N(0,1/n)$. 
+Hence, for lags $h > p$, where $p$ is the optimal or true order of the partial autocorrelation, $\rho_{hh} < 1.96/\sqrt{n}$ (assuming the confidence level 95%). 
+This suggests using as a preliminary estimator of the order $p$ the smallest value $m$ such that $\rho_{hh} < 1.96/\sqrt{n}$ for $h > m$.
+
 ::: {.callout-note icon=false}
 
 ## Example: ACF and PACF of accdeaths

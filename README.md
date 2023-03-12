@@ -1,19 +1,16 @@
-# Wishlist for lectures and examples
+# Future work
 - after GARMA, add about GAMLSS (see the example file on Chesapeake Bay)
 - make causality a separate lecture #10, add on diff-in-diff with cannabis example.
-- add example coverage calculations Lect 2 or ARIMA, eventually move part of the material from l02 to a separate lecture on Model diagnostics and forecasting. B&D Ch. 9
+- add example coverage calculations Lect 2 or ARIMA, eventually move part of the material from l02 to a separate lecture on Model diagnostics and forecasting. Overfitting. B&D Ch. 9
 Remember that all predictive inference is based on the assumptions that the relationships between the variables and their dynamics will be the same in the future.
 - add a lecture on panel data analysis
-- add about ts bootstrap (sieve, block) in l07
+- add about TS bootstrap (sieve, block) in l07
 - appendix on synch of parametric trends
 - expand on wavelets, add example of acoustic data
 - appendix or lecture on changepoint analysis
 - GLM or another generalized model with classification example for fisheries or ecology.
-
-
-# To-dos
-- check the folders in MEES713, MEES713/check this.
-- check missing materials from YRG's lectures
+- appendix or example with Lake Huron analysis. See YRG L12N and slides.
+- add about the Ljung--Box statistic eg from 7N
 
 
 # Conventions and format examples
