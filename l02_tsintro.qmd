@@ -113,7 +113,8 @@ We will talk about the alternatives in the next lecture.
 #| fig-cap: "Time-series decomposition of the monthly number of births in New York City (thousands), 1946--1959."
 #| fig-height: 7
 
-births <- scan("http://robjhyndman.com/tsdldata/data/nybirths.dat")
+# births <- scan("http://robjhyndman.com/tsdldata/data/nybirths.dat")
+births <- scan("data/nybirths.dat")
 births <- ts(births, frequency = 12, start = c(1946, 1))
 ggplot2::autoplot(decompose(births))  + 
     theme_light()

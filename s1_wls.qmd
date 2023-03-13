@@ -144,7 +144,7 @@ First, use OLS to estimate the simple linear regression exploring dishwasher shi
 ```{r}
 #| code-fold: false
 
-D <- read.delim("./data/dish.txt") %>% 
+D <- read.delim("data/dish.txt") %>% 
     rename(Year = YEAR)
 modDish_ols <- lm(DISH ~ RES, data = D)
 ```

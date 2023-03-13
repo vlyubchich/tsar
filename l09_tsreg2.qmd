@@ -196,7 +196,7 @@ These time series were described in @Nesslage:etal:2021:environmental and @lyubc
 The goal is to develop a regression model to explore the relationship between the landings and AMO.
 
 ```{r}
-D <- read.csv("./data/tilefish.csv")
+D <- read.csv("data/tilefish.csv")
 summary(D)
 ```
 
@@ -327,7 +327,7 @@ The number is standardized by the daily number of insured properties in that cit
 Explore the relationship between the number of claims and weekly total precipitation (mm).
 
 ```{r}
-Insurance <- read.csv("./data/insurance_weekly.csv") %>%
+Insurance <- read.csv("data/insurance_weekly.csv") %>%
     select(Claims, Precipitation)
 summary(Insurance)
 ```

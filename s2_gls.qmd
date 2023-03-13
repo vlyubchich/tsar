@@ -52,7 +52,7 @@ To get from @eq-mod1t to @eq-mod1w, we can use an iterative procedure by @Cochra
 
 1. Estimate the model in @eq-mod1t using OLS.
 ```{r}
-D <- read.delim("./data/dish.txt") %>% 
+D <- read.delim("data/dish.txt") %>% 
     rename(Year = YEAR)
 modDish_ols <- lm(DISH ~ RES, data = D)
 ```

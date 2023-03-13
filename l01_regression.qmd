@@ -112,7 +112,7 @@ How different are the patterns in @fig-DishResiduals from those in @fig-IdealRes
 #| fig-cap: "Estimated residuals plotted vs. time, fitted values, and predictor."
 #| fig-height: 3
 
-D <- read.delim("./data/dish.txt") %>% 
+D <- read.delim("data/dish.txt") %>% 
     rename(Year = YEAR)
 mod1 <- lm(DISH ~ RES, data = D)
 p1 <- ggplot(D, aes(x = Year, y = mod1$residuals)) + 

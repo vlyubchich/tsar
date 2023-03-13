@@ -72,7 +72,7 @@ For an example calculation of log returns, see @fig-CAD.
 #| fig-cap: "CAD per USD daily noon exchange rates and log returns, from 2006-02-22 to 2016-02-22 (excluding bank holidays), obtained from [Bank of Canada](https://www.bankofcanada.ca/rates/exchange/daily-exchange-rates-lookup/)."
 
 # Load data and calculate log returns
-CAD <- readr::read_csv("./data/CAD.csv",
+CAD <- readr::read_csv("data/CAD.csv",
                        na = "Bank holiday",
                        skip = 11) %>% 
     filter(!is.na(USD)) %>% 

@@ -126,7 +126,7 @@ Here we find an ARIMA model for the Lake Baikal thaw (breakup) dates from the Gl
 
 ```{r}
 # Calculate calendar day from ice break-up date
-B <- read.csv("./data/baikal.csv", skip = 1) %>%
+B <- read.csv("data/baikal.csv", skip = 1) %>%
     mutate(Date_iceoff = as.Date(paste(iceoff_year, iceoff_month, iceoff_day,
                                        sep = "-"))) %>%
     mutate(DoY_iceoff = as.numeric(format(Date_iceoff, "%j")))

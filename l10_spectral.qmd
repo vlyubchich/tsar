@@ -393,7 +393,7 @@ The spectrogram combines information from multiple periodograms: it shows time o
 Consider a long time series of the North Atlantic Oscillation (NAO) index obtained from an ensemble of 100 model-constrained NAO reconstructions (@fig-NAO).
 
 ```{r}
-NAOdf <- readr::read_csv("./data/NAO.csv", skip = 12, show_col_types = FALSE) %>% 
+NAOdf <- readr::read_csv("data/NAO.csv", skip = 12, show_col_types = FALSE) %>% 
     rename(NAOproxy = nao_mc_mean) %>% 
     select(Year, NAOproxy) %>% 
     arrange(Year)

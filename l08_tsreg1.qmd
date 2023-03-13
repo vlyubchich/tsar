@@ -298,7 +298,7 @@ First, look at the time series plots of the raw data (@fig-TSdish).
 #| label: fig-TSdish
 #| fig-cap: "Time series plots of the dishwasher shipments (DISH) and residential investments (RES)."
 
-D <- read.delim("./data/dish.txt") %>% 
+D <- read.delim("data/dish.txt") %>% 
     rename(Year = YEAR)
 p1 <- ggplot(D, aes(x = Year, y = DISH)) + 
     geom_line() + 
