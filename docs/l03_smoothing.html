@@ -554,7 +554,7 @@ Example: Secchi depth automatic (simple moving average-based) decomposition
 <div class="callout-body-container callout-body">
 <p>Consider monthly data of Secchi disk depth measured at station CB1.1 in Chesapeake Bay (<a href="#fig-Secchi">Figure&nbsp;<span>3.4</span></a>), with the decomposition in <a href="#fig-SecchiDecompose">Figure&nbsp;<span>3.5</span></a>.</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"./data/Secchi_CB1.1.RData"</span><span class="op">)</span></span>
+<details><summary>Code</summary><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/Secchi_CB1.1.RData"</span><span class="op">)</span></span>
 <span><span class="va">pSecchi</span> <span class="op">&lt;-</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">Secchi</span>, col <span class="op">=</span> <span class="st">"grey50"</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Year"</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">"Secchi depth (m)"</span><span class="op">)</span> <span class="op">+</span> </span>
