@@ -192,7 +192,7 @@ A slightly different solution is possible using a *generalized autoregressive mo
 ## Example: Golden tilefish ARIMAX
 
 Here we have time series of 1918--2017 annual landings of golden tilefish (tonne) in the U.S. North Atlantic region and the Atlantic Multi-decadal Oscillation (AMO) index characterizing climatic conditions (@fig-tilefishTS). 
-These time series were described in @Nesslage:etal:2021:environmental and @lyubchich3732840.
+These time series were described in @Nesslage:etal:2021:environmental with R code by  @lyubchich3732840.
 The goal is to develop a regression model to explore the relationship between the landings and AMO.
 
 ```{r}
@@ -219,7 +219,7 @@ p1 + p2 +
 ```
 
 Interpolation of missing data (a.k.a. imputation) is a separate and very expansive topic. For a univariate time series, linear interpolation can be implemented using `forecast::na.interp()`. 
-Also, the landings time series required a power transformation, so square root transformation was applied (@fig-tilefishScatter).
+Also, the landings time series required a power transformation, so the square root transformation was applied (@fig-tilefishScatter).
 
 ```{r}
 #| label: fig-tilefishScatter
