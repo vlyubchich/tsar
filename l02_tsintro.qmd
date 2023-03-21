@@ -280,7 +280,7 @@ To select the best coverage, one can calculate the absolute differences between 
 $$
 \Delta_m = |C - \hat{C}_m|.
 $$
-Hence, we select the model with the smallest $\Delta_m$, not the largest coverage $C_m$.
+Hence, we select the model with the smallest $\Delta_m$, not the largest coverage $\hat{C}_m$.
 :::
 
 ::: {.callout-note}

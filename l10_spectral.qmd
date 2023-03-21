@@ -125,7 +125,7 @@ $$
 $$
 and
 $$
-f(\omega) = \sum_{h=-\infty}^{h=\infty} \gamma(h) e^{-2\pi i \omega h}.
+f(\omega) = \sum_{h=-\infty}^{+\infty} \gamma(h) e^{-2\pi i \omega h}.
 $$
 
 In the language of advanced calculus, the autocovariance and spectral density are Fourier transform pairs.
@@ -322,18 +322,18 @@ This method was originally developed for the analysis of unevenly-spaced astrono
 
 ::: {.callout-note icon=false}
 
-## Example: NH4 concentration in wastewater system
+## Example: Ammonium concentration in wastewater system
 
-For example, consider a time series `imputeTS::tsNH4` of NH4 concentration in a wastewater system (@fig-NH4). 
+For example, consider a time series `imputeTS::tsNH4` of ammonium (NH$_4$) concentration in a wastewater system (@fig-NH4). 
 This time series contains observations from regular 10-minute intervals, but some of the observations are missing. 
 
 ```{r}
 #| label: fig-NH4
-#| fig-cap: "Time series of NH4 concentration in a wastewater system."
+#| fig-cap: "Time series of ammonium concentration in a wastewater system."
 
 forecast::autoplot(imputeTS::tsNH4) +
     xlab("Day") +
-    ylab("NH4 concentration") +
+    ylab(bquote(NH[4]~concentration)) +
     theme_light()
 ```
 
@@ -353,7 +353,7 @@ Note that the function `lomb::lsp()` has arguments adjusting the span of the fre
 
 ```{r}
 #| label: fig-NH4lombf
-#| fig-cap: "Lomb--Scargle periodograms computed for the unequally-spaced time series of NH4 concentration."
+#| fig-cap: "Lomb--Scargle periodograms computed for the unequally-spaced time series of ammonium concentration."
 
 par(mfrow = c(2, 2))
 lomb::lsp(D$NH4, times = D$Time, type = "frequency", alpha = 0.05, main = "")
@@ -361,7 +361,7 @@ lomb::lsp(D$NH4, times = D$Time, type = "frequency", alpha = 0.05, main = "")
 
 ```{r}
 #| label: fig-NH4lombp
-#| fig-cap: "Lomb--Scargle periodograms computed for the unequally-spaced time series of NH4 concentration."
+#| fig-cap: "Lomb--Scargle periodograms computed for the unequally-spaced time series of ammonium concentration."
 
 lomb::lsp(D$NH4, times = D$Time, type = "period", alpha = 0.05, main = "")
 ```

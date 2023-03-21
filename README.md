@@ -1,7 +1,7 @@
 # Future work
 - after GARMA, add about GAMLSS (see the example file on Chesapeake Bay)
 - make causality a separate lecture #10, add on diff-in-diff with cannabis example.
-- add example coverage calculations Lect 2 or ARIMA, eventually move part of the material from l02 to a separate lecture on Model diagnostics and forecasting. Overfitting. B&D Ch. 9
+- add example coverage calculations Lect 2 or ARIMA, eventually move part of the material from l02 to a separate lecture on Model diagnostics and forecasting. forecast::accuracy(). Overfitting. B&D Ch. 9
 Remember that all predictive inference is based on the assumptions that the relationships between the variables and their dynamics will be the same in the future.
 - add a lecture on panel data analysis
 - add about TS bootstrap (sieve, block) in l07
@@ -15,7 +15,7 @@ Remember that all predictive inference is based on the assumptions that the rela
 
 # Conventions and format examples
 
-## Spellings 
+## Spellings
 
 a.k.a.
 changepoint
@@ -91,7 +91,7 @@ p1 + p2 +
 ```
 
 
-## Notes and examples 
+## Notes and examples
 
 ::: {.callout-note}
 text
