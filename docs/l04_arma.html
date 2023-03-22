@@ -257,7 +257,12 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./s_practice.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Practice exercises</span></a>
+  <a href="./s4_trendsync.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Synchrony of parametric trends</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./s_practice.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Practice exercises</span></a>
   </div>
 </li>
       </ul>
@@ -1074,7 +1079,7 @@ Y_{t} = \phi_{1} Y_{t - 1} + \phi_{2} Y_{t - 2} + \phi_{3} Y_{t - 3} + \epsilon_
 <li>information criterion such as AIC or BIC or</li>
 <li>forecast accuracy (e.g., PRMSE and PMAE of point forecasts for a testing set)</li>
 </ul>
-<p>Use the examples in <a href="s_practice.html#sec-acfpractice"><span>Section&nbsp;C.1</span></a> to practice the implementation of the rules in <a href="#tbl-arma">Table&nbsp;<span>4.1</span></a>.</p>
+<p>Use the examples in <a href="s_practice.html#sec-acfpractice"><span>Section&nbsp;D.1</span></a> to practice the implementation of the rules in <a href="#tbl-arma">Table&nbsp;<span>4.1</span></a>.</p>
 </section><section id="example-analysis" class="level2" data-number="4.7"><h2 data-number="4.7" class="anchored" data-anchor-id="example-analysis">
 <span class="header-section-number">4.7</span> Example analysis</h2>
 <div class="cell">
@@ -1152,7 +1157,7 @@ Y_{t} = \phi_{1} Y_{t - 1} + \phi_{2} Y_{t - 2} + \phi_{3} Y_{t - 3} + \epsilon_
 #&gt; Order selected 2  sigma^2 estimated as  0.939</code></pre>
 </div>
 </div>
-<p>The function <code><a href="https://rdrr.io/pkg/funtimes/man/ARest.html">funtimes::ARest()</a></code> is a wrapper for <code><a href="https://rdrr.io/r/stats/ar.html">stats::ar()</a></code>. It adds a difference-based estimator by <span class="citation" data-cites="Hall:VanKeilegom:2003">Hall and Van Keilegom (<a href="references.html#ref-Hall:VanKeilegom:2003" role="doc-biblioref">2003</a>)</span>, which is now used by default, and also switches to BIC as the model selection criterion. The selection is still done only for the order <span class="math inline">\(p\)</span> in AR(<span class="math inline">\(p\)</span>), without considering the possibility of MA terms.</p>
+<p>The function <code><a href="https://rdrr.io/pkg/funtimes/man/ARest.html">funtimes::ARest()</a></code> is a wrapper for <code><a href="https://rdrr.io/r/stats/ar.html">stats::ar()</a></code>. It adds a difference-based estimator by <span class="citation" data-cites="Hall:VanKeilegom:2003">Hall and Van Keilegom (<a href="references.html#ref-Hall:VanKeilegom:2003" role="doc-biblioref">2003</a>)</span>, which is now used by default, and also switches between BIC or AIC as the model selection criterion. The selection is still done only for the order <span class="math inline">\(p\)</span> in AR(<span class="math inline">\(p\)</span>), without considering the possibility of MA terms.</p>
 <div class="cell">
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">funtimes</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/funtimes/man/ARest.html">ARest</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1161,7 +1166,7 @@ Y_{t} = \phi_{1} Y_{t - 1} + \phi_{2} Y_{t - 2} + \phi_{3} Y_{t - 3} + \epsilon_
 </div>
 <p>To check the correspondence with <code><a href="https://rdrr.io/r/stats/ar.html">stats::ar()</a></code>, change the method and fix the <code>ar.order</code> (turn off its automatic selection):</p>
 <div class="cell">
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">funtimes</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/funtimes/man/ARest.html">ARest</a></span><span class="op">(</span><span class="va">Y</span>, ar.method <span class="op">=</span> <span class="st">"yw"</span>, ar.order <span class="op">=</span> <span class="fl">2</span>, BIC <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">funtimes</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/funtimes/man/ARest.html">ARest</a></span><span class="op">(</span><span class="va">Y</span>, ar.method <span class="op">=</span> <span class="st">"yw"</span>, ar.order <span class="op">=</span> <span class="fl">2</span>, ic <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; [1] 0.612 0.220</code></pre>
 </div>
@@ -1286,7 +1291,7 @@ Note
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
 <div id="ref-Brockwell:Davis:2002" class="csl-entry" role="doc-biblioentry">
-Brockwell PJ, Davis RA (2002) Introduction to time series and forecasting, 2nd edn. Springer, New York
+Brockwell PJ, Davis RA (2002) Introduction to time series and forecasting, 2nd edn. Springer, New York, NY, USA
 </div>
 <div id="ref-Hall:VanKeilegom:2003" class="csl-entry" role="doc-biblioentry">
 Hall P, Van Keilegom I (2003) Using difference-based methods for inference in nonparametric regression with time series errors. Journal of the Royal Statistical Society: Series B (Statistical Methodology) 65:443–456. <a href="https://doi.org/10.1111/1467-9868.00395">https://doi.org/10.1111/1467-9868.00395</a>

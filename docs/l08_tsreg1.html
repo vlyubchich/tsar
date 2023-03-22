@@ -257,7 +257,12 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./s_practice.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Practice exercises</span></a>
+  <a href="./s4_trendsync.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Synchrony of parametric trends</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./s_practice.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Practice exercises</span></a>
   </div>
 </li>
       </ul>
@@ -803,11 +808,12 @@ DISH_t = \beta_0 + \beta_1 RES_t + \beta_2 Year + \epsilon_t;
 </div>
 </section></section><section id="sec-cointegration" class="level2" data-number="8.3"><h2 data-number="8.3" class="anchored" data-anchor-id="sec-cointegration">
 <span class="header-section-number">8.3</span> Cointegration</h2>
-<p>Generally, cointegration might be characterized by two or more I(1) variables indicating a common long-run development, i.e., the variables do not drift away from each other except for transitory fluctuations. This defines a statistical equilibrium that, in empirical analysis, can often be interpreted as a long-run [economic] relation.</p>
+<p>Generally, cointegration might be characterized by two or more I(1) variables indicating a common long-run development, i.e., the variables do not drift away from each other except for transitory fluctuations. This defines a statistical equilibrium that, in empirical analysis, can often be interpreted as a long-run [economic] relation <span class="citation" data-cites="Engle:Granger:1987">(<a href="references.html#ref-Engle:Granger:1987" role="doc-biblioref">Engle and Granger 1987</a>)</span>.</p>
 <p>In other words, two I(1) series <span class="math inline">\(X_t\)</span> and <span class="math inline">\(Y_t\)</span> are cointegrated if their linear combination <span class="math inline">\(u_t\)</span> is I(0): <span id="eq-longrun"><span class="math display">\[
 Y_t - \beta X_t = u_t.
 \tag{8.3}\]</span></span></p>
-<p>Cointegration means a common stochastic trend. The vector <span class="math inline">\((1, -\beta)^{\top}\)</span> is called the <em>cointegration vector</em>.</p>
+<p>Cointegration means a common stochastic trend (see <a href="s4_trendsync.html"><span>Appendix&nbsp;C</span></a> on testing for a common parametric trend). The vector <span class="math inline">\((1, -\beta)^{\top}\)</span> is called the <em>cointegration vector</em>.</p>
+<p>For the development of methods of analyzing time series cointegration, in 2003, <a href="https://www.nobelprize.org/prizes/economic-sciences/2003/granger/facts/">Clive W. J. Granger was awarded 1/2 of the Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel</a> (the other half was awarded to R. Engle, see <a href="l06_garch.html"><span>Chapter&nbsp;6</span></a>).</p>
 <section id="two-step-englegranger-method" class="level3" data-number="8.3.1"><h3 data-number="8.3.1" class="anchored" data-anchor-id="two-step-englegranger-method">
 <span class="header-section-number">8.3.1</span> Two-step Engle–Granger method</h3>
 <ol type="1">
@@ -947,11 +953,11 @@ Y_t = a + bX_t + u_t.
 #&gt; F-statistic: 29.3 on 3 and 244 DF,  p-value: 3.2e-16</code></pre>
 </div>
 </div>
-<p>Model using <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code> and <code>dplyr::lag()</code>:</p>
+<p>Model using <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code> and <code><a href="https://dplyr.tidyverse.org/reference/lead-lag.html">dplyr::lag()</a></code>:</p>
 <div class="cell">
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ecm2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">dy</span> <span class="op">~</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">lag</span><span class="op">(</span><span class="va">ect</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>               <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">lag</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="va">dy</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>               <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">lag</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="va">dx</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ecm2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">dy</span> <span class="op">~</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html">lag</a></span><span class="op">(</span><span class="va">ect</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>               <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html">lag</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="va">dy</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>               <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html">lag</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="va">dx</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">ecm2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
@@ -1044,8 +1050,11 @@ Y_t = a + bX_t + u_t.
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="ref-Engle:Granger:1987" class="csl-entry" role="doc-biblioentry">
+Engle RF, Granger CWJ (1987) Co-integration and error correction: Representation, estimation, and testing. Econometrica 55:251–276. <a href="https://doi.org/10.2307/1913236">https://doi.org/10.2307/1913236</a>
+</div>
 <div id="ref-Kirchgassner:Wolters:2007" class="csl-entry" role="doc-biblioentry">
-Kirchgässner G, Wolters J (2007) <a href="https://doi.org/10.1007/978-3-540-73291-4">Introduction to modern time series analysis</a>. Springer-Verlag, Berlin
+Kirchgässner G, Wolters J (2007) <a href="https://doi.org/10.1007/978-3-540-73291-4">Introduction to modern time series analysis</a>. Springer-Verlag, Berlin, Germany
 </div>
 <div id="ref-Wooldridge:2013" class="csl-entry" role="doc-biblioentry">
 Wooldridge JM (2013) Introductory econometrics: A modern approach, 5th edn. Cengage Learning, Mason, OH, USA

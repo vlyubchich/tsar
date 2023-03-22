@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.2.335">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>Time Series Analysis - Appendix C — Practice exercises</title>
+<title>Time Series Analysis - Appendix D — Practice exercises</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -26,7 +26,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./s2_gls.html" rel="prev">
+<link href="./s4_trendsync.html" rel="prev">
 <link href="./TSAfav.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -60,7 +60,7 @@ ul.task-list li input[type="checkbox"] {
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">Appendix C — Practice exercises</h1>
+      <h1 class="quarto-secondary-nav-title">Appendix D — Practice exercises</h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -172,7 +172,12 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./s_practice.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Practice exercises</span></a>
+  <a href="./s4_trendsync.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Synchrony of parametric trends</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./s_practice.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Practice exercises</span></a>
   </div>
 </li>
       </ul>
@@ -183,13 +188,13 @@ ul.task-list li input[type="checkbox"] {
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#sec-acfpractice" id="toc-sec-acfpractice" class="nav-link active" data-scroll-target="#sec-acfpractice"><span class="toc-section-number">C.1</span>  ARMA practice</a></li>
-  <li><a href="#sec-trendpractice" id="toc-sec-trendpractice" class="nav-link" data-scroll-target="#sec-trendpractice"><span class="toc-section-number">C.2</span>  Trend practice</a></li>
+<li><a href="#sec-acfpractice" id="toc-sec-acfpractice" class="nav-link active" data-scroll-target="#sec-acfpractice"><span class="toc-section-number">D.1</span>  ARMA practice</a></li>
+  <li><a href="#sec-trendpractice" id="toc-sec-trendpractice" class="nav-link" data-scroll-target="#sec-trendpractice"><span class="toc-section-number">D.2</span>  Trend practice</a></li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/vlyubchich/tsar/edit/master/s_practice.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/vlyubchich/tsar/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
-<h1 class="title d-none d-lg-block">Appendix C — Practice exercises</h1>
+<h1 class="title d-none d-lg-block">Appendix D — Practice exercises</h1>
 </div>
 
 
@@ -205,8 +210,8 @@ ul.task-list li input[type="checkbox"] {
 </header><div class="cell">
 
 </div>
-<section id="sec-acfpractice" class="level2" data-number="C.1"><h2 data-number="C.1" class="anchored" data-anchor-id="sec-acfpractice">
-<span class="header-section-number">C.1</span> ARMA practice</h2>
+<section id="sec-acfpractice" class="level2" data-number="D.1"><h2 data-number="D.1" class="anchored" data-anchor-id="sec-acfpractice">
+<span class="header-section-number">D.1</span> ARMA practice</h2>
 <p>Below are several examples of time series with their ACF and PACF plots. For each example time series, use the plots to decide whether an ARMA(<span class="math inline">\(p, q\)</span>) model is appropriate, and if so, suggest the orders <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span>. Use <a href="l04_arma.html#tbl-arma">Table&nbsp;<span>4.1</span></a> for help.</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -240,8 +245,8 @@ ul.task-list li input[type="checkbox"] {
 <p><img src="s_practice_files/figure-html/unnamed-chunk-2-10.png" class="img-fluid" width="768"></p>
 </div>
 </div>
-</section><section id="sec-trendpractice" class="level2" data-number="C.2"><h2 data-number="C.2" class="anchored" data-anchor-id="sec-trendpractice">
-<span class="header-section-number">C.2</span> Trend practice</h2>
+</section><section id="sec-trendpractice" class="level2" data-number="D.2"><h2 data-number="D.2" class="anchored" data-anchor-id="sec-trendpractice">
+<span class="header-section-number">D.2</span> Trend practice</h2>
 <p>Answer whether each of these statements is true or false.</p>
 <ol type="1">
 <li>If ACF values at the first ten lags are statistically significant, then the time series is not stationary.</li>
@@ -399,8 +404,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
-      <a href="./s2_gls.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Generalized least squares</span></span>
+      <a href="./s4_trendsync.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Synchrony of parametric trends</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

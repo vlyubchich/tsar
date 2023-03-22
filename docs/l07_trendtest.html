@@ -257,7 +257,12 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./s_practice.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Practice exercises</span></a>
+  <a href="./s4_trendsync.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Synchrony of parametric trends</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./s_practice.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Practice exercises</span></a>
   </div>
 </li>
       </ul>
@@ -283,7 +288,7 @@ div.csl-indent {
   <li><a href="#bootstrapped-t-test-and-mannkendall-test" id="toc-bootstrapped-t-test-and-mannkendall-test" class="nav-link" data-scroll-target="#bootstrapped-t-test-and-mannkendall-test"><span class="toc-section-number">7.3.2</span>  Bootstrapped <span class="math inline">\(t\)</span>-test and Mann–Kendall test</a></li>
   </ul>
 </li>
-  <li><a href="#detecting-non-monotonic-trends" id="toc-detecting-non-monotonic-trends" class="nav-link" data-scroll-target="#detecting-non-monotonic-trends"><span class="toc-section-number">7.4</span>  Detecting non-monotonic trends</a></li>
+  <li><a href="#sec-WAVK" id="toc-sec-WAVK" class="nav-link" data-scroll-target="#sec-WAVK"><span class="toc-section-number">7.4</span>  Detecting non-monotonic trends</a></li>
   <li>
 <a href="#unit-roots" id="toc-unit-roots" class="nav-link" data-scroll-target="#unit-roots"><span class="toc-section-number">7.5</span>  Unit roots</a>
   <ul class="collapse">
@@ -550,7 +555,7 @@ Example: Bootstrap confidence interval for the population mean
 </div>
 </div>
 <p>Notice the different <span class="math inline">\(p\)</span>-values from the first time we applied the tests.</p>
-</section></section><section id="detecting-non-monotonic-trends" class="level2" data-number="7.4"><h2 data-number="7.4" class="anchored" data-anchor-id="detecting-non-monotonic-trends">
+</section></section><section id="sec-WAVK" class="level2" data-number="7.4"><h2 data-number="7.4" class="anchored" data-anchor-id="sec-WAVK">
 <span class="header-section-number">7.4</span> Detecting non-monotonic trends</h2>
 <p>Consider a time series <span id="eq-WAVKtrend"><span class="math display">\[
 Y_t = \mu(t) + \epsilon_t,
@@ -662,6 +667,7 @@ Y_t = \mu(t) + \epsilon_t,
 #&gt;      10           0.93   0.234</code></pre>
 </div>
 </div>
+<p>For the application of this test to multiple time series, see <a href="s4_trendsync.html"><span>Appendix&nbsp;C</span></a>.</p>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1048,7 +1054,7 @@ Example: ADF test applied to simulated data
 Bickel PJ, Götze F, Zwet WR van (1997) Resampling fewer than <span class="math inline">\(n\)</span> observations: Gains, losses, and remedies for losses. Statistica Sinica 7:1–31
 </div>
 <div id="ref-Brockwell:Davis:2002" class="csl-entry" role="doc-biblioentry">
-Brockwell PJ, Davis RA (2002) Introduction to time series and forecasting, 2nd edn. Springer, New York
+Brockwell PJ, Davis RA (2002) Introduction to time series and forecasting, 2nd edn. Springer, New York, NY, USA
 </div>
 <div id="ref-Buhlmann:2002" class="csl-entry" role="doc-biblioentry">
 Bühlmann P (2002) Bootstraps for time series. Statistical Science 17:52–72. <a href="https://doi.org/10.1214/ss/1023798998">https://doi.org/10.1214/ss/1023798998</a>
@@ -1057,13 +1063,13 @@ Bühlmann P (2002) Bootstraps for time series. Statistical Science 17:52–72. <
 Cabilio P, Zhang Y, Chen X (2013) Bootstrap rank tests for trend in time series. Environmetrics 24:537–549. <a href="https://doi.org/10.1002/env.2250">https://doi.org/10.1002/env.2250</a>
 </div>
 <div id="ref-Chatterjee:Hadi:2006" class="csl-entry" role="doc-biblioentry">
-Chatterjee S, Hadi AS (2006) Regression analysis by example, 4th edn. John Wiley &amp; Sons, Hoboken, New Jersey
+Chatterjee S, Hadi AS (2006) Regression analysis by example, 4th edn. John Wiley &amp; Sons, Hoboken, NJ, USA
 </div>
 <div id="ref-Chatterjee:Simonoff:2013" class="csl-entry" role="doc-biblioentry">
-Chatterjee S, Simonoff JS (2013) Handbook of regression analysis. John Wiley &amp; Sons, Hoboken, New Jersey
+Chatterjee S, Simonoff JS (2013) Handbook of regression analysis. John Wiley &amp; Sons, Hoboken, NJ, USA
 </div>
 <div id="ref-Davison:Hinkley:1997" class="csl-entry" role="doc-biblioentry">
-Davison AC, Hinkley DV (1997) Bootstrap methods and their application. Cambridge University Press, Cambridge
+Davison AC, Hinkley DV (1997) Bootstrap methods and their application. Cambridge University Press, Cambridge, UK
 </div>
 <div id="ref-Dickey:Fuller:1979" class="csl-entry" role="doc-biblioentry">
 Dickey DA, Fuller WA (1979) Distribution of the estimators for autoregressive time series with a unit root. Journal of the American Statistical Association 74:427–431. <a href="https://doi.org/10.2307/2286348">https://doi.org/10.2307/2286348</a>
@@ -1078,10 +1084,10 @@ Esterby SR (1996) Review of methods for the detection and estimation of trends w
 Hirsch RM, Slack JR, Smith RA (1982) Techniques of trend analysis for monthly water quality data. Water Resources Research 18:107–121. <a href="https://doi.org/10.1029/WR018i001p00107">https://doi.org/10.1029/WR018i001p00107</a>
 </div>
 <div id="ref-Kendall:1975" class="csl-entry" role="doc-biblioentry">
-Kendall MG (1975) Rank correlation methods, 4th edn. Charles Griffin, London
+Kendall MG (1975) Rank correlation methods, 4th edn. Charles Griffin, London, UK
 </div>
 <div id="ref-Lyubchich:2016:trends" class="csl-entry" role="doc-biblioentry">
-Lyubchich V (2016) Detecting time series trends and their synchronization in climate data. Intelligence Innovations Investments 12:132–137
+Lyubchich V (2016) Detecting time series trends and their synchronization in climate data. Intelligence Innovations Investments 12:132–137. <a href="https://www.researchgate.net/publication/318283780_Detecting_time_series_trends_and_their_synchronization_in_climate_data">https://www.researchgate.net/publication/318283780_Detecting_time_series_trends_and_their_synchronization_in_climate_data</a>
 </div>
 <div id="ref-Lyubchich:etal:2013:wavk" class="csl-entry" role="doc-biblioentry">
 Lyubchich V, Gel YR, El‐Shaarawi A (2013) On detecting non‐monotonic trends in environmental time series: A fusion of local regression and bootstrap. Environmetrics 24:209–226. <a href="https://doi.org/10.1002/env.2212">https://doi.org/10.1002/env.2212</a>

@@ -143,9 +143,7 @@ div.csl-indent {
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">
-<span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Generalized Autoregressive Conditional Heteroskedasticity (GARCH) Models</span>
-</h1>
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Generalized Autoregressive Conditional Heteroskedasticity (GARCH) Models</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -257,7 +255,12 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./s_practice.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Practice exercises</span></a>
+  <a href="./s4_trendsync.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Synchrony of parametric trends</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./s_practice.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Practice exercises</span></a>
   </div>
 </li>
       </ul>
@@ -283,9 +286,7 @@ div.csl-indent {
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
-<h1 class="title d-none d-lg-block">
-<span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Generalized Autoregressive Conditional Heteroskedasticity (GARCH) Models</span>
-</h1>
+<h1 class="title"><span id="sec-GARCH" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Generalized Autoregressive Conditional Heteroskedasticity (GARCH) Models</span></span></h1>
 </div>
 
 
@@ -318,7 +319,7 @@ div.csl-indent {
 <section id="introduction" class="level2" data-number="6.1"><h2 data-number="6.1" class="anchored" data-anchor-id="introduction">
 <span class="header-section-number">6.1</span> Introduction</h2>
 <p>In contrast to the traditional time series analysis that focuses on modeling the conditional first moment, models of <em>autoregressive conditional heteroskedasticity</em> (ARCH) and <em>generalized autoregressive conditional heteroskedasticity</em> (GARCH) specifically take the dependency of the conditional second moment into modeling consideration and accommodate the increasingly important need to explain and model risk and uncertainty in, for example, financial time series.</p>
-<p>The ARCH models were introduced in 1982 by Robert Engle to model varying (conditional) variance or volatility of time series. It is often found in economics that the larger values of time series also lead to larger instability (i.e., larger variances), which is termed <em>(conditional) heteroskedasticity</em>. Standard examples for demonstrating ARCH or GARCH effects are time series of stock prices, interest and foreign exchange rates, and even some environmental processes: high-frequency data on wind speed, energy production, air quality, etc. <span class="citation" data-cites="Cripps:Dunsmuir:2003 Marinova:McAleer:2003 Taylor:Buizza:2004 Campbell:Diebold:2005">(see examples in <a href="references.html#ref-Cripps:Dunsmuir:2003" role="doc-biblioref">Cripps and Dunsmuir 2003</a>; <a href="references.html#ref-Marinova:McAleer:2003" role="doc-biblioref">Marinova and McAleer 2003</a>; <a href="references.html#ref-Taylor:Buizza:2004" role="doc-biblioref">Taylor and Buizza 2004</a>; <a href="references.html#ref-Campbell:Diebold:2005" role="doc-biblioref">Campbell and Diebold 2005</a>)</span>. In 2003, <a href="https://www.nobelprize.org/prizes/economic-sciences/2003/engle/facts/">Engle was awarded the Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel</a> for his work on ARCH models. Although it is not one of the prizes that Alfred Nobel established in his will in 1895, the Sveriges Riksbank Prize is referred to along with the other Nobel Prizes by the Nobel Foundation.</p>
+<p>The ARCH models were introduced in 1982 by Robert Engle to model varying (conditional) variance or volatility of time series. It is often found in economics that the larger values of time series also lead to larger instability (i.e., larger variances), which is termed <em>(conditional) heteroskedasticity</em>. Standard examples for demonstrating ARCH or GARCH effects are time series of stock prices, interest and foreign exchange rates, and even some environmental processes: high-frequency data on wind speed, energy production, air quality, etc. <span class="citation" data-cites="Cripps:Dunsmuir:2003 Marinova:McAleer:2003 Taylor:Buizza:2004 Campbell:Diebold:2005">(see examples in <a href="references.html#ref-Cripps:Dunsmuir:2003" role="doc-biblioref">Cripps and Dunsmuir 2003</a>; <a href="references.html#ref-Marinova:McAleer:2003" role="doc-biblioref">Marinova and McAleer 2003</a>; <a href="references.html#ref-Taylor:Buizza:2004" role="doc-biblioref">Taylor and Buizza 2004</a>; <a href="references.html#ref-Campbell:Diebold:2005" role="doc-biblioref">Campbell and Diebold 2005</a>)</span>. In 2003, <a href="https://www.nobelprize.org/prizes/economic-sciences/2003/engle/facts/">Robert F. Engle was awarded 1/2 of the Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel</a> for his work on ARCH models (the other half was awarded to C. Granger, see <a href="l08_tsreg1.html#sec-cointegration"><span>Section&nbsp;8.3</span></a>). Although it is not one of the prizes that Alfred Nobel established in his will in 1895, the Sveriges Riksbank Prize is referred to along with the other Nobel Prizes by the Nobel Foundation.</p>
 </section><section id="features-of-arch" class="level2" data-number="6.2"><h2 data-number="6.2" class="anchored" data-anchor-id="features-of-arch">
 <span class="header-section-number">6.2</span> Features of ARCH</h2>
 <p>Since financial data typically have the autocorrelation coefficient close to 1 at lag 1 (e.g., the exchange rate between the US and Canadian dollar hardly changes from today to tomorrow), it is much more interesting and also more practically relevant to model the returns of a financial time series rather than the series itself. Let <span class="math inline">\(Y_t\)</span> be a time series of stock prices. The returns <span class="math inline">\(X_t\)</span> measure the relative changes in price and are typically defined as simple returns <span id="eq-returnsimple"><span class="math display">\[
@@ -781,7 +782,7 @@ Engle RF (1982) Autoregressive conditional heteroscedasticity with estimates of 
 Hansen PR, Lunde A (2005) A comparison of volatility models: Does anything beat a <span>GARCH</span>(1, 1)? Journal of Applied Econometrics 20:873–889. <a href="https://doi.org/10.1002/jae.800">https://doi.org/10.1002/jae.800</a>
 </div>
 <div id="ref-Kirchgassner:Wolters:2007" class="csl-entry" role="doc-biblioentry">
-Kirchgässner G, Wolters J (2007) <a href="https://doi.org/10.1007/978-3-540-73291-4">Introduction to modern time series analysis</a>. Springer-Verlag, Berlin
+Kirchgässner G, Wolters J (2007) <a href="https://doi.org/10.1007/978-3-540-73291-4">Introduction to modern time series analysis</a>. Springer-Verlag, Berlin, Germany
 </div>
 <div id="ref-Marinova:McAleer:2003" class="csl-entry" role="doc-biblioentry">
 Marinova D, McAleer M (2003) Modelling trends and volatility in ecological patents in the <span>USA</span>. Environmental Modelling &amp; Software 18:195–203. <a href="https://doi.org/10.1016/S1364-8152(02)00079-8">https://doi.org/10.1016/S1364-8152(02)00079-8</a>
@@ -793,7 +794,7 @@ Rydberg TH (2000) Realistic statistical modelling of financial data. Internation
 Taylor JW, Buizza R (2004) A comparison of temperature density forecasts from <span>GARCH</span> and atmospheric models. Journal of Forecasting 23:337–355. <a href="https://doi.org/10.1002/for.917">https://doi.org/10.1002/for.917</a>
 </div>
 <div id="ref-Tsay:2005" class="csl-entry" role="doc-biblioentry">
-Tsay RS (2005) Analysis of financial time series, 2nd edn. John Wiley &amp; Sons, Hoboken
+Tsay RS (2005) Analysis of financial time series, 2nd edn. John Wiley &amp; Sons, Hoboken, NJ, USA
 </div>
 </div>
 </section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
