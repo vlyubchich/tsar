@@ -95,7 +95,7 @@ For an application of this method in trend clustering, see [this vignette](https
 
 Replicate the test for synchrony of trends found in two time series [@Lyubchich:2016:trends]:
 
-- a multi-model average of temperatures from the 5th phase of the Coupled Model Intercomparison Project (CMIP5),
+- a multi-model average of temperatures from the 5th phase of the Coupled Model Intercomparison Project (CMIP5) and
 - observed global temperature anomalies relative to the base period of 1981--2010.
 
 ```{r}
@@ -142,6 +142,6 @@ set.seed(123)
 funtimes::sync_test(D[, c("Temp_CMIP5", "Temp_obs")] ~ poly(t, 2))
 ```
 
-Note the results differ quite a lot based on the window used for computing the WAVK statistic.
-The function `funtimes::sync_test()` automatically selects the optimal window based on the heuristic approach of computing distances between bootstrap distributions [@Lyubchich:Gel:2016:synchronism;@Lyubchich:2016:trends].
+Note these results differ substantially based on the window used for computing the WAVK statistic.
+The function `funtimes::sync_test()` automatically selects the optimal window based on the heuristic approach of comparing distances between bootstrap distributions [@Lyubchich:Gel:2016:synchronism;@Lyubchich:2016:trends].
 :::
