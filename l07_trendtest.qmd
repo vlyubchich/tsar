@@ -256,7 +256,7 @@ funtimes::notrend_test(Y, test = "MK", ar.method = "yw")
 Notice the different $p$-values from the first time we applied the tests.
 
 
-## Detecting non-monotonic trends
+## Detecting non-monotonic trends {#sec-WAVK}
 
 Consider a time series 
 $$
@@ -325,6 +325,8 @@ funtimes::wavk_test(Y ~ poly(t, 2),
                     ar.method = "yw", 
                     out = TRUE)
 ```
+
+For the application of this test to multiple time series, see @sec-syncparam.
 
 ::: {.callout-note}
 Statistical test results depend on the alternative hypothesis. 

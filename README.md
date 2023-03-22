@@ -5,7 +5,7 @@
 Remember that all predictive inference is based on the assumptions that the relationships between the variables and their dynamics will be the same in the future.
 - add a lecture on panel data analysis
 - add about TS bootstrap (sieve, block) in l07
-- appendix on synch of parametric trends
+- about CCF and ccf_boot()
 - expand on wavelets, add example of acoustic data
 - appendix or lecture on changepoint analysis
 - GLM or another generalized model with classification example for fisheries or ecology.
@@ -21,6 +21,7 @@ a.k.a.
 changepoint
 heteroskedasticity
 homoskedasticity
+hyperparameter
 nonlinear
 nonnegative
 nonparametric

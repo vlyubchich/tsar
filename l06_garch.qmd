@@ -11,7 +11,7 @@ library(patchwork)
 options(digits = 3)
 ```
 
-# Generalized Autoregressive Conditional Heteroskedasticity (GARCH) Models
+# Generalized Autoregressive Conditional Heteroskedasticity (GARCH) Models {#sec-GARCH}
 
 The goal of this lecture is to introduce a class of models with conditional heteroskedasticity for stationary time series. 
 You will be able to recognize the presence of such heteroskedasticity from graphs or statistical tests and model it.
@@ -36,7 +36,7 @@ In contrast to the traditional time series analysis that focuses on modeling the
 The ARCH models were introduced in 1982 by Robert Engle to model varying (conditional) variance or volatility of time series. 
 It is often found in economics that the larger values of time series also lead to larger instability (i.e., larger variances), which is termed *(conditional) heteroskedasticity*. 
 Standard examples for demonstrating ARCH or GARCH effects are time series of stock prices, interest and foreign exchange rates, and even some environmental processes: high-frequency data on wind speed, energy production, air quality, etc. [see examples in @Cripps:Dunsmuir:2003;@Marinova:McAleer:2003;@Taylor:Buizza:2004;@Campbell:Diebold:2005]. 
-In 2003, [Engle was awarded the Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel](https://www.nobelprize.org/prizes/economic-sciences/2003/engle/facts/) for his work on ARCH models.
+In 2003, [Robert F. Engle was awarded 1/2 of the Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel](https://www.nobelprize.org/prizes/economic-sciences/2003/engle/facts/) for his work on ARCH models (the other half was awarded to C. Granger, see @sec-cointegration).
 Although it is not one of the prizes that Alfred Nobel established in his will in 1895, the Sveriges Riksbank Prize is referred to along with the other Nobel Prizes by the Nobel Foundation.
 
 

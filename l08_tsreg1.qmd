@@ -423,15 +423,17 @@ p1 + p2 + p3 +
 ## Cointegration {#sec-cointegration}
 
 Generally, cointegration might be characterized by two or more I(1) variables indicating a common long-run development, i.e., the variables do not drift away from each other except for transitory fluctuations. 
-This defines a statistical equilibrium that, in empirical analysis, can often be interpreted as a long-run [economic] relation.
+This defines a statistical equilibrium that, in empirical analysis, can often be interpreted as a long-run [economic] relation [@Engle:Granger:1987].
 
 In other words, two I(1) series $X_t$ and $Y_t$ are cointegrated if their linear combination $u_t$ is I(0):
 $$
 Y_t - \beta X_t = u_t.
 $${#eq-longrun}
 
-Cointegration means a common stochastic trend. 
+Cointegration means a common stochastic trend (see @sec-syncparam on testing for a common parametric trend). 
 The vector $(1, -\beta)^{\top}$ is called the *cointegration vector*.
+
+For the development of methods of analyzing time series cointegration, in 2003, [Clive W. J. Granger was awarded 1/2 of the Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel](https://www.nobelprize.org/prizes/economic-sciences/2003/granger/facts/) (the other half was awarded to R. Engle, see @sec-GARCH).
 
 
 ### Two-step Engle--Granger method

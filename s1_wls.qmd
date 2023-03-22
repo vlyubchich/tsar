@@ -19,14 +19,14 @@ y_i=\beta_0+\beta_1x_i+\varepsilon_i
 $${#eq-mod1}
 is proportional to the predictor $X$, so
 $$
-\mathrm{Var}(\varepsilon_i)=k^2x^2_i, \;\; k>0.
+\mathrm{var}(\varepsilon_i)=k^2x^2_i, \;\; k>0.
 $$
 
 In the *weighted least squares* (WLS) method, we can stabilize the variance by dividing both sides of @eq-mod1 by $x_i$:
 $$
 \frac{y_i}{x_i}=\frac{\beta_0}{x_i}+\beta_1+\frac{\varepsilon_i}{x_i},
 $${#eq-mod1W}
-then $\mathrm{Var}\left(\frac{\varepsilon_i}{x_i}\right)=k^2$, i.e., it is now *stabilized*.
+then $\mathrm{var}\left(\frac{\varepsilon_i}{x_i}\right)=k^2$, i.e., it is now *stabilized*.
 
 ::: {.callout-note icon=false}
 

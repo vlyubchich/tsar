@@ -950,7 +950,7 @@ ar(Y, order.max = 11)
 ```
 
 The function `funtimes::ARest()` is a wrapper for `stats::ar()`. 
-It adds a difference-based estimator by @Hall:VanKeilegom:2003, which is now used by default, and also switches to BIC as the model selection criterion. 
+It adds a difference-based estimator by @Hall:VanKeilegom:2003, which is now used by default, and also switches between BIC or AIC as the model selection criterion. 
 The selection is still done only for the order $p$ in AR($p$), without considering the possibility of MA terms.
 
 ```{r}
@@ -963,7 +963,7 @@ To check the correspondence with `stats::ar()`, change the method and fix the `a
 ```{r}
 #| code-fold: false
 
-funtimes::ARest(Y, ar.method = "yw", ar.order = 2, BIC = FALSE)
+funtimes::ARest(Y, ar.method = "yw", ar.order = 2, ic = "none")
 ```
 
 ::: {.callout-note}

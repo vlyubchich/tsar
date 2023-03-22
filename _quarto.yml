@@ -36,6 +36,7 @@ book:
     appendices:
         - s1_wls.qmd
         - s2_gls.qmd
+        - s4_trendsync.qmd
         - s_practice.qmd
 
 bibliography:
