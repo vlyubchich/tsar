@@ -347,7 +347,7 @@ Example: CMIP5 vs.&nbsp;observations
 <div class="callout-body-container callout-body">
 <p>Replicate the test for synchrony of trends found in two time series <span class="citation" data-cites="Lyubchich:2016:trends">(<a href="references.html#ref-Lyubchich:2016:trends" role="doc-biblioref">Lyubchich 2016</a>)</span>:</p>
 <ul>
-<li>a multi-model average of temperatures from the 5th phase of the Coupled Model Intercomparison Project (CMIP5),</li>
+<li>a multi-model average of temperatures from the 5th phase of the Coupled Model Intercomparison Project (CMIP5) and</li>
 <li>observed global temperature anomalies relative to the base period of 1981–2010.</li>
 </ul>
 <div class="cell">
@@ -446,7 +446,7 @@ Example: CMIP5 vs.&nbsp;observations
 #&gt; [1] -0.000673  0.052504</code></pre>
 </div>
 </div>
-<p>Note the results differ quite a lot based on the window used for computing the WAVK statistic. The function <code><a href="https://rdrr.io/pkg/funtimes/man/sync_test.html">funtimes::sync_test()</a></code> automatically selects the optimal window based on the heuristic approach of computing distances between bootstrap distributions <span class="citation" data-cites="Lyubchich:Gel:2016:synchronism Lyubchich:2016:trends">(<a href="references.html#ref-Lyubchich:2016:trends" role="doc-biblioref">Lyubchich 2016</a>; <a href="references.html#ref-Lyubchich:Gel:2016:synchronism" role="doc-biblioref">Lyubchich and Gel 2016</a>)</span>.</p>
+<p>Note these results differ substantially based on the window used for computing the WAVK statistic. The function <code><a href="https://rdrr.io/pkg/funtimes/man/sync_test.html">funtimes::sync_test()</a></code> automatically selects the optimal window based on the heuristic approach of comparing distances between bootstrap distributions <span class="citation" data-cites="Lyubchich:Gel:2016:synchronism Lyubchich:2016:trends">(<a href="references.html#ref-Lyubchich:2016:trends" role="doc-biblioref">Lyubchich 2016</a>; <a href="references.html#ref-Lyubchich:Gel:2016:synchronism" role="doc-biblioref">Lyubchich and Gel 2016</a>)</span>.</p>
 </div>
 </div>
 
