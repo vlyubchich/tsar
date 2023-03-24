@@ -43,6 +43,93 @@ When modeling time series, we often want to find so-called *leading indicators*,
 Hence, our models may include lagged versions of both the response and predictor variables (a general form of such a model was given in @eq-fmult).
 
 
+## Cross-correlation function {#sec-ccf}
+
+Cross-correlation is a correlation between different time series, typically with a time offset $k$ (a.k.a. lag):
+$$
+\mathrm{cor}(X_{t+k},Y_t).
+$${#eq-ccf}
+(Recall that autocorrelation is also a correlation with a lag present, but for the same time series.)
+By calculating cross-correlations at each lag $k = 0, \pm 1, \pm 2, \dots$, we obtain the *cross-correlation function* (CCF).
+CCF shows how the correlation coefficient varies with the lag $k$ and helps us to identify important lags and find leading indicators for predictive models.
+For example, the relationship between nutrient input and algal blooms in a marine environment is not immediate since the algae need time to reproduce.
+The correlation between a time series of births and demand for baby formula would be distributed over smaller lags $l$
+$$
+\mathrm{cor}(\mathrm{Births}_{t - l}, \mathrm{FormulaDemand}_t)
+$$
+than the correlation lags $L$ between births and school enrollments
+$$
+\mathrm{cor}(\mathrm{Births}_{t - L}, \mathrm{SchoolEnrollment}_t),
+$$
+where $l,L > 0$.
+
+The functions `ccf()` and `forecast::ggCcf()` estimate the cross-correlation function and plot it as a base-R or a `ggplot2` graph, respectively. 
+The functions use the notations like in @eq-ccf, hence when using `ccf(x, y)` we are typically interested in identifying *negative* $k$s that correspond to correlation between past values of the predictor $X_t$ and current values of the response $Y_t$.
+
+For example, @fig-CCFBJ shows the CCF for two time series of sales that have been detrended by taking differences. 
+From this plot, lagged values of the first series, $\Delta \mathrm{BJsales.lead}_{t - 2}$ and $\Delta \mathrm{BJsales.lead}_{t - 3}$ are significantly correlated with current values of the second series, $\Delta \mathrm{BJsales}_{t}$. 
+Hence, we can call `BJsales.lead` a leading indicator for `BJsales`.
+
+```{r}
+#| label: fig-CCFBJ
+#| fig-cap: "Cross-correlation function of the detrended time series."
+
+forecast::ggCcf(diff(BJsales.lead), diff(BJsales)) + 
+    theme_light()
+```
+
+::: {.callout-note}
+The function `ccf()` assumes that the two time series are evenly spaced and have no missing data. 
+We can use the argument `na.action = na.pass` to ignore any missing values.
+:::
+
+Note that the 95% confidence band shown in @fig-CCFBJ is based on how i.i.d. series of length $n$ would correlate (the same way the band is produced for an autocorrelation function with `acf()`). 
+However, when $n$ is small, there are not so many pairs $(X_{t+k}, Y_t)$ to calculate the correlations at large lags, hence the confidence bands should be ideally adjusted by using the smaller $n'(k) = n - |k|$ to account for this lack of confidence.
+
+Another concern is the autocorrelation of individual time series that may lead to spurious cross-correlation [@Dean:Dunsmuir:2016]. 
+Intuitively, say if both $X_t$ and $Y_t$ are positively autocorrelated -- high (or low) values in $X_t$ follow each other, and high (or low) values in $Y_t$ follow each other -- there could be a time alignment among our considered lags $k = 0, \pm 1, \pm 2, \dots$ when the ups (or downs) in $X_{t+k}$ match those in $Y_t$. 
+To address the concern of autocorrelation, we can apply bootstrapping to approximate the distribution of cross-correlation coefficients corresponding not to the i.i.d. series but to stationary time series with the same autocorrelation structure as the input data. 
+The function `funtimes::ccf_boot()` implements the sieve bootstrap and returns results for both Pearson and Spearman correlations [@fig-CCFbootBJ].
+
+```{r}
+#| label: fig-CCFbootBJ
+#| fig-cap: "Pearson and Spearman cross-correlation functions of the detrended time series with sieve bootstrap confidence intervals. Note that the function `funtimes::ccf_boot()` automatically produces a base-R plot that was suppressed here to save the results as the object `res` and use the package `ggplot2` for the plots."
+
+set.seed(123)
+res <- funtimes::ccf_boot(diff(BJsales.lead), diff(BJsales), 
+                          B = 10000, plot = "none")
+p1 <- res %>% 
+    ggplot(aes(x = Lag, y = r_P, xend = Lag, yend = 0)) + 
+    geom_ribbon(aes(ymin = lower_P, ymax = upper_P), fill = 4) +
+    geom_point() + 
+    geom_segment() + 
+    geom_hline(yintercept = 0) + 
+    ylab("Pearson correlation")
+p2 <- res %>% 
+    ggplot(aes(x = Lag, y = r_S, xend = Lag, yend = 0)) + 
+    geom_ribbon(aes(ymin = lower_S, ymax = upper_S), fill = 4) +
+    geom_point() + 
+    geom_segment() + 
+    geom_hline(yintercept = 0) + 
+    ylab("Spearman correlation")
+p1 + p2 +
+    plot_annotation(tag_levels = 'A') &
+    theme_light()
+```
+
+Finally, remember that the reported Pearson correlations in @fig-CCFBJ and @fig-CCFbootBJ A measure the direction and strength of *linear* relationships, while Spearman correlations in @fig-CCFbootBJ B correspond to *monotonic* relationships. 
+To further investigate whether the lagged relationships are linear, monotonic, or of some other form, we need to plot the lagged scatterplots [@fig-lagCCF].
+Also see other functions in the package `astsa`, such as the function `astsa::lag1.plot()` for exploring nonlinear autocorrelations.
+
+```{r}
+#| label: fig-lagCCF
+#| fig-cap: "Lagged scatterplots of the detrended time series with lowess smooths and (linear) Pearson correlations reported in the right corners."
+#| fig-height: 9
+
+astsa::lag2.plot(diff(BJsales.lead), diff(BJsales), max.lag = 5)
+```
+
+
 ## Linear regression with ARMA errors
 
 We begin with the simplest case, a *constant mean model*, where the residuals are serially correlated and follow an AR(1) model, that is
@@ -235,19 +322,17 @@ D %>%
     theme_light()
 ```
 
-The lag `k` implemented in `ccf(x, y)` is used to estimate the correlation between `x[t + k]` and `y[t]` (@fig-tilefishCCF).
-
 ```{r}
 #| label: fig-tilefishCCF
 #| fig-cap: "Estimated cross-correlation function (CCF) of time series of the landings and AMO."
 
 par(mar = c(4, 5, 1, 1) + 0.1, mgp = c(3, 1, 0), mfrow = c(1, 1))
 with(D,
-     ccf(Landings_noNA_sqrt, AMO, las = 1)
+     ccf(AMO, Landings_noNA_sqrt, las = 1)
 )
 ```
 
-Implement a model
+Based on the strongest lagged correlations (@fig-tilefishCCF), implement a model
 $$
 \sqrt{Landings_t} = \beta_0 + \beta_{1} AMO_{t-7} + \epsilon_{t},
 $$
@@ -356,7 +441,7 @@ Hence, we will still keep the current precipitation and additionally explore the
 par(mar = c(4, 5, 1, 1) + 0.1, mgp = c(3, 1, 0), mfrow = c(1, 1))
 logconstant <- 1
 with(Insurance,
-     ccf(log(Claims + logconstant), Precipitation, las = 1, lag.max = 3)
+     ccf(Precipitation, log(Claims + logconstant), las = 1, lag.max = 3)
 )
 ```
 

@@ -39,8 +39,9 @@ The R packages used in this book include (in alphabetic order):
 #| echo: false
 
 packages2cite <- sort(c(
+    'astsa'
     # 'car'
-    'downlit'
+    ,'downlit'
     ,'dplR'
     ,'dplyr'
     ,'dynlm'

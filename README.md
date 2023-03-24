@@ -1,16 +1,15 @@
 # Future work
 - after GARMA, add about GAMLSS (see the example file on Chesapeake Bay)
-- make causality a separate lecture #10, add on diff-in-diff with cannabis example.
+- make causality a separate lecture 10, add on diff-in-diff with cannabis example.
 - add example coverage calculations Lect 2 or ARIMA, eventually move part of the material from l02 to a separate lecture on Model diagnostics and forecasting. forecast::accuracy(). Overfitting. B&D Ch. 9
 Remember that all predictive inference is based on the assumptions that the relationships between the variables and their dynamics will be the same in the future.
 - add a lecture on panel data analysis
 - add about TS bootstrap (sieve, block) in l07
-- about CCF and ccf_boot()
 - expand on wavelets, add example of acoustic data
 - appendix or lecture on changepoint analysis
 - GLM or another generalized model with classification example for fisheries or ecology.
-- appendix or example with Lake Huron analysis. See YRG L12N and slides.
 - add about the Ljung--Box statistic eg from 7N
+- local stationarity, warping, time motifs, graph representation of time series
 
 
 # Conventions and format examples
@@ -30,6 +29,7 @@ non-existent
 non-monotonic
 non-normal
 non-seasonal
+scatterplot
 vs.
 
 
@@ -46,6 +46,8 @@ $X_t \sim$ I(2)
 Use *italics* for highlights in text, not **bold**.
 
 Use 'single quotes' in text whenever possible.
+
+#| code-fold: false
 
 Space and capital letter after a comment sign: 
 # This is a comment
@@ -88,7 +90,8 @@ p2 <- forecast::ggAcf(shampoo) +
     xlab("Lag (months)") +
     theme_light()
 p1 + p2 +
-    plot_annotation(tag_levels = 'A')
+    plot_annotation(tag_levels = 'A') &
+    theme_light()
 ```
 
 

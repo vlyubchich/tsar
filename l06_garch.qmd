@@ -261,7 +261,7 @@ garch11
 ```
 
 Next, we run diagnostics of the fitted model, i.e., whether the residuals $\varepsilon_{t}$ are white noise and are normally distributed. 
-The code `plot(garch11)` generates scatter plots, histograms, Q-Q plots, and ACF plots of the original data and the obtained residuals (@fig-garch11QQ). 
+The code `plot(garch11)` generates scatterplots, histograms, Q-Q plots, and ACF plots of the original data and the obtained residuals (@fig-garch11QQ). 
 Of course, the analysis can be performed also with separate commands. 
 For example, see the ACFs of the residuals (@fig-garch11ACF).
 
