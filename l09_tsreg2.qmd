@@ -61,7 +61,7 @@ than the correlation lags $L$ between births and school enrollments
 $$
 \mathrm{cor}(\mathrm{Births}_{t - L}, \mathrm{SchoolEnrollment}_t),
 $$
-where $l,L > 0$.
+where $l,L > 0$ and $l < L$.
 
 The functions `ccf()` and `forecast::ggCcf()` estimate the cross-correlation function and plot it as a base-R or a `ggplot2` graph, respectively. 
 The functions use the notations like in @eq-ccf, hence when using `ccf(x, y)` we are typically interested in identifying *negative* $k$s that correspond to correlation between past values of the predictor $X_t$ and current values of the response $Y_t$.
@@ -84,12 +84,13 @@ We can use the argument `na.action = na.pass` to ignore any missing values.
 :::
 
 Note that the 95% confidence band shown in @fig-CCFBJ is based on how i.i.d. series of length $n$ would correlate (the same way the band is produced for an autocorrelation function with `acf()`). 
-However, when $n$ is small, there are not so many pairs $(X_{t+k}, Y_t)$ to calculate the correlations at large lags, hence the confidence bands should be ideally adjusted by using the smaller $n'(k) = n - |k|$ to account for this lack of confidence.
+However, when $n$ is small, there are not so many pairs $(X_{t+k}, Y_t)$ to calculate the correlations at large lags, hence the confidence bands should be adjusted by using the smaller $n'(k) = n - |k|$ to account for this lack of confidence.
 
 Another concern is the autocorrelation of individual time series that may lead to spurious cross-correlation [@Dean:Dunsmuir:2016]. 
-Intuitively, say if both $X_t$ and $Y_t$ are positively autocorrelated -- high (or low) values in $X_t$ follow each other, and high (or low) values in $Y_t$ follow each other -- there could be a time alignment among our considered lags $k = 0, \pm 1, \pm 2, \dots$ when the ups (or downs) in $X_{t+k}$ match those in $Y_t$. 
+Intuitively, say if $X_t$ and $Y_t$ are independent from each other but both $X_t$ and $Y_t$ are positively autocorrelated -- high (or low) values in $X_t$ follow each other, and high (or low) values in $Y_t$ follow each other -- there could be a time alignment among our considered lags $k = 0, \pm 1, \pm 2, \dots$ when the ups (or downs) in $X_{t+k}$ match those in $Y_t$. 
+This may result in spurious cross-correlation. 
 To address the concern of autocorrelation, we can apply bootstrapping to approximate the distribution of cross-correlation coefficients corresponding not to the i.i.d. series but to stationary time series with the same autocorrelation structure as the input data. 
-The function `funtimes::ccf_boot()` implements the sieve bootstrap and returns results for both Pearson and Spearman correlations [@fig-CCFbootBJ].
+The function `funtimes::ccf_boot()` implements the sieve bootstrap and returns results for both Pearson and Spearman correlations (@fig-CCFbootBJ).
 
 ```{r}
 #| label: fig-CCFbootBJ
@@ -118,7 +119,7 @@ p1 + p2 +
 ```
 
 Finally, remember that the reported Pearson correlations in @fig-CCFBJ and @fig-CCFbootBJ A measure the direction and strength of *linear* relationships, while Spearman correlations in @fig-CCFbootBJ B correspond to *monotonic* relationships. 
-To further investigate whether the lagged relationships are linear, monotonic, or of some other form, we need to plot the lagged scatterplots [@fig-lagCCF].
+To further investigate whether the lagged relationships are linear, monotonic, or of some other form, we need to plot the lagged scatterplots (@fig-lagCCF).
 Also see other functions in the package `astsa`, such as the function `astsa::lag1.plot()` for exploring nonlinear autocorrelations.
 
 ```{r}
