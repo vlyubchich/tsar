@@ -8,7 +8,6 @@ Remember that all predictive inference is based on the assumptions that the rela
 - expand on wavelets, add example of acoustic data
 - appendix or lecture on changepoint analysis
 - GLM or another generalized model with classification example for fisheries or ecology.
-- add about the Ljung--Box statistic eg from 7N
 - local stationarity, warping, time motifs, graph representation of time series
 
 

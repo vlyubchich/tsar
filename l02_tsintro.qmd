@@ -407,7 +407,27 @@ for all positive integers $n$ and vectors $\boldsymbol{a} = (a_1, \dots, a_n)^{\
 1. The autocorrelation function $\rho(\cdot)$ has all the properties of autocovariance function plus $\rho(0)=1$.
 1. For i.i.d. noise with finite variance, the sample autocorrelations $\hat{\rho}(h)$, $h>0$, are approximately $N(0,1/n)$ for large sample size $n$. 
 Hence, approximately 95% of the sample autocorrelations should fall between the bounds $\pm1.96/\sqrt{n}$ (1.96 is the 0.975th quantile of the standard normal distribution) -- this is the bound automatically drawn by the R function `acf()`.
+Autocorrelations that reach outside this bound are then statistically significant.
 Note that in R as a rule of thumb the *default maximal lag* is $10 \log_{10}(n)$, and the same $n$ is used for the confidence bounds at all lags (however, in reality, samples of different sizes are used for each lag).
+
+::: {.callout-note}
+The last property is yet another tool for testing autocorrelation in a time series, in addition to those listed in @sec-regression.
+Also, see the Ljung--Box test described below.
+:::
+
+**Ljung--Box test**
+
+Instead of testing autocorrelation at each lag, we can apply an overall test by @Ljung:Box:1978:
+
+$H_0$: $\rho(1) = \rho(2) = \dots = \rho(h) = 0$  
+$H_1$: $\rho(j) \neq 0$ for some $j \in \{1, 2, \dots, h\}$, where $n > h$.
+
+The Ljung--Box test statistic is given by
+$$
+Q_h = n(n + 2) \sum_{j = 1}^h\frac{\hat{\rho}_j^2}{n - j}.
+$$
+Under the null hypothesis, $Q_h$ has a $\chi^2$ distribution with $h$ degrees of freedom.
+In R, this test is implemented in the function `Box.test()` with the argument `type = "Ljung-Box"` and in the function `tsdiag()`.
 
 ::: {.callout-note icon=false}
 
