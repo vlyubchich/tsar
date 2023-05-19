@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.335">
+<meta name="generator" content="quarto-1.2.313">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>Time Series Analysis - 8&nbsp; Time Series Regression with Trends</title>
 <style>
@@ -984,7 +984,7 @@ Y_t = a + bX_t + u_t.
 #&gt; F-statistic: 29.3 on 3 and 244 DF,  p-value: 3.2e-16</code></pre>
 </div>
 </div>
-<p>There is also the R package <code>ecm</code>, but it uses a modified formulation of the model, see details for the function <code><a href="https://rdrr.io/pkg/ecm/man/ecm.html">ecm::ecm()</a></code>.</p>
+<p>There is also the R package <code>ecm</code>, but it uses a modified formulation of the model, see details for the function <code>ecm::ecm()</code>.</p>
 </div>
 </div>
 <p>In the example above, the time series were simulated as cointegrated. Below is an example of another I(1) process <span class="math inline">\(W_t\)</span> but with a stochastic trend different from that of <span class="math inline">\(X_t\)</span>. In this case, the linear combination of individually integrated <span class="math inline">\(W_t\)</span> and <span class="math inline">\(X_t\)</span> does not produce a stationary time series, thus, <span class="math inline">\(W_t\)</span> and <span class="math inline">\(X_t\)</span> are not cointegrated.</p>
