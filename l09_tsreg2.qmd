@@ -250,7 +250,7 @@ If differencing is chosen as the method of detrending, the orders of differences
 :::
 
 
-## ARIMAX models
+## ARIMAX
 
 ARIMAX ('X' stands for 'external regressor') models are closely related to @eq-MlinModelARMA, but there is an important difference. 
 For simplicity of notation, we can present an ARMAX($p,q$) model that is a regular ARMA($p,q$) model for $Y_t$ plus the external regressors:
@@ -387,7 +387,7 @@ report(m3)
 :::
 
 
-## GARMA models {#sec-GARMA}
+## GARMA {#sec-GARMA}
 
 Let $Y_t$ be the observed time series and $\boldsymbol{X_t}$ exogenous regressors. 
 Then, we can model the conditional distribution of $Y_t$, given $Y_1,\dots,Y_{t-1}$, $\boldsymbol{X_1,\dots,X_{t}}$ as
@@ -414,7 +414,7 @@ Explore the relationship between the number of claims and weekly total precipita
 
 ```{r}
 Insurance <- read.csv("data/insurance_weekly.csv") %>%
-    select(Claims, Precipitation)
+    dplyr::select(Claims, Precipitation)
 summary(Insurance)
 ```
 
@@ -452,6 +452,7 @@ Based on the estimated CCFs (@fig-insCCF), past-week precipitation is significan
 Insurance <- Insurance %>%
     mutate(Precipitation_lag1 = dplyr::lag(Precipitation, 1),
            Week = 1:nrow(Insurance),
+           Year = rep(2002:2011, each = 52),
            Claims_ln = log(Claims + logconstant))
 ```
 
@@ -481,7 +482,7 @@ Plot the data once again after the transformations (@fig-insScatter2).
 #| fig-cap: "Scatterplot matrix of the weekly number of weather-related home insurance claims and precipitation."
 
 Insurance %>%
-    dplyr::select(-Claims) %>%
+    dplyr::select(-Claims, -Year) %>%
     GGally::ggpairs() +
     theme_light()
 ```
@@ -603,6 +604,65 @@ plot(m03nbi)
 
 The residual diagnostics look better for the latter model. 
 One could also consider modeling the strictly periodical component such as using the Fourier series, however, @fig-insACF did not show a prominent seasonality.
+:::
+
+
+## GAMLSS {#sec-GAMLSS}
+
+@Stasinopoulos:Rigby:2007 provide an extension of a generalized additive model to $k=1,2,3,4$ parameters $\boldsymbol{\theta}_k$ of a distribution in a so-called *generalized additive model for location scale and shape* (GAMLSS).
+The $k$ parameters represent the location parameter $\mu$ (that's what we typically model with regression models), scale $\sigma$, and two shape parameters: skewness and kurtosis.
+The model can be further generalized for $k>4$, if needed.
+It allows us fitting $k$ individual models to study relationships between regressors $\boldsymbol{x}$ and parameters of the response distribution:
+$$
+g_k(\boldsymbol{\theta}_k) = h_k\left(\boldsymbol{X}_k,\boldsymbol{\beta}_k\right) + \sum_{j=1}^{J_k}h_{jk}(\boldsymbol{x}_{jk}),
+$${#eq:gamlss}
+where $k=1$ produces model for the mean; $h_k(\cdot)$ and $h_{jk}(\cdot)$ are nonlinear functions; $\boldsymbol{\beta}_k$ is a parameter vector of length $J_k$; $\boldsymbol{X}_k$ is an $n\times J_k$ design matrix; $\boldsymbol{x}_{jk}$ are vectors of length $n$. 
+The terms in the GAMLSS provide a flexible framework to specify random effects and correlation structure as in the mixed effects models [@Zuur:etal:2009]; see Table 3 by @Stasinopoulos:Rigby:2007 for other possible specifications of the additive terms. 
+Hence, models of the form @eq-gamlss may be a good choice for insurance problems, because such models accommodate non-normal distributions, possibly nonlinear relationships, and spatiotemporal dependencies in the data.
+
+:::{.callout-note icon=false}
+
+## Example: Insurance claims GAMLSS
+
+Start by using the insights from the latest GARMA model to start with the selected regressors and distribution family of the response variable.
+
+* Negative binomial distribution has two parameters (see `?NBI`) -- location and scale -- so the GAMLSS using this distribution family can include up to two equations.
+We'll start by 
+* 
+
+Here we try one other distribution appropriate for modeling overdispersed count data -- negative binomial distribution. 
+See the model summary below and the verification of residuals in @fig-m03nbiACF and @fig-m03nbi.
+
+```{r}
+#| code-fold: false
+
+library(gamlss)
+set.seed(12345)
+m1_gamlss <- gamlss(Claims ~ Precipitation + Week + Precipitation_lag1
+                    ,sigma.formula = ~pb(Week) + pb(Precipitation_lag1)
+                    ,correlation222 = corARMA(q = 3)
+                    ,family = NBI
+                    ,data = Insurance_noNA)
+summary(m1_gamlss)
+```
+
+```{r}
+#| label: fig-m03nbiACF
+#| fig-cap: "ACF and PACF plots of the GARMA(0,3) model residuals based on NBI distribution."
+
+par(mfrow = c(1, 3))
+term.plot(m1_gamlss, las = 1, se = TRUE, ylim = "common", what = "mu")
+
+term.plot(m1_gamlss, las = 1, se = TRUE, ylim = "common", what = "sigma")
+
+plot(m1_gamlss, ts = TRUE)
+
+acf(residuals(m1_gamlss, what = "z-scores"))
+acfResid(m1_gamlss)
+AIC(m1_gamlss)
+```
+
+
 :::
 
 
