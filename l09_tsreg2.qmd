@@ -9,6 +9,7 @@ library(dplyr)
 library(ggplot2)
 library(patchwork)
 options(digits = 3)
+theme_set(theme_light())
 ```
 
 # Time Series Regression with Correlated Errors
@@ -74,8 +75,7 @@ Hence, we can call `BJsales.lead` a leading indicator for `BJsales`.
 #| label: fig-CCFBJ
 #| fig-cap: "Cross-correlation function of the detrended time series."
 
-forecast::ggCcf(diff(BJsales.lead), diff(BJsales)) + 
-    theme_light()
+forecast::ggCcf(diff(BJsales.lead), diff(BJsales))
 ```
 
 ::: {.callout-note}
@@ -114,8 +114,7 @@ p2 <- res %>%
     geom_hline(yintercept = 0) + 
     ylab("Spearman correlation")
 p1 + p2 +
-    plot_annotation(tag_levels = 'A') &
-    theme_light()
+    plot_annotation(tag_levels = 'A')
 ```
 
 Finally, remember that the reported Pearson correlations in @fig-CCFBJ and @fig-CCFbootBJ A measure the direction and strength of *linear* relationships, while Spearman correlations in @fig-CCFbootBJ B correspond to *monotonic* relationships. 
@@ -295,13 +294,11 @@ summary(D)
 p1 <- ggplot(D, aes(x = Year, y = Landings)) +
     geom_line() +
     xlab("Year") +
-    ylab("Landings (tonne)") +
-    theme_light()
+    ylab("Landings (tonne)")
 p2 <- ggplot(D, aes(x = Year, y = AMO)) +
     geom_line() +
     xlab("Year") +
-    ylab("AMO") +
-    theme_light()
+    ylab("AMO")
 p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```
@@ -318,9 +315,8 @@ D <- D %>%
     mutate(Landings_noNA_sqrt = sqrt(Landings_noNA))
 
 D %>% 
-    select(AMO, Landings_noNA_sqrt) %>% 
-    GGally::ggpairs() +
-    theme_light()
+    dplyr::select(AMO, Landings_noNA_sqrt) %>% 
+    GGally::ggpairs()
 ```
 
 ```{r}
@@ -423,8 +419,7 @@ summary(Insurance)
 #| fig-cap: "Scatterplot matrix of weekly weather-related home insurance outcomes and precipitation."
 
 Insurance %>%
-    GGally::ggpairs() +
-    theme_light()
+    GGally::ggpairs()
 ```
 
 Based on the distribution plots in @fig-insScatter, the data are highly right-skewed (have heavy right tails). 
@@ -464,13 +459,11 @@ Based on @fig-insACF, there might be an increasing trend in the number of claims
 
 p1 <- ggplot2::autoplot(as.ts(log(Insurance$Claims + logconstant))) +
     xlab("Week") +
-    ylab("ln(Number of claims)") +
-    theme_light()
+    ylab("ln(Number of claims)")
 p2 <- forecast::ggAcf(as.ts(log(Insurance$Claims + logconstant)),
                       lag.max = 110) +
     ggtitle("") +
-    xlab("Lag (weeks)") +
-    theme_light()
+    xlab("Lag (weeks)")
 p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```
@@ -483,8 +476,7 @@ Plot the data once again after the transformations (@fig-insScatter2).
 
 Insurance %>%
     dplyr::select(-Claims, -Year) %>%
-    GGally::ggpairs() +
-    theme_light()
+    GGally::ggpairs()
 ```
 
 Fit a GARMA model relating the weekly number of insurance claims to the total precipitation during that and previous weeks.
@@ -509,12 +501,10 @@ Obtain ACF and PACF plots of the model residuals to select ARMA order (@fig-insr
 
 p1 <- forecast::ggAcf(m00zip$residuals) +
     ggtitle("") +
-    xlab("Lag (weeks)") +
-    theme_light()
+    xlab("Lag (weeks)")
 p2 <- forecast::ggAcf(m00zip$residuals, type = "partial") +
     ggtitle("") +
-    xlab("Lag (weeks)") +
-    theme_light()
+    xlab("Lag (weeks)")
 p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```
@@ -540,12 +530,10 @@ summary(m30zip)
 
 p1 <- forecast::ggAcf(m30zip$residuals) +
     ggtitle("") +
-    xlab("Lag (weeks)") +
-    theme_light()
+    xlab("Lag (weeks)")
 p2 <- forecast::ggAcf(m30zip$residuals, type = "partial") +
     ggtitle("") +
-    xlab("Lag (weeks)") +
-    theme_light()
+    xlab("Lag (weeks)")
 p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```
@@ -583,12 +571,10 @@ summary(m03nbi)
 
 p1 <- forecast::ggAcf(m03nbi$residuals) +
     ggtitle("") +
-    xlab("Lag (weeks)") +
-    theme_light()
+    xlab("Lag (weeks)")
 p2 <- forecast::ggAcf(m03nbi$residuals, type = "partial") +
     ggtitle("") +
-    xlab("Lag (weeks)") +
-    theme_light()
+    xlab("Lag (weeks)")
 p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```
@@ -610,82 +596,130 @@ One could also consider modeling the strictly periodical component such as using
 ## GAMLSS {#sec-GAMLSS}
 
 @Stasinopoulos:Rigby:2007 provide an extension of a generalized additive model to $k=1,2,3,4$ parameters $\boldsymbol{\theta}_k$ of a distribution in a so-called *generalized additive model for location scale and shape* (GAMLSS).
-The $k$ parameters represent the location parameter $\mu$ (that's what we typically model with regression models), scale $\sigma$, and two shape parameters: skewness and kurtosis.
-The model can be further generalized for $k>4$, if needed.
-It allows us fitting $k$ individual models to study relationships between regressors $\boldsymbol{x}$ and parameters of the response distribution:
+The $k$ parameters represent the location parameter $\mu$ (it is what we typically model with regression models), scale $\sigma$, and two shape parameters: skewness and kurtosis.
+The model can be further generalized for $k>4$ if needed.
+It allows us to fit $k$ individual models to study relationships between regressors $\boldsymbol{x}$ and parameters of the response distribution:
 $$
 g_k(\boldsymbol{\theta}_k) = h_k\left(\boldsymbol{X}_k,\boldsymbol{\beta}_k\right) + \sum_{j=1}^{J_k}h_{jk}(\boldsymbol{x}_{jk}),
-$${#eq:gamlss}
+$${#eq-GAMLSS}
 where $k=1$ produces model for the mean; $h_k(\cdot)$ and $h_{jk}(\cdot)$ are nonlinear functions; $\boldsymbol{\beta}_k$ is a parameter vector of length $J_k$; $\boldsymbol{X}_k$ is an $n\times J_k$ design matrix; $\boldsymbol{x}_{jk}$ are vectors of length $n$. 
-The terms in the GAMLSS provide a flexible framework to specify random effects and correlation structure as in the mixed effects models [@Zuur:etal:2009]; see Table 3 by @Stasinopoulos:Rigby:2007 for other possible specifications of the additive terms. 
-Hence, models of the form @eq-gamlss may be a good choice for insurance problems, because such models accommodate non-normal distributions, possibly nonlinear relationships, and spatiotemporal dependencies in the data.
+The terms in the GAMLSS provide a flexible framework to specify nonlinearities, random effects, and correlation structure as in the mixed effects models [@Zuur:etal:2009]; see Table 3 by @Stasinopoulos:Rigby:2007 for the possible specifications of the additive terms. 
+Hence, a model of the form @eq-GAMLSS may accommodate non-normal distributions, possibly nonlinear relationships, and spatiotemporal dependencies in the data.
 
 :::{.callout-note icon=false}
 
 ## Example: Insurance claims GAMLSS
 
-Start by using the insights from the latest GARMA model to start with the selected regressors and distribution family of the response variable.
+Here, we use insights from the latest GARMA model and specify the same regressors and distribution family of the response variable in a GAMLSS.
 
-* Negative binomial distribution has two parameters (see `?NBI`) -- location and scale -- so the GAMLSS using this distribution family can include up to two equations.
-We'll start by 
-* 
+Negative binomial distribution has two parameters (see `?NBI`) -- location and scale -- so the GAMLSS using this distribution family can include up to two equations ($k = 1, 2$ in @eq-GAMLSS).
 
-Here we try one other distribution appropriate for modeling overdispersed count data -- negative binomial distribution. 
-See the model summary below and the verification of residuals in @fig-m03nbiACF and @fig-m03nbi.
+We will keep a linear relationship between claims and the week number (parametric linear trend; note that the variable `Week` here is the time index, not the week of the year) but will use nonparametric additive smooths for the relationships between number of claims and precipitation amounts.
+
+We will model the scale (variability) of the number of claims using a smooth term of the week number.
+
+We start by fitting a model as follows:
+$$
+\begin{split}
+Claims_t &= NegBin(\mu_t, \sigma_t) \\
+\ln(\mu_t) &= a_0 + a_1 Week_t + f_1(Precipitation_t) + f_2(Precipitation_{t-1}) + \epsilon_t \\
+\ln(\sigma_t) &= b_0 + f_3(Week) \\
+\end{split}
+$${#eq-GAMLSSins}
+where $\epsilon_t \sim \mathrm{WN}(0,\sigma^2)$; $a_0$, $a_1$, and $b_0$ are parametric coefficients; $f_1$, $f_2$, and $f_3$ are nonparametric smooths.
+
+In its expandable collection of smoothers, the R package `gamlss` features penalized B-splines.
+See the help files `?gamlss` and `?pb` for more details and the review of spline functions in R by @Perperoglou:etal:2019.
+However, we used the original P-splines `ps()` because they provided more visually smooth results than `pb()` under the default settings.
+Note that the model summary below has a table for each parameter of the distribution.
+The obtained term plots are in @fig-m00gamlssTermsMu and @fig-m00gamlssTermsSigma.
 
 ```{r}
 #| code-fold: false
 
 library(gamlss)
 set.seed(12345)
-m03_gamlss <- gamlss(Claims ~ pb(Precipitation) + Week + Precipitation_lag1
-                    ,sigma.formula = ~pb(Week) + pb(Precipitation_lag1)
-                    ,correlation = corARMA(q = 3)
-                    ,family = NBI
-                    ,data = Insurance_noNA)
-m03_gamlss$mu.coefSmo[[1]]$modelStruct$corStruct
-
-m03_gamlss <- gamlss(Claims ~ re(fixed = ~ Precipitation + Week + Precipitation_lag1
-                                 ,random = ~1|Year
-                    ,correlation = corARMA(q = 3))
-                    ,sigma.formula = ~pb(Week) + pb(Precipitation_lag1)
-                    ,family = NBI
-                    ,data = Insurance_noNA)
-m03_gamlss$mu.coefSmo[[1]]$modelStruct$corStruct
-
-
-m01_gamlss <- gamlss(Claims ~ Precipitation + Week + Precipitation_lag1
-                    ,sigma.formula = ~pb(Week) + pb(Precipitation_lag1)
-                    ,correlation = corARMA(q = 10)
-                    ,family = NBI
-                    ,data = Insurance_noNA)
-summary(m03_gamlss)
-str(m03_gamlss)
-
-m03_gamlss$mu.coefficients
-m03_gamlss[[2]]
-    [[1]]$coefficients$random.
-
-AIC(m03nbi, m03_gamlss, m01_gamlss)
+m00_gamlss <- gamlss(Claims ~ ps(Precipitation) + Week + ps(Precipitation_lag1)
+                     ,sigma.formula = ~ps(Week)
+                     ,family = NBI
+                     ,control = gamlss.control(c.crit = 0.01, trace = FALSE)
+                     ,data = Insurance_noNA)
+summary(m00_gamlss)
 ```
 
 ```{r}
-#| label: fig-m03nbiACF
-#| fig-cap: "ACF and PACF plots of the GARMA(0,3) model residuals based on NBI distribution."
+#| label: fig-m00gamlssTermsMu
+#| fig-cap: "GAMLSS terms showing the estimated relationships between the regressors and the *location* parameter for the distribution of the number of home insurance claims."
 
-par(mfrow = c(1, 3))
-term.plot(m1_gamlss, las = 1, se = TRUE, ylim = "common", what = "mu")
-
-term.plot(m1_gamlss, las = 1, se = TRUE, ylim = "common", what = "sigma")
-
-plot(m01_gamlss, ts = TRUE)
-
-acf(residuals(m1_gamlss, what = "z-scores"))
-acfResid(m1_gamlss)
-AIC(m1_gamlss)
+gamlss.ggplots::fitted_terms(m00_gamlss, rug = TRUE, nrow = 1, what = "mu")
 ```
 
+```{r}
+#| label: fig-m00gamlssTermsSigma
+#| fig-cap: "GAMLSS terms showing the estimated relationships between the regressors and the *scale* parameter for the distribution of the number of home insurance claims."
 
+gamlss.ggplots::fitted_terms(m00_gamlss, rug = TRUE, nrow = 1, what = "sigma")
+```
+
+For the correlation estimates to work, we need to specify a grouping factor for the random effects.
+To create a grouping factor, we added a variable with the city ID; here it has only one level `"City A"` and hence does not affect the estimates substantially.
+If we had information from multiple cities, the specified form of autoregressive structure `form = ~Week|City` could readily accommodate it.
+
+The code below estimates the model from @eq-GAMLSSins again but assumes the new autocorrelation structure in the residuals: $\epsilon_t \sim$ ARMA(0,3).
+The control arguments change the default settings to speed up the algorithm convergence.
+See the model summary below and the verification of residuals in @fig-m03gamlssRES.
+
+```{r}
+#| eval: false
+#| echo: true
+#| code-fold: false
+
+set.seed(12345)
+Insurance_noNA$City <- as.factor("City A")
+m03_gamlss <- gamlss(Claims ~ re(fixed = ~ps(Precipitation) + Week + ps(Precipitation_lag1)
+                                 ,random = ~1|City
+                                 ,correlation = corARMA(form = ~Week|City, q = 3)
+                                 ,method = "REML")
+                     ,sigma.formula = ~ps(Week)
+                     ,family = NBI
+                     ,i.control = glim.control(cc = 0.01, bf.cyc = 100, bf.tol = 0.01)
+                     ,control = gamlss.control(c.crit = 0.01, trace = FALSE)
+                     ,data = Insurance_noNA)
+```
+
+```{r}
+#| eval: true
+#| echo: false
+
+# saveRDS(m03_gamlss, file = "data/m03_gamlss.RData")
+m03_gamlss <- readRDS("data/m03_gamlss.RData")
+```
+
+Model summary for the location parameter:
+
+```{r}
+#| code-fold: false
+
+summary(getSmo(m03_gamlss))
+```
+
+Model summary for all distribution parameters:
+
+```{r}
+#| code-fold: false
+
+summary(m03_gamlss)
+```
+
+```{r}
+#| label: fig-m03gamlssRES
+#| fig-cap: "Residual diagnostics of the GAMLSS for the number of home insurance claims."
+
+plot(m03_gamlss, ts = TRUE)
+```
+
+Hence, compared with the GARMA model from the previous section, the GAMLSS @eq-GAMLSSins uses the same predictors and distribution family and specifies ARMA(0,3) dependence in the residuals.
+What differs is that the GAMLSS allows nonlinear relationships between the number of claims and precipitation and models the variability changing nonlinearly across weeks.
 :::
 
 
