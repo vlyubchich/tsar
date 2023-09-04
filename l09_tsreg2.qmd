@@ -638,12 +638,35 @@ See the model summary below and the verification of residuals in @fig-m03nbiACF 
 
 library(gamlss)
 set.seed(12345)
-m1_gamlss <- gamlss(Claims ~ Precipitation + Week + Precipitation_lag1
+m03_gamlss <- gamlss(Claims ~ pb(Precipitation) + Week + Precipitation_lag1
                     ,sigma.formula = ~pb(Week) + pb(Precipitation_lag1)
-                    ,correlation222 = corARMA(q = 3)
+                    ,correlation = corARMA(q = 3)
                     ,family = NBI
                     ,data = Insurance_noNA)
-summary(m1_gamlss)
+m03_gamlss$mu.coefSmo[[1]]$modelStruct$corStruct
+
+m03_gamlss <- gamlss(Claims ~ re(fixed = ~ Precipitation + Week + Precipitation_lag1
+                                 ,random = ~1|Year
+                    ,correlation = corARMA(q = 3))
+                    ,sigma.formula = ~pb(Week) + pb(Precipitation_lag1)
+                    ,family = NBI
+                    ,data = Insurance_noNA)
+m03_gamlss$mu.coefSmo[[1]]$modelStruct$corStruct
+
+
+m01_gamlss <- gamlss(Claims ~ Precipitation + Week + Precipitation_lag1
+                    ,sigma.formula = ~pb(Week) + pb(Precipitation_lag1)
+                    ,correlation = corARMA(q = 10)
+                    ,family = NBI
+                    ,data = Insurance_noNA)
+summary(m03_gamlss)
+str(m03_gamlss)
+
+m03_gamlss$mu.coefficients
+m03_gamlss[[2]]
+    [[1]]$coefficients$random.
+
+AIC(m03nbi, m03_gamlss, m01_gamlss)
 ```
 
 ```{r}
@@ -655,7 +678,7 @@ term.plot(m1_gamlss, las = 1, se = TRUE, ylim = "common", what = "mu")
 
 term.plot(m1_gamlss, las = 1, se = TRUE, ylim = "common", what = "sigma")
 
-plot(m1_gamlss, ts = TRUE)
+plot(m01_gamlss, ts = TRUE)
 
 acf(residuals(m1_gamlss, what = "z-scores"))
 acfResid(m1_gamlss)
