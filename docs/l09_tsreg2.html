@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.313">
+<meta name="generator" content="quarto-1.2.335">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>Time Series Analysis - 9&nbsp; Time Series Regression with Correlated Errors</title>
 <style>
@@ -276,11 +276,12 @@ div.csl-indent {
 <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="toc-section-number">9.1</span>  Introduction</a></li>
   <li><a href="#sec-ccf" id="toc-sec-ccf" class="nav-link" data-scroll-target="#sec-ccf"><span class="toc-section-number">9.2</span>  Cross-correlation function</a></li>
   <li><a href="#linear-regression-with-arma-errors" id="toc-linear-regression-with-arma-errors" class="nav-link" data-scroll-target="#linear-regression-with-arma-errors"><span class="toc-section-number">9.3</span>  Linear regression with ARMA errors</a></li>
-  <li><a href="#arimax-models" id="toc-arimax-models" class="nav-link" data-scroll-target="#arimax-models"><span class="toc-section-number">9.4</span>  ARIMAX models</a></li>
-  <li><a href="#sec-GARMA" id="toc-sec-GARMA" class="nav-link" data-scroll-target="#sec-GARMA"><span class="toc-section-number">9.5</span>  GARMA models</a></li>
-  <li><a href="#sec-Granger" id="toc-sec-Granger" class="nav-link" data-scroll-target="#sec-Granger"><span class="toc-section-number">9.6</span>  Granger causality</a></li>
-  <li><a href="#about-predictions" id="toc-about-predictions" class="nav-link" data-scroll-target="#about-predictions"><span class="toc-section-number">9.7</span>  About predictions</a></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="toc-section-number">9.8</span>  Conclusion</a></li>
+  <li><a href="#arimax" id="toc-arimax" class="nav-link" data-scroll-target="#arimax"><span class="toc-section-number">9.4</span>  ARIMAX</a></li>
+  <li><a href="#sec-GARMA" id="toc-sec-GARMA" class="nav-link" data-scroll-target="#sec-GARMA"><span class="toc-section-number">9.5</span>  GARMA</a></li>
+  <li><a href="#sec-GAMLSS" id="toc-sec-GAMLSS" class="nav-link" data-scroll-target="#sec-GAMLSS"><span class="toc-section-number">9.6</span>  GAMLSS</a></li>
+  <li><a href="#sec-Granger" id="toc-sec-Granger" class="nav-link" data-scroll-target="#sec-Granger"><span class="toc-section-number">9.7</span>  Granger causality</a></li>
+  <li><a href="#about-predictions" id="toc-about-predictions" class="nav-link" data-scroll-target="#about-predictions"><span class="toc-section-number">9.8</span>  About predictions</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="toc-section-number">9.9</span>  Conclusion</a></li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/vlyubchich/tsar/edit/master/l09_tsreg2.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/vlyubchich/tsar/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
@@ -337,8 +338,7 @@ div.csl-indent {
 <p>The functions <code><a href="https://rdrr.io/r/stats/acf.html">ccf()</a></code> and <code><a href="https://pkg.robjhyndman.com/forecast/reference/autoplot.acf.html">forecast::ggCcf()</a></code> estimate the cross-correlation function and plot it as a base-R or a <code>ggplot2</code> graph, respectively. The functions use the notations like in <a href="#eq-ccf">Equation&nbsp;<span>9.1</span></a>, hence when using <code>ccf(x, y)</code> we are typically interested in identifying <em>negative</em> <span class="math inline">\(k\)</span>s that correspond to correlation between past values of the predictor <span class="math inline">\(X_t\)</span> and current values of the response <span class="math inline">\(Y_t\)</span>.</p>
 <p>For example, <a href="#fig-CCFBJ">Figure&nbsp;<span>9.1</span></a> shows the CCF for two time series of sales that have been detrended by taking differences. From this plot, lagged values of the first series, <span class="math inline">\(\Delta \mathrm{BJsales.lead}_{t - 2}\)</span> and <span class="math inline">\(\Delta \mathrm{BJsales.lead}_{t - 3}\)</span> are significantly correlated with current values of the second series, <span class="math inline">\(\Delta \mathrm{BJsales}_{t}\)</span>. Hence, we can call <code>BJsales.lead</code> a leading indicator for <code>BJsales</code>.</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/autoplot.acf.html">ggCcf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="va">BJsales.lead</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="va">BJsales</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details><summary>Code</summary><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/autoplot.acf.html">ggCcf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="va">BJsales.lead</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="va">BJsales</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
 <div id="fig-CCFBJ" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure"><p><img src="l09_tsreg2_files/figure-html/fig-CCFBJ-1.png" class="img-fluid figure-img" width="768"></p>
@@ -381,8 +381,7 @@ Note
 <span>    <span class="fu">geom_hline</span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">"Spearman correlation"</span><span class="op">)</span></span>
 <span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span></span>
-<span>    <span class="fu">plot_annotation</span><span class="op">(</span>tag_levels <span class="op">=</span> <span class="st">'A'</span><span class="op">)</span> <span class="op">&amp;</span></span>
-<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>    <span class="fu">plot_annotation</span><span class="op">(</span>tag_levels <span class="op">=</span> <span class="st">'A'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
 <div id="fig-CCFbootBJ" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure"><p><img src="l09_tsreg2_files/figure-html/fig-CCFbootBJ-1.png" class="img-fluid figure-img" width="768"></p>
@@ -484,8 +483,8 @@ Note
 <p>Remember that the variables <span class="math inline">\(Y_t\)</span> and <span class="math inline">\(X_{t,j}\)</span> (<span class="math inline">\(j = 1,\dots,k\)</span>) should be detrended prior to the analysis (to avoid spurious regression results, see the previous lecture on dealing with trends in regression). If differencing is chosen as the method of detrending, the orders of differences <span class="math inline">\(d\)</span> and <span class="math inline">\(D\)</span> can be specified directly within the mentioned ARIMA functions (so R will do the differencing for us).</p>
 </div>
 </div>
-</section><section id="arimax-models" class="level2" data-number="9.4"><h2 data-number="9.4" class="anchored" data-anchor-id="arimax-models">
-<span class="header-section-number">9.4</span> ARIMAX models</h2>
+</section><section id="arimax" class="level2" data-number="9.4"><h2 data-number="9.4" class="anchored" data-anchor-id="arimax">
+<span class="header-section-number">9.4</span> ARIMAX</h2>
 <p>ARIMAX (‘X’ stands for ‘external regressor’) models are closely related to <a href="#eq-MlinModelARMA">Equation&nbsp;<span>9.10</span></a>, but there is an important difference. For simplicity of notation, we can present an ARMAX(<span class="math inline">\(p,q\)</span>) model that is a regular ARMA(<span class="math inline">\(p,q\)</span>) model for <span class="math inline">\(Y_t\)</span> plus the external regressors: <span id="eq-ARMAX"><span class="math display">\[
 \begin{split}
 Y_t &amp;= \phi_1 Y_{t-1} + \dots + \phi_p Y_{t-p} + \theta_1 a_{t-1} + \dots + \theta_q a_{t-q} + a_t\\
@@ -535,13 +534,11 @@ Example: Golden tilefish ARIMAX
 <details><summary>Code</summary><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="va">D</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Year</span>, y <span class="op">=</span> <span class="va">Landings</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Year"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">"Landings (tonne)"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">"Landings (tonne)"</span><span class="op">)</span></span>
 <span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="va">D</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Year</span>, y <span class="op">=</span> <span class="va">AMO</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Year"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">"AMO"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">"AMO"</span><span class="op">)</span></span>
 <span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span></span>
 <span>    <span class="fu">plot_annotation</span><span class="op">(</span>tag_levels <span class="op">=</span> <span class="st">'A'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
@@ -559,9 +556,8 @@ Example: Golden tilefish ARIMAX
 <span>    <span class="fu">mutate</span><span class="op">(</span>Landings_noNA_sqrt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">Landings_noNA</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">D</span> <span class="op">%&gt;%</span> </span>
-<span>    <span class="fu">select</span><span class="op">(</span><span class="va">AMO</span>, <span class="va">Landings_noNA_sqrt</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>    <span class="fu">GGally</span><span class="fu">::</span><span class="fu"><a href="https://ggobi.github.io/ggally/reference/ggpairs.html">ggpairs</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">AMO</span>, <span class="va">Landings_noNA_sqrt</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>    <span class="fu">GGally</span><span class="fu">::</span><span class="fu"><a href="https://ggobi.github.io/ggally/reference/ggpairs.html">ggpairs</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
 <div id="fig-tilefishScatter" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure"><p><img src="l09_tsreg2_files/figure-html/fig-tilefishScatter-1.png" class="img-fluid figure-img" width="768"></p>
@@ -674,7 +670,7 @@ Example: Golden tilefish ARIMAX
 </div>
 </div>
 </section><section id="sec-GARMA" class="level2" data-number="9.5"><h2 data-number="9.5" class="anchored" data-anchor-id="sec-GARMA">
-<span class="header-section-number">9.5</span> GARMA models</h2>
+<span class="header-section-number">9.5</span> GARMA</h2>
 <p>Let <span class="math inline">\(Y_t\)</span> be the observed time series and <span class="math inline">\(\boldsymbol{X_t}\)</span> exogenous regressors. Then, we can model the conditional distribution of <span class="math inline">\(Y_t\)</span>, given <span class="math inline">\(Y_1,\dots,Y_{t-1}\)</span>, <span class="math inline">\(\boldsymbol{X_1,\dots,X_{t}}\)</span> as <span id="eq-GARMA"><span class="math display">\[
 g(\mu_t)=\boldsymbol{X}'_t\beta+\sum_{j=1}^p\phi_j\{g(Y_{t-j})- \boldsymbol{X}'_{t-j}\beta\}
 +\sum_{j=1}^q\theta_j \{g(Y_{t-j})-g(\mu_{t-j})\},
@@ -694,7 +690,7 @@ Example: Insurance claims GARMA model
 <p>Consider the weekly number of house insurance claims related to water and weather damage in one Canadian city. The number is standardized by the daily number of insured properties in that city. Explore the relationship between the number of claims and weekly total precipitation (mm).</p>
 <div class="cell">
 <details><summary>Code</summary><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">Insurance</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"data/insurance_weekly.csv"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu">select</span><span class="op">(</span><span class="va">Claims</span>, <span class="va">Precipitation</span><span class="op">)</span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">Claims</span>, <span class="va">Precipitation</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">Insurance</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output cell-output-stdout">
 <pre><code>#&gt;      Claims      Precipitation 
@@ -708,8 +704,7 @@ Example: Insurance claims GARMA model
 </div>
 <div class="cell">
 <details><summary>Code</summary><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">Insurance</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu">GGally</span><span class="fu">::</span><span class="fu"><a href="https://ggobi.github.io/ggally/reference/ggpairs.html">ggpairs</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>    <span class="fu">GGally</span><span class="fu">::</span><span class="fu"><a href="https://ggobi.github.io/ggally/reference/ggpairs.html">ggpairs</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
 <div id="fig-insScatter" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure"><p><img src="l09_tsreg2_files/figure-html/fig-insScatter-1.png" class="img-fluid figure-img" width="768"></p>
@@ -739,6 +734,7 @@ Example: Insurance claims GARMA model
 <details><summary>Code</summary><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">Insurance</span> <span class="op">&lt;-</span> <span class="va">Insurance</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>    <span class="fu">mutate</span><span class="op">(</span>Precipitation_lag1 <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html">lag</a></span><span class="op">(</span><span class="va">Precipitation</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>           Week <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">Insurance</span><span class="op">)</span>,</span>
+<span>           Year <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">2002</span><span class="op">:</span><span class="fl">2011</span>, each <span class="op">=</span> <span class="fl">52</span><span class="op">)</span>,</span>
 <span>           Claims_ln <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">Claims</span> <span class="op">+</span> <span class="va">logconstant</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
@@ -746,13 +742,11 @@ Example: Insurance claims GARMA model
 <div class="cell">
 <details><summary>Code</summary><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/ts.html">as.ts</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">Insurance</span><span class="op">$</span><span class="va">Claims</span> <span class="op">+</span> <span class="va">logconstant</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Week"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">"ln(Number of claims)"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">"ln(Number of claims)"</span><span class="op">)</span></span>
 <span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/autoplot.acf.html">ggAcf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/ts.html">as.ts</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">Insurance</span><span class="op">$</span><span class="va">Claims</span> <span class="op">+</span> <span class="va">logconstant</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>                      lag.max <span class="op">=</span> <span class="fl">110</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Lag (weeks)"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Lag (weeks)"</span><span class="op">)</span></span>
 <span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span></span>
 <span>    <span class="fu">plot_annotation</span><span class="op">(</span>tag_levels <span class="op">=</span> <span class="st">'A'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
@@ -766,9 +760,8 @@ Example: Insurance claims GARMA model
 <p>Plot the data once again after the transformations (<a href="#fig-insScatter2">Figure&nbsp;<span>9.10</span></a>).</p>
 <div class="cell">
 <details><summary>Code</summary><div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">Insurance</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">Claims</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu">GGally</span><span class="fu">::</span><span class="fu"><a href="https://ggobi.github.io/ggally/reference/ggpairs.html">ggpairs</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">Claims</span>, <span class="op">-</span><span class="va">Year</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu">GGally</span><span class="fu">::</span><span class="fu"><a href="https://ggobi.github.io/ggally/reference/ggpairs.html">ggpairs</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
 <div id="fig-insScatter2" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure"><p><img src="l09_tsreg2_files/figure-html/fig-insScatter2-1.png" class="img-fluid figure-img" width="768"></p>
@@ -794,12 +787,10 @@ Example: Insurance claims GARMA model
 <div class="cell">
 <details><summary>Code</summary><div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/autoplot.acf.html">ggAcf</a></span><span class="op">(</span><span class="va">m00zip</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Lag (weeks)"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Lag (weeks)"</span><span class="op">)</span></span>
 <span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/autoplot.acf.html">ggAcf</a></span><span class="op">(</span><span class="va">m00zip</span><span class="op">$</span><span class="va">residuals</span>, type <span class="op">=</span> <span class="st">"partial"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Lag (weeks)"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Lag (weeks)"</span><span class="op">)</span></span>
 <span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span></span>
 <span>    <span class="fu">plot_annotation</span><span class="op">(</span>tag_levels <span class="op">=</span> <span class="st">'A'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
@@ -853,12 +844,10 @@ Example: Insurance claims GARMA model
 <div class="cell">
 <details><summary>Code</summary><div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/autoplot.acf.html">ggAcf</a></span><span class="op">(</span><span class="va">m30zip</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Lag (weeks)"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Lag (weeks)"</span><span class="op">)</span></span>
 <span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/autoplot.acf.html">ggAcf</a></span><span class="op">(</span><span class="va">m30zip</span><span class="op">$</span><span class="va">residuals</span>, type <span class="op">=</span> <span class="st">"partial"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Lag (weeks)"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Lag (weeks)"</span><span class="op">)</span></span>
 <span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span></span>
 <span>    <span class="fu">plot_annotation</span><span class="op">(</span>tag_levels <span class="op">=</span> <span class="st">'A'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
@@ -933,12 +922,10 @@ Example: Insurance claims GARMA model
 <div class="cell">
 <details><summary>Code</summary><div class="sourceCode" id="cb38"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/autoplot.acf.html">ggAcf</a></span><span class="op">(</span><span class="va">m03nbi</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Lag (weeks)"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Lag (weeks)"</span><span class="op">)</span></span>
 <span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/autoplot.acf.html">ggAcf</a></span><span class="op">(</span><span class="va">m03nbi</span><span class="op">$</span><span class="va">residuals</span>, type <span class="op">=</span> <span class="st">"partial"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Lag (weeks)"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Lag (weeks)"</span><span class="op">)</span></span>
 <span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span></span>
 <span>    <span class="fu">plot_annotation</span><span class="op">(</span>tag_levels <span class="op">=</span> <span class="st">'A'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
@@ -972,8 +959,244 @@ Example: Insurance claims GARMA model
 <p>The residual diagnostics look better for the latter model. One could also consider modeling the strictly periodical component such as using the Fourier series, however, <a href="#fig-insACF">Figure&nbsp;<span>9.9</span></a> did not show a prominent seasonality.</p>
 </div>
 </div>
-</section><section id="sec-Granger" class="level2" data-number="9.6"><h2 data-number="9.6" class="anchored" data-anchor-id="sec-Granger">
-<span class="header-section-number">9.6</span> Granger causality</h2>
+</section><section id="sec-GAMLSS" class="level2" data-number="9.6"><h2 data-number="9.6" class="anchored" data-anchor-id="sec-GAMLSS">
+<span class="header-section-number">9.6</span> GAMLSS</h2>
+<p><span class="citation" data-cites="Stasinopoulos:Rigby:2007">Stasinopoulos and Rigby (<a href="references.html#ref-Stasinopoulos:Rigby:2007" role="doc-biblioref">2007</a>)</span> provide an extension of a generalized additive model to <span class="math inline">\(k=1,2,3,4\)</span> parameters <span class="math inline">\(\boldsymbol{\theta}_k\)</span> of a distribution in a so-called <em>generalized additive model for location scale and shape</em> (GAMLSS). The <span class="math inline">\(k\)</span> parameters represent the location parameter <span class="math inline">\(\mu\)</span> (it is what we typically model with regression models), scale <span class="math inline">\(\sigma\)</span>, and two shape parameters: skewness and kurtosis. The model can be further generalized for <span class="math inline">\(k&gt;4\)</span> if needed. It allows us to fit <span class="math inline">\(k\)</span> individual models to study relationships between regressors <span class="math inline">\(\boldsymbol{x}\)</span> and parameters of the response distribution: <span id="eq-GAMLSS"><span class="math display">\[
+g_k(\boldsymbol{\theta}_k) = h_k\left(\boldsymbol{X}_k,\boldsymbol{\beta}_k\right) + \sum_{j=1}^{J_k}h_{jk}(\boldsymbol{x}_{jk}),
+\tag{9.13}\]</span></span> where <span class="math inline">\(k=1\)</span> produces model for the mean; <span class="math inline">\(h_k(\cdot)\)</span> and <span class="math inline">\(h_{jk}(\cdot)\)</span> are nonlinear functions; <span class="math inline">\(\boldsymbol{\beta}_k\)</span> is a parameter vector of length <span class="math inline">\(J_k\)</span>; <span class="math inline">\(\boldsymbol{X}_k\)</span> is an <span class="math inline">\(n\times J_k\)</span> design matrix; <span class="math inline">\(\boldsymbol{x}_{jk}\)</span> are vectors of length <span class="math inline">\(n\)</span>. The terms in the GAMLSS provide a flexible framework to specify nonlinearities, random effects, and correlation structure as in the mixed effects models <span class="citation" data-cites="Zuur:etal:2009">(<a href="references.html#ref-Zuur:etal:2009" role="doc-biblioref">Zuur et al. 2009</a>)</span>; see Table 3 by <span class="citation" data-cites="Stasinopoulos:Rigby:2007">Stasinopoulos and Rigby (<a href="references.html#ref-Stasinopoulos:Rigby:2007" role="doc-biblioref">2007</a>)</span> for the possible specifications of the additive terms. Hence, a model of the form <a href="#eq-GAMLSS">Equation&nbsp;<span>9.13</span></a> may accommodate non-normal distributions, possibly nonlinear relationships, and spatiotemporal dependencies in the data.</p>
+<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Example: Insurance claims GAMLSS
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Here, we use insights from the latest GARMA model and specify the same regressors and distribution family of the response variable in a GAMLSS.</p>
+<p>Negative binomial distribution has two parameters (see <code><a href="https://rdrr.io/pkg/gamlss.dist/man/NBI.html">?NBI</a></code>) – location and scale – so the GAMLSS using this distribution family can include up to two equations (<span class="math inline">\(k = 1, 2\)</span> in <a href="#eq-GAMLSS">Equation&nbsp;<span>9.13</span></a>).</p>
+<p>We will keep a linear relationship between claims and the week number (parametric linear trend; note that the variable <code>Week</code> here is the time index, not the week of the year) but will use nonparametric additive smooths for the relationships between number of claims and precipitation amounts.</p>
+<p>We will model the scale (variability) of the number of claims using a smooth term of the week number.</p>
+<p>We start by fitting a model as follows: <span id="eq-GAMLSSins"><span class="math display">\[
+\begin{split}
+Claims_t &amp;= NegBin(\mu_t, \sigma_t) \\
+\ln(\mu_t) &amp;= a_0 + a_1 Week_t + f_1(Precipitation_t) + f_2(Precipitation_{t-1}) + \epsilon_t \\
+\ln(\sigma_t) &amp;= b_0 + f_3(Week) \\
+\end{split}
+\tag{9.14}\]</span></span> where <span class="math inline">\(\epsilon_t \sim \mathrm{WN}(0,\sigma^2)\)</span>; <span class="math inline">\(a_0\)</span>, <span class="math inline">\(a_1\)</span>, and <span class="math inline">\(b_0\)</span> are parametric coefficients; <span class="math inline">\(f_1\)</span>, <span class="math inline">\(f_2\)</span>, and <span class="math inline">\(f_3\)</span> are nonparametric smooths.</p>
+<p>In its expandable collection of smoothers, the R package <code>gamlss</code> features penalized B-splines. See the help files <code><a href="https://rdrr.io/pkg/gamlss/man/gamlss.html">?gamlss</a></code> and <code><a href="https://rdrr.io/pkg/gamlss/man/ps.html">?pb</a></code> for more details and the review of spline functions in R by <span class="citation" data-cites="Perperoglou:etal:2019">Perperoglou et al. (<a href="references.html#ref-Perperoglou:etal:2019" role="doc-biblioref">2019</a>)</span>. However, we used the original P-splines <code><a href="https://rdrr.io/pkg/gamlss/man/ps.html">ps()</a></code> because they provided more visually smooth results than <code><a href="https://rdrr.io/pkg/gamlss/man/ps.html">pb()</a></code> under the default settings. Note that the model summary below has a table for each parameter of the distribution. The obtained term plots are in <a href="#fig-m00gamlssTermsMu">Figure&nbsp;<span>9.16</span></a> and <a href="#fig-m00gamlssTermsSigma">Figure&nbsp;<span>9.17</span></a>.</p>
+<div class="cell">
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://www.gamlss.com/">gamlss</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">12345</span><span class="op">)</span></span>
+<span><span class="va">m00_gamlss</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/gamlss/man/gamlss.html">gamlss</a></span><span class="op">(</span><span class="va">Claims</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/gamlss/man/ps.html">ps</a></span><span class="op">(</span><span class="va">Precipitation</span><span class="op">)</span> <span class="op">+</span> <span class="va">Week</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/gamlss/man/ps.html">ps</a></span><span class="op">(</span><span class="va">Precipitation_lag1</span><span class="op">)</span></span>
+<span>                     ,sigma.formula <span class="op">=</span> <span class="op">~</span><span class="fu"><a href="https://rdrr.io/pkg/gamlss/man/ps.html">ps</a></span><span class="op">(</span><span class="va">Week</span><span class="op">)</span></span>
+<span>                     ,family <span class="op">=</span> <span class="va">NBI</span></span>
+<span>                     ,control <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gamlss/man/gamlss.control.html">gamlss.control</a></span><span class="op">(</span>c.crit <span class="op">=</span> <span class="fl">0.01</span>, trace <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>                     ,data <span class="op">=</span> <span class="va">Insurance_noNA</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m00_gamlss</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; ******************************************************************
+#&gt; Family:  c("NBI", "Negative Binomial type I") 
+#&gt; 
+#&gt; Call:  gamlss(formula = Claims ~ ps(Precipitation) + Week +  
+#&gt;     ps(Precipitation_lag1), sigma.formula = ~ps(Week),  
+#&gt;     family = NBI, data = Insurance_noNA, control = gamlss.control(c.crit = 0.01,  
+#&gt;         trace = FALSE)) 
+#&gt; 
+#&gt; Fitting method: RS() 
+#&gt; 
+#&gt; ------------------------------------------------------------------
+#&gt; Mu link function:  log
+#&gt; Mu Coefficients:
+#&gt;                        Estimate Std. Error t value Pr(&gt;|t|)    
+#&gt; (Intercept)            0.572497   0.092566    6.18  1.3e-09 ***
+#&gt; ps(Precipitation)      0.014442   0.002691    5.37  1.2e-07 ***
+#&gt; Week                   0.001520   0.000269    5.64  2.8e-08 ***
+#&gt; ps(Precipitation_lag1) 0.011326   0.002908    3.90  0.00011 ***
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt; 
+#&gt; ------------------------------------------------------------------
+#&gt; Sigma link function:  log
+#&gt; Sigma Coefficients:
+#&gt;              Estimate Std. Error t value Pr(&gt;|t|)    
+#&gt; (Intercept) -0.371642   0.218617   -1.70  0.08975 .  
+#&gt; ps(Week)    -0.002379   0.000717   -3.32  0.00098 ***
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt; 
+#&gt; ------------------------------------------------------------------
+#&gt; NOTE: Additive smoothing terms exist in the formulas: 
+#&gt;  i) Std. Error for smoothers are for the linear effect only. 
+#&gt; ii) Std. Error for the linear terms maybe are not accurate. 
+#&gt; ------------------------------------------------------------------
+#&gt; No. of observations in the fit:  519 
+#&gt; Degrees of Freedom for the fit:  15
+#&gt;       Residual Deg. of Freedom:  504 
+#&gt;                       at cycle:  6 
+#&gt;  
+#&gt; Global Deviance:     2214 
+#&gt;             AIC:     2244 
+#&gt;             SBC:     2308 
+#&gt; ******************************************************************</code></pre>
+</div>
+</div>
+<div class="cell">
+<details><summary>Code</summary><div class="sourceCode" id="cb43"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">gamlss.ggplots</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gamlss.ggplots/man/fitted_terms.html">fitted_terms</a></span><span class="op">(</span><span class="va">m00_gamlss</span>, rug <span class="op">=</span> <span class="cn">TRUE</span>, nrow <span class="op">=</span> <span class="fl">1</span>, what <span class="op">=</span> <span class="st">"mu"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<div id="fig-m00gamlssTermsMu" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure"><p><img src="l09_tsreg2_files/figure-html/fig-m00gamlssTermsMu-1.png" class="img-fluid figure-img" width="768"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;9.16: GAMLSS terms showing the estimated relationships between the regressors and the <em>location</em> parameter for the distribution of the number of home insurance claims.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<details><summary>Code</summary><div class="sourceCode" id="cb44"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">gamlss.ggplots</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gamlss.ggplots/man/fitted_terms.html">fitted_terms</a></span><span class="op">(</span><span class="va">m00_gamlss</span>, rug <span class="op">=</span> <span class="cn">TRUE</span>, nrow <span class="op">=</span> <span class="fl">1</span>, what <span class="op">=</span> <span class="st">"sigma"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<div id="fig-m00gamlssTermsSigma" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure"><p><img src="l09_tsreg2_files/figure-html/fig-m00gamlssTermsSigma-1.png" class="img-fluid figure-img" width="768"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;9.17: GAMLSS terms showing the estimated relationships between the regressors and the <em>scale</em> parameter for the distribution of the number of home insurance claims.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>For the correlation estimates to work, we need to specify a grouping factor for the random effects. To create a grouping factor, we added a variable with the city ID; here it has only one level <code>"City A"</code> and hence does not affect the estimates substantially. If we had information from multiple cities, the specified form of autoregressive structure <code>form = ~Week|City</code> could readily accommodate it.</p>
+<p>The code below estimates the model from <a href="#eq-GAMLSSins">Equation&nbsp;<span>9.14</span></a> again but assumes the new autocorrelation structure in the residuals: <span class="math inline">\(\epsilon_t \sim\)</span> ARMA(0,3). The control arguments change the default settings to speed up the algorithm convergence. See the model summary below and the verification of residuals in <a href="#fig-m03gamlssRES">Figure&nbsp;<span>9.18</span></a>.</p>
+<div class="cell">
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">12345</span><span class="op">)</span></span>
+<span><span class="va">Insurance_noNA</span><span class="op">$</span><span class="va">City</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="st">"City A"</span><span class="op">)</span></span>
+<span><span class="va">m03_gamlss</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/gamlss/man/gamlss.html">gamlss</a></span><span class="op">(</span><span class="va">Claims</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/gamlss/man/random.html">re</a></span><span class="op">(</span>fixed <span class="op">=</span> <span class="op">~</span><span class="fu"><a href="https://rdrr.io/pkg/gamlss/man/ps.html">ps</a></span><span class="op">(</span><span class="va">Precipitation</span><span class="op">)</span> <span class="op">+</span> <span class="va">Week</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/gamlss/man/ps.html">ps</a></span><span class="op">(</span><span class="va">Precipitation_lag1</span><span class="op">)</span></span>
+<span>                                 ,random <span class="op">=</span> <span class="op">~</span><span class="fl">1</span><span class="op">|</span><span class="va">City</span></span>
+<span>                                 ,correlation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/nlme/man/corARMA.html">corARMA</a></span><span class="op">(</span>form <span class="op">=</span> <span class="op">~</span><span class="va">Week</span><span class="op">|</span><span class="va">City</span>, q <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span>                                 ,method <span class="op">=</span> <span class="st">"REML"</span><span class="op">)</span></span>
+<span>                     ,sigma.formula <span class="op">=</span> <span class="op">~</span><span class="fu"><a href="https://rdrr.io/pkg/gamlss/man/ps.html">ps</a></span><span class="op">(</span><span class="va">Week</span><span class="op">)</span></span>
+<span>                     ,family <span class="op">=</span> <span class="va">NBI</span></span>
+<span>                     ,i.control <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gamlss/man/glim.control.html">glim.control</a></span><span class="op">(</span>cc <span class="op">=</span> <span class="fl">0.01</span>, bf.cyc <span class="op">=</span> <span class="fl">100</span>, bf.tol <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span>
+<span>                     ,control <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gamlss/man/gamlss.control.html">gamlss.control</a></span><span class="op">(</span>c.crit <span class="op">=</span> <span class="fl">0.01</span>, trace <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>                     ,data <span class="op">=</span> <span class="va">Insurance_noNA</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+
+</div>
+<p>Model summary for the location parameter:</p>
+<div class="cell">
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/gamlss/man/getSmo.html">getSmo</a></span><span class="op">(</span><span class="va">m03_gamlss</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; Linear mixed-effects model fit by REML
+#&gt;   Data: Data 
+#&gt;    AIC  BIC logLik
+#&gt;   1521 1559   -751
+#&gt; 
+#&gt; Random effects:
+#&gt;  Formula: ~1 | City
+#&gt;         (Intercept) Residual
+#&gt; StdDev:       0.147     1.26
+#&gt; 
+#&gt; Correlation Structure: ARMA(0,3)
+#&gt;  Formula: ~Week | City 
+#&gt;  Parameter estimate(s):
+#&gt; Theta1 Theta2 Theta3 
+#&gt; 0.1946 0.0437 0.0332 
+#&gt; Variance function:
+#&gt;  Structure: fixed weights
+#&gt;  Formula: ~W.var 
+#&gt; Fixed effects:  list(fix.formula) 
+#&gt;                         Value Std.Error  DF t-value p-value
+#&gt; (Intercept)            -0.568    0.2051 515   -2.77  0.0058
+#&gt; ps(Precipitation)       0.018    0.0033 515    5.49  0.0000
+#&gt; Week                    0.001    0.0004 515    3.36  0.0008
+#&gt; ps(Precipitation_lag1)  0.009    0.0036 515    2.64  0.0086
+#&gt;  Correlation: 
+#&gt;                        (Intr) ps(Pr) Week  
+#&gt; ps(Precipitation)      -0.145              
+#&gt; Week                   -0.616 -0.010       
+#&gt; ps(Precipitation_lag1) -0.135  0.017 -0.022
+#&gt; 
+#&gt; Standardized Within-Group Residuals:
+#&gt;    Min     Q1    Med     Q3    Max 
+#&gt; -1.384 -0.549 -0.155  0.327 14.056 
+#&gt; 
+#&gt; Number of Observations: 519
+#&gt; Number of Groups: 1</code></pre>
+</div>
+</div>
+<p>Model summary for all distribution parameters:</p>
+<div class="cell">
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m03_gamlss</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; ******************************************************************
+#&gt; Family:  c("NBI", "Negative Binomial type I") 
+#&gt; 
+#&gt; Call:  gamlss(formula = Claims ~ re(fixed = ~ps(Precipitation) +  
+#&gt;     Week + ps(Precipitation_lag1), random = ~1 | City,  
+#&gt;     correlation = corARMA(form = ~Week | City, q = 3),  
+#&gt;     method = "REML"), sigma.formula = ~ps(Week), family = NBI,  
+#&gt;     data = Insurance_noNA, control = gamlss.control(c.crit = 0.01,  
+#&gt;         trace = FALSE), i.control = glim.control(cc = 0.01,  
+#&gt;         bf.cyc = 100, bf.tol = 0.01)) 
+#&gt; 
+#&gt; Fitting method: RS() 
+#&gt; 
+#&gt; ------------------------------------------------------------------
+#&gt; Mu link function:  log
+#&gt; Mu Coefficients:
+#&gt;             Estimate Std. Error t value Pr(&gt;|t|)    
+#&gt; (Intercept)   1.1723     0.0329    35.6   &lt;2e-16 ***
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt; 
+#&gt; ------------------------------------------------------------------
+#&gt; Sigma link function:  log
+#&gt; Sigma Coefficients:
+#&gt;              Estimate Std. Error t value Pr(&gt;|t|)    
+#&gt; (Intercept)  0.115810   0.201071    0.58     0.56    
+#&gt; ps(Week)    -0.003421   0.000684   -5.00  7.8e-07 ***
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt; 
+#&gt; ------------------------------------------------------------------
+#&gt; NOTE: Additive smoothing terms exist in the formulas: 
+#&gt;  i) Std. Error for smoothers are for the linear effect only. 
+#&gt; ii) Std. Error for the linear terms maybe are not accurate. 
+#&gt; ------------------------------------------------------------------
+#&gt; No. of observations in the fit:  519 
+#&gt; Degrees of Freedom for the fit:  9
+#&gt;       Residual Deg. of Freedom:  510 
+#&gt;                       at cycle:  5 
+#&gt;  
+#&gt; Global Deviance:     2240 
+#&gt;             AIC:     2258 
+#&gt;             SBC:     2296 
+#&gt; ******************************************************************</code></pre>
+</div>
+</div>
+<div class="cell">
+<details><summary>Code</summary><div class="sourceCode" id="cb50"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">m03_gamlss</span>, ts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
+<pre><code>#&gt; ******************************************************************
+#&gt;   Summary of the Randomised Quantile Residuals
+#&gt;                            mean   =  0.0141 
+#&gt;                        variance   =  0.924 
+#&gt;                coef. of skewness  =  0.446 
+#&gt;                coef. of kurtosis  =  5.68 
+#&gt; Filliben correlation coefficient  =  0.987 
+#&gt; ******************************************************************</code></pre>
+</div>
+<div class="cell-output-display">
+<div id="fig-m03gamlssRES" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure"><p><img src="l09_tsreg2_files/figure-html/fig-m03gamlssRES-1.png" class="img-fluid figure-img" width="768"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;9.18: Residual diagnostics of the GAMLSS for the number of home insurance claims.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Hence, compared with the GARMA model from the previous section, the GAMLSS <a href="#eq-GAMLSSins">Equation&nbsp;<span>9.14</span></a> uses the same predictors and distribution family and specifies ARMA(0,3) dependence in the residuals. What differs is that the GAMLSS allows nonlinear relationships between the number of claims and precipitation and models the variability changing nonlinearly across weeks.</p>
+</div>
+</div>
+</section><section id="sec-Granger" class="level2" data-number="9.7"><h2 data-number="9.7" class="anchored" data-anchor-id="sec-Granger">
+<span class="header-section-number">9.7</span> Granger causality</h2>
 <p>The Granger causality <span class="citation" data-cites="Granger:1969 Kirchgassner:Wolters:2007">(<a href="references.html#ref-Granger:1969" role="doc-biblioref">Granger 1969</a>; <a href="references.html#ref-Kirchgassner:Wolters:2007" role="doc-biblioref">Kirchgässner and Wolters 2007</a>)</span> concept is based on predictability, which is why we should consider it in the time series course. Pearl causality is based on the analysis of interventions <span class="citation" data-cites="Rebane:Pearl:1987 Pearl:2009">(<a href="references.html#ref-Rebane:Pearl:1987" role="doc-biblioref">Rebane and Pearl 1987</a>; <a href="references.html#ref-Pearl:2009" role="doc-biblioref">Pearl 2009</a>)</span>.</p>
 <p>Let <span class="math inline">\(I_t\)</span> be the total information set available at the time <span class="math inline">\(t\)</span>. This information set includes the two time series <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>. Let <span class="math inline">\(\bar{X}_t\)</span> be the set of all current and past values of <span class="math inline">\(X\)</span>, i.e., <span class="math inline">\(\bar{X}_t = \{X_{t}, X_{t-1}, \dots, X_{t-k}, \dots \}\)</span> and analogously of <span class="math inline">\(Y\)</span>. Let <span class="math inline">\(\sigma^2(\cdot)\)</span> be the variance of the corresponding forecast error.</p>
 <div class="callout-note callout callout-style-default callout-captioned">
@@ -992,16 +1215,16 @@ Note
 <p><strong>Granger causality</strong></p>
 <p><span class="math inline">\(X\)</span> is (simply) Granger causal to <span class="math inline">\(Y\)</span> if future values of <span class="math inline">\(Y\)</span> can be predicted better, i.e., with a smaller forecast error variance, if current and past values of <span class="math inline">\(X\)</span> are used: <span id="eq-Granger"><span class="math display">\[
 \sigma^2(Y_{t+1}|I_t) &lt; \sigma^2(Y_{t+1}|I_t \setminus \bar{X}_t).
-\tag{9.13}\]</span></span></p>
+\tag{9.15}\]</span></span></p>
 <p><strong>Instantaneous Granger causality</strong></p>
 <p><span class="math inline">\(X\)</span> is instantaneously Granger causal to <span class="math inline">\(Y\)</span> if the future value of <span class="math inline">\(Y\)</span>, <span class="math inline">\(Y_{t+1}\)</span>, can be predicted better, i.e., with a smaller forecast error variance, if the future value of <span class="math inline">\(X\)</span>, <span class="math inline">\(X_{t+1}\)</span>, is used in addition to the current and past values of <span class="math inline">\(X\)</span>: <span id="eq-GrangerInst"><span class="math display">\[
 \sigma^2(Y_{t+1}|\{I_t, X_{t+1}\}) &lt; \sigma^2(Y_{t+1}|I_t ).
-\tag{9.14}\]</span></span></p>
+\tag{9.16}\]</span></span></p>
 <p><strong>Feedback</strong></p>
 <p>There is feedback between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> if <span class="math inline">\(X\)</span> is causal to <span class="math inline">\(Y\)</span> and <span class="math inline">\(Y\)</span> is causal to <span class="math inline">\(X\)</span>. Feedback is only defined for the case of simple causal relations.</p>
-<p>The test for <a href="#eq-Granger">Equation&nbsp;<span>9.13</span></a> and <a href="#eq-GrangerInst">Equation&nbsp;<span>9.14</span></a> is, essentially, an <span class="math inline">\(F\)</span>-test comparing two nested models: with additional predictors <span class="math inline">\(X\)</span> and without. In other words, consider the model: <span id="eq-GrangerModel"><span class="math display">\[
+<p>The test for <a href="#eq-Granger">Equation&nbsp;<span>9.15</span></a> and <a href="#eq-GrangerInst">Equation&nbsp;<span>9.16</span></a> is, essentially, an <span class="math inline">\(F\)</span>-test comparing two nested models: with additional predictors <span class="math inline">\(X\)</span> and without. In other words, consider the model: <span id="eq-GrangerModel"><span class="math display">\[
 Y_t = \beta_0 + \sum_{k=1}^{k_1}\beta_k Y_{t-k} + \sum_{k=k_0}^{k_2}\alpha_k X_{t-k} + U_t
-\tag{9.15}\]</span></span> with <span class="math inline">\(k_0 = 1\)</span>. An <span class="math inline">\(F\)</span>-test is applied to test the null hypothesis, H<span class="math inline">\(_0\)</span>: <span class="math inline">\(\alpha_1 = \alpha_2 = \dots = \alpha_{k_2} = 0\)</span>. By switching <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> in <a href="#eq-GrangerModel">Equation&nbsp;<span>9.15</span></a>, it can be tested whether a simple causal relation from <span class="math inline">\(Y\)</span> to <span class="math inline">\(X\)</span> exists. There is a feedback relation if the null hypothesis is rejected in both directions (<span class="math inline">\(X\rightarrow Y\)</span> and <span class="math inline">\(Y\rightarrow X\)</span>). To test whether there is an instantaneous causality, we finally set <span class="math inline">\(k_0 = 0\)</span> and perform a <span class="math inline">\(t\)</span> or <span class="math inline">\(F\)</span>-test for the null hypothesis H<span class="math inline">\(_0\)</span>: <span class="math inline">\(\alpha_0 = 0\)</span>.</p>
+\tag{9.17}\]</span></span> with <span class="math inline">\(k_0 = 1\)</span>. An <span class="math inline">\(F\)</span>-test is applied to test the null hypothesis, H<span class="math inline">\(_0\)</span>: <span class="math inline">\(\alpha_1 = \alpha_2 = \dots = \alpha_{k_2} = 0\)</span>. By switching <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> in <a href="#eq-GrangerModel">Equation&nbsp;<span>9.17</span></a>, it can be tested whether a simple causal relation from <span class="math inline">\(Y\)</span> to <span class="math inline">\(X\)</span> exists. There is a feedback relation if the null hypothesis is rejected in both directions (<span class="math inline">\(X\rightarrow Y\)</span> and <span class="math inline">\(Y\rightarrow X\)</span>). To test whether there is an instantaneous causality, we finally set <span class="math inline">\(k_0 = 0\)</span> and perform a <span class="math inline">\(t\)</span> or <span class="math inline">\(F\)</span>-test for the null hypothesis H<span class="math inline">\(_0\)</span>: <span class="math inline">\(\alpha_0 = 0\)</span>.</p>
 <p>The problem with this test is that the results are strongly dependent on the number of lags of the explanatory variable, <span class="math inline">\(k_2\)</span>. There is a trade-off: the more lagged values we include, the better the influence of this variable can be captured. This argues for a high maximal lag. On the other hand, the power of this test is lower the more lagged values are included <span class="citation" data-cites="Kirchgassner:Wolters:2007">(Chapter 3 of <a href="references.html#ref-Kirchgassner:Wolters:2007" role="doc-biblioref">Kirchgässner and Wolters 2007</a>)</span>. Two general procedures can be used to select the lags: inspecting the sensitivity of results to different <span class="math inline">\(k_2\)</span> (sensitivity analysis) or one of the different information criteria guiding model selection.</p>
 <div class="callout-note callout callout-style-default no-icon callout-captioned">
 <div class="callout-header d-flex align-content-center">
@@ -1013,9 +1236,9 @@ Example: Insurance claims and precipitation Granger causality test
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>For example, use the insurance data to test the relationships between the log-transformed home insurance number of claims and precipitation. A quick test has been performed to check that the time series are stationary and do not have a strong seasonality, so the chance of detecting spurious relationships is minimized. We can use the series in <a href="#eq-GrangerModel">Equation&nbsp;<span>9.15</span></a>.</p>
+<p>For example, use the insurance data to test the relationships between the log-transformed home insurance number of claims and precipitation. A quick test has been performed to check that the time series are stationary and do not have a strong seasonality, so the chance of detecting spurious relationships is minimized. We can use the series in <a href="#eq-GrangerModel">Equation&nbsp;<span>9.17</span></a>.</p>
 <div class="cell">
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">lmtest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/grangertest.html">grangertest</a></span><span class="op">(</span><span class="va">Claims_ln</span> <span class="op">~</span> <span class="va">Precipitation</span> </span>
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">lmtest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/grangertest.html">grangertest</a></span><span class="op">(</span><span class="va">Claims_ln</span> <span class="op">~</span> <span class="va">Precipitation</span> </span>
 <span>                    ,order <span class="op">=</span> <span class="fl">1</span></span>
 <span>                    ,data <span class="op">=</span> <span class="va">Insurance_noNA</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1032,7 +1255,7 @@ Example: Insurance claims and precipitation Granger causality test
 </div>
 <p>The low <span class="math inline">\(p\)</span>-value shows that precipitation is a Granger cause of the number of home insurance claims. Now test the reverse relationship.</p>
 <div class="cell">
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">lmtest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/grangertest.html">grangertest</a></span><span class="op">(</span><span class="va">Precipitation</span> <span class="op">~</span> <span class="va">Claims_ln</span>  </span>
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">lmtest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/grangertest.html">grangertest</a></span><span class="op">(</span><span class="va">Precipitation</span> <span class="op">~</span> <span class="va">Claims_ln</span>  </span>
 <span>                    ,order <span class="op">=</span> <span class="fl">1</span></span>
 <span>                    ,data <span class="op">=</span> <span class="va">Insurance_noNA</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1048,7 +1271,7 @@ Example: Insurance claims and precipitation Granger causality test
 <p>Reverse testing does not confirm a statistically significant Granger causality. Hence, we do not have enough evidence to claim that insurance claims are a Granger cause of precipitation (we could expect to come to this conclusion based on our knowledge of how things work), and hence there is no evidence of feedback between losses and precipitation.</p>
 <p>The function <code><a href="https://rdrr.io/pkg/lmtest/man/grangertest.html">lmtest::grangertest()</a></code> does not allow us to set <code>order = 0</code> (to test instantaneous Granger causality), but we can do it manually. First, to show that ‘manual’ results match the <code><a href="https://rdrr.io/pkg/lmtest/man/grangertest.html">lmtest::grangertest()</a></code> output, repeat the test above using two nested models with lag 1.</p>
 <div class="cell">
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">M1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Claims_ln</span> <span class="op">~</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html">lag</a></span><span class="op">(</span><span class="va">Claims_ln</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html">lag</a></span><span class="op">(</span><span class="va">Precipitation</span>, <span class="fl">1</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">M1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Claims_ln</span> <span class="op">~</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html">lag</a></span><span class="op">(</span><span class="va">Claims_ln</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html">lag</a></span><span class="op">(</span><span class="va">Precipitation</span>, <span class="fl">1</span><span class="op">)</span></span>
 <span>         ,data <span class="op">=</span> <span class="va">Insurance_noNA</span><span class="op">)</span></span>
 <span><span class="va">M2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Claims_ln</span> <span class="op">~</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html">lag</a></span><span class="op">(</span><span class="va">Claims_ln</span>, <span class="fl">1</span><span class="op">)</span></span>
 <span>         ,data <span class="op">=</span> <span class="va">Insurance_noNA</span><span class="op">)</span></span>
@@ -1069,7 +1292,7 @@ Example: Insurance claims and precipitation Granger causality test
 <p>The results match.</p>
 <p>Second, test the instantaneous Granger causality in the same manner.</p>
 <div class="cell">
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">M3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Claims_ln</span> <span class="op">~</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html">lag</a></span><span class="op">(</span><span class="va">Claims_ln</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html">lag</a></span><span class="op">(</span><span class="va">Precipitation</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> </span>
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">M3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Claims_ln</span> <span class="op">~</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html">lag</a></span><span class="op">(</span><span class="va">Claims_ln</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html">lag</a></span><span class="op">(</span><span class="va">Precipitation</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>             <span class="va">Precipitation</span>, data <span class="op">=</span> <span class="va">Insurance_noNA</span><span class="op">)</span></span>
 <span><span class="va">M4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Claims_ln</span> <span class="op">~</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html">lag</a></span><span class="op">(</span><span class="va">Claims_ln</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html">lag</a></span><span class="op">(</span><span class="va">Precipitation</span>, <span class="fl">1</span><span class="op">)</span></span>
 <span>         ,data <span class="op">=</span> <span class="va">Insurance_noNA</span><span class="op">)</span></span>
@@ -1102,11 +1325,11 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The <code><a href="https://rdrr.io/pkg/lmtest/man/grangertest.html">lmtest::grangertest()</a></code> options set one value to both <span class="math inline">\(k_1\)</span> and <span class="math inline">\(k_2\)</span> in <a href="#eq-GrangerModel">Equation&nbsp;<span>9.15</span></a>. In our example, it was <span class="math inline">\(k_1 = k_2 = 1\)</span>. The ‘manual’ test using the function <code><a href="https://rdrr.io/r/stats/anova.html">anova()</a></code> can be used for models with <span class="math inline">\(k_1 = k_2\)</span> or <span class="math inline">\(k_1 \neq k_2\)</span>.</p>
+<p>The <code><a href="https://rdrr.io/pkg/lmtest/man/grangertest.html">lmtest::grangertest()</a></code> options set one value to both <span class="math inline">\(k_1\)</span> and <span class="math inline">\(k_2\)</span> in <a href="#eq-GrangerModel">Equation&nbsp;<span>9.17</span></a>. In our example, it was <span class="math inline">\(k_1 = k_2 = 1\)</span>. The ‘manual’ test using the function <code><a href="https://rdrr.io/r/stats/anova.html">anova()</a></code> can be used for models with <span class="math inline">\(k_1 = k_2\)</span> or <span class="math inline">\(k_1 \neq k_2\)</span>.</p>
 </div>
 </div>
-</section><section id="about-predictions" class="level2" data-number="9.7"><h2 data-number="9.7" class="anchored" data-anchor-id="about-predictions">
-<span class="header-section-number">9.7</span> About predictions</h2>
+</section><section id="about-predictions" class="level2" data-number="9.8"><h2 data-number="9.8" class="anchored" data-anchor-id="about-predictions">
+<span class="header-section-number">9.8</span> About predictions</h2>
 <p>Let <span class="math inline">\(\hat{Y}_T(h)\)</span> be a forecast <span class="math inline">\(h\)</span> steps ahead made at the time <span class="math inline">\(T\)</span>. If <span class="math inline">\(\hat{Y}_T(h)\)</span> only uses information up to time <span class="math inline">\(T\)</span>, the resulting forecasts are called out-of-sample forecasts. Economists call them <em>ex-ante</em> forecasts. We have discussed several ways to select the optimal method or model for forecasting, e.g., using PMAE, PMSE, or coverage – all calculated on a testing set. <span class="citation" data-cites="Chatfield:2000">Chatfield (<a href="references.html#ref-Chatfield:2000" role="doc-biblioref">2000</a>)</span> mentions several ways to unfairly ‘improve’ forecasts:</p>
 <ol type="1">
 <li>Fitting the model to all the data including the test set.</li>
@@ -1115,11 +1338,11 @@ Note
 </ol>
 <p>So what to do if we put lots of effort to build a regression model using time series and need to forecast the response, <span class="math inline">\(Y_t\)</span>, which is modeled using different independent variables <span class="math inline">\(X_{t,k}\)</span> (<span class="math inline">\(k=1,\dots,K\)</span>)? Two options are possible.</p>
 <p><strong>Leading indicators</strong></p>
-<p>If <span class="math inline">\(X_{t,k}\)</span>’s are leading indicators with lags starting at <span class="math inline">\(l\)</span>, we, generally, would not need their future values to obtain the forecasts <span class="math inline">\(\hat{Y}_T(h)\)</span>, where <span class="math inline">\(h\leqslant l\)</span>. For example, the model for losses tested in <a href="#sec-Granger"><span>Section&nbsp;9.6</span></a> shows that precipitation with lag 1 is a good predictor for current losses, i.e., precipitation is a leading indicator. The 1-week ahead forecast of <span class="math inline">\(Y_{t+1}\)</span> can be obtained using the current precipitation <span class="math inline">\(X_t\)</span> (all data are available). If <span class="math inline">\(h&gt;l\)</span>, we will be forced to forecast the independent variables, <span class="math inline">\(X_{t,k}\)</span>’s – see the next option.</p>
+<p>If <span class="math inline">\(X_{t,k}\)</span>’s are leading indicators with lags starting at <span class="math inline">\(l\)</span>, we, generally, would not need their future values to obtain the forecasts <span class="math inline">\(\hat{Y}_T(h)\)</span>, where <span class="math inline">\(h\leqslant l\)</span>. For example, the model for losses tested in <a href="#sec-Granger"><span>Section&nbsp;9.7</span></a> shows that precipitation with lag 1 is a good predictor for current losses, i.e., precipitation is a leading indicator. The 1-week ahead forecast of <span class="math inline">\(Y_{t+1}\)</span> can be obtained using the current precipitation <span class="math inline">\(X_t\)</span> (all data are available). If <span class="math inline">\(h&gt;l\)</span>, we will be forced to forecast the independent variables, <span class="math inline">\(X_{t,k}\)</span>’s – see the next option.</p>
 <p><strong>Forecast of predictors</strong></p>
 <p>If we opt for forecasting <span class="math inline">\(X_{t,k}\)</span>’s, the errors (uncertainty) of such forecasts will be larger, because future <span class="math inline">\(X_{t,k}\)</span>’s themselves will be the estimates. Nevertheless, it might be the only choice when leading indicators are not available. Building a full and comprehensive model with all diagnostics for each regressor is usually unfeasible and even problematic if we plan to consider multivariate models for regressors (the complexity of models will quickly escalate). As an alternative, it is common to use automatic or semi-automatic univariate procedures that can help to forecast each of the <span class="math inline">\(X_{t,k}\)</span>’s. For example, consider exponential smoothing, Holt–Winters smoothing, and auto-selected SARIMA/ARIMA/ARMA/AR/MA models – all those can be automated for a large number of forecasts to make.</p>
-</section><section id="conclusion" class="level2" data-number="9.8"><h2 data-number="9.8" class="anchored" data-anchor-id="conclusion">
-<span class="header-section-number">9.8</span> Conclusion</h2>
+</section><section id="conclusion" class="level2" data-number="9.9"><h2 data-number="9.9" class="anchored" data-anchor-id="conclusion">
+<span class="header-section-number">9.9</span> Conclusion</h2>
 <p>Multivariate models are still much more difficult to fit than univariate ones. Multiple regression remains a treacherous procedure when applied to time series data. Many observed time series exhibit nonlinear characteristics, but nonlinear models often fail to give better out-of-sample forecasts than linear models, perhaps because the latter are more robust to departures from model assumptions. It is always a good idea to end with the so-called eyeball test. Plot the forecasts on a time plot of the data and check that they look intuitively reasonable <span class="citation" data-cites="Chatfield:2000">(<a href="references.html#ref-Chatfield:2000" role="doc-biblioref">Chatfield 2000</a>)</span>.</p>
 
 
@@ -1160,6 +1383,9 @@ Nesslage G, Lyubchich V, Nitschke P, et al (2021) Environmental drivers of golde
 <div id="ref-Pearl:2009" class="csl-entry" role="doc-biblioentry">
 Pearl J (2009) Causality: Models, reasoning, and inference, 2nd edn. Cambridge University Press, Cambridge, UK
 </div>
+<div id="ref-Perperoglou:etal:2019" class="csl-entry" role="doc-biblioentry">
+Perperoglou A, Sauerbrei W, Abrahamowicz M, Schmid M (2019) A review of spline function procedures in <span>R</span>. BMC Medical Research Methodology 19: <a href="https://doi.org/10.1186/s12874-019-0666-3">https://doi.org/10.1186/s12874-019-0666-3</a>
+</div>
 <div id="ref-Rebane:Pearl:1987" class="csl-entry" role="doc-biblioentry">
 Rebane G, Pearl J (1987) The recovery of causal poly-trees from statistical data. In: Proceedings of the third annual conference on uncertainty in artificial intelligence. pp 222–228
 </div>
@@ -1174,6 +1400,9 @@ Stasinopoulos DM, Rigby RA (2007) Generalized additive models for location scale
 </div>
 <div id="ref-Zeger:Qaqish:1988" class="csl-entry" role="doc-biblioentry">
 Zeger SL, Qaqish B (1988) Markov regression models for time series: A quasi-likelihood approach. Biometrics 44:1019–1031. <a href="https://doi.org/10.2307/2531732">https://doi.org/10.2307/2531732</a>
+</div>
+<div id="ref-Zuur:etal:2009" class="csl-entry" role="doc-biblioentry">
+Zuur A, Ieno EN, Walker NJ, et al (2009) <a href="https://doi.org/10.1007/978-0-387-87458-6">Mixed effects models and extensions in ecology with <span>R</span></a>. Springer, New York
 </div>
 </div>
 </section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">

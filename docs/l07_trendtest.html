@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.313">
+<meta name="generator" content="quarto-1.2.335">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>Time Series Analysis - 7&nbsp; Trend Detection</title>
 <style>
@@ -356,7 +356,7 @@ Y_t = b_0 + b_1 t + e_t,
 <div class="cell">
 <details><summary>Code</summary><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
 <span><span class="va">Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/arima.sim.html">arima.sim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>order <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span>, ar <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>, n <span class="op">=</span> <span class="fl">100</span>, n.start <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
-<span><span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
 <div id="fig-ar1sim" class="quarto-figure quarto-figure-center anchored">
@@ -726,25 +726,25 @@ Example: ADF test applied to simulated data
 <span><span class="co"># Apply first-order (non-seasonal) differences again</span></span>
 <span><span class="va">D2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="va">D1</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">Yt</span><span class="op">)</span> <span class="op">+</span> </span>
+<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">Yt</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">"Original"</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Yt"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/autoplot.acf.html">ggAcf</a></span><span class="op">(</span><span class="va">Yt</span><span class="op">)</span> <span class="op">+</span> </span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/forecast/man/autoplot.acf.html">ggAcf</a></span><span class="op">(</span><span class="va">Yt</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Yt"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">D1</span><span class="op">)</span> <span class="op">+</span> </span>
+<span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">D1</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">"First differences"</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"(1-B)Yt"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/autoplot.acf.html">ggAcf</a></span><span class="op">(</span><span class="va">D1</span><span class="op">)</span> <span class="op">+</span> </span>
+<span><span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/forecast/man/autoplot.acf.html">ggAcf</a></span><span class="op">(</span><span class="va">D1</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"(1-B)Yt"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">p5</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">D2</span><span class="op">)</span> <span class="op">+</span> </span>
+<span><span class="va">p5</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">D2</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">"Second differences"</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"(1-B)2Yt"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">p6</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/autoplot.acf.html">ggAcf</a></span><span class="op">(</span><span class="va">D2</span><span class="op">)</span> <span class="op">+</span> </span>
+<span><span class="va">p6</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/forecast/man/autoplot.acf.html">ggAcf</a></span><span class="op">(</span><span class="va">D2</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"(1-B)2Yt"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">(</span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="va">p3</span> <span class="op">+</span> <span class="va">p4</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="va">p5</span> <span class="op">+</span> <span class="va">p6</span><span class="op">)</span> <span class="op">+</span></span>

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.313">
+<meta name="generator" content="quarto-1.2.335">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>Time Series Analysis - Software</title>
 <style>
@@ -285,12 +285,13 @@ div.csl-indent {
   </div>
   
 
-</header><p>Examples were calculated in R version 4.2.1 (2022-06-23 ucrt) with an effort to use the most recent versions of R packages.</p>
+</header><p>Examples were calculated in R version 4.2.2 (2022-10-31 ucrt) with an effort to use the most recent versions of R packages.</p>
 <p>The codes load silently only a few packages:</p>
 <div class="cell">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme_get.html">theme_set</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_light</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>All other packages are named before the function as in <code><a href="https://pkg.robjhyndman.com/forecast/reference/autoplot.acf.html">forecast::ggAcf()</a></code> (this code calls the function <code>ggAcf()</code> from the package <code>forecast</code>) or called immediately before the necessary function use:</p>
 <div class="cell">
@@ -308,7 +309,7 @@ div.csl-indent {
 <code>astsa</code> <span class="citation" data-cites="R-astsa">(<a href="references.html#ref-R-astsa" role="doc-biblioref">Stoffer and Poison 2023</a>)</span>
 </li>
 <li>
-<code>downlit</code> <span class="citation" data-cites="R-downlit">(<a href="references.html#ref-R-downlit" role="doc-biblioref">Wickham 2022</a>)</span>
+<code>downlit</code> <span class="citation" data-cites="R-downlit">(<a href="references.html#ref-R-downlit" role="doc-biblioref">Wickham 2023</a>)</span>
 </li>
 <li>
 <code>dplR</code> <span class="citation" data-cites="R-dplR">(<a href="references.html#ref-R-dplR" role="doc-biblioref">Bunn et al. 2022</a>)</span>
@@ -323,10 +324,10 @@ div.csl-indent {
 <code>Ecdat</code> <span class="citation" data-cites="R-Ecdat">(<a href="references.html#ref-R-Ecdat" role="doc-biblioref">Croissant and Graves 2022</a>)</span>
 </li>
 <li>
-<code>fable</code> <span class="citation" data-cites="R-fable">(<a href="references.html#ref-R-fable" role="doc-biblioref">O’Hara-Wild et al. 2022a</a>)</span>
+<code>fable</code> <span class="citation" data-cites="R-fable">(<a href="references.html#ref-R-fable" role="doc-biblioref">O’Hara-Wild et al. 2023a</a>)</span>
 </li>
 <li>
-<code>feasts</code> <span class="citation" data-cites="R-feasts">(<a href="references.html#ref-R-feasts" role="doc-biblioref">O’Hara-Wild et al. 2022b</a>)</span>
+<code>feasts</code> <span class="citation" data-cites="R-feasts">(<a href="references.html#ref-R-feasts" role="doc-biblioref">O’Hara-Wild et al. 2023b</a>)</span>
 </li>
 <li>
 <code>fGarch</code> <span class="citation" data-cites="R-fGarch">(<a href="references.html#ref-R-fGarch" role="doc-biblioref">Wuertz et al. 2022</a>)</span>
@@ -347,6 +348,9 @@ div.csl-indent {
 <code>gamlss</code> <span class="citation" data-cites="R-gamlss">(<a href="references.html#ref-R-gamlss" role="doc-biblioref">Stasinopoulos and Rigby 2023</a>)</span>
 </li>
 <li>
+<code>gamlss.ggplots</code> <span class="citation" data-cites="R-gamlss.ggplots">(<a href="references.html#ref-R-gamlss.ggplots" role="doc-biblioref">Stasinopoulos et al. 2023</a>)</span>
+</li>
+<li>
 <code>gamlss.util</code> <span class="citation" data-cites="R-gamlss.util">(<a href="references.html#ref-R-gamlss.util" role="doc-biblioref">Stasinopoulos et al. 2016</a>)</span>
 </li>
 <li>
@@ -365,7 +369,7 @@ div.csl-indent {
 <code>knitr</code> <span class="citation" data-cites="R-knitr">(<a href="references.html#ref-R-knitr" role="doc-biblioref">Xie 2023</a>)</span>
 </li>
 <li>
-<code>lawstat</code> <span class="citation" data-cites="R-lawstat">(<a href="references.html#ref-R-lawstat" role="doc-biblioref">Gastwirth et al. 2022</a>)</span>
+<code>lawstat</code> <span class="citation" data-cites="R-lawstat">(<a href="references.html#ref-R-lawstat" role="doc-biblioref">Gastwirth et al. 2023</a>)</span>
 </li>
 <li>
 <code>lmtest</code> <span class="citation" data-cites="R-lmtest">(<a href="references.html#ref-R-lmtest" role="doc-biblioref">Hothorn et al. 2022</a>)</span>
@@ -377,13 +381,13 @@ div.csl-indent {
 <code>nlme</code> <span class="citation" data-cites="R-nlme">(<a href="references.html#ref-R-nlme" role="doc-biblioref">Pinheiro et al. 2023</a>)</span>
 </li>
 <li>
-<code>oce</code> <span class="citation" data-cites="R-oce">(<a href="references.html#ref-R-oce" role="doc-biblioref">Kelley and Richards 2022</a>)</span>
+<code>oce</code> <span class="citation" data-cites="R-oce">(<a href="references.html#ref-R-oce" role="doc-biblioref">Kelley and Richards 2023</a>)</span>
 </li>
 <li>
 <code>patchwork</code> <span class="citation" data-cites="R-patchwork">(<a href="references.html#ref-R-patchwork" role="doc-biblioref">Pedersen 2022</a>)</span>
 </li>
 <li>
-<code>plotly</code> <span class="citation" data-cites="R-plotly">(<a href="references.html#ref-R-plotly" role="doc-biblioref">Sievert et al. 2022</a>)</span>
+<code>plotly</code> <span class="citation" data-cites="R-plotly">(<a href="references.html#ref-R-plotly" role="doc-biblioref">Sievert et al. 2023</a>)</span>
 </li>
 <li>
 <code>pracma</code> <span class="citation" data-cites="R-pracma">(<a href="references.html#ref-R-pracma" role="doc-biblioref">Borchers 2022</a>)</span>
@@ -410,14 +414,14 @@ div.csl-indent {
 <code>urca</code> <span class="citation" data-cites="R-urca">(<a href="references.html#ref-R-urca" role="doc-biblioref">Pfaff 2022</a>)</span>
 </li>
 <li>
-<code>xml2</code> <span class="citation" data-cites="R-xml2">(<a href="references.html#ref-R-xml2" role="doc-biblioref">Wickham et al. 2021</a>)</span>
+<code>xml2</code> <span class="citation" data-cites="R-xml2">(<a href="references.html#ref-R-xml2" role="doc-biblioref">Wickham et al. 2023d</a>)</span>
 </li>
 </ul>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
 <div id="ref-R-rmarkdown" class="csl-entry" role="doc-biblioentry">
-Allaire J, Xie Y, McPherson J, et al (2023) Rmarkdown: Dynamic documents for r. R package version 2.20, <a href="https://CRAN.R-project.org/package=rmarkdown">https://CRAN.R-project.org/package=rmarkdown</a>
+Allaire J, Xie Y, Dervieux C, et al (2023) Rmarkdown: Dynamic documents for r. R package version 2.22, <a href="https://CRAN.R-project.org/package=rmarkdown">https://CRAN.R-project.org/package=rmarkdown</a>
 </div>
 <div id="ref-R-pracma" class="csl-entry" role="doc-biblioentry">
 Borchers HW (2022) Pracma: Practical numerical math functions. R package version 2.4.2, <a href="https://CRAN.R-project.org/package=pracma">https://CRAN.R-project.org/package=pracma</a>
@@ -432,7 +436,7 @@ Caeiro F, Mateus A (2022) Randtests: Testing randomness in r. R package version 
 Croissant Y, Graves S (2022) Ecdat: Data sets for econometrics. R package version 0.4-2, <a href="https://www.r-project.org">https://www.r-project.org</a>
 </div>
 <div id="ref-R-lawstat" class="csl-entry" role="doc-biblioentry">
-Gastwirth JL, Gel YR, Hui WLW, et al (2022) Lawstat: Tools for biostatistics, public policy, and law. R package version 3.5, <a href="https://CRAN.R-project.org/package=lawstat">https://CRAN.R-project.org/package=lawstat</a>
+Gastwirth JL, Gel YR, Hui WLW, et al (2023) Lawstat: Tools for biostatistics, public policy, and law. R package version 3.6, <a href="https://CRAN.R-project.org/package=lawstat">https://CRAN.R-project.org/package=lawstat</a>
 </div>
 <div id="ref-R-FinTS" class="csl-entry" role="doc-biblioentry">
 Graves S (2019) FinTS: Companion to tsay (2005) analysis of financial time series. R package version 0.4-6, <a href="https://r-forge.r-project.org/projects/fints/">https://r-forge.r-project.org/projects/fints/</a>
@@ -444,13 +448,13 @@ Hothorn T, Zeileis A, Farebrother RW, Cummins C (2022) Lmtest: Testing linear re
 Hyndman R (2023) Fma: Data sets from "forecasting: Methods and applications" by makridakis, wheelwright &amp; hyndman (1998). R package version 2.5, <a href="https://CRAN.R-project.org/package=fma">https://CRAN.R-project.org/package=fma</a>
 </div>
 <div id="ref-R-forecast" class="csl-entry" role="doc-biblioentry">
-Hyndman R, Athanasopoulos G, Bergmeir C, et al (2023) Forecast: Forecasting functions for time series and linear models. R package version 8.20, <a href="https://CRAN.R-project.org/package=forecast">https://CRAN.R-project.org/package=forecast</a>
+Hyndman R, Athanasopoulos G, Bergmeir C, et al (2023) Forecast: Forecasting functions for time series and linear models. R package version 8.21, <a href="https://CRAN.R-project.org/package=forecast">https://CRAN.R-project.org/package=forecast</a>
 </div>
 <div id="ref-R-ggpubr" class="csl-entry" role="doc-biblioentry">
 Kassambara A (2023) Ggpubr: ggplot2 based publication ready plots. R package version 0.6.0, <a href="https://rpkgs.datanovia.com/ggpubr/">https://rpkgs.datanovia.com/ggpubr/</a>
 </div>
 <div id="ref-R-oce" class="csl-entry" role="doc-biblioentry">
-Kelley D, Richards C (2022) Oce: Analysis of oceanographic data. R package version 1.7-10, <a href="https://dankelley.github.io/oce/">https://dankelley.github.io/oce/</a>
+Kelley D, Richards C (2023) Oce: Analysis of oceanographic data. R package version 1.8-1, <a href="https://dankelley.github.io/oce/">https://dankelley.github.io/oce/</a>
 </div>
 <div id="ref-R-TSstudio" class="csl-entry" role="doc-biblioentry">
 Krispin R (2020) TSstudio: Functions for time series analysis and forecasting. R package version 0.1.6, <a href="https://github.com/RamiKrispin/TSstudio">https://github.com/RamiKrispin/TSstudio</a>
@@ -459,16 +463,16 @@ Krispin R (2020) TSstudio: Functions for time series analysis and forecasting. R
 Ligges U, Short T, Kienzle P (2021) Signal: Signal processing. R package version 0.7-7, <a href="https://CRAN.R-project.org/package=signal">https://CRAN.R-project.org/package=signal</a>
 </div>
 <div id="ref-R-funtimes" class="csl-entry" role="doc-biblioentry">
-Lyubchich V, Gel YR, Vishwakarma S (2023) Funtimes: Functions for time series analysis. R package version 9.2
+Lyubchich V, Gel YR, Vishwakarma S (2023) Funtimes: Functions for time series analysis. R package version 9.1, <a href="https://CRAN.R-project.org/package=funtimes">https://CRAN.R-project.org/package=funtimes</a>
 </div>
 <div id="ref-R-Kendall" class="csl-entry" role="doc-biblioentry">
 McLeod AI (2022) Kendall: Kendall rank correlation and mann-kendall trend test. R package version 2.2.1, <a href="http://www.stats.uwo.ca/faculty/aim">http://www.stats.uwo.ca/faculty/aim</a>
 </div>
 <div id="ref-R-fable" class="csl-entry" role="doc-biblioentry">
-O’Hara-Wild M, Hyndman R, Wang E (2022a) Fable: Forecasting models for tidy time series. R package version 0.3.2, <a href="https://CRAN.R-project.org/package=fable">https://CRAN.R-project.org/package=fable</a>
+O’Hara-Wild M, Hyndman R, Wang E (2023a) Fable: Forecasting models for tidy time series. R package version 0.3.3, <a href="https://CRAN.R-project.org/package=fable">https://CRAN.R-project.org/package=fable</a>
 </div>
 <div id="ref-R-feasts" class="csl-entry" role="doc-biblioentry">
-O’Hara-Wild M, Hyndman R, Wang E (2022b) Feasts: Feature extraction and statistics for time series. R package version 0.3.0, <a href="https://CRAN.R-project.org/package=feasts">https://CRAN.R-project.org/package=feasts</a>
+O’Hara-Wild M, Hyndman R, Wang E (2023b) Feasts: Feature extraction and statistics for time series. R package version 0.3.1, <a href="https://CRAN.R-project.org/package=feasts">https://CRAN.R-project.org/package=feasts</a>
 </div>
 <div id="ref-R-patchwork" class="csl-entry" role="doc-biblioentry">
 Pedersen TL (2022) Patchwork: The composer of plots. R package version 1.1.2, <a href="https://CRAN.R-project.org/package=patchwork">https://CRAN.R-project.org/package=patchwork</a>
@@ -486,10 +490,13 @@ Ruf T, C original by Press et al. partially based on, Python module Astropy. the
 Schloerke B, Cook D, Larmarange J, et al (2021) GGally: Extension to ggplot2. R package version 2.1.2, <a href="https://CRAN.R-project.org/package=GGally">https://CRAN.R-project.org/package=GGally</a>
 </div>
 <div id="ref-R-plotly" class="csl-entry" role="doc-biblioentry">
-Sievert C, Parmer C, Hocking T, et al (2022) Plotly: Create interactive web graphics via plotly.js. R package version 4.10.1, <a href="https://CRAN.R-project.org/package=plotly">https://CRAN.R-project.org/package=plotly</a>
+Sievert C, Parmer C, Hocking T, et al (2023) Plotly: Create interactive web graphics via plotly.js. R package version 4.10.2, <a href="https://CRAN.R-project.org/package=plotly">https://CRAN.R-project.org/package=plotly</a>
 </div>
 <div id="ref-R-gamlss" class="csl-entry" role="doc-biblioentry">
 Stasinopoulos M, Rigby B (2023) Gamlss: Generalised additive models for location scale and shape. R package version 5.4-12, <a href="https://www.gamlss.com/">https://www.gamlss.com/</a>
+</div>
+<div id="ref-R-gamlss.ggplots" class="csl-entry" role="doc-biblioentry">
+Stasinopoulos M, Rigby B, De Bastiani F, Merder J (2023) Gamlss.ggplots: Plotting generalised additive model for location, scale and shape. R package version 2.1-2, <a href="https://www.gamlss.com/">https://www.gamlss.com/</a>
 </div>
 <div id="ref-R-gamlss.util" class="csl-entry" role="doc-biblioentry">
 Stasinopoulos M, Rigby B, Eilers P (2016) Gamlss.util: GAMLSS utilities. R package version 4.3-4, <a href="http://www.gamlss.org/">http://www.gamlss.org/</a>
@@ -498,22 +505,22 @@ Stasinopoulos M, Rigby B, Eilers P (2016) Gamlss.util: GAMLSS utilities. R packa
 Stoffer D, Poison N (2023) Astsa: Applied statistical time series analysis. R package version 2.0, <a href="https://CRAN.R-project.org/package=astsa">https://CRAN.R-project.org/package=astsa</a>
 </div>
 <div id="ref-R-tseries" class="csl-entry" role="doc-biblioentry">
-Trapletti A, Hornik K (2023) Tseries: Time series analysis and computational finance. R package version 0.10-53, <a href="https://CRAN.R-project.org/package=tseries">https://CRAN.R-project.org/package=tseries</a>
+Trapletti A, Hornik K (2023) Tseries: Time series analysis and computational finance. R package version 0.10-54, <a href="https://CRAN.R-project.org/package=tseries">https://CRAN.R-project.org/package=tseries</a>
 </div>
 <div id="ref-R-downlit" class="csl-entry" role="doc-biblioentry">
-Wickham H (2022) Downlit: Syntax highlighting and automatic linking. R package version 0.4.2, <a href="https://CRAN.R-project.org/package=downlit">https://CRAN.R-project.org/package=downlit</a>
+Wickham H (2023) Downlit: Syntax highlighting and automatic linking. R package version 0.4.3, <a href="https://CRAN.R-project.org/package=downlit">https://CRAN.R-project.org/package=downlit</a>
 </div>
 <div id="ref-R-ggplot2" class="csl-entry" role="doc-biblioentry">
-Wickham H, Chang W, Henry L, et al (2023a) ggplot2: Create elegant data visualisations using the grammar of graphics. R package version 3.4.1, <a href="https://CRAN.R-project.org/package=ggplot2">https://CRAN.R-project.org/package=ggplot2</a>
+Wickham H, Chang W, Henry L, et al (2023a) ggplot2: Create elegant data visualisations using the grammar of graphics. R package version 3.4.2, <a href="https://CRAN.R-project.org/package=ggplot2">https://CRAN.R-project.org/package=ggplot2</a>
 </div>
 <div id="ref-R-dplyr" class="csl-entry" role="doc-biblioentry">
-Wickham H, François R, Henry L, et al (2023b) Dplyr: A grammar of data manipulation. R package version 1.1.0, <a href="https://CRAN.R-project.org/package=dplyr">https://CRAN.R-project.org/package=dplyr</a>
+Wickham H, François R, Henry L, et al (2023b) Dplyr: A grammar of data manipulation. R package version 1.1.2, <a href="https://CRAN.R-project.org/package=dplyr">https://CRAN.R-project.org/package=dplyr</a>
 </div>
 <div id="ref-R-readr" class="csl-entry" role="doc-biblioentry">
 Wickham H, Hester J, Bryan J (2023c) Readr: Read rectangular text data. R package version 2.1.4, <a href="https://CRAN.R-project.org/package=readr">https://CRAN.R-project.org/package=readr</a>
 </div>
 <div id="ref-R-xml2" class="csl-entry" role="doc-biblioentry">
-Wickham H, Hester J, Ooms J (2021) xml2: Parse XML. R package version 1.3.3, <a href="https://CRAN.R-project.org/package=xml2">https://CRAN.R-project.org/package=xml2</a>
+Wickham H, Hester J, Ooms J (2023d) xml2: Parse XML. R package version 1.3.4, <a href="https://CRAN.R-project.org/package=xml2">https://CRAN.R-project.org/package=xml2</a>
 </div>
 <div id="ref-R-fGarch" class="csl-entry" role="doc-biblioentry">
 Wuertz D, Chalabi Y, Setz T, Maechler M (2022) fGarch: Rmetrics - autoregressive conditional heteroskedastic modelling. R package version 4022.89, <a href="https://www.rmetrics.org">https://www.rmetrics.org</a>
