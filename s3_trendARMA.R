@@ -6,13 +6,12 @@ library(patchwork)
 
 library(readr)
 
-# Lake Baikal ice data, sorted by ice season
-# Calculate calendar day from ice break-up date
+# Lake Baikal ice data, sorted by the ice season
+# Calculate day of the year from the ice break-up date, see ?strptime
 B <- read_csv("./data/baikal.csv", skip = 1) %>%
     mutate(Date_iceoff = as.Date(paste(iceoff_year, iceoff_month, iceoff_day,
                                        sep = "-"))) %>%
     mutate(DoY_iceoff = as.numeric(format(Date_iceoff, "%j")))
-# ?strptime
 
 # Convert to ts format
 iceoff <- ts(B$DoY_iceoff, start = B$iceoff_year[1])
@@ -55,7 +54,7 @@ m_arma = forecast::auto.arima(iceoff, d = 0, ic = "bic") # ARMA(1, 1)
 ls(m_arma)
 
 res <- m_arma$residuals
-# dependence
+# uncorrelatedness
 acf(res)
 pacf(res)
 # homogeneity
@@ -131,8 +130,8 @@ mod_gam_ar1_2 <- gamlss::gamlss(iceoff ~ pb(Year)
 summary(mod_gam_ar1)
 summary(mod_gam_ar1_2)
 term.plot(mod_gam_ar1, rug = FALSE, partial.resid = TRUE)
-plot(mod_gam_ar1)
-plot(mod_gam_ar1_2)
+plot(mod_gam_ar1, ts = TRUE)
+plot(mod_gam_ar1_2, ts = TRUE)
 
 res <- residuals(mod_gam_ar1, what = "z-scores")
 res <- residuals(mod_gam_ar1, what = "mu", type = "weighted")
@@ -148,8 +147,14 @@ nortest::ad.test(res)
 
 
 library(gamlss.tr)
-gamlss.tr::gen.trun(par = c(0), family = "NO")
+gamlss.tr::gen.trun(par = c(0, 365), type = "both", family = "NO")
 mod_gam_ar1_3 <- gamlss::gamlss(iceoff ~ pb(Year)
                                 ,family = NOtr #PO PIG ST4
                                 )
-plot(mod_gam_ar1_3)
+plot(mod_gam_ar1_3, ts = TRUE)
+lmtest::dwtest(mod_gam_ar1_3)
+
+Box.test(mod_gam_ar1_3$residuals)
+forecast::auto.arima(mod_gam_ar1_3$residuals)
+
+term.plot(mod_gam_ar1_3)
