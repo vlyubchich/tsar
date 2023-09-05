@@ -9,6 +9,7 @@ library(dplyr)
 library(ggplot2)
 library(patchwork)
 options(digits = 3)
+theme_set(theme_light())
 ```
 
 # Trend Detection
@@ -68,8 +69,7 @@ $H_1$: linear trend ($b_1 \neq 0$)
 
 set.seed(123)
 Y <- arima.sim(list(order = c(1,0,0), ar = 0.5), n = 100, n.start = 100)
-forecast::autoplot(Y) +
-    theme_light()
+forecast::autoplot(Y)
 ```
 
 Apply the $t$-test to this time series $Y_t$:
@@ -133,7 +133,9 @@ This test is still limited to only monotonic trends and independent observations
 
 ## Bootstrap enhancements
 
-### Introduction to bootstrap
+## Introduction to bootstrap
+
+### Bootstrap for independent data
 
 When some of the statistical assumptions are violated, we may switch to using other methods or try to accommodate these violations by modifying part of the existing method. 
 
@@ -212,29 +214,33 @@ p1 <- ggplot(data.frame(x = Hg), aes(x = x)) +
                    fill = "grey50") +
     xlab("Hg (ng/g)") + 
     ylab("Density") +
-    ggtitle("Hg observations") + 
-    theme_light()
+    ggtitle("Hg observations")
 p2 <- ggplot(data.frame(x = xbar_star), aes(x = x)) + 
     geom_histogram(aes(y = after_stat(density)), bins = 15, fill = "grey50") +
     geom_vline(xintercept = interval, lty = 2) +
     xlab("Hg (ng/g)") + 
     ylab("Density") +
-    ggtitle("Bootstrapped means") + 
-    theme_light()
+    ggtitle("Bootstrapped means")
 p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```
 
 The calculated confidence interval can be used in hypothesis testing. 
-Note that the package `boot` provides functions with other options.
+Note that the package `boot` provides functions with more options.
 :::
 
 We cannot apply the outlined bootstrapping directly to time series or spatial data because these data are not i.i.d. and resampling will break the order and dependence structure. 
+
+
+### Bootstrap for time series
+
 To account for the dependence structure, some modifications to the bootstrap procedure were proposed, including block bootstrap and sieve bootstrap [see @Buhlmann:2002 and references therein].
 
 In short, the first step of the outlined bootstrapping algorithm should preserve the dependence structure of the time series so that the generated bootstrapped samples correspond to the violation case that we want to accommodate in our analysis.
 For example, if we want to accommodate serial dependence in the $t$-test, the bootstrapped time series should be still autocorrelated, so we can approximate the distribution of the test statistic when the assumption of independence is violated.
 
+
+## Bootstrapped tests for trend detection
 
 ### Bootstrapped $t$-test and Mann--Kendall test
 
@@ -404,25 +410,19 @@ D2 <- diff(D1)
 
 p1 <- forecast::autoplot(Yt) + 
     ylab("Original") + 
-    ggtitle("Yt") +
-    theme_light()
+    ggtitle("Yt")
 p2 <- forecast::ggAcf(Yt) + 
-    ggtitle("Yt") +
-    theme_light()
+    ggtitle("Yt")
 p3 <- forecast::autoplot(D1) + 
     ylab("First differences") + 
-    ggtitle("(1-B)Yt") +
-    theme_light()
+    ggtitle("(1-B)Yt")
 p4 <- forecast::ggAcf(D1) + 
-    ggtitle("(1-B)Yt") +
-    theme_light()
+    ggtitle("(1-B)Yt")
 p5 <- forecast::autoplot(D2) + 
     ylab("Second differences") + 
-    ggtitle("(1-B)2Yt") +
-    theme_light()
+    ggtitle("(1-B)2Yt")
 p6 <- forecast::ggAcf(D2) + 
-    ggtitle("(1-B)2Yt") +
-    theme_light()
+    ggtitle("(1-B)2Yt")
 (p1 + p2) / (p3 + p4) / (p5 + p6) +
     plot_annotation(tag_levels = 'A')
 ```
