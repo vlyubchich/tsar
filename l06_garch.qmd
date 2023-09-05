@@ -9,6 +9,7 @@ library(dplyr)
 library(ggplot2)
 library(patchwork)
 options(digits = 3)
+theme_set(theme_light())
 ```
 
 # Generalized Autoregressive Conditional Heteroskedasticity (GARCH) Models {#sec-GARCH}
@@ -81,12 +82,10 @@ CAD <- readr::read_csv("data/CAD.csv",
 
 p1 <- ggplot(CAD, aes(x = Date, y = USD)) + 
     geom_line() +
-    ylab("CAD per USD") +
-    theme_light()
+    ylab("CAD per USD")
 p2 <- ggplot(CAD, aes(x = Date, y = lnR)) + 
     geom_line() +
-    ylab("Log return") +
-    theme_light()
+    ylab("Log return")
 p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```
@@ -109,11 +108,9 @@ Both squared returns and absolute returns often exhibit persistent autocorrelati
 #| fig-cap: "ACF of log returns and squared log returns for USD/CAD exchange."
 
 p1 <- forecast::ggAcf(CAD$lnR) +
-    ggtitle("Log returns") +
-    theme_light()
+    ggtitle("Log returns")
 p2 <- forecast::ggAcf(CAD$lnR^2) +
-    ggtitle(bquote('(Log returns)'^2)) +
-    theme_light()
+    ggtitle(bquote('(Log returns)'^2))
 p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```
@@ -128,11 +125,9 @@ set.seed(1)
 iid <- rnorm(nrow(CAD))
 
 p1 <- forecast::ggAcf(iid) +
-    ggtitle("iid") +
-    theme_light()
+    ggtitle("iid")
 p2 <- forecast::ggAcf(iid^2) +
-    ggtitle(bquote('iid'^2)) +
-    theme_light()
+    ggtitle(bquote('iid'^2))
 p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```
@@ -279,11 +274,9 @@ plot(garch11, which = c(3, 13))
 
 et <- residuals(garch11, standardize = TRUE)
 p1 <- forecast::ggAcf(et) +
-    ggtitle("Residuals") +
-    theme_light()
+    ggtitle("Residuals")
 p2 <- forecast::ggAcf(et^2) +
-    ggtitle(bquote('Residuals'^2)) +
-    theme_light()
+    ggtitle(bquote('Residuals'^2))
 p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```

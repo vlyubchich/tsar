@@ -20,14 +20,11 @@ iceoff <- ts(B$DoY_iceoff, start = B$iceoff_year[1])
 plot.ts(iceoff)
 
 p1 <- ggplot2::autoplot(iceoff, col = "grey50") +
-    xlab("Year") +
-    theme_light()
+    xlab("Year")
 p2 <- forecast::ggAcf(iceoff) +
-    ggtitle("") +
-    theme_light()
+    ggtitle("")
 p3 <- forecast::ggAcf(iceoff, type = "partial") +
-    ggtitle("") +
-    theme_light()
+    ggtitle("")
 p1 + p2 + p3 +
     plot_annotation(tag_levels = 'A')
 

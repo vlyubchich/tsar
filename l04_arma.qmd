@@ -9,6 +9,7 @@ library(dplyr)
 library(ggplot2)
 library(patchwork)
 options(digits = 3)
+theme_set(theme_light())
 ```
 
 # Autoregressive Moving Average (ARMA) Models
@@ -106,21 +107,16 @@ X <- ts(rnorm(T, sd = 2))
 # Plots
 p1 <- ggplot(data.frame(Lag, ACF = RHO), aes(x = Lag, y = ACF)) +
     geom_bar(stat = "identity") +
-    ggtitle("Theoretical ACF") +
-    theme_light()
+    ggtitle("Theoretical ACF")
 p2 <- ggplot(data.frame(Lag, PACF = RHO), aes(x = Lag, y = PACF)) +
     geom_bar(stat = "identity") +
-    ggtitle("Theoretical PACF") +
-    theme_light()
+    ggtitle("Theoretical PACF")
 p3 <- forecast::autoplot(X) + 
-    ggtitle("Sample time series") +
-    theme_light()
+    ggtitle("Sample time series")
 p4 <- forecast::ggAcf(X) + 
-    ggtitle("Sample ACF") +
-    theme_light()
+    ggtitle("Sample ACF")
 p5 <- forecast::ggAcf(X, type = "partial") + 
-    ggtitle("Sample PACF") +
-    theme_light()
+    ggtitle("Sample PACF")
 (plot_spacer() + p1 + p2) / (p3 + p4 + p5) +
     plot_annotation(tag_levels = 'A')
 ```
@@ -172,14 +168,11 @@ RW0 <- ts(cumsum(X))
 
 # Plots
 p3 <- forecast::autoplot(RW0) + 
-    ggtitle("Sample time series") +
-    theme_light()
+    ggtitle("Sample time series")
 p4 <- forecast::ggAcf(RW0) + 
-    ggtitle("Sample ACF") +
-    theme_light()
+    ggtitle("Sample ACF")
 p5 <- forecast::ggAcf(RW0, type = "partial") + 
-    ggtitle("Sample PACF") +
-    theme_light()
+    ggtitle("Sample PACF")
 p3 + p4 + p5 +
     plot_annotation(tag_levels = 'A')
 ```
@@ -201,14 +194,11 @@ RW2 <- ts(cumsum(X + 0.2))
 
 # Plots
 p3 <- forecast::autoplot(RW2) + 
-    ggtitle("Sample time series") +
-    theme_light()
+    ggtitle("Sample time series")
 p4 <- forecast::ggAcf(RW2) + 
-    ggtitle("Sample ACF") +
-    theme_light()
+    ggtitle("Sample ACF")
 p5 <- forecast::ggAcf(RW2, type = "partial") + 
-    ggtitle("Sample PACF") +
-    theme_light()
+    ggtitle("Sample PACF")
 p3 + p4 + p5 +
     plot_annotation(tag_levels = 'A')
 ```
@@ -431,21 +421,16 @@ X <- arima.sim(list(order = c(1, 0, 0), ar = phi), n = T)
 # Plots
 p1 <- ggplot(data.frame(Lag, ACF = RHO), aes(x = Lag, y = ACF)) +
     geom_bar(stat = "identity") +
-    ggtitle("Theoretical ACF") +
-    theme_light()
+    ggtitle("Theoretical ACF")
 p2 <- ggplot(data.frame(Lag, PACF = ALPHA), aes(x = Lag, y = PACF)) +
     geom_bar(stat = "identity") +
-    ggtitle("Theoretical PACF") +
-    theme_light()
+    ggtitle("Theoretical PACF")
 p3 <- forecast::autoplot(X) + 
-    ggtitle("Sample time series") +
-    theme_light()
+    ggtitle("Sample time series")
 p4 <- forecast::ggAcf(X) + 
-    ggtitle("Sample ACF") +
-    theme_light()
+    ggtitle("Sample ACF")
 p5 <- forecast::ggAcf(X, type = "partial") + 
-    ggtitle("Sample PACF") +
-    theme_light()
+    ggtitle("Sample PACF")
 (plot_spacer() + p1 + p2) / (p3 + p4 + p5) +
     plot_annotation(tag_levels = 'A')
 ```
@@ -471,21 +456,16 @@ X <- arima.sim(list(order = c(1, 0, 0), ar = phi), n = T)
 # Plots
 p1 <- ggplot(data.frame(Lag, ACF = RHO), aes(x = Lag, y = ACF)) +
     geom_bar(stat = "identity") +
-    ggtitle("Theoretical ACF") +
-    theme_light()
+    ggtitle("Theoretical ACF")
 p2 <- ggplot(data.frame(Lag, PACF = ALPHA), aes(x = Lag, y = PACF)) +
     geom_bar(stat = "identity") +
-    ggtitle("Theoretical PACF") +
-    theme_light()
+    ggtitle("Theoretical PACF")
 p3 <- forecast::autoplot(X) + 
-    ggtitle("Sample time series") +
-    theme_light()
+    ggtitle("Sample time series")
 p4 <- forecast::ggAcf(X) + 
-    ggtitle("Sample ACF") +
-    theme_light()
+    ggtitle("Sample ACF")
 p5 <- forecast::ggAcf(X, type = "partial") + 
-    ggtitle("Sample PACF") +
-    theme_light()
+    ggtitle("Sample PACF")
 (plot_spacer() + p1 + p2) / (p3 + p4 + p5) +
     plot_annotation(tag_levels = 'A')
 ```
@@ -729,21 +709,16 @@ X <- arima.sim(list(order = c(0, 0, 1), ma = theta), n = T)
 # Plots
 p1 <- ggplot(data.frame(Lag, ACF = RHO), aes(x = Lag, y = ACF)) +
     geom_bar(stat = "identity") +
-    ggtitle("Theoretical ACF") +
-    theme_light()
+    ggtitle("Theoretical ACF")
 p2 <- ggplot(data.frame(Lag, PACF = ALPHA), aes(x = Lag, y = PACF)) +
     geom_bar(stat = "identity") +
-    ggtitle("Theoretical PACF") +
-    theme_light()
+    ggtitle("Theoretical PACF")
 p3 <- forecast::autoplot(X) + 
-    ggtitle("Sample time series") +
-    theme_light()
+    ggtitle("Sample time series")
 p4 <- forecast::ggAcf(X) + 
-    ggtitle("Sample ACF") +
-    theme_light()
+    ggtitle("Sample ACF")
 p5 <- forecast::ggAcf(X, type = "partial") + 
-    ggtitle("Sample PACF") +
-    theme_light()
+    ggtitle("Sample PACF")
 (plot_spacer() + p1 + p2) / (p3 + p4 + p5) +
     plot_annotation(tag_levels = 'A')
 ```
@@ -770,21 +745,16 @@ X <- arima.sim(list(order = c(0, 0, 1), ma = theta), n = T)
 # Plots
 p1 <- ggplot(data.frame(Lag, ACF = RHO), aes(x = Lag, y = ACF)) +
     geom_bar(stat = "identity") +
-    ggtitle("Theoretical ACF") +
-    theme_light()
+    ggtitle("Theoretical ACF")
 p2 <- ggplot(data.frame(Lag, PACF = ALPHA), aes(x = Lag, y = PACF)) +
     geom_bar(stat = "identity") +
-    ggtitle("Theoretical PACF") +
-    theme_light()
+    ggtitle("Theoretical PACF")
 p3 <- forecast::autoplot(X) + 
-    ggtitle("Sample time series") +
-    theme_light()
+    ggtitle("Sample time series")
 p4 <- forecast::ggAcf(X) + 
-    ggtitle("Sample ACF") +
-    theme_light()
+    ggtitle("Sample ACF")
 p5 <- forecast::ggAcf(X, type = "partial") + 
-    ggtitle("Sample PACF") +
-    theme_light()
+    ggtitle("Sample PACF")
 (plot_spacer() + p1 + p2) / (p3 + p4 + p5) +
     plot_annotation(tag_levels = 'A')
 ```
@@ -896,8 +866,7 @@ First, plot the data (@fig-simYt).
 #| label: fig-simYt
 #| fig-cap: "Plot of the time series $Y_t$."
 
-ggplot2::autoplot(Y) +
-    theme_light()
+ggplot2::autoplot(Y)
 ```
 
 If no obvious trend, plot sample ACF and PACF (@fig-simYtacf).
@@ -907,11 +876,9 @@ If no obvious trend, plot sample ACF and PACF (@fig-simYtacf).
 #| fig-cap: "Estimated ACF and PACF of $Y_t$."
 
 p1 <- forecast::ggAcf(Y) +
-    ggtitle("") +
-    theme_light()
+    ggtitle("")
 p2 <- forecast::ggAcf(Y, type = "partial") +
-    ggtitle("") +
-    theme_light()
+    ggtitle("")
 p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```
@@ -1003,8 +970,7 @@ Based on the plots, the residuals do not violate the assumptions, so proceed wit
 
 m %>%
     fabletools::forecast(h = 10) %>%
-    autoplot(Y) + 
-    theme_light()
+    autoplot(Y)
 ```
 
 However, the syntax and outputs of the package `fable` are quite different from typical R alternatives.
@@ -1019,16 +985,12 @@ Also, see the base-R function `tsdiag()` for residual diagnostics.
 m <- arima(Y, order = c(2, 0, 0))
 e <- m$residuals
 p1 <- ggplot2::autoplot(e) + 
-    ylab("Residuals") +
-    theme_light()
+    ylab("Residuals")
 p2 <- forecast::ggAcf(e) +
-    ggtitle("") +
-    theme_light()
+    ggtitle("")
 p3 <- ggpubr::ggqqplot(e) + 
-    xlab("Standard normal quantiles") +
-    theme_light()
-p4 <- ggplot2::autoplot(forecast::forecast(m, h = 10)) + 
-    theme_light()
+    xlab("Standard normal quantiles")
+p4 <- ggplot2::autoplot(forecast::forecast(m, h = 10))
 p1 / (p2 + p3) / p4 +
     plot_annotation(tag_levels = 'A')
 ```
@@ -1042,8 +1004,7 @@ Using the estimated residuals, $\hat{\epsilon}_t = Y_t - \hat{Y}_t$, we can get 
 Fit <- Y - e
 ggplot2::autoplot(Y) + 
     autolayer(Fit) +
-    ylab("Y") +
-    theme_light()
+    ylab("Y")
 ```
 
 

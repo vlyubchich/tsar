@@ -9,6 +9,7 @@ library(dplyr)
 library(ggplot2)
 library(patchwork)
 options(digits = 3)
+theme_set(theme_light())
 ```
 
 # Time Series Regression with Trends
@@ -40,10 +41,8 @@ set.seed(123)
 T <- 300
 Xt <- ts(rnorm(T))
 Yt <- ts(rnorm(T))
-p1 <- forecast::autoplot(Xt) +
-    theme_light()
-p2 <- forecast::autoplot(Yt) +
-    theme_light()
+p1 <- forecast::autoplot(Xt)
+p2 <- forecast::autoplot(Yt)
 p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```
@@ -80,11 +79,9 @@ Contrary, a linear trend in pollutant concentrations with a positive slope (goin
 Xt <- Xt + c(1:T)/95
 Yt <- Yt + c(1:T)/50
 p1 <- forecast::autoplot(Xt) +
-    ylim(-2, 8) +
-    theme_light()
+    ylim(-2, 8)
 p2 <- forecast::autoplot(Yt) +
-    ylim(-2, 8) +
-    theme_light()
+    ylim(-2, 8)
 p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```
@@ -188,12 +185,10 @@ $$
 
 p1 <- ggplot2::autoplot(as.ts(MY$resid)) +
     xlab("t") +
-    ylab("eYt") +
-    theme_light()
+    ylab("eYt")
 p2 <- ggplot2::autoplot(as.ts(MX$resid)) +
     xlab("t") +
-    ylab("eXt") +
-    theme_light()
+    ylab("eXt")
 p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```
@@ -241,11 +236,9 @@ D1Y <- diff(Yt)
 #| fig-cap: "First-order differences of the time series."
 
 p1 <- ggplot2::autoplot(D1Y) +
-    xlab("t") +
-    theme_light()
+    xlab("t")
 p2 <- ggplot2::autoplot(D1X) +
-    xlab("t") +
-    theme_light()
+    xlab("t")
 p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```
@@ -301,11 +294,9 @@ First, look at the time series plots of the raw data (@fig-TSdish).
 D <- read.delim("data/dish.txt") %>% 
     rename(Year = YEAR)
 p1 <- ggplot(D, aes(x = Year, y = DISH)) + 
-    geom_line() + 
-    theme_light()
+    geom_line()
 p2 <- ggplot(D, aes(x = Year, y = RES)) + 
-    geom_line() + 
-    theme_light()
+    geom_line()
 p1 + p2 + 
     plot_annotation(tag_levels = 'A')
 ```
@@ -340,15 +331,12 @@ lawstat::runs.test(M_time$residuals, plot.it = FALSE)
 p1 <- ggplot(D, aes(x = Year, y = M_time$residuals)) + 
     geom_line() + 
     geom_hline(yintercept = 0, lty = 2, col = 4) + 
-    ylab("Residuals") +
-    theme_light()
+    ylab("Residuals")
 p2 <- forecast::ggAcf(M_time$residuals) +
     ggtitle("") +
-    xlab("Lag (years)") +
-    theme_light()
+    xlab("Lag (years)")
 p3 <- ggpubr::ggqqplot(M_time$residuals) + 
-    xlab("Standard normal quantiles") +
-    theme_light()
+    xlab("Standard normal quantiles")
 p1 + p2 + p3 +
     plot_annotation(tag_levels = 'A')
 ```
@@ -377,15 +365,12 @@ summary(M_diff)
 
 p1 <- ggplot(D[-1,], aes(x = Year, y = D_DISH)) + 
     geom_line() + 
-    geom_hline(yintercept = 0, lty = 2, col = 4) + 
-    theme_light()
+    geom_hline(yintercept = 0, lty = 2, col = 4)
 p2 <- ggplot(D[-1,], aes(x = Year, y = D_RES)) + 
     geom_line() + 
-    geom_hline(yintercept = 0, lty = 2, col = 4) + 
-    theme_light()
+    geom_hline(yintercept = 0, lty = 2, col = 4)
 p3 <- ggplot(data.frame(D_DISH, D_RES), aes(y = D_DISH, x = D_RES)) +
-    geom_point() + 
-    theme_light()
+    geom_point()
 p1 + p2 + p3 +
     plot_annotation(tag_levels = 'A')
 ```
@@ -405,15 +390,12 @@ lawstat::runs.test(M_diff$residuals, plot.it = FALSE)
 p1 <- ggplot(D[-1,], aes(x = Year, y = M_diff$residuals)) + 
     geom_line() + 
     geom_hline(yintercept = 0, lty = 2, col = 4) + 
-    ylab("Residuals") +
-    theme_light()
+    ylab("Residuals")
 p2 <- forecast::ggAcf(M_diff$residuals) +
     ggtitle("") +
-    xlab("Lag (years)") +
-    theme_light()
+    xlab("Lag (years)")
 p3 <- ggpubr::ggqqplot(M_diff$residuals) + 
-    xlab("Standard normal quantiles") +
-    theme_light()
+    xlab("Standard normal quantiles")
 p1 + p2 + p3 +
     plot_annotation(tag_levels = 'A')
 ```
@@ -477,10 +459,8 @@ Demonstrate the analysis using simulated time series (@fig-XYi1).
 #| label: fig-XYi1
 #| fig-cap: "Simulated I(1) time series."
 
-p1 <- ggplot2::autoplot(Xt) +
-    theme_light()
-p2 <- ggplot2::autoplot(Yt) +
-    theme_light()
+p1 <- ggplot2::autoplot(Xt)
+p2 <- ggplot2::autoplot(Yt)
 p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```

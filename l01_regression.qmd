@@ -9,6 +9,7 @@ library(dplyr)
 library(ggplot2)
 library(patchwork)
 options(digits = 3)
+theme_set(theme_light())
 ```
 
 # Review of Linear Regression {#sec-regression}
@@ -83,8 +84,7 @@ set.seed(1)
 n = 26; m = 0; s = 522
 x <- ts(rnorm(n, mean = m, sd = s))
 forecast::autoplot(x) + 
-    geom_hline(yintercept = 0, lty = 2, col = 4) +
-    theme_light()
+    geom_hline(yintercept = 0, lty = 2, col = 4)
 ```
 
 What can we notice in a residual plot?
@@ -118,20 +118,17 @@ mod1 <- lm(DISH ~ RES, data = D)
 p1 <- ggplot(D, aes(x = Year, y = mod1$residuals)) + 
     geom_line() + 
     geom_hline(yintercept = 0, lty = 2, col = 4) + 
-    ylab("Residuals") +
-    theme_light()
+    ylab("Residuals")
 p2 <- ggplot(D, aes(x = mod1$fitted.values, y = mod1$residuals)) + 
     geom_point() + 
     geom_hline(yintercept = 0, lty = 2, col = 4) + 
     xlab("Fitted values") +
-    ylab("Residuals") +
-    theme_light()
+    ylab("Residuals")
 p3 <- ggplot(D, aes(x = RES, y = mod1$residuals)) + 
     geom_point() + 
     geom_hline(yintercept = 0, lty = 2, col = 4) + 
     xlab("Residential investments (RES)") +
-    ylab("Residuals") +
-    theme_light()
+    ylab("Residuals")
 p1 + p2 + p3 +
     plot_annotation(tag_levels = 'A')
 ```
@@ -307,16 +304,14 @@ p1 <- ggplot(data.frame(x = x), aes(x = x)) +
                   args = list(mean = mean(x), sd = sd(x)),
                   col = 1, lwd = 1.5) +
     ylab("Density") +
-    ggtitle("Random normal values") + 
-    theme_light()
+    ggtitle("Random normal values")
 p2 <- ggplot(x, aes(x = mod1$residuals)) + 
     geom_histogram(aes(y = after_stat(density)), binwidth = 300, fill = "grey50") +
     stat_function(fun = dnorm, 
                   args = list(mean = mean(mod1$residuals), sd = sd(mod1$residuals)),
                   col = 1, lwd = 1.5) +
     ylab("Density") +
-    ggtitle("Model residuals") + 
-    theme_light()
+    ggtitle("Model residuals")
 p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```
@@ -395,12 +390,10 @@ The R packages `car` and `ggpubr` also draw Q-Q plots, but also add a point-wise
 
 p1 <- ggpubr::ggqqplot(x) + 
     ggtitle("Random normal values") +
-    xlab("Standard normal quantiles") +
-    theme_light()
+    xlab("Standard normal quantiles")
 p2 <- ggpubr::ggqqplot(mod1$residuals) + 
     ggtitle("Model residuals") +
-    xlab("Standard normal quantiles") +
-    theme_light()
+    xlab("Standard normal quantiles")
 p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```
@@ -605,14 +598,12 @@ Plot the estimated residuals $\hat{\epsilon}_{t} = \hat{Y}_{t} - Y_{t}$ vs. the 
 p1 <- ggplot(D, aes(x = Year, y = mod2$residuals)) + 
     geom_line() + 
     geom_hline(yintercept = 0, lty = 2, col = 4) + 
-    ylab("Residuals") +
-    theme_light()
+    ylab("Residuals")
 p2 <- ggplot(D, aes(x = mod2$fitted.values, y = mod2$residuals)) + 
     geom_point() + 
     geom_hline(yintercept = 0, lty = 2, col = 4) + 
     xlab("Fitted values") +
-    ylab("Residuals") +
-    theme_light()
+    ylab("Residuals")
 p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```
@@ -644,8 +635,7 @@ shapiro.test(mod2$residuals)
 #| fig-cap: "Normal Q-Q plot of the multiple regression residuals."
 
 ggpubr::ggqqplot(mod2$residuals) + 
-    xlab("Standard normal quantiles") +
-    theme_light()
+    xlab("Standard normal quantiles")
 ```
 :::
 

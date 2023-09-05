@@ -9,6 +9,7 @@ library(dplyr)
 library(ggplot2)
 library(patchwork)
 options(digits = 3)
+theme_set(theme_light())
 ```
 
 # Autoregressive Integrated Moving Average (ARIMA) Models
@@ -145,14 +146,11 @@ iceoff <- ts(B$DoY_iceoff, start = B$iceoff_year[1])
 X <- iceoff
 p1 <- forecast::autoplot(X) +
     xlab("Year") +
-    ylab("Ice breakup day") +
-    theme_light()
+    ylab("Ice breakup day")
 p2 <- forecast::ggAcf(X) +
-    ggtitle("") +
-    theme_light()
+    ggtitle("")
 p3 <- forecast::ggAcf(X, type = "partial") +
-    ggtitle("") +
-    theme_light()
+    ggtitle("")
 p1 / (p2 + p3) +
     plot_annotation(tag_levels = 'A')
 ```
@@ -169,14 +167,11 @@ Overall, we differenced the time series once to achieve stationarity, so the ord
 X <- diff(iceoff)
 p1 <- ggplot2::autoplot(X) +
     xlab("Year") +
-    ylab("diff(Ice breakup day)") +
-    theme_light()
+    ylab("diff(Ice breakup day)")
 p2 <- forecast::ggAcf(X) +
-    ggtitle("") +
-    theme_light()
+    ggtitle("")
 p3 <- forecast::ggAcf(X, type = "partial") +
-    ggtitle("") +
-    theme_light()
+    ggtitle("")
 p1 / (p2 + p3) +
     plot_annotation(tag_levels = 'A')
 ```
@@ -222,14 +217,11 @@ Remember that the residuals should resemble white noise.
 
 e <- mod_baikal$residuals
 p1 <- ggplot2::autoplot(e) + 
-    ylab("Residuals") +
-    theme_light()
+    ylab("Residuals")
 p2 <- forecast::ggAcf(e) +
-    ggtitle("") +
-    theme_light()
+    ggtitle("")
 p3 <- ggpubr::ggqqplot(e) + 
-    xlab("Standard normal quantiles") +
-    theme_light()
+    xlab("Standard normal quantiles")
 p1 / (p2 + p3) +
     plot_annotation(tag_levels = 'A')
 ```
@@ -244,8 +236,7 @@ Note that ARIMA(0,1,1) is mathematically equivalent to simple exponential smooth
 ggplot2::autoplot(forecast::forecast(mod_baikal, h = 10)) + 
     xlab("Year") +
     ylab("Ice breakup day") +
-    ggtitle("") +
-    theme_light()
+    ggtitle("")
 ```
 :::
 
@@ -301,30 +292,24 @@ D1D12 <- diff(D1, lag = 12)
 p1 <- ggplot2::autoplot(Yt) + 
     xlab("Year") + 
     ylab("lg(Air passangers)") + 
-    ggtitle("Yt") +
-    theme_light()
+    ggtitle("Yt")
 p2 <- forecast::ggAcf(Yt) + 
     ggtitle("Yt") +
-    xlab("Lag (months)") + 
-    theme_light()
+    xlab("Lag (months)")
 p3 <- ggplot2::autoplot(D1) + 
     xlab("Year") + 
     ylab("lg(Air passangers)") + 
-    ggtitle("(1-B)Yt") +
-    theme_light()
+    ggtitle("(1-B)Yt")
 p4 <- forecast::ggAcf(D1) + 
     ggtitle("(1-B)Yt") +
-    xlab("Lag (months)") + 
-    theme_light()
+    xlab("Lag (months)")
 p5 <- ggplot2::autoplot(D1D12) + 
     xlab("Year") + 
     ylab("lg(Air passangers)") + 
-    ggtitle("(1-B)(1-B12)Yt") +
-    theme_light()
+    ggtitle("(1-B)(1-B12)Yt")
 p6 <- forecast::ggAcf(D1D12) + 
     ggtitle("(1-B)(1-B12)Yt") +
-    xlab("Lag (months)") + 
-    theme_light()
+    xlab("Lag (months)")
 (p1 + p2) / (p3 + p4) / (p5 + p6) +
     plot_annotation(tag_levels = 'A')
 ```
@@ -346,12 +331,10 @@ From these options, AR(1) and MA(1) are the most parsimonious so we should selec
 
 p6 <- forecast::ggAcf(D1D12, lag.max = 36) + 
     ggtitle("(1-B)(1-B12)Yt") +
-    xlab("Lag (months)") + 
-    theme_light()
+    xlab("Lag (months)")
 p7 <- forecast::ggAcf(D1D12, lag.max = 36, type = "partial") + 
     ggtitle("(1-B)(1-B12)Yt") +
-    xlab("Lag (months)") + 
-    theme_light()
+    xlab("Lag (months)")
 p6 + p7 +
     plot_annotation(tag_levels = 'A')
 ```
@@ -424,14 +407,11 @@ In the next step, we apply diagnostic checks for the residuals, for example, usi
 
 e <- mod_air$residuals
 p1 <- ggplot2::autoplot(e) + 
-    ylab("Residuals") +
-    theme_light()
+    ylab("Residuals")
 p2 <- forecast::ggAcf(e) +
-    ggtitle("") +
-    theme_light()
+    ggtitle("")
 p3 <- ggpubr::ggqqplot(e) + 
-    xlab("Standard normal quantiles") +
-    theme_light()
+    xlab("Standard normal quantiles")
 p1 / (p2 + p3) +
     plot_annotation(tag_levels = 'A')
 ```
@@ -445,8 +425,7 @@ Given that the diagnostics plots show satisfactory behavior of the residuals (@f
 ggplot2::autoplot(forecast::forecast(mod_air, h = 24)) + 
     xlab("Year") +
     ylab("lg(Air passangers)") +
-    ggtitle("") +
-    theme_light()
+    ggtitle("")
 ```
 
 Compare ACF in @fig-AirARIMAres with ACF of regression residuals in @fig-airpassangersRegTrendSeas and @fig-airpassangersRegTrendFourier. 

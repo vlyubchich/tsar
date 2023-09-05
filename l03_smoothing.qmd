@@ -9,6 +9,7 @@ library(dplyr)
 library(ggplot2)
 library(patchwork)
 options(digits = 3)
+theme_set(theme_light())
 ```
 
 # Smoothing, Detrending, and Deseasonalizing
@@ -110,12 +111,10 @@ shampoo
 
 pshampoo <- ggplot2::autoplot(shampoo, col = "grey50") + 
     xlab("Year") + 
-    ylab("Sales") + 
-    theme_light()
+    ylab("Sales")
 p2 <- forecast::ggAcf(shampoo) + 
     ggtitle("") +
-    xlab("Lag (months)") + 
-    theme_light()
+    xlab("Lag (months)")
 pshampoo + p2 +
     plot_annotation(tag_levels = 'A')
 ```
@@ -248,12 +247,10 @@ Consider monthly data of Secchi disk depth measured at station CB1.1 in Chesapea
 load("data/Secchi_CB1.1.RData")
 pSecchi <- ggplot2::autoplot(Secchi, col = "grey50") + 
     xlab("Year") + 
-    ylab("Secchi depth (m)") + 
-    theme_light()
+    ylab("Secchi depth (m)")
 p2 <- forecast::ggAcf(Secchi) + 
     ggtitle("") +
-    xlab("Lag (months)") + 
-    theme_light()
+    xlab("Lag (months)")
 pSecchi + p2 +
     plot_annotation(tag_levels = 'A')
 ```
@@ -263,8 +260,7 @@ pSecchi + p2 +
 #| fig-cap: "Trend-seasonal decomposition of monthly average Secchi disk depth at station CB1.1."
 #| fig-height: 7
 
-ggplot2::autoplot(stats::decompose(Secchi))  + 
-    theme_light()
+ggplot2::autoplot(stats::decompose(Secchi))
 ```
 :::
 
@@ -324,12 +320,10 @@ p2 <- pSecchi +
     ggtitle("Final trend-cycle: Mt_star + St_star")
 p3 <- ggplot2::autoplot(et) + 
     xlab("Year") + 
-    ggtitle("Residuals: et") +
-    theme_light()
+    ggtitle("Residuals: et")
 p4 <- forecast::ggAcf(et) + 
     ggtitle("ACF of residuals") +
-    xlab("Lag (months)") +
-    theme_light()
+    xlab("Lag (months)")
 (p1 + p2) / (p3 + p4) + 
     plot_annotation(tag_levels = 'A')
 ```
@@ -365,7 +359,6 @@ data(WWWusage)
 ps <- lapply(c(0.1, 0.3, 0.5, 0.75), function(w){
     ggplot2::autoplot(WWWusage, colour = "grey50")  + 
         ggtitle(paste0("span = ", w)) +
-        theme_light() + 
         geom_smooth(method = "loess", span = w, se = FALSE)
 })
 wrap_plots(ps, ncol = 2) +
@@ -430,12 +423,10 @@ p2 <- pSecchi +
     ggtitle("Final trend-cycle: Mt_star + St_star")
 p3 <- ggplot2::autoplot(et) + 
     xlab("Year") + 
-    ggtitle("Residuals: et") +
-    theme_light()
+    ggtitle("Residuals: et")
 p4 <- forecast::ggAcf(et) + 
     ggtitle("ACF of residuals") +
-    xlab("Lag (months)") +
-    theme_light()
+    xlab("Lag (months)")
 (p1 + p2) / (p3 + p4) + 
     plot_annotation(tag_levels = 'A')
 ```
@@ -467,12 +458,10 @@ p2 <- pSecchi +
     ggtitle("Final trend-cycle: Mt_star + St_star")
 p3 <- ggplot2::autoplot(et) + 
     xlab("Year") + 
-    ggtitle("Residuals: et") +
-    theme_light()
+    ggtitle("Residuals: et")
 p4 <- forecast::ggAcf(et) + 
     ggtitle("ACF of residuals") +
-    xlab("Lag (months)") +
-    theme_light()
+    xlab("Lag (months)")
 (p1 + p2) / (p3 + p4) + 
     plot_annotation(tag_levels = 'A')
 ```
@@ -495,12 +484,10 @@ p2 <- pSecchi +
     ggtitle("Final trend-cycle: Mt_star + St_star")
 p3 <- ggplot2::autoplot(et) + 
     xlab("Year") + 
-    ggtitle("Residuals: et") +
-    theme_light()
+    ggtitle("Residuals: et")
 p4 <- forecast::ggAcf(et) + 
     ggtitle("ACF of residuals") +
-    xlab("Lag (months)") +
-    theme_light()
+    xlab("Lag (months)")
 (p1 + p2) / (p3 + p4) + 
     plot_annotation(tag_levels = 'A')
 ```
@@ -672,12 +659,10 @@ This is a classical example and benchmark in time series analysis.
 
 pAirPassengers <- ggplot2::autoplot(AirPassengers, col = "grey50") + 
     xlab("Year") + 
-    ylab("Airline passengers (thousand)") + 
-    theme_light()
+    ylab("Airline passengers (thousand)")
 p2 <- forecast::ggAcf(AirPassengers) + 
     ggtitle("") +
-    xlab("Lag (months)") + 
-    theme_light()
+    xlab("Lag (months)")
 pAirPassengers + p2 +
     plot_annotation(tag_levels = 'A')
 ```
@@ -880,8 +865,7 @@ p1 <- pAirPassengers +
     geom_line(aes(y = exp(m$fitted.values)), col = 4, lwd = 1.5)
 p2 <- forecast::ggAcf(m$residuals) + 
     ggtitle("ACF of residuals") +
-    xlab("Lag (months)") + 
-    theme_light()
+    xlab("Lag (months)")
 p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```
@@ -946,8 +930,7 @@ p1 <- pAirPassengers +
     geom_line(aes(y = exp(m$fitted.values)), col = 4, lwd = 1.5)
 p2 <- forecast::ggAcf(m$residuals) + 
     ggtitle("ACF of residuals") +
-    xlab("Lag (months)") + 
-    theme_light()
+    xlab("Lag (months)")
 p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```
@@ -1022,26 +1005,21 @@ p1 <- pshampoo +
     ggtitle("Yt")
 p2 <- forecast::ggAcf(shampoo) + 
     ggtitle("") +
-    xlab("Lag (months)") + 
-    theme_light()
+    xlab("Lag (months)")
 p3 <- ggplot2::autoplot(diff(shampoo)) + 
     xlab("Year") + 
     ylab("Sales") + 
-    ggtitle("D1") +
-    theme_light()
+    ggtitle("D1")
 p4 <- forecast::ggAcf(diff(shampoo)) + 
     ggtitle("") +
-    xlab("Lag (months)") + 
-    theme_light()
+    xlab("Lag (months)")
 p5 <- ggplot2::autoplot(diff(shampoo, differences = 2)) + 
     xlab("Year") + 
     ylab("Sales") +
-    ggtitle("D2") +
-    theme_light()
+    ggtitle("D2")
 p6 <- forecast::ggAcf(diff(shampoo, differences = 2)) + 
     ggtitle("") +
-    xlab("Lag (months)") + 
-    theme_light()
+    xlab("Lag (months)")
 (p1 + p2) / (p3 + p4) / (p5 + p6) +
     plot_annotation(tag_levels = 'A')
 ```
@@ -1094,30 +1072,24 @@ D1D12 <- diff(D1, lag = 12)
 p1 <- ggplot2::autoplot(Yt) + 
     xlab("Year") + 
     ylab("log10(Air passangers)") + 
-    ggtitle("Yt") +
-    theme_light()
+    ggtitle("Yt")
 p2 <- forecast::ggAcf(Yt) + 
     ggtitle("Yt") +
-    xlab("Lag (months)") + 
-    theme_light()
+    xlab("Lag (months)")
 p3 <- ggplot2::autoplot(D1) + 
     xlab("Year") + 
     ylab("log10(Air passangers)") + 
-    ggtitle("(1-B)Yt") +
-    theme_light()
+    ggtitle("(1-B)Yt")
 p4 <- forecast::ggAcf(D1) + 
     ggtitle("(1-B)Yt") +
-    xlab("Lag (months)") + 
-    theme_light()
+    xlab("Lag (months)")
 p5 <- ggplot2::autoplot(D1D12) + 
     xlab("Year") + 
     ylab("log10(Air passangers)") + 
-    ggtitle("(1-B)(1-B12)Yt") +
-    theme_light()
+    ggtitle("(1-B)(1-B12)Yt")
 p6 <- forecast::ggAcf(D1D12) + 
     ggtitle("(1-B)(1-B12)Yt") +
-    xlab("Lag (months)") + 
-    theme_light()
+    xlab("Lag (months)")
 (p1 + p2) / (p3 + p4) / (p5 + p6) +
     plot_annotation(tag_levels = 'A')
 ```
@@ -1176,7 +1148,6 @@ If we assume that trends are not smooth, then some other techniques (e.g., piece
 t <- c(1:length(Xt))
 ggplot(data.frame(t = t, Xt = Xt), aes(x = t, y = Xt)) + 
     geom_line() + 
-    geom_smooth(se = FALSE, span = 0.25) + 
-    theme_light()
+    geom_smooth(se = FALSE, span = 0.25)
 ```
 :::

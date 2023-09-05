@@ -9,6 +9,7 @@ library(dplyr)
 library(ggplot2)
 library(patchwork)
 options(digits = 3)
+theme_set(theme_light())
 ```
 
 # Introduction to Time Series Analysis
@@ -49,8 +50,7 @@ Let's try to describe the patterns we see in @fig-sentiment, @fig-JohnsonJohnson
 
 p <- forecast::autoplot(TSstudio::Michigan_CS) + 
     xlab("") + 
-    ylab("Index") + 
-    theme_light()
+    ylab("Index")
 plotly::ggplotly(p)
 ```
 
@@ -60,8 +60,7 @@ plotly::ggplotly(p)
 
 ggplot2::autoplot(JohnsonJohnson) + 
     xlab("") + 
-    ylab("Earnings per share (USD)") + 
-    theme_light()
+    ylab("Earnings per share (USD)")
 ```
 
 ```{r}
@@ -70,8 +69,7 @@ ggplot2::autoplot(JohnsonJohnson) +
 
 ggplot2::autoplot(MASS::accdeaths) + 
     xlab("") + 
-    ylab("Number of accidental deaths") + 
-    theme_light()
+    ylab("Number of accidental deaths")
 ```
 
 In this course, we will be interested in constructing time series models to learn more about their properties and to forecast (predict) future values of $Y_t$, i.e., values of $Y_t$ for $t$ beyond the end of the data set. 
@@ -116,8 +114,7 @@ We will talk about the alternatives in the next lecture.
 # births <- scan("http://robjhyndman.com/tsdldata/data/nybirths.dat")
 births <- scan("data/nybirths.dat")
 births <- ts(births, frequency = 12, start = c(1946, 1))
-ggplot2::autoplot(decompose(births))  + 
-    theme_light()
+ggplot2::autoplot(decompose(births))
 ```
 
 
@@ -178,8 +175,7 @@ We should create an appropriate univariate model (like in @eq-funiv) to serve as
 
 ggplot2::autoplot(sunspots) + 
     xlab("") + 
-    ylab("Sunspot number") + 
-    theme_light()
+    ylab("Sunspot number")
 ```
 
 ```{r}
@@ -188,8 +184,7 @@ ggplot2::autoplot(sunspots) +
 
 ggplot2::autoplot(lynx) + 
     xlab("") + 
-    ylab("Number of lynx trappings") + 
-    theme_light()
+    ylab("Number of lynx trappings")
 ```
 
 ```{r}
@@ -198,8 +193,7 @@ ggplot2::autoplot(lynx) +
 
 ggplot2::autoplot(Nile) + 
     xlab("") + 
-    ylab(bquote('Annual flow  '(10^8~m^3))) + 
-    theme_light()
+    ylab(bquote('Annual flow  '(10^8~m^3)))
 ```
 
 ```{r}
@@ -208,8 +202,7 @@ ggplot2::autoplot(Nile) +
 
 ggplot2::autoplot(co2) + 
     xlab("") + 
-    ylab("Concentration (ppm)") + 
-    theme_light()
+    ylab("Concentration (ppm)")
 ```
 
 ```{r}
@@ -218,8 +211,7 @@ ggplot2::autoplot(co2) +
 
 ggplot2::autoplot(Ecdat::Consumption[,"yd"]/1000) + 
     xlab("") + 
-    ylab("Income (thousand 1986 dollars)") + 
-    theme_light()
+    ylab("Income (thousand 1986 dollars)")
 ```
 
 ```{r}
@@ -228,8 +220,7 @@ ggplot2::autoplot(Ecdat::Consumption[,"yd"]/1000) +
 
 forecast::autoplot(as.ts(Ecdat::SP500[,1])) + 
     xlab("") + 
-    ylab("Earnings per share (USD)") + 
-    theme_light()
+    ylab("Earnings per share (USD)")
 ```
 :::
 
@@ -446,12 +437,10 @@ Compare with the plots for accidental deaths in @fig-accdeathsACF.
 
 p1 <- ggplot2::autoplot(births) + 
     xlab("") +
-    ylab("Number of births (thousands)") +
-    theme_light()
+    ylab("Number of births (thousands)")
 p2 <- forecast::ggAcf(births) + 
     ggtitle("") +
-    xlab("Lag (months)") + 
-    theme_light()
+    xlab("Lag (months)")
 p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```
@@ -462,12 +451,10 @@ p1 + p2 +
 
 p1 <- ggplot2::autoplot(MASS::accdeaths) + 
     xlab("") +
-    ylab("Number of accidental deaths") +
-    theme_light()
+    ylab("Number of accidental deaths")
 p2 <- forecast::ggAcf(MASS::accdeaths) + 
     ggtitle("") +
-    xlab("Lag (months)") + 
-    theme_light()
+    xlab("Lag (months)")
 p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```
@@ -574,12 +561,10 @@ By plotting ACF and PACF (@fig-accdeathsPACF), we observe that most of the tempo
 
 p1 <- forecast::ggAcf(MASS::accdeaths) + 
     ggtitle("") +
-    xlab("Lag (months)") + 
-    theme_light()
+    xlab("Lag (months)")
 p2 <- forecast::ggAcf(MASS::accdeaths, type = "partial") + 
     ggtitle("") +
-    xlab("Lag (months)") + 
-    theme_light()
+    xlab("Lag (months)")
 p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```

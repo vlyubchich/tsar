@@ -9,6 +9,7 @@ library(dplyr)
 library(ggplot2)
 library(patchwork)
 options(digits = 3)
+theme_set(theme_light())
 ```
 
 # Spectral Analysis
@@ -259,27 +260,23 @@ After detrending the data (@fig-airpassangersFFT C), the spectrum at frequency 1
 pAirPassengers <- forecast::autoplot(AirPassengers, col = "grey50") + 
     xlab("Year") + 
     ylab("Airline passengers (thousand)") +
-    ggtitle("Raw series") + 
-    theme_light()
+    ggtitle("Raw series")
 p2 <- data.frame(Spectrum = spec_raw$spec, 
                  Frequency = spec_raw$freq) %>% 
     ggplot(aes(x = Frequency, y = Spectrum)) +
     scale_y_continuous(trans = 'log10') +
     geom_line() + 
-    ggtitle("") +
-    theme_light()
+    ggtitle("")
 p3 <- forecast::autoplot(res, col = "grey50") + 
     xlab("Year") + 
     ylab("Airline passengers residuals (lg[thousand])") + 
-    ggtitle("Detrended and log-transformed series") + 
-    theme_light()
+    ggtitle("Detrended and log-transformed series")
 p4 <- data.frame(Spectrum = spec_log_detrend$spec, 
                  Frequency = spec_log_detrend$freq) %>% 
     ggplot(aes(x = Frequency, y = Spectrum)) +
     scale_y_continuous(trans = 'log10') +
     geom_line() + 
-    ggtitle("") +
-    theme_light()
+    ggtitle("")
 (pAirPassengers + p2) / (p3 + p4) +
     plot_annotation(tag_levels = 'A')
 ```
@@ -333,8 +330,7 @@ This time series contains observations from regular 10-minute intervals, but som
 
 forecast::autoplot(imputeTS::tsNH4) +
     xlab("Day") +
-    ylab(bquote(NH[4]~concentration)) +
-    theme_light()
+    ylab(bquote(NH[4]~concentration))
 ```
 
 Save the data in a format acceptable by the Lomb--Scargle function. 
@@ -412,24 +408,21 @@ fmax <- spec_raw$freq[which.max(spec_raw$spec)]
 
 p1 <- forecast::autoplot(NAO) +
     xlab("Year") +
-    ylab("NAO") +
-    theme_light()
+    ylab("NAO")
 p2 <- data.frame(Spectrum = spec_raw$spec, 
                  Frequency = spec_raw$freq) %>% 
     ggplot(aes(x = Frequency, y = Spectrum)) +
     scale_y_continuous(trans = 'log10') +
     geom_vline(xintercept = fmax, col = "blue", lty = 2) + 
     geom_line() + 
-    ggtitle("") +
-    theme_light()
+    ggtitle("")
 p3 <- data.frame(Spectrum = spec_raw$spec, 
                  Period = 1/spec_raw$freq) %>% 
     ggplot(aes(x = Period, y = Spectrum)) +
     scale_y_continuous(trans = 'log10') +
     geom_vline(xintercept = 1/fmax, col = "blue", lty = 2) +
     geom_line() + 
-    ggtitle("") +
-    theme_light()
+    ggtitle("")
 p1 / (p2 + p3) + 
     plot_annotation(tag_levels = 'A')
 ```

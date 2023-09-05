@@ -9,6 +9,7 @@ library(dplyr)
 library(ggplot2)
 library(patchwork)
 options(digits = 3)
+theme_set(theme_light())
 ```
 
 # Generalized least squares {#sec-gls}
@@ -85,14 +86,12 @@ p1 <- ggplot(D, aes(x = Year, y = modDish_ols$residuals)) +
     geom_line() + 
     geom_hline(yintercept = 0, lty = 2, col = 4) + 
     ggtitle("OLS model modDish_ols") +
-    ylab("Residuals") +
-    theme_light()
+    ylab("Residuals")
 p2 <- ggplot(D[-1,], aes(x = Year, y = modDish_ar1$residuals)) + 
     geom_line() + 
     geom_hline(yintercept = 0, lty = 2, col = 4) + 
     ggtitle("Transformed model modDish_ar1") +
-    ylab("Residuals") +
-    theme_light()
+    ylab("Residuals")
 p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```

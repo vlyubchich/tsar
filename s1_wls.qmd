@@ -9,6 +9,7 @@ library(dplyr)
 library(ggplot2)
 library(patchwork)
 options(digits = 3)
+theme_set(theme_light())
 ```
 
 # Weighted least squares {#sec-wls}
@@ -61,14 +62,12 @@ p1 <- ggplot(data.frame(x, y), aes(x = x, y = y)) +
     geom_abline(intercept = 3, slope = -2, col = "gray50", lwd = 1.5) +
     geom_abline(intercept = fit_ols$coefficients[1], 
                 slope = fit_ols$coefficients[2], lty = 2) +
-    geom_point() +
-    theme_light()
+    geom_point()
 p2 <- ggplot(data.frame(x, y), aes(x = x, y = rstandard(fit_ols))) +
     geom_hline(yintercept = 0, col = "gray50") +
     geom_point() +
     xlab("x") +
-    ylab("Standardized residuals") + 
-    theme_light()
+    ylab("Standardized residuals")
 p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```
@@ -94,14 +93,12 @@ p1 <- ggplot(data.frame(x, y), aes(x = x, y = y)) +
     geom_abline(intercept = 3, slope = -2, col = "gray50", lwd = 1.5) +
     geom_abline(intercept = fit_wls$coefficients[2], 
                 slope = fit_wls$coefficients[1], lty = 2) +
-    geom_point() +
-    theme_light()
+    geom_point()
 p2 <- ggplot(data.frame(x, y), aes(x = x, y = rstandard(fit_wls))) +
     geom_hline(yintercept = 0, col = "gray50") +
     geom_point() +
     xlab("x") +
-    ylab("Standardized residuals") + 
-    theme_light()
+    ylab("Standardized residuals")
 p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```
@@ -159,8 +156,7 @@ ggplot(D, aes(x = RES, y = rstandard(modDish_ols))) +
     geom_hline(yintercept = 0, col = "gray50") +
     geom_point() +
     xlab("Residential investments") +
-    ylab("Standardized residuals") + 
-    theme_light()
+    ylab("Standardized residuals")
 ```
 
 Apply the WLS:
@@ -185,14 +181,12 @@ p1 <- ggplot(D, aes(x = RES, y = DISH)) +
                 col = "gray50") +
     geom_point() +
     xlab("Residential investments") + 
-    ylab("Dishwasher shipments") + 
-    theme_light()
+    ylab("Dishwasher shipments")
 p2 <- ggplot(D, aes(x = RES, y = rstandard(modDish_wls))) +
     geom_hline(yintercept = 0, col = "gray50") +
     geom_point() +
     xlab("Residential investments") +
-    ylab("Standardized residuals") + 
-    theme_light()
+    ylab("Standardized residuals")
 p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```

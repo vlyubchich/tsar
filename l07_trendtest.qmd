@@ -149,7 +149,8 @@ We do not know the distributional law under which sample means are distributed i
 
 The seminal paper by @Efron:1979 describes bootstrap for i.i.d. data. 
 In two words, the idea is the following: we can relax distributional assumptions and reconstruct the distribution of the sample statistic by *resampling data with replacement* and recalculating the statistic over and over. 
-The resampling step will give us 'new' cases of collected samples, while the statistics calculated multiple times will let us approximate the distribution of the parameter of interest in this case of violated distributional assumption.
+The resampling step will give us artificial 'new' samples, while the statistics calculated multiple times will let us approximate the distribution of the statistic of interest.
+Thus, by repeating the resampling and estimation steps multiple times, we will know how the statistic is distributed, even if the sample is small and not normally distributed.
 
 Let $x_i$ ($i = 1, \dots, n$) be sample values collected from a non-normally distributed population using simple random sampling. 
 If the sample size $n$ is small, we cannot be sure that the distribution of sample averages $\bar{x}$ is normal, so we will approximate it using the following bootstrapping steps:
@@ -239,6 +240,15 @@ To account for the dependence structure, some modifications to the bootstrap pro
 In short, the first step of the outlined bootstrapping algorithm should preserve the dependence structure of the time series so that the generated bootstrapped samples correspond to the violation case that we want to accommodate in our analysis.
 For example, if we want to accommodate serial dependence in the $t$-test, the bootstrapped time series should be still autocorrelated, so we can approximate the distribution of the test statistic when the assumption of independence is violated.
 
+**Block bootstrap** text
+
+
+**Sieve bootstrap** text
+
+
+
+
+
 
 ## Bootstrapped tests for trend detection
 
@@ -259,7 +269,7 @@ funtimes::notrend_test(Y, ar.method = "yw")
 funtimes::notrend_test(Y, test = "MK", ar.method = "yw")
 ```
 
-Notice the different $p$-values from the first time we applied the tests.
+Notice the different $p$-values from the first time we applied the tests without the bootstrap.
 
 
 ## Detecting non-monotonic trends {#sec-WAVK}

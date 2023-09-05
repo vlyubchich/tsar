@@ -9,6 +9,7 @@ library(dplyr)
 library(ggplot2)
 library(patchwork)
 options(digits = 3)
+theme_set(theme_light())
 ```
 
 # Synchrony of parametric trends {#sec-syncparam}
@@ -111,11 +112,9 @@ See @fig-CMIP5 showing the time series plots after converting the CMIP data to d
 #| fig-cap: "Global annual mean temperature (°C) in 1948--2013: CMIP5 multi-model average and observed anomalies relative to the base period of 1981--2010."
 
 p1 <- D %>% ggplot(aes(x = Year, y = Temp_CMIP5)) +
-    geom_line() +
-    theme_light()
+    geom_line()
 p2 <- D %>% ggplot(aes(x = Year, y = Temp_obs)) +
-    geom_line() +
-    theme_light()
+    geom_line()
 p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```
