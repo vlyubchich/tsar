@@ -250,14 +250,14 @@ The block length $l$ should be adjusted each time to the statistic of interest, 
 In other words, $l$ is the algorithm's major tuning parameter that is difficult to select automatically.
 @Buhlmann:2002 also points out the lack of good interpretations and reliable diagnostic tools for the block length $l$.
 
-**Sieve bootstrap** generally works for time series that are realizations of linear AR($\infty$) processes [@Buhlmann:2002], with more recent research extending to all stationary purely nondeterministic processes [@Kreiss:etal:2011].
+**Sieve bootstrap** generally works for time series that are realizations of linear AR($\infty$) processes [@Buhlmann:2002], with more recent research extending the method to all stationary purely nondeterministic processes [@Kreiss:etal:2011].
 In this algorithm, an autoregressive (AR) model acts as a sieve by approximating the dependence structure and letting through only the i.i.d. residuals $\epsilon_t$.
 We then center (subtract mean) and resample with replacement the residuals (there is no more structure we need to preserve after the sieve, so this bootstrap step is no different from resampling i.i.d. data).
-We introduce these bootstrapped residuals $\epsilon^*_t$ back into the AR($\hat{p}$) model:
+We introduce these bootstrapped residuals $\epsilon^*_t$ back into the AR($\hat{p}$) model to obtain a bootstrapped time series $X_t^*$:
 $$
 X_t^* = \sum_{j=1}^{\hat{p}} \hat{\phi}_j X^*_{t-j} + \epsilon^*_t,
 $$
-where $\hat{\phi}_j$ are the estimated AR coefficients and $\hat{p}$ is the selected AR order.
+where $\hat{\phi}_j$ are the AR coefficients, estimated on the original time series $X_t$, and $\hat{p}$ is the selected AR order.
 The order $p$ is the main tuning parameter in this algorithm, but as @Buhlmann:2002 points out, it has several advantages compared with the block length in block bootstrap:
 
 * The order $\hat{p}$ can be selected using the Akaike information criterion (AIC) or Bayesian information criterion (BIC) based on the available data, which means the method adapts to the sample size and underlying dependence structure.
