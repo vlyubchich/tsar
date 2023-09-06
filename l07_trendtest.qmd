@@ -46,7 +46,7 @@ There exist two main problems:
 Hence, our goal is to provide reliable inference even for dependent observations and to test different alternative trend shapes.
 
 
-## 'Traditional' tests
+## 'Traditional' tests assuming independence
 
 ### Student's $t$-test for linear trend
 
@@ -130,8 +130,6 @@ Kendall::MannKendall(Y)
 
 This test is still limited to only monotonic trends and independent observations.
 
-
-## Bootstrap enhancements
 
 ## Introduction to bootstrap
 
@@ -237,20 +235,39 @@ We cannot apply the outlined bootstrapping directly to time series or spatial da
 
 To account for the dependence structure, some modifications to the bootstrap procedure were proposed, including block bootstrap and sieve bootstrap [see @Buhlmann:2002 and references therein].
 
-In short, the first step of the outlined bootstrapping algorithm should preserve the dependence structure of the time series so that the generated bootstrapped samples correspond to the violation case that we want to accommodate in our analysis.
-For example, if we want to accommodate serial dependence in the $t$-test, the bootstrapped time series should be still autocorrelated, so we can approximate the distribution of the test statistic when the assumption of independence is violated.
+While the bootstrap for independent data generates samples that mimic the underlying population distribution, the bootstrap for time series also aims to mimic or preserve the dependence structure of the time series.
+Hence, the first step of the outlined bootstrapping algorithm should be modified so that the generated bootstrapped samples preserve the dependence structure that we want to accommodate in our analysis.
+For example, if we want to accommodate serial dependence in the $t$-test, the bootstrapped time series should be autocorrelated similarly to the original series, so we can approximate the distribution of the test statistic when the assumption of independence is violated.
 
-**Block bootstrap** text
+**Block bootstrap** works for general stationary time series or categorical series (e.g., genetic sequences).
+In the simplest version of the algorithm, the observed time series of length $n$ is used to create overlapping blocks of fixed length $l$, which are then resampled with replacement to create a bootstrapped time series.
+To match the original sample size, the last block entering the bootstrapped series can be truncated.
+By resampling blocks rather than individual observations, we preserve the original dependence structure within each block [@Buhlmann:2002;@Hardle:etal:2003].
+
+Other versions of this algorithm include non-overlapping blocks and blocks of random length $l$ sampled from the geometric distribution (the latter version is also known as the *stationary bootstrap*), but these versions often show poorer performance [@Buhlmann:2002;@Hardle:etal:2003].
+
+The block length $l$ should be adjusted each time to the statistic of interest, data generating process, and purpose of the estimation, such as distribution, bias, or variance estimation [@Buhlmann:2002].
+In other words, $l$ is the algorithm's major tuning parameter that is difficult to select automatically.
+@Buhlmann:2002 also points out the lack of good interpretations and reliable diagnostic tools for the block length $l$.
+
+**Sieve bootstrap** generally works for time series that are realizations of linear AR($\infty$) processes [@Buhlmann:2002], with more recent research extending to all stationary purely nondeterministic processes [@Kreiss:etal:2011].
+In this algorithm, an autoregressive (AR) model acts as a sieve by approximating the dependence structure and letting through only the i.i.d. residuals $\epsilon_t$.
+We then center (subtract mean) and resample with replacement the residuals (there is no more structure we need to preserve after the sieve, so this bootstrap step is no different from resampling i.i.d. data).
+We introduce these bootstrapped residuals $\epsilon^*_t$ back into the AR($\hat{p}$) model:
+$$
+X_t^* = \sum_{j=1}^{\hat{p}} \hat{\phi}_j X^*_{t-j} + \epsilon^*_t,
+$$
+where $\hat{\phi}_j$ are the estimated AR coefficients and $\hat{p}$ is the selected AR order.
+The order $p$ is the main tuning parameter in this algorithm, but as @Buhlmann:2002 points out, it has several advantages compared with the block length in block bootstrap:
+
+* The order $\hat{p}$ can be selected using the Akaike information criterion (AIC) or Bayesian information criterion (BIC) based on the available data, which means the method adapts to the sample size and underlying dependence structure.
+* The AR order is more interpretable than the block length.
+* There exist diagnostic procedures to check how good is the selected $\hat{p}$, for example, graphs and tests for remaining autocorrelation in the AR($\hat{p}$) residuals $\epsilon_t$.
+
+Other versions of sieve bootstrap include options of obtaining $\epsilon^*_t$ from a parametric distribution (e.g., normal distribution with the mean of 0 and variance matching that of $\epsilon_t$) or nonparametrically estimated probability density (e.g., using kernel smoothing) for incorporating additional variability in the data.
 
 
-**Sieve bootstrap** text
-
-
-
-
-
-
-## Bootstrapped tests for trend detection
+## Bootstrapped tests for trend detection in time series
 
 ### Bootstrapped $t$-test and Mann--Kendall test
 

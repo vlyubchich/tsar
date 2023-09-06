@@ -3,7 +3,6 @@
 - add example coverage calculations Lect 2 or ARIMA, eventually move part of the material from l02 to a separate lecture on Model diagnostics and forecasting. forecast::accuracy(). Overfitting. B&D Ch. 9
 Remember that all predictive inference is based on the assumptions that the relationships between the variables and their dynamics will be the same in the future.
 - add a lecture on panel data analysis
-- add about TS bootstrap (sieve, block) in l07
 - expand on wavelets, add example of acoustic data
 - appendix or lecture on changepoint analysis
 - GLM or another generalized model with classification example for fisheries or ecology.
@@ -19,6 +18,7 @@ changepoint
 heteroskedasticity
 homoskedasticity
 hyperparameter
+nondeterministic
 nonlinear
 nonnegative
 nonparametric
@@ -26,6 +26,7 @@ nonstationarity
 non-existent
 non-monotonic
 non-normal
+non-overlapping
 non-seasonal
 scatterplot
 vs.

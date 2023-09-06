@@ -3,12 +3,13 @@ rm(list = ls())
 library(dplyr)
 library(ggplot2)
 library(patchwork)
+options(digits = 3)
+theme_set(theme_light())
 
-library(readr)
 
 # Lake Baikal ice data, sorted by the ice season
 # Calculate day of the year from the ice break-up date, see ?strptime
-B <- read_csv("./data/baikal.csv", skip = 1) %>%
+B <- readr::read_csv("./data/baikal.csv", skip = 1) %>%
     mutate(Date_iceoff = as.Date(paste(iceoff_year, iceoff_month, iceoff_day,
                                        sep = "-"))) %>%
     mutate(DoY_iceoff = as.numeric(format(Date_iceoff, "%j")))

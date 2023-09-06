@@ -781,8 +781,8 @@ p1 + p2 +
 The models `tm2.1` and `tm2.2` are equivalent.
 Model `tm2.1` uses a pre-calculated quadratic transformation, while model `tm2.2` applies the transformation on the fly within the R formula call, using the `I()` syntax (without the `I()` wrapper, the output of `tm2.2` would be the same as of `tm1`, not `tm2.1`). 
 However, both models `tm2.1` and `tm2.2` can easily violate the assumption of independence of predictors in linear regression, especially when values of the time index $t$ are large. 
-That is the case for us because the sequence $t$ represents decimal years, from `r min(t)` to `r max(t)`, and $\widehat{\mathrm{cor}}(t, t^2) =$ `r cor(t, t2)`. 
-Therefore, model `tm2.3` is preferred, because it is evaluated on orthogonal polynomials (basically, centering and normalization are applied to $t$ and $t^2$).
+It applies to our example because the sequence $t$ of decimal years goes from `r min(t)` to `r max(t)`, and $\widehat{\mathrm{cor}}(t, t^2) =$ `r cor(t, t2)`. 
+Therefore, model `tm2.3` is preferred, because it is evaluated on orthogonal polynomials (centering and normalization are applied to $t$ and $t^2$).
 :::
 
 
