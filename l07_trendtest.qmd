@@ -139,16 +139,16 @@ When some of the statistical assumptions are violated, we may switch to using ot
 
 * One of the assumptions of Pearson correlation analysis is the absence of outliers. 
 When outliers are in the data, we can opt for using Spearman correlations based on ranks, not the actual values. 
-Thus, here we switch the method.
+Thus, here we *switch the method*.
 * We often use the normal distribution for inference about the population mean because we assume that averages of independent samples coming from the same population are distributed normally. 
 The normal approximation is true for large samples or for small samples if the underlying population is close to being normally distributed. 
 So what happens if we have a small sample from a non-normal population? 
-We do not know the distributional law under which sample means are distributed in this case, but we can approximate it using bootstrap.
+We do not know the distributional law under which sample means are distributed in this case, but we can *approximate the distribution using bootstrapped statistics*.
 
 The seminal paper by @Efron:1979 describes bootstrap for i.i.d. data. 
 In two words, the idea is the following: we can relax distributional assumptions and reconstruct the distribution of the sample statistic by *resampling data with replacement* and recalculating the statistic over and over. 
-The resampling step will give us artificial 'new' samples, while the statistics calculated multiple times will let us approximate the distribution of the statistic of interest.
-Thus, by repeating the resampling and estimation steps multiple times, we will know how the statistic is distributed, even if the sample is small and not normally distributed.
+The resampling step will give us artificial 'new' samples, while the statistics calculated multiple times on those samples will let us approximate the distribution of the statistic of interest.
+Thus, by repeating the resampling and estimation steps many times, we will know how the statistic is distributed, even if the sample is small and not normally distributed.
 
 Let $x_i$ ($i = 1, \dots, n$) be sample values collected from a non-normally distributed population using simple random sampling. 
 If the sample size $n$ is small, we cannot be sure that the distribution of sample averages $\bar{x}$ is normal, so we will approximate it using the following bootstrapping steps:
@@ -157,10 +157,10 @@ If the sample size $n$ is small, we cannot be sure that the distribution of samp
 This is a way for us, without knowing the underlying distribution of the population and without collecting new data, to get a new artificial sample from the population.
 1. Calculate the mean (or another statistic of interest) from the bootstrapped data. 
 For example, $\bar{x}^* = n^{-1} \sum x^*_i$ is the bootstrapped mean.
-1. Repeat the steps above a large number of times to obtain a distribution of the statistics $\bar{x}^*_1, \dots, \bar{x}^*_B$, where $B$ is the number of bootstrap replications. 
-This is so-called *bootstrapped distribution*.
+1. Repeat the steps above a large number of times to obtain a distribution of the statistics $\bar{x}^*_1, \dots, \bar{x}^*_B$ (the *bootstrapped distribution*), where $B$ is a large enough number of bootstrap replications. 
+Typically, $B \geqslant 1000$.
 1. Finally, we use the bootstrapped distribution for the intended analysis. 
-Typically it involves calculating confidence intervals. 
+It often involves calculating confidence intervals. 
 There are a few ways the intervals can be calculated [see @Davison:Hinkley:1997], some of the methods provide symmetric intervals, while others do not. 
 Probably the simplest is the *percentile confidence interval*, which computes the $\alpha/2$th and $(1-\alpha/2)$th quantiles of the bootstrapped distribution, to get an interval for confidence $1 - \alpha$.
 
@@ -225,7 +225,7 @@ p1 + p2 +
 ```
 
 The calculated confidence interval can be used in hypothesis testing. 
-Note that the package `boot` provides functions with more options.
+Note that the package `boot` provides functions with more options for the calculations.
 :::
 
 We cannot apply the outlined bootstrapping directly to time series or spatial data because these data are not i.i.d. and resampling will break the order and dependence structure. 
@@ -289,7 +289,7 @@ funtimes::notrend_test(Y, test = "MK", ar.method = "yw")
 Notice the different $p$-values from the first time we applied the tests without the bootstrap.
 
 
-## Detecting non-monotonic trends {#sec-WAVK}
+### Detecting non-monotonic trends {#sec-WAVK}
 
 Consider a time series 
 $$
