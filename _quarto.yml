@@ -30,7 +30,10 @@ book:
         - l07_trendtest.qmd
         - l08_tsreg1.qmd
         - l09_tsreg2.qmd
-        - l10_spectral.qmd
+        # - l10_causality.qmd
+        # - l11_panel.qmd
+        # - l12_forecast.qmd
+        - l13_spectral.qmd
         - software.qmd
         - references.qmd
     appendices:

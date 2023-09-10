@@ -77,7 +77,7 @@ upper = P$pred + qnorm(0.975) * P$se
 # Option 1: parametric linear trend + ARMA
 
 Year <- time(iceoff)
-mod_lin <- lm(iceoff ~ Year)
+di <- lm(iceoff ~ Year)
 
 ts.plot(iceoff)
 abline(mod_lin)
@@ -95,21 +95,23 @@ qqnorm(res)
 qqline(res)
 shapiro.test(res)
 
+funtimes::notrend_test(res, ar.method = "yw", test = "t")
+
 
 library(nlme)
 # use p and q you selected from the res analysis above (ACF+PACF, or auto.arima)
 mod_lin_ar1 <- nlme::gls(iceoff ~ Year
                          ,correlation = nlme::corAR1(form = ~Year))
-mod_lin_arma11 <- nlme::gls(iceoff ~ Year
-                         ,correlation = nlme::corARMA(form = ~Year, p = 1, q = 1))
+# mod_lin_arma11 <- nlme::gls(iceoff ~ Year
+#                          ,correlation = nlme::corARMA(form = ~Year, p = 1, q = 1))
 summary(mod_lin_ar1)
 res <- residuals(mod_lin_ar1, type = "normalized")
 # reapply resid diagnostics
 
-?predict.gls
-yearLast =  Year[length(Year)]
-
-predict(mod_lin_ar1, newdata = data.frame(Year = (yearLast + 1):(yearLast + 6)))
+# ?predict.gls
+# yearLast =  Year[length(Year)]
+#
+# predict(mod_lin_ar1, newdata = data.frame(Year = (yearLast + 1):(yearLast + 6)))
 
 
 
@@ -122,13 +124,40 @@ library(gamlss)
 mod_gam_ar1 <- gamlss::gamlss(iceoff ~ pb(Year),
                               correlation = nlme::corAR1(form = ~Year))
 
+summary(mod_gam_ar1)
+acf(mod_gam_ar1$residuals)
+pacf(mod_gam_ar1$residuals)
+
+plot(mod_gam_ar1)
+
+
+funtimes::notrend_test(mod_gam_ar1$residuals, ar.method = "yw", test = "WAVK")
+
+# No AR needed. If was needed, would look like this:
+
+D <- data.frame(Year = Year,
+                iceoff = iceoff,
+                Lake = "Baikal")
+
+mod_gam_ar1re <- gamlss::gamlss(iceoff ~ re(fixed = ~pb(Year),
+                                            random = ~1|Lake,
+                              # correlation = nlme::corAR1(form = ~Year)
+                              ),
+                              data = D)
+summary(getSmo(mod_gam_ar1re))
+resre <- residuals(getSmo(mod_gam_ar1re))
+resre <- resid(mod_gam_ar1re)
+acf(resre)
+pacf(resre)
+
 
 mod_gam_ar1_2 <- gamlss::gamlss(iceoff ~ pb(Year)
                               ,nu.formula = ~Year
                               ,family = ST4 #PO PIG ST4
                               ,correlation = nlme::corAR1(form = ~Year))
 
-summary(mod_gam_ar1)
+
+
 summary(mod_gam_ar1_2)
 term.plot(mod_gam_ar1, rug = FALSE, partial.resid = TRUE)
 plot(mod_gam_ar1, ts = TRUE)

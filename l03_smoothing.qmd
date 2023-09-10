@@ -330,7 +330,7 @@ p4 <- forecast::ggAcf(et) +
 :::
 
 
-## Lowess smoothing
+## Lowess smoothing {#sec-lowess}
 
 One of the alternatives for estimating trends $M_t$ is *locally weighted regression* (shortened as 'lowess' or 'loess') [@Cleveland:1979]. 
 We can apply lowess as a regression of $Y_t$ on time, for example, using the algorithm outlined by @Berk:2016:
@@ -934,6 +934,173 @@ p2 <- forecast::ggAcf(m$residuals) +
 p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```
+:::
+
+
+## Generalized additive models (GAMs) {#sec-GAM}
+
+An alternative way of modeling nonlinearities in trends, seasonality, and other patterns is by replacing the original variables with those individually transformed using smooth nonparametric functions, such as in a *generalized additive model* [GAM;Wood:2006book].
+The model is called 'generalized' because the distribution of the response variable $Y_t$ is not just normal but can be from a family of exponential distributions, such as Poisson, binomial, and gamma.
+A smooth monotonic function $g(\cdot)$ called the 'link function' is applied to transform the response variable.
+However, our interest currently is in the additive nature of these models.
+
+```{r}
+#| echo: false
+
+# Time domain
+t <- 1:length(WWWusage)
+
+# Manually set knots
+tau <- c(min(t), 10, 20, 50)
+
+# Generate the B-spline basis matrices
+s1 <- bs(t, knots = tau, degree = 1)
+s2 <- bs(t, knots = tau, degree = 2)
+s3 <- bs(t, knots = tau, degree = 3)
+
+# Transform for easy plotting and regression
+S1 <- ts(data.frame(s1))
+colnames(S1) <- paste0("B", 1:ncol(S1))
+S2 <- ts(data.frame(s2))
+colnames(S2) <- paste0("B", 1:ncol(S2))
+S3 <- ts(data.frame(s3))
+colnames(S3) <- paste0("B", 1:ncol(S3))
+```
+
+Instead of fitting a global nonlinear function like in polynomial regresison (@sec-regressionTime) or fitting simpler local polynomials directly like in lowess smoothing (@sec-lowess), we can constuct a basis from basic splines (B-splines).
+B-splines are simple functions, which vanish outside the intervals defined by timepoints called the 'knots.'
+These splines are defined recursively, from the lowest to higher orders, starting from a simple indicator function for the intervals between the knots [see Appendix to Chapter 5 in @Hastie:etal:2009 for the recursive formulas]. 
+Here we show results of the recursive computations, for times $t = 1, \dots,$ `r max(t)` and unequally-spaced knots `r paste0(tau, collapse = ", ")` (this is a more general case than the uniformly-spaced knots giving us cardinal B-splines).
+@fig-BS1 shows a basis formed by B-splines of degree one, and @fig-BS2 shows splines of degree two.
+
+```{r}
+#| label: fig-BS1
+#| echo: false
+#| fig-cap: "B-splines of degree one. The vertical dashed lines denote locations of the knots."
+
+forecast::autoplot(S1, facets = TRUE) +
+    geom_vline(xintercept = tau, lty = 2, col = "gray50") +
+    ylab("")
+```
+
+```{r}
+#| label: fig-BS2
+#| echo: false
+#| fig-cap: "B-splines of degree two. The vertical dashed lines denote locations of the knots."
+
+forecast::autoplot(S2, facets = TRUE) +
+    geom_vline(xintercept = tau, lty = 2, col = "gray50") +
+    ylab("")
+```
+
+In the next step, the basis is used in regression, for example, to model the expected value $\mu_t$ of the `WWWusage` data introduced in @sec-lowess:
+$$
+\mu_t = a_0 + f(t),
+$${#eq-GAM}
+where $a_0$ is the intercept, and $f(t)$ represents the added effects of the $M$ basis functions $B_m(t)$ (hence the word 'additive' in GAM):
+$$
+f(t) = \sum_{m = 1}^M \beta_m B_m(t).
+$$
+We are not interested in the individual regression coefficients $\beta_m$ (regression parameters) we estimated, hence the function $f(t)$ is called *nonparametric* even though many parameters have been estimated to obtain $f(t)$ (similar to lowess smoothing).
+
+The model in @eq-GAM can handle deviations from normality and can accommodate nonlinearity and nonmonotonicity of individual relationships, however, the model does not address the potential issue of remaining dependencies in the errors [e.g., see @Kohn:etal:2000].
+We skip the topic of selecting an appropriate distribution, testing statistical significance of estimated patterns, or using the reported confidence intervals for inference until later in the course when we are familiar with various tests for autocorrelation and trends (e.g., see @sec-trendtest on trend tests and @sec-GAMLSS using additional covariates, specifying structure of the regression errors, and extending GAM to several parameters of an exponential distribution beyond just the mean).
+
+@fig-BSreg shows the results of fitting the model in @eq-GAM to the bases shown in @fig-BS1 and @fig-BS2.
+The results are not so bad given the knots were set without considering the data.
+
+```{r}
+#| label: fig-BSreg
+#| echo: false
+#| fig-cap: "Results of regressing `WWWusage` on the linear, quadratic, and cubic B-spline bases. The fit in each case is suboptimal because the knots were set arbitrarly."
+
+# Fit the regressions
+m1 <- lm(WWWusage ~ S1[, -1])
+m2 <- lm(WWWusage ~ S2[, -1])
+m3 <- lm(WWWusage ~ S3[, -1])
+
+p0 <- ggplot2::autoplot(WWWusage, col = "grey50")
+
+p1 <- p0 + 
+    geom_line(aes(y = m1$fitted.values), col = 4, lwd = 1.5) +
+    ggtitle("Degree 1")
+p2 <- p0 + 
+    geom_line(aes(y = m2$fitted.values), col = 4, lwd = 1.5) +
+    ggtitle("Degree 2")
+p3 <- p0 + 
+    geom_line(aes(y = m3$fitted.values), col = 4, lwd = 1.5) +
+    ggtitle("Degree 3")
+p1 + p2 + p3 + 
+    plot_annotation(tag_levels = 'A')
+```
+
+The number and locations of the knots are important tuning parameters for achieving a desired smoothness.
+Fortunately, there exist cross-validation procedures and penalization techniques that allow us to set these parameters rather automatically.
+When a penalty is applied to the basis coefficients, B-splines are called P-splines.
+
+The R packages `mgcv` and `gamlss` provide sevaral types of splines.
+In this lecture, we demonstrate the package `mgcv` but we will use the package `gamlss` in @sec-GAMLSS.
+
+::: {.callout-note icon=false}
+
+## Example: GAM of WWWusage
+
+Consider fitting the GAM specified in @eq-GAM to the `WWWusage` time series.
+Here we use B-splines again (see `?mgcv::smooth.terms` and `?mgcv::b.spline` for different options), but allow the parameters to be estimated each time using a cross-validation (see `?mgcv::gam` for more details).
+
+In the code below, we estimate the model four times, with different spline orders `m[1]` (quadratic or cubic) and basis dimensions `k` (it controls the overall smothness as it sets the upper limit on the degrees of freedom associated with a smooth, see `?mgcv::choose.k`).
+The models can be compared using the Akaike information criterion (AIC).
+
+```{r}
+#| code-fold: false
+
+library(mgcv)
+t <- 1:length(WWWusage)
+mwww_q1 <- gam(WWWusage ~ s(t, bs = "bs", m = c(2, 2)))
+mwww_c1 <- gam(WWWusage ~ s(t, bs = "bs", m = c(3, 2)))
+mwww_c2 <- gam(WWWusage ~ s(t, bs = "bs", m = c(3, 2), k = 5))
+mwww_c3 <- gam(WWWusage ~ s(t, bs = "bs", m = c(3, 2), k = 15))
+AIC(mwww_q1, mwww_c1, mwww_c2, mwww_c3)
+```
+
+From the results above and @fig-WWWusageGAM, we may conclude that when the smoothing parameters are allowed to be selected automatically, restricting the degrees of freedom leads to more dramatic changes than switching the order of splines.
+
+```{r}
+#| label: fig-WWWusageGAM
+#| fig-cap: "Results of regressing `WWWusage` on the linear, quadratic, and cubic B-spline bases. The fit in each case is suboptimal because the knots were set arbitrarly."
+
+p1 <- p0 + 
+    geom_line(aes(y = mwww_q1$fitted.values), col = 4, lwd = 1.5) +
+    ggtitle("Quadratic splines, automatic k")
+p2 <- p0 + 
+    geom_line(aes(y = mwww_c1$fitted.values), col = 4, lwd = 1.5) +
+    ggtitle("Cubic splines, automatic k")
+p3 <- p0 + 
+    geom_line(aes(y = mwww_c2$fitted.values), col = 4, lwd = 1.5) +
+    ggtitle("Cubic splines, k = 5")
+p4 <- p0 + 
+    geom_line(aes(y = mwww_c3$fitted.values), col = 4, lwd = 1.5) +
+    ggtitle("Cubic splines, k = 15")
+(p1 + p2) / (p3 + p4) + 
+    plot_annotation(tag_levels = 'A')
+```
+
+Summary of the last model:
+
+```{r}
+#| code-fold: false
+
+summary(mwww_c3)
+```
+:::
+
+
+::: {.callout-note icon=false}
+
+## Example: GAM of the airline passengers time series
+
+Consider ...
+
 :::
 
 

@@ -12,7 +12,7 @@ options(digits = 3)
 theme_set(theme_light())
 ```
 
-# Trend Detection
+# Trend Detection {#sec-trendtest}
 
 This lecture demonstrates the effects of autocorrelation on the results of statistical tests for trend detection. 
 You will recall the assumptions of the classical $t$-test and Mann--Kendall tests and will be able to suggest bootstrapped modifications of these tests to overcome the problem of temporal dependence. 
