@@ -764,7 +764,7 @@ After estimating the trend coefficients with OLS, visualize the results (@fig-ai
 
 ```{r}
 #| label: fig-airpassangersRegTrend
-#| fig-cap: "The plots of the `AirPassengers` data with estimated parametric linear and quadratic trends."
+#| fig-cap: "Plots of the `AirPassengers` data with estimated parametric linear and quadratic trends."
 
 p1 <- pAirPassengers + 
     geom_line(aes(y = tm1$fitted.values), col = 4, lwd = 1.5) + 
@@ -939,7 +939,7 @@ p1 + p2 +
 
 ## Generalized additive models (GAMs) {#sec-GAM}
 
-An alternative way of modeling nonlinearities in trends, seasonality, and other patterns is by replacing the original variables with those individually transformed using smooth nonparametric functions, such as in a *generalized additive model* [GAM;Wood:2006book].
+An alternative way of modeling nonlinearities in trends, seasonality, and other patterns is by replacing the original variables with those individually transformed using smooth nonparametric functions, such as in a *generalized additive model* [GAM,@Wood:2006book].
 The model is called 'generalized' because the distribution of the response variable $Y_t$ is not just normal but can be from a family of exponential distributions, such as Poisson, binomial, and gamma.
 A smooth monotonic function $g(\cdot)$ called the 'link function' is applied to transform the response variable.
 However, our interest currently is in the additive nature of these models.
@@ -954,9 +954,9 @@ t <- 1:length(WWWusage)
 tau <- c(min(t), 10, 20, 50)
 
 # Generate the B-spline basis matrices
-s1 <- bs(t, knots = tau, degree = 1)
-s2 <- bs(t, knots = tau, degree = 2)
-s3 <- bs(t, knots = tau, degree = 3)
+s1 <- splines::bs(t, knots = tau, degree = 1)
+s2 <- splines::bs(t, knots = tau, degree = 2)
+s3 <- splines::bs(t, knots = tau, degree = 3)
 
 # Transform for easy plotting and regression
 S1 <- ts(data.frame(s1))
@@ -967,10 +967,10 @@ S3 <- ts(data.frame(s3))
 colnames(S3) <- paste0("B", 1:ncol(S3))
 ```
 
-Instead of fitting a global nonlinear function like in polynomial regresison (@sec-regressionTime) or fitting simpler local polynomials directly like in lowess smoothing (@sec-lowess), we can constuct a basis from basic splines (B-splines).
-B-splines are simple functions, which vanish outside the intervals defined by timepoints called the 'knots.'
-These splines are defined recursively, from the lowest to higher orders, starting from a simple indicator function for the intervals between the knots [see Appendix to Chapter 5 in @Hastie:etal:2009 for the recursive formulas]. 
-Here we show results of the recursive computations, for times $t = 1, \dots,$ `r max(t)` and unequally-spaced knots `r paste0(tau, collapse = ", ")` (this is a more general case than the uniformly-spaced knots giving us cardinal B-splines).
+Instead of fitting a global nonlinear function like in a polynomial regression (@sec-regressionTime) or fitting simpler local polynomials directly like in lowess smoothing (@sec-lowess), we can construct a basis from basic splines (B-splines).
+B-splines are simple functions, which vanish outside the intervals defined by time points called the 'knots.'
+These splines are defined recursively, from the lowest to higher orders, starting from a simple indicator function for the intervals between the knots [see Appendix to Chapter 5 in @Hastie:etal:2009 or Chapter 4.1 in @Wood:2006book for the recursive formulas]. 
+Here we show the results of the recursive computations, for times $t = 1, \dots,$ `r max(t)` and knots `r paste0(tau, collapse = ", ")` spaced unequally for illustration purposes (uniformly-spaced knots give us cardinal B-splines).
 @fig-BS1 shows a basis formed by B-splines of degree one, and @fig-BS2 shows splines of degree two.
 
 ```{r}
@@ -995,13 +995,18 @@ forecast::autoplot(S2, facets = TRUE) +
 
 In the next step, the basis is used in regression, for example, to model the expected value $\mu_t$ of the `WWWusage` data introduced in @sec-lowess:
 $$
-\mu_t = a_0 + f(t),
+g(\mu_t) = \alpha_0 + f(t),
 $${#eq-GAM}
-where $a_0$ is the intercept, and $f(t)$ represents the added effects of the $M$ basis functions $B_m(t)$ (hence the word 'additive' in GAM):
+where $\alpha_0$ is the intercept, and $f(t)$ represents the added effects of the $M$ basis functions $B_m(t)$ (hence the word 'additive' in GAM):
 $$
 f(t) = \sum_{m = 1}^M \beta_m B_m(t).
 $$
-We are not interested in the individual regression coefficients $\beta_m$ (regression parameters) we estimated, hence the function $f(t)$ is called *nonparametric* even though many parameters have been estimated to obtain $f(t)$ (similar to lowess smoothing).
+Here we may assume that the response `WWWusage` is normally distributed.
+The link function $g(\cdot)$ for normal distribution is identity (no transformation to the original data), hence we can omit it and rewrite @eq-GAM for our data as follows:
+$$
+\mu_t = \alpha_0 + f(t).
+$$
+We are not interested in the individual regression coefficients $\beta_m$ (regression parameters) we estimated, hence the function $f(t)$ is *nonparametric* even though many parameters have been estimated to obtain $f(t)$, similar to lowess smoothing.
 
 The model in @eq-GAM can handle deviations from normality and can accommodate nonlinearity and nonmonotonicity of individual relationships, however, the model does not address the potential issue of remaining dependencies in the errors [e.g., see @Kohn:etal:2000].
 We skip the topic of selecting an appropriate distribution, testing statistical significance of estimated patterns, or using the reported confidence intervals for inference until later in the course when we are familiar with various tests for autocorrelation and trends (e.g., see @sec-trendtest on trend tests and @sec-GAMLSS using additional covariates, specifying structure of the regression errors, and extending GAM to several parameters of an exponential distribution beyond just the mean).
@@ -1012,7 +1017,7 @@ The results are not so bad given the knots were set without considering the data
 ```{r}
 #| label: fig-BSreg
 #| echo: false
-#| fig-cap: "Results of regressing `WWWusage` on the linear, quadratic, and cubic B-spline bases. The fit in each case is suboptimal because the knots were set arbitrarly."
+#| fig-cap: "Results of regressing `WWWusage` on the linear, quadratic, and cubic B-spline bases. The fit in each case is suboptimal because the knots were set arbitrarily."
 
 # Fit the regressions
 m1 <- lm(WWWusage ~ S1[, -1])
@@ -1034,11 +1039,11 @@ p1 + p2 + p3 +
     plot_annotation(tag_levels = 'A')
 ```
 
-The number and locations of the knots are important tuning parameters for achieving a desired smoothness.
+The number and locations of the knots are important tuning parameters for achieving the desired smoothness.
 Fortunately, there exist cross-validation procedures and penalization techniques that allow us to set these parameters rather automatically.
 When a penalty is applied to the basis coefficients, B-splines are called P-splines.
 
-The R packages `mgcv` and `gamlss` provide sevaral types of splines.
+The R packages `mgcv` and `gamlss` provide several types of smoothing splines.
 In this lecture, we demonstrate the package `mgcv` but we will use the package `gamlss` in @sec-GAMLSS.
 
 ::: {.callout-note icon=false}
@@ -1046,9 +1051,9 @@ In this lecture, we demonstrate the package `mgcv` but we will use the package `
 ## Example: GAM of WWWusage
 
 Consider fitting the GAM specified in @eq-GAM to the `WWWusage` time series.
-Here we use B-splines again (see `?mgcv::smooth.terms` and `?mgcv::b.spline` for different options), but allow the parameters to be estimated each time using a cross-validation (see `?mgcv::gam` for more details).
+Here we use B-splines again (see `?mgcv::smooth.terms` and `?mgcv::b.spline` for different options), but allow the parameters to be estimated each time using cross-validation (see `?mgcv::gam` for more details).
 
-In the code below, we estimate the model four times, with different spline orders `m[1]` (quadratic or cubic) and basis dimensions `k` (it controls the overall smothness as it sets the upper limit on the degrees of freedom associated with a smooth, see `?mgcv::choose.k`).
+In the code below, we estimate the model four times, with different spline orders `m[1]` (quadratic or cubic) and basis dimensions `k` (`k` controls the overall smoothness as it sets the upper limit on the degrees of freedom associated with a smooth, see `?mgcv::choose.k`).
 The models can be compared using the Akaike information criterion (AIC).
 
 ```{r}
@@ -1067,7 +1072,8 @@ From the results above and @fig-WWWusageGAM, we may conclude that when the smoot
 
 ```{r}
 #| label: fig-WWWusageGAM
-#| fig-cap: "Results of regressing `WWWusage` on the linear, quadratic, and cubic B-spline bases. The fit in each case is suboptimal because the knots were set arbitrarly."
+#| fig-cap: "Results of regressing `WWWusage` on time, using the smoothing splines."
+#| fig-height: 7
 
 p1 <- p0 + 
     geom_line(aes(y = mwww_q1$fitted.values), col = 4, lwd = 1.5) +
@@ -1085,7 +1091,7 @@ p4 <- p0 +
     plot_annotation(tag_levels = 'A')
 ```
 
-Summary of the last model:
+Summary of the last model using cubic smoothing splines:
 
 ```{r}
 #| code-fold: false
@@ -1094,13 +1100,92 @@ summary(mwww_c3)
 ```
 :::
 
-
 ::: {.callout-note icon=false}
 
 ## Example: GAM of the airline passengers time series
 
-Consider ...
+Consider fitting a GAM to the airline passengers time series. 
+Similar to our previous analyses, we need to apply logarithmic transformations to stabilize the variance and transform the multiplicative seasonality to additive, but now we have a few more options to choose from.
+We may continue assuming a lognormal distribution of the response with the identity link $g(\mathrm{E}(Y_t)) = \mathrm{E}(Y_t)$
+$$
+Y_t \sim LN(\mu_t, \sigma^2) \text{ or equivalently } \ln(Y_t) ~ N(\mu_t, \sigma^2)
+$${#eq-GAMlno}
+or use a normal distribution with the logarithmic link function $g(\mathrm{E}(Y_t)) = \ln(\mathrm{E}(Y_t))$:
+$$
+Y_t \sim N(\mu_t, \sigma^2).
+$${#eq-GAMno}
+The main difference between these options is how the errors are interpreted.
 
+For the expected values, we will use a GAM with smoothing splines applied to the numeric time and month:
+$$
+g(\mu_t) = \alpha_0 + f_1(t) + f_2(Month_t).
+$$
+This model will capture a potentially non-monotonic trend and seasonality.
+We will use cyclical splines for $f_2(\cdot)$, with an additional penalty to ensure a smooth transition between the last and the first month of the annual cycle.
+
+Below we fit the model for both distribution families, lognormal with the identity link function (@eq-GAMlno) and normal with the logarithmic link (@eq-GAMno):
+
+```{r}
+#| code-fold: false
+
+t <- as.vector(time(AirPassengers))
+month <- as.numeric(cycle(AirPassengers))
+
+m_lno <- gam(log(AirPassengers) ~ s(t) + s(month, bs = "cp"), 
+         family = gaussian(link = "identity"))
+
+m_no <- gam(AirPassengers ~ s(t) + s(month, bs = "cp"), 
+         family = gaussian(link = "log"))
+```
+
+@fig-airpassangersGAM shows the results of smoothing are quite similar. 
+In both cases, we were not able to fully remove seasonality from the data, based on the residual autocorrelation at the seasonal lag of 12 months.
+
+```{r}
+#| label: fig-airpassangersGAM
+#| fig-cap: "Plots of the `AirPassengers` data smoothed with GAMs and ACFs of the residuals."
+#| fig-height: 7
+
+p1 <- pAirPassengers + 
+    geom_line(aes(y = exp(m_lno$fitted.values)), col = 4, lwd = 1.5) + 
+    ggtitle("GAM smoothing using lognormal distribution")
+p2 <- forecast::ggAcf(m_lno$residuals) + 
+    ggtitle("ACF of residuals, using lognormal distribution") +
+    xlab("Lag (months)")
+p3 <- pAirPassengers + 
+    geom_line(aes(y = m_no$fitted.values), col = 4, lwd = 1.5) + 
+    ggtitle("GAM smoothing using normal distribution with log link")
+p4 <- forecast::ggAcf(m_no$residuals) + 
+    ggtitle("ACF of residuals, using normal distribution with log link") +
+    xlab("Lag (months)")
+(p1 + p2) / (p3 + p4) + 
+    plot_annotation(tag_levels = 'A')
+```
+
+```{r}
+#| echo: false
+
+tmp <- summary(m_no)
+```
+
+We might prefer using the formulation in @eq-GAMno since it captures the most recent peaks better (@fig-airpassangersGAM C) than the alternative (@fig-airpassangersGAM A), however, more rigorous numeric comparisons can be performed.
+
+The fitted smooth functions can be visualized using `plot(m_no)` or using the `ggplot2`-type graphics as in @fig-airpassangersGAMterms.
+Note that the smooths are centered at 0 for the identifiability.
+This model used approximately `r tmp$s.table['s(t)', 'edf']` degrees of freedom to fit the trend, which is much more than the polynomial regression used.
+To fit the seasonality, the GAM used approximately `r tmp$s.table['s(month)', 'edf']` degrees of freedom, which is between the numbers for the regressions with Fourier series (4) and categorical months (11).
+Note that the quality of removing seasonality by GAM in this case is also between the regressions with Fourier series (strong autocorrelation at the seasonal lag remains, @fig-airpassangersRegTrendFourier) and categorical months (no significant autocorrelation at the seasonal lag, @fig-airpassangersRegTrendSeas).
+
+```{r}
+#| label: fig-airpassangersGAMterms
+#| fig-cap: "GAM smoothers. Solid curves are the function estimates, dashed curves are 2 standard errors above and below the estimate. The y-labels show the variable to which the smoothing splines were applied and the approximate degrees of freedom used for the smooth."
+
+library(mgcViz)
+b <- getViz(m_no)
+print(plot(b, allTerms = TRUE) + 
+          theme_light(),
+      pages = 1)
+```
 :::
 
 
@@ -1280,7 +1365,7 @@ To quantify the uncertainty, we provide prediction intervals that are based on t
 The evaluation of the methods may involve splitting the time series into training and testing periods. 
 Overall, this lecture focused on presenting the methods themselves, while *residual diagnostics* and *evaluation on a testing set* were omitted due to time constraints.
 
-While the considered methods are among the most common, there are many more smoothing methods that can be applied to time series: splines (such as used in generalized additive models, GAMs), kernels, machine learning techniques, etc.
+While the considered methods are among the most common, there are many more smoothing methods that can be applied to time series, including machine learning techniques.
 
 
 ## Appendix

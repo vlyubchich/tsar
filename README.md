@@ -7,7 +7,7 @@ Remember that all predictive inference is based on the assumptions that the rela
 - appendix or lecture on changepoint analysis
 - GLM or another generalized model with classification example for fisheries or ecology.
 - local stationarity, warping, time motifs, graph representation of time series
-
+- from NOAA project with G.N.: "Environmental Statistics 2: identification of different types of rare events in time series (appendix?), time-series cross-validation (l 12?), and GAMLSS (lect 12 on TSREG2 - done; lect 3 - done)"
 
 # Conventions and format examples
 

@@ -99,14 +99,14 @@ Answer whether each of these statements is true or false.
 1. If ACF values at the first ten lags are statistically significant, then the time series is not stationary.
 1. If $X_t$ is an ARIMA$(p,d,q)$ process, then $(1-B)^d X_t$ is an ARMA$(p,q)$ process.
 1. Slowly decaying ACF is a sign of nonstationarity.
-1. If a hypothesis $H_1$ of a linear trend was accepted for the series $U_t$, $t = 1, \dots, T$, it will be also accepted for the subsets $U_{t'}$, where $t' = j, \dots, k$; $j<k$, and $j,k < T$.
+1. If the hypothesis $H_1$ of a linear trend was accepted for the series $U_t$, $t = 1, \dots, T$, it will be also accepted for the subsets $U_{t'}$, where $t' = j, \dots, k$; $j<k$, and $j,k < T$.
 1. Unit root tests can be applied to determine the appropriate order of differencing $d$.
 1. A time series that exhibits a quadratic-looking trend can be made stationary (detrended) using the Box--Cox transformation with the power parameter $\lambda = 2$.
 1. ARIMA(0,1,0) model is a random walk.
 1. For the backshift operator $B$, $(1-B)^dX_t = (1-B^d)X_t$.
 1. A linear time trend can be eliminated by differencing the time series once or twice.
 1. Trend functions (e.g., $X_t = 0.35 + 0.11t + \epsilon_t$, where $\epsilon_t$ are uncorrelated errors) express the changes in the process $X_t$ caused by time.
-1. Time series should be differenced just enough times to remove a stochastic trend. Differencing too many times causes problems.
+1. Time series should be differenced just enough times to remove a stochastic trend. Differencing too many times leads to problems.
 1. Autocorrelation in observations affects results of the $t$-test and Mann--Kendall test.
 1. The Mann--Kendall test focuses on a more general class of trends than the $t$-test does.
 1. The null hypothesis of the augmented Dickey--Fuller test is no unit root (stationarity).
