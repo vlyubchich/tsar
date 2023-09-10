@@ -224,7 +224,7 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./l10_spectral.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Spectral Analysis</span></a>
+  <a href="./l13_spectral.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Spectral Analysis</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -281,7 +281,7 @@ div.csl-indent {
   <li><a href="#frequency-estimation-in-time" id="toc-frequency-estimation-in-time" class="nav-link" data-scroll-target="#frequency-estimation-in-time"><span class="toc-section-number">10.6</span>  Frequency estimation in time</a></li>
   <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="toc-section-number">10.7</span>  Conclusion</a></li>
   <li><a href="#appendix" id="toc-appendix" class="nav-link" data-scroll-target="#appendix"><span class="toc-section-number">10.8</span>  Appendix</a></li>
-  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/vlyubchich/tsar/edit/master/l10_spectral.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/vlyubchich/tsar/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/vlyubchich/tsar/edit/master/l13_spectral.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/vlyubchich/tsar/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
@@ -526,7 +526,7 @@ Example: Spectral analysis of the airline passenger data
 <span>    <span class="fu">plot_annotation</span><span class="op">(</span>tag_levels <span class="op">=</span> <span class="st">'A'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
 <div id="fig-airpassangersFFT" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="l10_spectral_files/figure-html/fig-airpassangersFFT-1.png" class="img-fluid figure-img" width="768"></p>
+<figure class="figure"><p><img src="l13_spectral_files/figure-html/fig-airpassangersFFT-1.png" class="img-fluid figure-img" width="768"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;10.1: Monthly <code>AirPassengers</code> time series, log-transformed and detrended, and the corresponding fast Fourier transforms.</figcaption><p></p>
 </figure>
 </div>
@@ -541,7 +541,7 @@ Example: Spectral analysis of the airline passenger data
 <span><span class="fu"><a href="https://rdrr.io/r/stats/spec.pgram.html">spec.pgram</a></span><span class="op">(</span><span class="va">res</span>, spans <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">11</span>, <span class="fl">11</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
 <div id="fig-airpassangersFFTsm" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="l10_spectral_files/figure-html/fig-airpassangersFFTsm-1.png" class="img-fluid figure-img" width="768"></p>
+<figure class="figure"><p><img src="l13_spectral_files/figure-html/fig-airpassangersFFTsm-1.png" class="img-fluid figure-img" width="768"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;10.2: Smoothed periodograms of monthly log-transformed and detrended <code>AirPassengers</code> time series.</figcaption><p></p>
 </figure>
 </div>
@@ -553,7 +553,7 @@ Example: Spectral analysis of the airline passenger data
 <details><summary>Code</summary><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/spectrum.html">spectrum</a></span><span class="op">(</span><span class="va">res</span>, method <span class="op">=</span> <span class="st">"ar"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
 <div id="fig-airpassangersFFTar" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="l10_spectral_files/figure-html/fig-airpassangersFFTar-1.png" class="img-fluid figure-img" width="768"></p>
+<figure class="figure"><p><img src="l13_spectral_files/figure-html/fig-airpassangersFFTar-1.png" class="img-fluid figure-img" width="768"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;10.3: Periodogram of AR process approximating the monthly log-transformed and detrended <code>AirPassengers</code> time series.</figcaption><p></p>
 </figure>
 </div>
@@ -581,7 +581,7 @@ Example: Ammonium concentration in wastewater system
 <span>    <span class="fu">ylab</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/bquote.html">bquote</a></span><span class="op">(</span><span class="va">NH</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span><span class="op">~</span><span class="va">concentration</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
 <div id="fig-NH4" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="l10_spectral_files/figure-html/fig-NH4-1.png" class="img-fluid figure-img" width="768"></p>
+<figure class="figure"><p><img src="l13_spectral_files/figure-html/fig-NH4-1.png" class="img-fluid figure-img" width="768"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;10.4: Time series of ammonium concentration in a wastewater system.</figcaption><p></p>
 </figure>
 </div>
@@ -599,7 +599,7 @@ Example: Ammonium concentration in wastewater system
 <span><span class="fu">lomb</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lomb/man/lsp.html">lsp</a></span><span class="op">(</span><span class="va">D</span><span class="op">$</span><span class="va">NH4</span>, times <span class="op">=</span> <span class="va">D</span><span class="op">$</span><span class="va">Time</span>, type <span class="op">=</span> <span class="st">"frequency"</span>, alpha <span class="op">=</span> <span class="fl">0.05</span>, main <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
 <div id="fig-NH4lombf" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="l10_spectral_files/figure-html/fig-NH4lombf-1.png" class="img-fluid figure-img" width="768"></p>
+<figure class="figure"><p><img src="l13_spectral_files/figure-html/fig-NH4lombf-1.png" class="img-fluid figure-img" width="768"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;10.5: Lomb–Scargle periodograms computed for the unequally-spaced time series of ammonium concentration.</figcaption><p></p>
 </figure>
 </div>
@@ -609,7 +609,7 @@ Example: Ammonium concentration in wastewater system
 <details><summary>Code</summary><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">lomb</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lomb/man/lsp.html">lsp</a></span><span class="op">(</span><span class="va">D</span><span class="op">$</span><span class="va">NH4</span>, times <span class="op">=</span> <span class="va">D</span><span class="op">$</span><span class="va">Time</span>, type <span class="op">=</span> <span class="st">"period"</span>, alpha <span class="op">=</span> <span class="fl">0.05</span>, main <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
 <div id="fig-NH4lombp" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="l10_spectral_files/figure-html/fig-NH4lombp-1.png" class="img-fluid figure-img" width="768"></p>
+<figure class="figure"><p><img src="l13_spectral_files/figure-html/fig-NH4lombp-1.png" class="img-fluid figure-img" width="768"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;10.6: Lomb–Scargle periodograms computed for the unequally-spaced time series of ammonium concentration.</figcaption><p></p>
 </figure>
 </div>
@@ -669,7 +669,7 @@ Example: Spectrograms for the NAO
 <span>    <span class="fu">plot_annotation</span><span class="op">(</span>tag_levels <span class="op">=</span> <span class="st">'A'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
 <div id="fig-NAO" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="l10_spectral_files/figure-html/fig-NAO-1.png" class="img-fluid figure-img" width="768"></p>
+<figure class="figure"><p><img src="l13_spectral_files/figure-html/fig-NAO-1.png" class="img-fluid figure-img" width="768"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;10.7: North Atlantic Oscillation (NAO) winter index (December, January, and February) calculated as the mean of 100 model-constrained NAO reconstructions, along with its smoothed periodograms. The dashed lines denote the maximal magnitude of the spectrum.</figcaption><p></p>
 </figure>
 </div>
@@ -715,7 +715,7 @@ Example: Spectrograms for the NAO
 <span>            decimate <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
 <div id="fig-NAOspect" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="l10_spectral_files/figure-html/fig-NAOspect-1.png" class="img-fluid figure-img" width="768"></p>
+<figure class="figure"><p><img src="l13_spectral_files/figure-html/fig-NAOspect-1.png" class="img-fluid figure-img" width="768"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;10.8: Spectrograms for North Atlantic Oscillation (NAO) winter index.</figcaption><p></p>
 </figure>
 </div>
@@ -739,7 +739,7 @@ Example: Spectrograms for the NAO
 <span><span class="fu"><a href="https://rdrr.io/pkg/dplR/man/wavelet.plot.html">wavelet.plot</a></span><span class="op">(</span><span class="va">wv</span>, wavelet.levels <span class="op">=</span> <span class="va">levs</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
 <div id="fig-NAOwv" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="l10_spectral_files/figure-html/fig-NAOwv-1.png" class="img-fluid figure-img" width="768"></p>
+<figure class="figure"><p><img src="l13_spectral_files/figure-html/fig-NAOwv-1.png" class="img-fluid figure-img" width="768"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;10.9: Wavelet analysis of the North Atlantic Oscillation (NAO) winter index.</figcaption><p></p>
 </figure>
 </div>

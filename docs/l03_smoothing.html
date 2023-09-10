@@ -224,7 +224,7 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./l10_spectral.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Spectral Analysis</span></a>
+  <a href="./l13_spectral.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Spectral Analysis</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -281,7 +281,7 @@ div.csl-indent {
   </ul>
 </li>
   <li>
-<a href="#lowess-smoothing" id="toc-lowess-smoothing" class="nav-link" data-scroll-target="#lowess-smoothing"><span class="toc-section-number">3.3</span>  Lowess smoothing</a>
+<a href="#sec-lowess" id="toc-sec-lowess" class="nav-link" data-scroll-target="#sec-lowess"><span class="toc-section-number">3.3</span>  Lowess smoothing</a>
   <ul class="collapse">
 <li><a href="#lowess-smoothing-for-seasonal-data" id="toc-lowess-smoothing-for-seasonal-data" class="nav-link" data-scroll-target="#lowess-smoothing-for-seasonal-data"><span class="toc-section-number">3.3.1</span>  Lowess smoothing for seasonal data</a></li>
   </ul>
@@ -299,9 +299,10 @@ div.csl-indent {
   <li><a href="#seasonal-regression-with-fourier-series" id="toc-seasonal-regression-with-fourier-series" class="nav-link" data-scroll-target="#seasonal-regression-with-fourier-series"><span class="toc-section-number">3.5.2</span>  Seasonal regression with Fourier series</a></li>
   </ul>
 </li>
-  <li><a href="#sec-differencing" id="toc-sec-differencing" class="nav-link" data-scroll-target="#sec-differencing"><span class="toc-section-number">3.6</span>  Differencing</a></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="toc-section-number">3.7</span>  Conclusion</a></li>
-  <li><a href="#appendix" id="toc-appendix" class="nav-link" data-scroll-target="#appendix"><span class="toc-section-number">3.8</span>  Appendix</a></li>
+  <li><a href="#sec-GAM" id="toc-sec-GAM" class="nav-link" data-scroll-target="#sec-GAM"><span class="toc-section-number">3.6</span>  Generalized additive models (GAMs)</a></li>
+  <li><a href="#sec-differencing" id="toc-sec-differencing" class="nav-link" data-scroll-target="#sec-differencing"><span class="toc-section-number">3.7</span>  Differencing</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="toc-section-number">3.8</span>  Conclusion</a></li>
+  <li><a href="#appendix" id="toc-appendix" class="nav-link" data-scroll-target="#appendix"><span class="toc-section-number">3.9</span>  Appendix</a></li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/vlyubchich/tsar/edit/master/l03_smoothing.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/vlyubchich/tsar/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
@@ -348,7 +349,7 @@ div.csl-indent {
 <p>Recall the classical decomposition <span id="eq-trseas"><span class="math display">\[
 Y_t = M_t + S_t + \epsilon_t,
 \tag{3.1}\]</span></span> where <span class="math inline">\(M_t\)</span> is a slowly changing function (trend component), <span class="math inline">\(\epsilon_t\)</span> is stationary random noise component, and <span class="math inline">\(S_t\)</span> is the periodic term with the period <span class="math inline">\(m\geqslant 2\)</span> (seasonal component) and scaling factors <span class="math inline">\(\lambda_k &gt; 0\)</span> such that <span class="math inline">\(S_{t+km} = \lambda_kS_t\)</span> for <span class="math inline">\(1 \leqslant t \leqslant m\)</span> and each <span class="math inline">\(k \geqslant 1\)</span>. For identification, we need <span class="math inline">\(\sum_{t=1}^m S_t = 0\)</span> and <span class="math inline">\(\mathrm{E}(\epsilon_t)=0\)</span>.</p>
-<p>Our goal is to estimate and extract <span class="math inline">\(M_t\)</span> and <span class="math inline">\(S_t\)</span> with the hope that the residual or noise component <span class="math inline">\(\epsilon_t\)</span> will turn out to be a stationary time series (<a href="#sec-movavg"><span>Section&nbsp;3.2</span></a>–<a href="#sec-regressionTime"><span>Section&nbsp;3.5</span></a>). Alternatively, Box–Jenkins models use difference operators repeatedly to the series <span class="math inline">\(Y_t\)</span> until a stationary time series is obtained (see <a href="#sec-differencing"><span>Section&nbsp;3.6</span></a> on differencing).</p>
+<p>Our goal is to estimate and extract <span class="math inline">\(M_t\)</span> and <span class="math inline">\(S_t\)</span> with the hope that the residual or noise component <span class="math inline">\(\epsilon_t\)</span> will turn out to be a stationary time series (<a href="#sec-movavg"><span>Section&nbsp;3.2</span></a>–<a href="#sec-regressionTime"><span>Section&nbsp;3.5</span></a>). Alternatively, Box–Jenkins models use difference operators repeatedly to the series <span class="math inline">\(Y_t\)</span> until a stationary time series is obtained (see <a href="#sec-differencing"><span>Section&nbsp;3.7</span></a> on differencing).</p>
 <p>The seasonal component is said to have <em>constant seasonal variation</em> if the scaling factors satisfy <span class="math inline">\(\lambda_{k} = 1\)</span> for all <span class="math inline">\(k\)</span>. In other words, <span class="math inline">\(S_{t+m} = S_{t}\)</span> for all <span class="math inline">\(t\)</span>. The constant variation is an assumption of most modeling techniques we will be using in this course. Unfortunately, many real seasonal time series do not have this constancy property and it is necessary to first perform a <em>variance-stabilizing transformation</em> to modify the original time series into one with constant variation. To some extent, this is a matter of trial and error, where we work from ‘weaker’ transformations to ‘stronger’ transformations as needed. Typically, power transformations are used <span class="math inline">\(Y_{t} \rightarrow Y^{\lambda}_{t}\)</span>, where <span class="math inline">\(0 &lt; \lambda &lt; 1\)</span> or, log or even log log transformations, e.g., <span class="math inline">\(Y_{t} \rightarrow \log Y_{t}\)</span>.</p>
 <p>The log transformation of <span class="math inline">\(Y_t\)</span> is convenient when we assume not an additive model as <a href="#eq-trseas">Equation&nbsp;<span>3.1</span></a> is, but a multiplicative model as <span id="eq-trseasmult"><span class="math display">\[
 Y_t = M_t \cdot S_t \cdot \epsilon_t.
@@ -665,7 +666,7 @@ Example: Secchi depth manual simple moving average smoothing
 </div>
 </div>
 </div>
-</section></section><section id="lowess-smoothing" class="level2" data-number="3.3"><h2 data-number="3.3" class="anchored" data-anchor-id="lowess-smoothing">
+</section></section><section id="sec-lowess" class="level2" data-number="3.3"><h2 data-number="3.3" class="anchored" data-anchor-id="sec-lowess">
 <span class="header-section-number">3.3</span> Lowess smoothing</h2>
 <p>One of the alternatives for estimating trends <span class="math inline">\(M_t\)</span> is <em>locally weighted regression</em> (shortened as ‘lowess’ or ‘loess’) <span class="citation" data-cites="Cleveland:1979">(<a href="references.html#ref-Cleveland:1979" role="doc-biblioref">Cleveland 1979</a>)</span>. We can apply lowess as a regression of <span class="math inline">\(Y_t\)</span> on time, for example, using the algorithm outlined by <span class="citation" data-cites="Berk:2016">Berk (<a href="references.html#ref-Berk:2016" role="doc-biblioref">2016</a>)</span>:</p>
 <ol type="1">
@@ -1119,7 +1120,7 @@ Example: Airline passengers non-seasonal polynomial smoothing
 </details><div class="cell-output-display">
 <div id="fig-airpassangersRegTrend" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure"><p><img src="l03_smoothing_files/figure-html/fig-airpassangersRegTrend-1.png" class="img-fluid figure-img" width="768"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;3.14: The plots of the <code>AirPassengers</code> data with estimated parametric linear and quadratic trends.</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3.14: Plots of the <code>AirPassengers</code> data with estimated parametric linear and quadratic trends.</figcaption><p></p>
 </figure>
 </div>
 </div>
@@ -1339,8 +1340,208 @@ sin_{2,t} &amp;= \sin(4 \pi \text{month}_t/12)
 </div>
 </div>
 </div>
-</section></section><section id="sec-differencing" class="level2" data-number="3.6"><h2 data-number="3.6" class="anchored" data-anchor-id="sec-differencing">
-<span class="header-section-number">3.6</span> Differencing</h2>
+</section></section><section id="sec-GAM" class="level2" data-number="3.6"><h2 data-number="3.6" class="anchored" data-anchor-id="sec-GAM">
+<span class="header-section-number">3.6</span> Generalized additive models (GAMs)</h2>
+<p>An alternative way of modeling nonlinearities in trends, seasonality, and other patterns is by replacing the original variables with those individually transformed using smooth nonparametric functions, such as in a <em>generalized additive model</em> <span class="citation" data-cites="Wood:2006book">(GAM, <a href="references.html#ref-Wood:2006book" role="doc-biblioref">Wood 2006</a>)</span>. The model is called ‘generalized’ because the distribution of the response variable <span class="math inline">\(Y_t\)</span> is not just normal but can be from a family of exponential distributions, such as Poisson, binomial, and gamma. A smooth monotonic function <span class="math inline">\(g(\cdot)\)</span> called the ‘link function’ is applied to transform the response variable. However, our interest currently is in the additive nature of these models.</p>
+<div class="cell">
+
+</div>
+<p>Instead of fitting a global nonlinear function like in a polynomial regression (<a href="#sec-regressionTime"><span>Section&nbsp;3.5</span></a>) or fitting simpler local polynomials directly like in lowess smoothing (<a href="#sec-lowess"><span>Section&nbsp;3.3</span></a>), we can construct a basis from basic splines (B-splines). B-splines are simple functions, which vanish outside the intervals defined by time points called the ‘knots.’ These splines are defined recursively, from the lowest to higher orders, starting from a simple indicator function for the intervals between the knots <span class="citation" data-cites="Hastie:etal:2009">Wood (<a href="references.html#ref-Wood:2006book" role="doc-biblioref">2006</a>)</span>. Here we show the results of the recursive computations, for times <span class="math inline">\(t = 1, \dots,\)</span> 100 and knots 1, 10, 20, 50 spaced unequally for illustration purposes (uniformly-spaced knots give us cardinal B-splines). <a href="#fig-BS1">Figure&nbsp;<span>3.17</span></a> shows a basis formed by B-splines of degree one, and <a href="#fig-BS2">Figure&nbsp;<span>3.18</span></a> shows splines of degree two.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-BS1" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure"><p><img src="l03_smoothing_files/figure-html/fig-BS1-1.png" class="img-fluid figure-img" width="768"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3.17: B-splines of degree one. The vertical dashed lines denote locations of the knots.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-BS2" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure"><p><img src="l03_smoothing_files/figure-html/fig-BS2-1.png" class="img-fluid figure-img" width="768"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3.18: B-splines of degree two. The vertical dashed lines denote locations of the knots.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In the next step, the basis is used in regression, for example, to model the expected value <span class="math inline">\(\mu_t\)</span> of the <code>WWWusage</code> data introduced in <a href="#sec-lowess"><span>Section&nbsp;3.3</span></a>: <span id="eq-GAM"><span class="math display">\[
+g(\mu_t) = \alpha_0 + f(t),
+\tag{3.6}\]</span></span> where <span class="math inline">\(\alpha_0\)</span> is the intercept, and <span class="math inline">\(f(t)\)</span> represents the added effects of the <span class="math inline">\(M\)</span> basis functions <span class="math inline">\(B_m(t)\)</span> (hence the word ‘additive’ in GAM): <span class="math display">\[
+f(t) = \sum_{m = 1}^M \beta_m B_m(t).
+\]</span> Here we may assume that the response <code>WWWusage</code> is normally distributed. The link function <span class="math inline">\(g(\cdot)\)</span> for normal distribution is identity (no transformation to the original data), hence we can omit it and rewrite <a href="#eq-GAM">Equation&nbsp;<span>3.6</span></a> for our data as follows: <span class="math display">\[
+\mu_t = \alpha_0 + f(t).
+\]</span> We are not interested in the individual regression coefficients <span class="math inline">\(\beta_m\)</span> (regression parameters) we estimated, hence the function <span class="math inline">\(f(t)\)</span> is <em>nonparametric</em> even though many parameters have been estimated to obtain <span class="math inline">\(f(t)\)</span>, similar to lowess smoothing.</p>
+<p>The model in <a href="#eq-GAM">Equation&nbsp;<span>3.6</span></a> can handle deviations from normality and can accommodate nonlinearity and nonmonotonicity of individual relationships, however, the model does not address the potential issue of remaining dependencies in the errors <span class="citation" data-cites="Kohn:etal:2000">(e.g., see <a href="references.html#ref-Kohn:etal:2000" role="doc-biblioref">Kohn et al. 2000</a>)</span>. We skip the topic of selecting an appropriate distribution, testing statistical significance of estimated patterns, or using the reported confidence intervals for inference until later in the course when we are familiar with various tests for autocorrelation and trends (e.g., see <a href="l07_trendtest.html"><span>Chapter&nbsp;7</span></a> on trend tests and <a href="l09_tsreg2.html#sec-GAMLSS"><span>Section&nbsp;9.6</span></a> using additional covariates, specifying structure of the regression errors, and extending GAM to several parameters of an exponential distribution beyond just the mean).</p>
+<p><a href="#fig-BSreg">Figure&nbsp;<span>3.19</span></a> shows the results of fitting the model in <a href="#eq-GAM">Equation&nbsp;<span>3.6</span></a> to the bases shown in <a href="#fig-BS1">Figure&nbsp;<span>3.17</span></a> and <a href="#fig-BS2">Figure&nbsp;<span>3.18</span></a>. The results are not so bad given the knots were set without considering the data.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-BSreg" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure"><p><img src="l03_smoothing_files/figure-html/fig-BSreg-1.png" class="img-fluid figure-img" width="768"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3.19: Results of regressing <code>WWWusage</code> on the linear, quadratic, and cubic B-spline bases. The fit in each case is suboptimal because the knots were set arbitrarily.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The number and locations of the knots are important tuning parameters for achieving the desired smoothness. Fortunately, there exist cross-validation procedures and penalization techniques that allow us to set these parameters rather automatically. When a penalty is applied to the basis coefficients, B-splines are called P-splines.</p>
+<p>The R packages <code>mgcv</code> and <code>gamlss</code> provide several types of smoothing splines. In this lecture, we demonstrate the package <code>mgcv</code> but we will use the package <code>gamlss</code> in <a href="l09_tsreg2.html#sec-GAMLSS"><span>Section&nbsp;9.6</span></a>.</p>
+<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Example: GAM of WWWusage
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Consider fitting the GAM specified in <a href="#eq-GAM">Equation&nbsp;<span>3.6</span></a> to the <code>WWWusage</code> time series. Here we use B-splines again (see <code><a href="https://rdrr.io/pkg/mgcv/man/smooth.terms.html">?mgcv::smooth.terms</a></code> and <code><a href="https://rdrr.io/pkg/mgcv/man/smooth.construct.bs.smooth.spec.html">?mgcv::b.spline</a></code> for different options), but allow the parameters to be estimated each time using cross-validation (see <code><a href="https://rdrr.io/pkg/mgcv/man/gam.html">?mgcv::gam</a></code> for more details).</p>
+<p>In the code below, we estimate the model four times, with different spline orders <code>m[1]</code> (quadratic or cubic) and basis dimensions <code>k</code> (<code>k</code> controls the overall smoothness as it sets the upper limit on the degrees of freedom associated with a smooth, see <code><a href="https://rdrr.io/pkg/mgcv/man/choose.k.html">?mgcv::choose.k</a></code>). The models can be compared using the Akaike information criterion (AIC).</p>
+<div class="cell">
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">mgcv</span><span class="op">)</span></span>
+<span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">WWWusage</span><span class="op">)</span></span>
+<span><span class="va">mwww_q1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span><span class="op">(</span><span class="va">WWWusage</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html">s</a></span><span class="op">(</span><span class="va">t</span>, bs <span class="op">=</span> <span class="st">"bs"</span>, m <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">mwww_c1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span><span class="op">(</span><span class="va">WWWusage</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html">s</a></span><span class="op">(</span><span class="va">t</span>, bs <span class="op">=</span> <span class="st">"bs"</span>, m <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">mwww_c2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span><span class="op">(</span><span class="va">WWWusage</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html">s</a></span><span class="op">(</span><span class="va">t</span>, bs <span class="op">=</span> <span class="st">"bs"</span>, m <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span>, k <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">mwww_c3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span><span class="op">(</span><span class="va">WWWusage</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html">s</a></span><span class="op">(</span><span class="va">t</span>, bs <span class="op">=</span> <span class="st">"bs"</span>, m <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span>, k <span class="op">=</span> <span class="fl">15</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/AIC.html">AIC</a></span><span class="op">(</span><span class="va">mwww_q1</span>, <span class="va">mwww_c1</span>, <span class="va">mwww_c2</span>, <span class="va">mwww_c3</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt;            df AIC
+#&gt; mwww_q1 10.92 701
+#&gt; mwww_c1 10.91 726
+#&gt; mwww_c2  5.97 887
+#&gt; mwww_c3 15.20 641</code></pre>
+</div>
+</div>
+<p>From the results above and <a href="#fig-WWWusageGAM">Figure&nbsp;<span>3.20</span></a>, we may conclude that when the smoothing parameters are allowed to be selected automatically, restricting the degrees of freedom leads to more dramatic changes than switching the order of splines.</p>
+<div class="cell">
+<details><summary>Code</summary><div class="sourceCode" id="cb65"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="va">p0</span> <span class="op">+</span> </span>
+<span>    <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">mwww_q1</span><span class="op">$</span><span class="va">fitted.values</span><span class="op">)</span>, col <span class="op">=</span> <span class="fl">4</span>, lwd <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Quadratic splines, automatic k"</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="va">p0</span> <span class="op">+</span> </span>
+<span>    <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">mwww_c1</span><span class="op">$</span><span class="va">fitted.values</span><span class="op">)</span>, col <span class="op">=</span> <span class="fl">4</span>, lwd <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Cubic splines, automatic k"</span><span class="op">)</span></span>
+<span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="va">p0</span> <span class="op">+</span> </span>
+<span>    <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">mwww_c2</span><span class="op">$</span><span class="va">fitted.values</span><span class="op">)</span>, col <span class="op">=</span> <span class="fl">4</span>, lwd <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Cubic splines, k = 5"</span><span class="op">)</span></span>
+<span><span class="va">p4</span> <span class="op">&lt;-</span> <span class="va">p0</span> <span class="op">+</span> </span>
+<span>    <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">mwww_c3</span><span class="op">$</span><span class="va">fitted.values</span><span class="op">)</span>, col <span class="op">=</span> <span class="fl">4</span>, lwd <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Cubic splines, k = 15"</span><span class="op">)</span></span>
+<span><span class="op">(</span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="va">p3</span> <span class="op">+</span> <span class="va">p4</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">plot_annotation</span><span class="op">(</span>tag_levels <span class="op">=</span> <span class="st">'A'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<div id="fig-WWWusageGAM" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure"><p><img src="l03_smoothing_files/figure-html/fig-WWWusageGAM-1.png" class="img-fluid figure-img" width="768"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3.20: Results of regressing <code>WWWusage</code> on time, using the smoothing splines.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Summary of the last model using cubic smoothing splines:</p>
+<div class="cell">
+<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">mwww_c3</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+#&gt; Family: gaussian 
+#&gt; Link function: identity 
+#&gt; 
+#&gt; Formula:
+#&gt; WWWusage ~ s(t, bs = "bs", m = c(3, 2), k = 15)
+#&gt; 
+#&gt; Parametric coefficients:
+#&gt;             Estimate Std. Error t value Pr(&gt;|t|)    
+#&gt; (Intercept)  137.080      0.552     248   &lt;2e-16 ***
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt; 
+#&gt; Approximate significance of smooth terms:
+#&gt;       edf Ref.df   F p-value    
+#&gt; s(t) 13.2   13.8 369  &lt;2e-16 ***
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt; 
+#&gt; R-sq.(adj) =  0.981   Deviance explained = 98.3%
+#&gt; GCV = 35.568  Scale est. = 30.519    n = 100</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Example: GAM of the airline passengers time series
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Consider fitting a GAM to the airline passengers time series. Similar to our previous analyses, we need to apply logarithmic transformations to stabilize the variance and transform the multiplicative seasonality to additive, but now we have a few more options to choose from. We may continue assuming a lognormal distribution of the response with the identity link <span class="math inline">\(g(\mathrm{E}(Y_t)) = \mathrm{E}(Y_t)\)</span> <span id="eq-GAMlno"><span class="math display">\[
+Y_t \sim LN(\mu_t, \sigma^2) \text{ or equivalently } \ln(Y_t) ~ N(\mu_t, \sigma^2)
+\tag{3.7}\]</span></span> or use a normal distribution with the logarithmic link function <span class="math inline">\(g(\mathrm{E}(Y_t)) = \ln(\mathrm{E}(Y_t))\)</span>: <span id="eq-GAMno"><span class="math display">\[
+Y_t \sim N(\mu_t, \sigma^2).
+\tag{3.8}\]</span></span> The main difference between these options is how the errors are interpreted.</p>
+<p>For the expected values, we will use a GAM with smoothing splines applied to the numeric time and month: <span class="math display">\[
+g(\mu_t) = \alpha_0 + f_1(t) + f_2(Month_t).
+\]</span> This model will capture a potentially non-monotonic trend and seasonality. We will use cyclical splines for <span class="math inline">\(f_2(\cdot)\)</span>, with an additional penalty to ensure a smooth transition between the last and the first month of the annual cycle.</p>
+<p>Below we fit the model for both distribution families, lognormal with the identity link function (<a href="#eq-GAMlno">Equation&nbsp;<span>3.7</span></a>) and normal with the logarithmic link (<a href="#eq-GAMno">Equation&nbsp;<span>3.8</span></a>):</p>
+<div class="cell">
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/time.html">time</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">month</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/time.html">cycle</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">m_lno</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html">s</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html">s</a></span><span class="op">(</span><span class="va">month</span>, bs <span class="op">=</span> <span class="st">"cp"</span><span class="op">)</span>, </span>
+<span>         family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">gaussian</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"identity"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">m_no</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span><span class="op">(</span><span class="va">AirPassengers</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html">s</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html">s</a></span><span class="op">(</span><span class="va">month</span>, bs <span class="op">=</span> <span class="st">"cp"</span><span class="op">)</span>, </span>
+<span>         family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">gaussian</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"log"</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><a href="#fig-airpassangersGAM">Figure&nbsp;<span>3.21</span></a> shows the results of smoothing are quite similar. In both cases, we were not able to fully remove seasonality from the data, based on the residual autocorrelation at the seasonal lag of 12 months.</p>
+<div class="cell">
+<details><summary>Code</summary><div class="sourceCode" id="cb69"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="va">pAirPassengers</span> <span class="op">+</span> </span>
+<span>    <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="va">m_lno</span><span class="op">$</span><span class="va">fitted.values</span><span class="op">)</span><span class="op">)</span>, col <span class="op">=</span> <span class="fl">4</span>, lwd <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"GAM smoothing using lognormal distribution"</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/autoplot.acf.html">ggAcf</a></span><span class="op">(</span><span class="va">m_lno</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"ACF of residuals, using lognormal distribution"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Lag (months)"</span><span class="op">)</span></span>
+<span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="va">pAirPassengers</span> <span class="op">+</span> </span>
+<span>    <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">m_no</span><span class="op">$</span><span class="va">fitted.values</span><span class="op">)</span>, col <span class="op">=</span> <span class="fl">4</span>, lwd <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"GAM smoothing using normal distribution with log link"</span><span class="op">)</span></span>
+<span><span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/autoplot.acf.html">ggAcf</a></span><span class="op">(</span><span class="va">m_no</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"ACF of residuals, using normal distribution with log link"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Lag (months)"</span><span class="op">)</span></span>
+<span><span class="op">(</span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="va">p3</span> <span class="op">+</span> <span class="va">p4</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">plot_annotation</span><span class="op">(</span>tag_levels <span class="op">=</span> <span class="st">'A'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<div id="fig-airpassangersGAM" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure"><p><img src="l03_smoothing_files/figure-html/fig-airpassangersGAM-1.png" class="img-fluid figure-img" width="768"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3.21: Plots of the <code>AirPassengers</code> data smoothed with GAMs and ACFs of the residuals.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+
+</div>
+<p>We might prefer using the formulation in <a href="#eq-GAMno">Equation&nbsp;<span>3.8</span></a> since it captures the most recent peaks better (<a href="#fig-airpassangersGAM">Figure&nbsp;<span>3.21</span></a> C) than the alternative (<a href="#fig-airpassangersGAM">Figure&nbsp;<span>3.21</span></a> A), however, more rigorous numeric comparisons can be performed.</p>
+<p>The fitted smooth functions can be visualized using <code>plot(m_no)</code> or using the <code>ggplot2</code>-type graphics as in <a href="#fig-airpassangersGAMterms">Figure&nbsp;<span>3.22</span></a>. Note that the smooths are centered at 0 for the identifiability. This model used approximately 8.069 degrees of freedom to fit the trend, which is much more than the polynomial regression used. To fit the seasonality, the GAM used approximately 8.922 degrees of freedom, which is between the numbers for the regressions with Fourier series (4) and categorical months (11). Note that the quality of removing seasonality by GAM in this case is also between the regressions with Fourier series (strong autocorrelation at the seasonal lag remains, <a href="#fig-airpassangersRegTrendFourier">Figure&nbsp;<span>3.16</span></a>) and categorical months (no significant autocorrelation at the seasonal lag, <a href="#fig-airpassangersRegTrendSeas">Figure&nbsp;<span>3.15</span></a>).</p>
+<div class="cell">
+<details><summary>Code</summary><div class="sourceCode" id="cb70"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mfasiolo/mgcViz">mgcViz</a></span><span class="op">)</span></span>
+<span><span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcViz/man/getViz.html">getViz</a></span><span class="op">(</span><span class="va">m_no</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">b</span>, allTerms <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_light</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>      pages <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<div id="fig-airpassangersGAMterms" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure"><p><img src="l03_smoothing_files/figure-html/fig-airpassangersGAMterms-1.png" class="img-fluid figure-img" width="768"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3.22: GAM smoothers. Solid curves are the function estimates, dashed curves are 2 standard errors above and below the estimate. The y-labels show the variable to which the smoothing splines were applied and the approximate degrees of freedom used for the smooth.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section><section id="sec-differencing" class="level2" data-number="3.7"><h2 data-number="3.7" class="anchored" data-anchor-id="sec-differencing">
+<span class="header-section-number">3.7</span> Differencing</h2>
 <p>A big subset of time series models (particularly, models dealing with random walk series) applies the differencing to eliminate trends.</p>
 <p>Let <span class="math inline">\(\Delta\)</span> be the difference operator (<span class="math inline">\(\nabla\)</span> notation is also used sometimes), then the simple first-order differences are: <span class="math display">\[
 \begin{split}
@@ -1390,35 +1591,35 @@ Example: Shampoo detrending by differencing
 </div>
 <div class="callout-body-container callout-body">
 <p>Remove the trend from the shampoo series by applying the differences.</p>
-<p>Based on <a href="#fig-shampooDiff">Figure&nbsp;<span>3.17</span></a>, differencing once is enough to remove the trend. The resulting detrended series is <span class="math display">\[
+<p>Based on <a href="#fig-shampooDiff">Figure&nbsp;<span>3.23</span></a>, differencing once is enough to remove the trend. The resulting detrended series is <span class="math display">\[
 Y^*_t = \Delta Y_t = (1 - B)Y_t = Y_t - Y_{t-1}.
 \]</span></p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb63"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="va">pshampoo</span> <span class="op">+</span></span>
-<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Yt"</span><span class="op">)</span></span>
+<details><summary>Code</summary><div class="sourceCode" id="cb71"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="va">pshampoo</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Yt"</span><span class="op">)</span></span>
 <span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/autoplot.acf.html">ggAcf</a></span><span class="op">(</span><span class="va">shampoo</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Lag (months)"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Lag (months)"</span><span class="op">)</span></span>
 <span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="va">shampoo</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Year"</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">"Sales"</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"D1"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Year"</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Sales"</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"D1"</span><span class="op">)</span></span>
 <span><span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/autoplot.acf.html">ggAcf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="va">shampoo</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Lag (months)"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Lag (months)"</span><span class="op">)</span></span>
 <span><span class="va">p5</span> <span class="op">&lt;-</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="va">shampoo</span>, differences <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Year"</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">"Sales"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"D2"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Year"</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Sales"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"D2"</span><span class="op">)</span></span>
 <span><span class="va">p6</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/autoplot.acf.html">ggAcf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="va">shampoo</span>, differences <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Lag (months)"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Lag (months)"</span><span class="op">)</span></span>
 <span><span class="op">(</span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="va">p3</span> <span class="op">+</span> <span class="va">p4</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="va">p5</span> <span class="op">+</span> <span class="va">p6</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">plot_annotation</span><span class="op">(</span>tag_levels <span class="op">=</span> <span class="st">'A'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
 <div id="fig-shampooDiff" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure"><p><img src="l03_smoothing_files/figure-html/fig-shampooDiff-1.png" class="img-fluid figure-img" width="768"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;3.17: Time series plot of shampoo sales with an estimated ACF and the differenced series with their ACFs.</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3.23: Time series plot of shampoo sales with an estimated ACF and the differenced series with their ACFs.</figcaption><p></p>
 </figure>
 </div>
 </div>
@@ -1446,14 +1647,14 @@ Example: Airline passengers detrending and deseasonalizing by differencing
 </div>
 <div class="callout-body-container callout-body">
 <p>Remove trend and seasonality from the log-transformed <code>AirPassengers</code> series by applying the differences.</p>
-<p>Based on <a href="#fig-AirPassengersDiff">Figure&nbsp;<span>3.18</span></a>, differencing once with the non-seasonal and the seasonal lags is enough to remove the trend and strong seasonality. The final series (denoted as <code>D1D12</code>) is <span class="math display">\[
+<p>Based on <a href="#fig-AirPassengersDiff">Figure&nbsp;<span>3.24</span></a>, differencing once with the non-seasonal and the seasonal lags is enough to remove the trend and strong seasonality. The final series (denoted as <code>D1D12</code>) is <span class="math display">\[
 \begin{split}
 D1D12_t &amp; = (1 - B)(1 - B^{12})\lg Y_t = (1 - B - B^{12} + B^{13})\lg Y_t\\
 &amp; = \lg Y_t - \lg Y_{t-1} - \lg Y_{t-12} + \lg Y_{t-13}.
 \end{split}
 \]</span></p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb64"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">Yt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log10</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span>
+<details><summary>Code</summary><div class="sourceCode" id="cb72"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">Yt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log10</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Apply first-order (non-seasonal) differences</span></span>
 <span><span class="va">D1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="va">Yt</span><span class="op">)</span></span>
@@ -1462,40 +1663,40 @@ D1D12_t &amp; = (1 - B)(1 - B^{12})\lg Y_t = (1 - B - B^{12} + B^{13})\lg Y_t\\
 <span><span class="va">D1D12</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="va">D1</span>, lag <span class="op">=</span> <span class="fl">12</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">Yt</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Year"</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">"log10(Air passangers)"</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Yt"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Year"</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"log10(Air passangers)"</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Yt"</span><span class="op">)</span></span>
 <span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/autoplot.acf.html">ggAcf</a></span><span class="op">(</span><span class="va">Yt</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Yt"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Lag (months)"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Yt"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Lag (months)"</span><span class="op">)</span></span>
 <span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">D1</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Year"</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">"log10(Air passangers)"</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"(1-B)Yt"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Year"</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"log10(Air passangers)"</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"(1-B)Yt"</span><span class="op">)</span></span>
 <span><span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/autoplot.acf.html">ggAcf</a></span><span class="op">(</span><span class="va">D1</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"(1-B)Yt"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Lag (months)"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"(1-B)Yt"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Lag (months)"</span><span class="op">)</span></span>
 <span><span class="va">p5</span> <span class="op">&lt;-</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">D1D12</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Year"</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">"log10(Air passangers)"</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"(1-B)(1-B12)Yt"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Year"</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"log10(Air passangers)"</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"(1-B)(1-B12)Yt"</span><span class="op">)</span></span>
 <span><span class="va">p6</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/autoplot.acf.html">ggAcf</a></span><span class="op">(</span><span class="va">D1D12</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"(1-B)(1-B12)Yt"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Lag (months)"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"(1-B)(1-B12)Yt"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Lag (months)"</span><span class="op">)</span></span>
 <span><span class="op">(</span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="va">p3</span> <span class="op">+</span> <span class="va">p4</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="va">p5</span> <span class="op">+</span> <span class="va">p6</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">plot_annotation</span><span class="op">(</span>tag_levels <span class="op">=</span> <span class="st">'A'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
 <div id="fig-AirPassengersDiff" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure"><p><img src="l03_smoothing_files/figure-html/fig-AirPassengersDiff-1.png" class="img-fluid figure-img" width="768"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;3.18: Time series plot of the airline passenger series with an estimated ACF and the detrended (differenced) series with their ACFs.</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3.24: Time series plot of the airline passenger series with an estimated ACF and the detrended (differenced) series with their ACFs.</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
 </div>
 </div>
-</section><section id="conclusion" class="level2" data-number="3.7"><h2 data-number="3.7" class="anchored" data-anchor-id="conclusion">
-<span class="header-section-number">3.7</span> Conclusion</h2>
+</section><section id="conclusion" class="level2" data-number="3.8"><h2 data-number="3.8" class="anchored" data-anchor-id="conclusion">
+<span class="header-section-number">3.8</span> Conclusion</h2>
 <p>We have implemented various methods for trend visualization, modeling, and trend removal. In each case, the method could be extended to additionally remove from a time series a strong seasonal signal. The choice of a method depends on many things, such as:</p>
 <ul>
 <li>The methods require different skill levels (and time commitment) for their implementation and can be categorized as automatic and non-automatic.</li>
@@ -1505,9 +1706,9 @@ D1D12_t &amp; = (1 - B)(1 - B^{12})\lg Y_t = (1 - B - B^{12} + B^{13})\lg Y_t\\
 </ul>
 <p>Remember that forecasted values (point forecasts) are not valuable if their uncertainty is not quantified. To quantify the uncertainty, we provide prediction intervals that are based on the past behavior of residuals and careful residual diagnostics (such as described in the previous lectures).</p>
 <p>The evaluation of the methods may involve splitting the time series into training and testing periods. Overall, this lecture focused on presenting the methods themselves, while <em>residual diagnostics</em> and <em>evaluation on a testing set</em> were omitted due to time constraints.</p>
-<p>While the considered methods are among the most common, there are many more smoothing methods that can be applied to time series: splines (such as used in generalized additive models, GAMs), kernels, machine learning techniques, etc.</p>
-</section><section id="appendix" class="level2" data-number="3.8"><h2 data-number="3.8" class="anchored" data-anchor-id="appendix">
-<span class="header-section-number">3.8</span> Appendix</h2>
+<p>While the considered methods are among the most common, there are many more smoothing methods that can be applied to time series, including machine learning techniques.</p>
+</section><section id="appendix" class="level2" data-number="3.9"><h2 data-number="3.9" class="anchored" data-anchor-id="appendix">
+<span class="header-section-number">3.9</span> Appendix</h2>
 <div class="callout-note callout callout-style-default no-icon callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1520,7 +1721,7 @@ Example: Smoothing blocks
 <div class="callout-body-container callout-body">
 <p>A student was concerned about applying smoothing to data with a block-like structure. Without a real data set on hand, below we simulate a series <span class="math inline">\(X_t\)</span> with the mentioned structure.</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb65"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<details><summary>Code</summary><div class="sourceCode" id="cb73"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Set number of blocks</span></span>
 <span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">10</span> </span>
@@ -1530,17 +1731,17 @@ Example: Smoothing blocks
 <span><span class="va">Xt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span>, times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html">rpois</a></span><span class="op">(</span><span class="va">n</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p><a href="#fig-blocks">Figure&nbsp;<span>3.19</span></a> shows an example of lowess applied to <span class="math inline">\(X_t\)</span> to get a smoothed series <span class="math inline">\(M_t\)</span>.</p>
+<p><a href="#fig-blocks">Figure&nbsp;<span>3.25</span></a> shows an example of lowess applied to <span class="math inline">\(X_t\)</span> to get a smoothed series <span class="math inline">\(M_t\)</span>.</p>
 <p>We see that lowess estimates <em>smooth</em> trends. If we assume that trends are not smooth, then some other techniques (e.g., piecewise linear estimation) should be used.</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb66"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">Xt</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu">ggplot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>t <span class="op">=</span> <span class="va">t</span>, Xt <span class="op">=</span> <span class="va">Xt</span><span class="op">)</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">t</span>, y <span class="op">=</span> <span class="va">Xt</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>    <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>    <span class="fu">geom_smooth</span><span class="op">(</span>se <span class="op">=</span> <span class="cn">FALSE</span>, span <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details><summary>Code</summary><div class="sourceCode" id="cb74"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">Xt</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>t <span class="op">=</span> <span class="va">t</span>, Xt <span class="op">=</span> <span class="va">Xt</span><span class="op">)</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">t</span>, y <span class="op">=</span> <span class="va">Xt</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>se <span class="op">=</span> <span class="cn">FALSE</span>, span <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
 <div id="fig-blocks" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure"><p><img src="l03_smoothing_files/figure-html/fig-blocks-1.png" class="img-fluid figure-img" width="768"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;3.19: Smoothing of the block-like data <span class="math inline">\(X_t\)</span>.</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3.25: Smoothing of the block-like data <span class="math inline">\(X_t\)</span>.</figcaption><p></p>
 </figure>
 </div>
 </div>
@@ -1559,8 +1760,17 @@ Brockwell PJ, Davis RA (2002) Introduction to time series and forecasting, 2nd e
 <div id="ref-Cleveland:1979" class="csl-entry" role="doc-biblioentry">
 Cleveland WS (1979) Robust locally weighted regression and smoothing scatterplots. Journal of the American Statistical Association 74:829–836. <a href="https://doi.org/10.1080/01621459.1979.10481038">https://doi.org/10.1080/01621459.1979.10481038</a>
 </div>
+<div id="ref-Hastie:etal:2009" class="csl-entry" role="doc-biblioentry">
+Hastie TJ, Tibshirani RJ, Friedman JH (2009) <a href="https://doi.org/10.1007/978-0-387-84858-7">The elements of statistical learning: Data mining, inference, and prediction</a>, 2nd edn. Springer, New York, NY, USA
+</div>
 <div id="ref-Kirchgassner:Wolters:2007" class="csl-entry" role="doc-biblioentry">
 Kirchgässner G, Wolters J (2007) <a href="https://doi.org/10.1007/978-3-540-73291-4">Introduction to modern time series analysis</a>. Springer-Verlag, Berlin, Germany
+</div>
+<div id="ref-Kohn:etal:2000" class="csl-entry" role="doc-biblioentry">
+Kohn R, Schimek MG, Smith M (2000) <a href="https://doi.org/10.1002/9781118150658.ch6">Spline and kernel regression for dependent data</a>. In: Schimek MG (ed) Smoothing and regression: Approaches, computation, and application. John Wiley &amp; Sons, Inc., New York, pp 135–158
+</div>
+<div id="ref-Wood:2006book" class="csl-entry" role="doc-biblioentry">
+Wood SN (2006) Generalized additive models: An introduction with r. Chapman; Hall/CRC, New York, NY, USA
 </div>
 </div>
 </section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">

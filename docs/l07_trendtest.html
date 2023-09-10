@@ -143,9 +143,7 @@ div.csl-indent {
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">
-<span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Trend Detection</span>
-</h1>
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Trend Detection</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -224,7 +222,7 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./l10_spectral.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Spectral Analysis</span></a>
+  <a href="./l13_spectral.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Spectral Analysis</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -292,23 +290,21 @@ div.csl-indent {
 <a href="#bootstrapped-tests-for-trend-detection-in-time-series" id="toc-bootstrapped-tests-for-trend-detection-in-time-series" class="nav-link" data-scroll-target="#bootstrapped-tests-for-trend-detection-in-time-series"><span class="toc-section-number">7.4</span>  Bootstrapped tests for trend detection in time series</a>
   <ul class="collapse">
 <li><a href="#bootstrapped-t-test-and-mannkendall-test" id="toc-bootstrapped-t-test-and-mannkendall-test" class="nav-link" data-scroll-target="#bootstrapped-t-test-and-mannkendall-test"><span class="toc-section-number">7.4.1</span>  Bootstrapped <span class="math inline">\(t\)</span>-test and Mann–Kendall test</a></li>
+  <li><a href="#sec-WAVK" id="toc-sec-WAVK" class="nav-link" data-scroll-target="#sec-WAVK"><span class="toc-section-number">7.4.2</span>  Detecting non-monotonic trends</a></li>
   </ul>
 </li>
-  <li><a href="#sec-WAVK" id="toc-sec-WAVK" class="nav-link" data-scroll-target="#sec-WAVK"><span class="toc-section-number">7.5</span>  Detecting non-monotonic trends</a></li>
   <li>
-<a href="#unit-roots" id="toc-unit-roots" class="nav-link" data-scroll-target="#unit-roots"><span class="toc-section-number">7.6</span>  Unit roots</a>
+<a href="#unit-roots" id="toc-unit-roots" class="nav-link" data-scroll-target="#unit-roots"><span class="toc-section-number">7.5</span>  Unit roots</a>
   <ul class="collapse">
-<li><a href="#adf-and-pp-test-problems" id="toc-adf-and-pp-test-problems" class="nav-link" data-scroll-target="#adf-and-pp-test-problems"><span class="toc-section-number">7.6.1</span>  ADF and PP test problems</a></li>
+<li><a href="#adf-and-pp-test-problems" id="toc-adf-and-pp-test-problems" class="nav-link" data-scroll-target="#adf-and-pp-test-problems"><span class="toc-section-number">7.5.1</span>  ADF and PP test problems</a></li>
   </ul>
 </li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="toc-section-number">7.7</span>  Conclusion</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="toc-section-number">7.6</span>  Conclusion</a></li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/vlyubchich/tsar/edit/master/l07_trendtest.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/vlyubchich/tsar/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
-<h1 class="title d-none d-lg-block">
-<span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Trend Detection</span>
-</h1>
+<h1 class="title"><span id="sec-trendtest" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Trend Detection</span></span></h1>
 </div>
 
 
@@ -433,16 +429,16 @@ S=\sum_{j=1}^m S_j.
 <span class="header-section-number">7.3.1</span> Bootstrap for independent data</h3>
 <p>When some of the statistical assumptions are violated, we may switch to using other methods or try to accommodate these violations by modifying part of the existing method.</p>
 <ul>
-<li>One of the assumptions of Pearson correlation analysis is the absence of outliers. When outliers are in the data, we can opt for using Spearman correlations based on ranks, not the actual values. Thus, here we switch the method.</li>
-<li>We often use the normal distribution for inference about the population mean because we assume that averages of independent samples coming from the same population are distributed normally. The normal approximation is true for large samples or for small samples if the underlying population is close to being normally distributed. So what happens if we have a small sample from a non-normal population? We do not know the distributional law under which sample means are distributed in this case, but we can approximate it using bootstrap.</li>
+<li>One of the assumptions of Pearson correlation analysis is the absence of outliers. When outliers are in the data, we can opt for using Spearman correlations based on ranks, not the actual values. Thus, here we <em>switch the method</em>.</li>
+<li>We often use the normal distribution for inference about the population mean because we assume that averages of independent samples coming from the same population are distributed normally. The normal approximation is true for large samples or for small samples if the underlying population is close to being normally distributed. So what happens if we have a small sample from a non-normal population? We do not know the distributional law under which sample means are distributed in this case, but we can <em>approximate the distribution using bootstrapped statistics</em>.</li>
 </ul>
-<p>The seminal paper by <span class="citation" data-cites="Efron:1979">Efron (<a href="references.html#ref-Efron:1979" role="doc-biblioref">1979</a>)</span> describes bootstrap for i.i.d. data. In two words, the idea is the following: we can relax distributional assumptions and reconstruct the distribution of the sample statistic by <em>resampling data with replacement</em> and recalculating the statistic over and over. The resampling step will give us artificial ‘new’ samples, while the statistics calculated multiple times will let us approximate the distribution of the statistic of interest. Thus, by repeating the resampling and estimation steps multiple times, we will know how the statistic is distributed, even if the sample is small and not normally distributed.</p>
+<p>The seminal paper by <span class="citation" data-cites="Efron:1979">Efron (<a href="references.html#ref-Efron:1979" role="doc-biblioref">1979</a>)</span> describes bootstrap for i.i.d. data. In two words, the idea is the following: we can relax distributional assumptions and reconstruct the distribution of the sample statistic by <em>resampling data with replacement</em> and recalculating the statistic over and over. The resampling step will give us artificial ‘new’ samples, while the statistics calculated multiple times on those samples will let us approximate the distribution of the statistic of interest. Thus, by repeating the resampling and estimation steps many times, we will know how the statistic is distributed, even if the sample is small and not normally distributed.</p>
 <p>Let <span class="math inline">\(x_i\)</span> (<span class="math inline">\(i = 1, \dots, n\)</span>) be sample values collected from a non-normally distributed population using simple random sampling. If the sample size <span class="math inline">\(n\)</span> is small, we cannot be sure that the distribution of sample averages <span class="math inline">\(\bar{x}\)</span> is normal, so we will approximate it using the following bootstrapping steps:</p>
 <ol type="1">
 <li>Let <span class="math inline">\(x^*_i\)</span> (<span class="math inline">\(i = 1, \dots, n\)</span>) be a sample with a replacement from the original sample <span class="math inline">\(x_i\)</span>. This is a way for us, without knowing the underlying distribution of the population and without collecting new data, to get a new artificial sample from the population.</li>
 <li>Calculate the mean (or another statistic of interest) from the bootstrapped data. For example, <span class="math inline">\(\bar{x}^* = n^{-1} \sum x^*_i\)</span> is the bootstrapped mean.</li>
-<li>Repeat the steps above a large number of times to obtain a distribution of the statistics <span class="math inline">\(\bar{x}^*_1, \dots, \bar{x}^*_B\)</span>, where <span class="math inline">\(B\)</span> is the number of bootstrap replications. This is so-called <em>bootstrapped distribution</em>.</li>
-<li>Finally, we use the bootstrapped distribution for the intended analysis. Typically it involves calculating confidence intervals. There are a few ways the intervals can be calculated <span class="citation" data-cites="Davison:Hinkley:1997">(see <a href="references.html#ref-Davison:Hinkley:1997" role="doc-biblioref">Davison and Hinkley 1997</a>)</span>, some of the methods provide symmetric intervals, while others do not. Probably the simplest is the <em>percentile confidence interval</em>, which computes the <span class="math inline">\(\alpha/2\)</span>th and <span class="math inline">\((1-\alpha/2)\)</span>th quantiles of the bootstrapped distribution, to get an interval for confidence <span class="math inline">\(1 - \alpha\)</span>.</li>
+<li>Repeat the steps above a large number of times to obtain a distribution of the statistics <span class="math inline">\(\bar{x}^*_1, \dots, \bar{x}^*_B\)</span> (the <em>bootstrapped distribution</em>), where <span class="math inline">\(B\)</span> is a large enough number of bootstrap replications. Typically, <span class="math inline">\(B \geqslant 1000\)</span>.</li>
+<li>Finally, we use the bootstrapped distribution for the intended analysis. It often involves calculating confidence intervals. There are a few ways the intervals can be calculated <span class="citation" data-cites="Davison:Hinkley:1997">(see <a href="references.html#ref-Davison:Hinkley:1997" role="doc-biblioref">Davison and Hinkley 1997</a>)</span>, some of the methods provide symmetric intervals, while others do not. Probably the simplest is the <em>percentile confidence interval</em>, which computes the <span class="math inline">\(\alpha/2\)</span>th and <span class="math inline">\((1-\alpha/2)\)</span>th quantiles of the bootstrapped distribution, to get an interval for confidence <span class="math inline">\(1 - \alpha\)</span>.</li>
 </ol>
 <div class="callout-note callout callout-style-default no-icon callout-captioned">
 <div class="callout-header d-flex align-content-center">
@@ -513,7 +509,7 @@ Example: Bootstrap confidence interval for the population mean
 </div>
 </div>
 </div>
-<p>The calculated confidence interval can be used in hypothesis testing. Note that the package <code>boot</code> provides functions with more options.</p>
+<p>The calculated confidence interval can be used in hypothesis testing. Note that the package <code>boot</code> provides functions with more options for the calculations.</p>
 </div>
 </div>
 <p>We cannot apply the outlined bootstrapping directly to time series or spatial data because these data are not i.i.d. and resampling will break the order and dependence structure.</p>
@@ -575,8 +571,8 @@ X_t^* = \sum_{j=1}^{\hat{p}} \hat{\phi}_j X^*_{t-j} + \epsilon^*_t,
 </div>
 </div>
 <p>Notice the different <span class="math inline">\(p\)</span>-values from the first time we applied the tests without the bootstrap.</p>
-</section></section><section id="sec-WAVK" class="level2" data-number="7.5"><h2 data-number="7.5" class="anchored" data-anchor-id="sec-WAVK">
-<span class="header-section-number">7.5</span> Detecting non-monotonic trends</h2>
+</section><section id="sec-WAVK" class="level3" data-number="7.4.2"><h3 data-number="7.4.2" class="anchored" data-anchor-id="sec-WAVK">
+<span class="header-section-number">7.4.2</span> Detecting non-monotonic trends</h3>
 <p>Consider a time series <span id="eq-WAVKtrend"><span class="math display">\[
 Y_t = \mu(t) + \epsilon_t,
 \tag{7.1}\]</span></span> where <span class="math inline">\(t=1, \dots, n\)</span>, <span class="math inline">\(\mu(t)\)</span> is an unknown trend function, and <span class="math inline">\(\epsilon_t\)</span> is a weakly stationary time series.</p>
@@ -701,8 +697,8 @@ Note
 <p>Statistical test results depend on the alternative hypothesis. Sometimes the null hypothesis cannot be rejected in favor of the alternative hypothesis because the data do not match the specified alternative. For example, there are numerous examples when in Pearson correlation analysis the null hypothesis of independence cannot be rejected in favor of the alternative hypothesis of linear dependence because the underlying nonlinear dependence cannot be described as a linear relationship. See <a href="https://cran.r-project.org/web/packages/funtimes/vignettes/trendtests.html">this vignette</a> describing a few similar cases for the time series.</p>
 </div>
 </div>
-</section><section id="unit-roots" class="level2" data-number="7.6"><h2 data-number="7.6" class="anchored" data-anchor-id="unit-roots">
-<span class="header-section-number">7.6</span> Unit roots</h2>
+</section></section><section id="unit-roots" class="level2" data-number="7.5"><h2 data-number="7.5" class="anchored" data-anchor-id="unit-roots">
+<span class="header-section-number">7.5</span> Unit roots</h2>
 <p>By now, we have been identifying the order of integration (if a process <span class="math inline">\(X_t \sim\)</span> I(<span class="math inline">\(d\)</span>)) by looking at the time series plot of <span class="math inline">\(X_t\)</span> and (largely) by looking at the plot of sample ACF. We differenced time series again and again until we saw a stable mean in the time series plot and a rapid (compared with linear), exponential-like decline in ACF. Here, we present a hypothesis testing approach originally suggested by <span class="citation" data-cites="Dickey:Fuller:1979">Dickey and Fuller (<a href="references.html#ref-Dickey:Fuller:1979" role="doc-biblioref">1979</a>)</span> (<em>Dickey–Fuller test</em>).</p>
 <p>Let <span class="math inline">\(X_1, \dots, X_n\)</span> be observations from an AR(1) model: <span class="math display">\[
 \begin{split}
@@ -1052,12 +1048,12 @@ Example: ADF test applied to simulated data
 <p>In this simulated example, misspecification of the testing model did not change our conclusion that <span class="math inline">\(X_t \sim\)</span> I(2), due to the automatic adjusting of the critical values <code>tau</code> to <code>tau2</code> (model with intercept) and <code>tau3</code> (model with trend).</p>
 </div>
 </div>
-<section id="adf-and-pp-test-problems" class="level3" data-number="7.6.1"><h3 data-number="7.6.1" class="anchored" data-anchor-id="adf-and-pp-test-problems">
-<span class="header-section-number">7.6.1</span> ADF and PP test problems</h3>
+<section id="adf-and-pp-test-problems" class="level3" data-number="7.5.1"><h3 data-number="7.5.1" class="anchored" data-anchor-id="adf-and-pp-test-problems">
+<span class="header-section-number">7.5.1</span> ADF and PP test problems</h3>
 <p>The ADF and PP tests are asymptotically equivalent but may differ substantially in finite samples due to the different ways in which they correct for serial correlation in the test regression.</p>
 <p>In general, the ADF and PP tests have very low power against I(0) alternatives that are close to being I(1). That is, unit root tests cannot distinguish highly persistent stationary processes from nonstationary processes very well. Also, the power of unit root tests diminishes as deterministic terms are added to the test regressions. Tests that include a constant and trend in the test regression have less power than tests that only include a constant in the test regression.</p>
-</section></section><section id="conclusion" class="level2" data-number="7.7"><h2 data-number="7.7" class="anchored" data-anchor-id="conclusion">
-<span class="header-section-number">7.7</span> Conclusion</h2>
+</section></section><section id="conclusion" class="level2" data-number="7.6"><h2 data-number="7.6" class="anchored" data-anchor-id="conclusion">
+<span class="header-section-number">7.6</span> Conclusion</h2>
 <p>Temporal dependence of time series is the most violated assumption of classical tests often employed for detecting trends, including the nonparametric Mann–Kendall test. However, multiple workarounds exist that allow the analyst to relax (avoid) the assumption of independence and provide more reliable inference. We have implemented sieve bootstrapping for time series as one such workaround.</p>
 <p>Test results depend on the specified alternative hypothesis. Remember that non-rejection of the null hypothesis doesn’t make it automatically true.</p>
 <p>When testing for unit roots (integration) in time series, the null hypothesis of ADF and PP tests is the unit root, while the alternative is the stationarity of the tested series. Iterative testing and differencing can be used to identify the order of integration <span class="math inline">\(d\)</span>.</p>

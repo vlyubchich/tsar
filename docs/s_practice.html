@@ -139,7 +139,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./l10_spectral.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Spectral Analysis</span></a>
+  <a href="./l13_spectral.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Spectral Analysis</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -252,14 +252,14 @@ ul.task-list li input[type="checkbox"] {
 <li>If ACF values at the first ten lags are statistically significant, then the time series is not stationary.</li>
 <li>If <span class="math inline">\(X_t\)</span> is an ARIMA<span class="math inline">\((p,d,q)\)</span> process, then <span class="math inline">\((1-B)^d X_t\)</span> is an ARMA<span class="math inline">\((p,q)\)</span> process.</li>
 <li>Slowly decaying ACF is a sign of nonstationarity.</li>
-<li>If a hypothesis <span class="math inline">\(H_1\)</span> of a linear trend was accepted for the series <span class="math inline">\(U_t\)</span>, <span class="math inline">\(t = 1, \dots, T\)</span>, it will be also accepted for the subsets <span class="math inline">\(U_{t'}\)</span>, where <span class="math inline">\(t' = j, \dots, k\)</span>; <span class="math inline">\(j&lt;k\)</span>, and <span class="math inline">\(j,k &lt; T\)</span>.</li>
+<li>If the hypothesis <span class="math inline">\(H_1\)</span> of a linear trend was accepted for the series <span class="math inline">\(U_t\)</span>, <span class="math inline">\(t = 1, \dots, T\)</span>, it will be also accepted for the subsets <span class="math inline">\(U_{t'}\)</span>, where <span class="math inline">\(t' = j, \dots, k\)</span>; <span class="math inline">\(j&lt;k\)</span>, and <span class="math inline">\(j,k &lt; T\)</span>.</li>
 <li>Unit root tests can be applied to determine the appropriate order of differencing <span class="math inline">\(d\)</span>.</li>
 <li>A time series that exhibits a quadratic-looking trend can be made stationary (detrended) using the Box–Cox transformation with the power parameter <span class="math inline">\(\lambda = 2\)</span>.</li>
 <li>ARIMA(0,1,0) model is a random walk.</li>
 <li>For the backshift operator <span class="math inline">\(B\)</span>, <span class="math inline">\((1-B)^dX_t = (1-B^d)X_t\)</span>.</li>
 <li>A linear time trend can be eliminated by differencing the time series once or twice.</li>
 <li>Trend functions (e.g., <span class="math inline">\(X_t = 0.35 + 0.11t + \epsilon_t\)</span>, where <span class="math inline">\(\epsilon_t\)</span> are uncorrelated errors) express the changes in the process <span class="math inline">\(X_t\)</span> caused by time.</li>
-<li>Time series should be differenced just enough times to remove a stochastic trend. Differencing too many times causes problems.</li>
+<li>Time series should be differenced just enough times to remove a stochastic trend. Differencing too many times leads to problems.</li>
 <li>Autocorrelation in observations affects results of the <span class="math inline">\(t\)</span>-test and Mann–Kendall test.</li>
 <li>The Mann–Kendall test focuses on a more general class of trends than the <span class="math inline">\(t\)</span>-test does.</li>
 <li>The null hypothesis of the augmented Dickey–Fuller test is no unit root (stationarity).</li>
