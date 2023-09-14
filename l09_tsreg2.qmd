@@ -40,7 +40,7 @@ Here we bring these two skills together.
 If the residuals do not satisfy the independence assumption, we can sometimes describe them in terms of a specific correlation model involving one or more new parameters and some 'new residuals.' 
 These new residuals essentially satisfy the OLS assumptions and can replace the original correlated residuals (which we will sometimes call the 'old' residuals) in the model.
 
-When modeling time series, we often want to find so-called *leading indicators*, i.e., exogenous variables whose lagged values can be used for predicting the response, so for the forecasts we do not need to predict $X$-variables that are employed in a model. 
+When modeling time series, we often want to find so-called *leading indicators*, i.e., exogenous variables whose lagged values can be used for predicting the response, so we do not need to predict the $X$-variables. 
 Hence, our models may include lagged versions of both the response and predictor variables (a general form of such a model was given in @eq-fmult).
 
 
@@ -838,42 +838,6 @@ The `lmtest::grangertest()` options set one value to both $k_1$ and $k_2$ in @eq
 In our example, it was $k_1 = k_2 = 1$. 
 The 'manual' test using the function `anova()` can be used for models with $k_1 = k_2$ or $k_1 \neq k_2$.
 :::
-
-
-## About predictions
-
-Let $\hat{Y}_T(h)$ be a forecast $h$ steps ahead made at the time $T$. 
-If $\hat{Y}_T(h)$ only uses information up to time $T$, the resulting forecasts are called out-of-sample forecasts. 
-Economists call them *ex-ante* forecasts. 
-We have discussed several ways to select the optimal method or model for forecasting, e.g., using PMAE, PMSE, or coverage -- all calculated on a testing set. 
-@Chatfield:2000 mentions several ways to unfairly 'improve' forecasts:
-
-1. Fitting the model to all the data including the test set.
-1. Fitting several models to the training set and choosing the model which gives the best 'forecasts' of the test set. 
-The selected model is then used (again) to produce forecasts of the test set, even though the latter has already been used in the modeling process.
-1. Using the known test-set values of 'future' observations on the explanatory variables in multivariate forecasting. 
-This will improve forecasts of the dependent variable in the test set, but these future values will not of course be known at the time the forecast is supposedly made (though in practice the 'forecast' is made at a later date). 
-Economists call such forecasts *ex-post* forecasts to distinguish them from *ex-ante* forecasts. 
-The latter, being genuinely out-of-sample, use forecasts of future values of explanatory variables, where necessary, to compute forecasts of the response variable. 
-*Ex-post* forecasts can be useful for assessing the effects of explanatory variables, provided the analyst does not pretend that they are genuine out-of-sample forecasts.
-
-So what to do if we put lots of effort to build a regression model using time series and need to forecast the response, $Y_t$, which is modeled using different independent variables $X_{t,k}$ ($k=1,\dots,K$)? 
-Two options are possible.
-
-**Leading indicators**
-
-If $X_{t,k}$'s are leading indicators with lags starting at $l$, we, generally, would not need their future values to obtain the forecasts $\hat{Y}_T(h)$, where $h\leqslant l$. 
-For example, the model for losses tested in @sec-Granger shows that precipitation with lag 1 is a good predictor for current losses, i.e., precipitation is a leading indicator. 
-The 1-week ahead forecast of $Y_{t+1}$ can be obtained using the current precipitation $X_t$ (all data are available). 
-If $h>l$, we will be forced to forecast the independent variables, $X_{t,k}$'s -- see the next option.
-
-**Forecast of predictors**
-
-If we opt for forecasting $X_{t,k}$'s, the errors (uncertainty) of such forecasts will be larger, because future $X_{t,k}$'s themselves will be the estimates.
-Nevertheless, it might be the only choice when leading indicators are not available. 
-Building a full and comprehensive model with all diagnostics for each regressor is usually unfeasible and even problematic if we plan to consider multivariate models for regressors (the complexity of models will quickly escalate). 
-As an alternative, it is common to use automatic or semi-automatic univariate procedures that can help to forecast each of the $X_{t,k}$'s. 
-For example, consider exponential smoothing, Holt--Winters smoothing, and auto-selected SARIMA/ARIMA/ARMA/AR/MA models -- all those can be automated for a large number of forecasts to make.
 
 
 ## Conclusion

@@ -12,4 +12,142 @@ options(digits = 3)
 theme_set(theme_light())
 ```
 
-# Model Evaluation and Forecasting
+# Model Evaluation and Forecasting {#sec-evalforecast}
+
+This lecture ... 
+
+**Objectives**
+
+1. Recognize the typical assumptions implied when making forecasts.
+1. Distinguish *ex-post* from *ex-ante* forecasts.
+1. Discuss peculiarities of assessing (cross-validating) regression models built for time series.
+1. Define metrics used to assess quality of point forecasts and interval forecasts.
+1. Design and implement cross-validation for time series models.
+
+**Reading materials**
+
+* Chapter 9 in @Brockwell:Davis:2002
+* Chapter 7 in @Hastie:etal:2009
+
+
+## Time series forecasts
+
+Assumptions 
+
+
+Types (*ex-post* from *ex-ante* forecasts)
+
+
+Let $\hat{Y}_T(h)$ be a forecast $h$ steps ahead made at the time $T$. 
+If $\hat{Y}_T(h)$ only uses information up to time $T$, the resulting forecasts are called out-of-sample forecasts. 
+Economists call them *ex-ante* forecasts. 
+We have discussed several ways to select the optimal method or model for forecasting, e.g., using PMAE, PMSE, or coverage -- all calculated on a testing set. 
+@Chatfield:2000 lists several ways to unfairly 'improve' forecasts:
+
+1. Fitting the model to all the data including the test set.
+1. Fitting several models to the training set and choosing the model which gives the best 'forecasts' of the test set. 
+The selected model is then used (again) to produce forecasts of the test set, even though the latter has already been used in the modeling process.
+1. Using the known test-set values of 'future' observations on the explanatory variables in multivariate forecasting. 
+This will improve forecasts of the dependent variable in the test set, but these future values will not of course be known at the time the forecast is supposedly made (though in practice the 'forecast' is made at a later date). 
+Economists call such forecasts *ex-post* forecasts to distinguish them from *ex-ante* forecasts. 
+The latter, being genuinely out-of-sample, use forecasts of future values of explanatory variables, where necessary, to compute forecasts of the response variable. 
+*Ex-post* forecasts can be useful for assessing the effects of explanatory variables, provided the analyst does not pretend that they are genuine out-of-sample forecasts.
+
+So what to do if we put lots of effort to build a regression model using time series and need to forecast the response, $Y_t$, which is modeled using different independent variables $X_{t,k}$ ($k=1,\dots,K$)? 
+Two options are possible.
+
+**Leading indicators**
+
+If $X_{t,k}$'s are leading indicators with lags starting at $l$, we, generally, would not need their future values to obtain the forecasts $\hat{Y}_T(h)$, where $h\leqslant l$. 
+For example, the model for losses tested in @sec-Granger shows that precipitation with lag 1 is a good predictor for current losses, i.e., precipitation is a leading indicator. 
+The 1-week ahead forecast of $Y_{t+1}$ can be obtained using the current precipitation $X_t$ (all data are available). 
+If $h>l$, we will be forced to forecast the independent variables, $X_{t,k}$'s -- see the next option.
+
+**Forecast of predictors**
+
+If we opt for forecasting $X_{t,k}$'s, the errors (uncertainty) of such forecasts will be larger, because future $X_{t,k}$'s themselves will be the estimates.
+Nevertheless, it might be the only choice when leading indicators are not available. 
+Building a full and comprehensive model with all diagnostics for each regressor is usually unfeasible and even problematic if we plan to consider multivariate models for regressors (the complexity of models will quickly escalate). 
+As an alternative, it is common to use automatic or semi-automatic univariate procedures that can help to forecast each of the $X_{t,k}$'s. 
+For example, consider exponential smoothing, Holt--Winters smoothing, and auto-selected SARIMA/ARIMA/ARMA/AR/MA models -- all those can be automated for a large number of forecasts to make.
+
+
+
+
+Univariate models - extrapolation of trends;
+ARIMA are 1-step-ahead forecasts (AIC)
+
+Types (point prediction or intervals; can be different intervals for the same point prediction)
+
+
+## Cross-validation schemes
+
+Goals and intended implementation of the model hence the selection of the scheme.
+
+Training - Testing
+(split %% and n)
+
+Training - Testing - Evaluation
+
+Window approach caret::
+
+
+
+## Metrics for model comparison
+
+How do we compare forecasting models to decide which one is better? 
+We will look at various ways of choosing between models as the course progresses, but the most obvious answer is to see which one is better at predicting.
+
+Suppose we have used the data $Y_1, \dots, Y_n$ to build $M$ forecasting models $\hat{Y}^{(m)}_t$ ($m = 1,\dots,M$) and we now obtain future observations $Y_{n+1}, \dots, Y_{n+k}$ that were not used to fit the models (also called *out-of-sample* data, after-sample, or the testing set; $k$ is the size of this set). 
+The difference $Y_t - \hat{Y}^{(m)}_t$ is the forecast (or prediction) error at the time $t$ for the $m$th model. 
+For each model, compute the prediction mean square error (PMSE)
+$$
+PMSE_m = k^{-1}\sum_{t=n+1}^{n+k}\left(Y_t - \hat{Y}^{(m)}_t\right)^2
+$${#eq-pmse}
+and prediction mean absolute error (PMAE)
+$$
+PMAE_m = k^{-1}\sum_{t=n+1}^{n+k}\left|Y_t - \hat{Y}^{(m)}_t\right|
+$${#eq-pmae}
+and, similarly, prediction root mean square error (PRMSE; $PRMSE = \sqrt{PMSE}$), prediction mean absolute percentage error (PMAPE, if $Y_t \neq 0$ in the testing period), etc. 
+We choose the model with the smallest error.
+
+One obvious drawback to the above method is that it requires us to wait for future observations to compare models. 
+A way around this is to take the historical dataset $Y_1, \dots, Y_n$ and split it into a *training set* $Y_1, \dots, Y_k$ and a *testing set* $Y_{k+1}, \dots, Y_n$, where $(n - k)\ll k$, i.e., most of the data goes into the training set.
+
+::: {.callout-note}
+This scheme of splitting time series into the testing and training sets is a simple form of *cross-validation*. 
+Not all forms of cross-validation apply to time series due to the usual temporal dependence in time series data. 
+We need to select cross-validation techniques that can accommodate such dependence. 
+Usually, it implies selecting data for validation not at random but in consecutive chunks (periods) and, ideally, with testing or validation periods being after the training period.
+:::
+
+Forecasting models are then built using only the training set and used to 'forecast' values from the testing set. 
+Sometimes it is called an *out-of-sample forecast* because we predict values for the times we have not used for the model specification and estimation. 
+The testing set is used as a set of future observations to compute the PMSE. 
+The PMSE and other errors are computed for each model over the testing set and then compared to see errors for which models are smaller.
+
+If two models produce approximately the same errors, we choose the model that is simpler (involves fewer variables). 
+This is called the *law of parsimony*.
+
+The above error measures (PMSE, PRMSE, PMAE, etc.) compare observed and forecasted data points, hence, are measures of the accuracy of the *point forecasts*. 
+Another way of comparing models could be based on the quality of their *interval forecasts*, i.e., by assessing how good the prediction intervals are. 
+To assess the quality of interval forecasts, one may start by computing the *empirical coverage* (proportion of observations in the testing set that are within -- covered by -- corresponding prediction intervals for given confidence $C$, e.g., 95%) and *average interval width*. 
+Prediction intervals are well-calibrated if empirical coverage is close to $C$ (more important) while intervals are not too wide (less important).
+
+::: {.callout-note}
+To select the best coverage, one can calculate the absolute differences between the nominal coverage $C$ and each empirical coverage $\hat{C}_m$:
+$$
+\Delta_m = |C - \hat{C}_m|.
+$$
+Hence, we select the model with the smallest $\Delta_m$, not the largest coverage $\hat{C}_m$.
+:::
+
+::: {.callout-note}
+It is possible to obtain different prediction intervals from the same model. 
+For example, we can calculate prediction intervals based on normal and bootstrapped distributions. 
+In this case, point forecasts are the same, but interval forecasts differ.
+:::
+
+We may compare a great number of models using the training set, and choose the best one (with the smallest errors), however, it would be unfair to use the out-of-sample errors from the testing set for demonstrating the model performance because this part of the sample was used to select the model. 
+Thus, it is advisable to have one more chunk of the same time series that was not used for model specification, estimation, or selection. 
+Errors of the selected model on this *validation set* will be closer to the true (genuine) out-of-sample errors and can be used to improve coverage of true out-of-sample forecasts when the model is finally deployed.

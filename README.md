@@ -1,6 +1,6 @@
 # Future work
 - make causality a separate lecture 10, add on diff-in-diff with cannabis example.
-- add example coverage calculations Lect 2 or ARIMA, eventually move part of the material from l02 to a separate lecture on Model evaluation and forecasting. forecast::accuracy(). Overfitting. B&D Ch. 9
++ add example coverage calculations Lect 2 or ARIMA, eventually move part of the material from l02 to a separate lecture on Model evaluation and forecasting. forecast::accuracy(). caret::postResample(obs = y_test, pred = y_dnn) Overfitting. B&D Ch. 9
 Remember that all predictive inference is based on the assumptions that the relationships between the variables and their dynamics will be the same in the future.
 - add a lecture on panel data analysis
 - expand on wavelets, add example of acoustic data

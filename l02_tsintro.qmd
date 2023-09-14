@@ -20,7 +20,6 @@ You should become confident in identifying and characterizing trends, seasonal a
 **Objectives**
 
 1. Define time series, common components (decomposition), and patterns to look out for (outliers, change points, heteroskedasticity).
-1. Discuss peculiarities of assessing (cross-validating) regression models built for time series.
 1. Distinguish simple models for univariate time series (building blocks for more complex models).
 1. Define autocorrelation and partial autocorrelation and interpret such estimates.
 1. Explain the assumption of stationarity for calculating autocorrelation.
@@ -163,7 +162,7 @@ Y_t = f(&X_{1,t}, X_{2,t}, \dots, X_{k,t}, \\
 $${#eq-fmult}
 where $p$, $q1, \dots, qk$ are the lags. 
 We can start the analysis with many variables and build a forecasting model as complex as @eq-fmult, but remember that a simpler univariate model may also work well. 
-We should create an appropriate univariate model (like in @eq-funiv) to serve as a baseline, then compare the models' performance on some out-of-sample data, as described in @sec-modComparison.
+We should create an appropriate univariate model (like in @eq-funiv) to serve as a baseline, then compare the models' performance on some out-of-sample data, as described in @sec-evalforecast.
 
 ::: {.callout-note icon=false}
 
@@ -223,66 +222,6 @@ forecast::autoplot(as.ts(Ecdat::SP500[,1])) +
     ylab("Earnings per share (USD)")
 ```
 :::
-
-
-## Model comparison {#sec-modComparison} 
-
-How do we compare forecasting models to decide which one is better? 
-We will look at various ways of choosing between models as the course progresses, but the most obvious answer is to see which one is better at predicting.
-
-Suppose we have used the data $Y_1, \dots, Y_n$ to build $M$ forecasting models $\hat{Y}^{(m)}_t$ ($m = 1,\dots,M$) and we now obtain future observations $Y_{n+1}, \dots, Y_{n+k}$ that were not used to fit the models (also called *out-of-sample* data, after-sample, or the testing set; $k$ is the size of this set). 
-The difference $Y_t - \hat{Y}^{(m)}_t$ is the forecast (or prediction) error at the time $t$ for the $m$th model. 
-For each model, compute the prediction mean square error (PMSE)
-$$
-PMSE_m = k^{-1}\sum_{t=n+1}^{n+k}\left(Y_t - \hat{Y}^{(m)}_t\right)^2
-$${#eq-pmse}
-and prediction mean absolute error (PMAE)
-$$
-PMAE_m = k^{-1}\sum_{t=n+1}^{n+k}\left|Y_t - \hat{Y}^{(m)}_t\right|
-$${#eq-pmae}
-and, similarly, prediction root mean square error (PRMSE; $PRMSE = \sqrt{PMSE}$), prediction mean absolute percentage error (PMAPE, if $Y_t \neq 0$ in the testing period), etc. 
-We choose the model with the smallest error.
-
-One obvious drawback to the above method is that it requires us to wait for future observations to compare models. 
-A way around this is to take the historical dataset $Y_1, \dots, Y_n$ and split it into a *training set* $Y_1, \dots, Y_k$ and a *testing set* $Y_{k+1}, \dots, Y_n$, where $(n - k)\ll k$, i.e., most of the data goes into the training set.
-
-::: {.callout-note}
-This scheme of splitting time series into the testing and training sets is a simple form of *cross-validation*. 
-Not all forms of cross-validation apply to time series due to the usual temporal dependence in time series data. 
-We need to select cross-validation techniques that can accommodate such dependence. 
-Usually, it implies selecting data for validation not at random but in consecutive chunks (periods) and, ideally, with testing or validation periods being after the training period.
-:::
-
-Forecasting models are then built using only the training set and used to 'forecast' values from the testing set. 
-Sometimes it is called an *out-of-sample forecast* because we predict values for the times we have not used for the model specification and estimation. 
-The testing set is used as a set of future observations to compute the PMSE. 
-The PMSE and other errors are computed for each model over the testing set and then compared to see errors for which models are smaller.
-
-If two models produce approximately the same errors, we choose the model that is simpler (involves fewer variables). 
-This is called the *law of parsimony*.
-
-The above error measures (PMSE, PRMSE, PMAE, etc.) compare observed and forecasted data points, hence, are measures of the accuracy of the *point forecasts*. 
-Another way of comparing models could be based on the quality of their *interval forecasts*, i.e., by assessing how good the prediction intervals are. 
-To assess the quality of interval forecasts, one may start by computing the *empirical coverage* (proportion of observations in the testing set that are within -- covered by -- corresponding prediction intervals for given confidence $C$, e.g., 95%) and *average interval width*. 
-Prediction intervals are well-calibrated if empirical coverage is close to $C$ (more important) while intervals are not too wide (less important).
-
-::: {.callout-note}
-To select the best coverage, one can calculate the absolute differences between the nominal coverage $C$ and each empirical coverage $\hat{C}_m$:
-$$
-\Delta_m = |C - \hat{C}_m|.
-$$
-Hence, we select the model with the smallest $\Delta_m$, not the largest coverage $\hat{C}_m$.
-:::
-
-::: {.callout-note}
-It is possible to obtain different prediction intervals from the same model. 
-For example, we can calculate prediction intervals based on normal and bootstrapped distributions. 
-In this case, point forecasts are the same, but interval forecasts differ.
-:::
-
-We may compare a great number of models using the training set, and choose the best one (with the smallest errors), however, it would be unfair to use the out-of-sample errors from the testing set for demonstrating the model performance because this part of the sample was used to select the model. 
-Thus, it is advisable to have one more chunk of the same time series that was not used for model specification, estimation, or selection. 
-Errors of the selected model on this *validation set* will be closer to the true (genuine) out-of-sample errors and can be used to improve coverage of true out-of-sample forecasts when the model is finally deployed.
 
 
 ## Some simple time series models
