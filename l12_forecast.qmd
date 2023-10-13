@@ -32,8 +32,19 @@ This lecture ...
 
 ## Time series forecasts
 
-Assumptions 
+### Assumptions 
 
+
+### How to obtain forecasts from different types of models (white noise-like; recursive like ARIMA and Exponential smoothing; with x-variables and ARMA structure; Examples in R)
+
+Univariate models - extrapolation of trends;
+ARIMA are 1-step-ahead forecasts (AIC)
+
+Types of forecasts (point prediction or intervals; can be different intervals for the same point prediction)
+
+
+
+### Types of forecasts, especially when multiple regression
 
 Types (*ex-post* from *ex-ante* forecasts)
 
@@ -74,12 +85,6 @@ For example, consider exponential smoothing, Holt--Winters smoothing, and auto-s
 
 
 
-Univariate models - extrapolation of trends;
-ARIMA are 1-step-ahead forecasts (AIC)
-
-Types (point prediction or intervals; can be different intervals for the same point prediction)
-
-
 ## Cross-validation schemes
 
 Goals and intended implementation of the model hence the selection of the scheme.
@@ -90,6 +95,7 @@ Training - Testing
 Training - Testing - Evaluation
 
 Window approach caret::
+forecast::
 
 
 
@@ -151,3 +157,16 @@ In this case, point forecasts are the same, but interval forecasts differ.
 We may compare a great number of models using the training set, and choose the best one (with the smallest errors), however, it would be unfair to use the out-of-sample errors from the testing set for demonstrating the model performance because this part of the sample was used to select the model. 
 Thus, it is advisable to have one more chunk of the same time series that was not used for model specification, estimation, or selection. 
 Errors of the selected model on this *validation set* will be closer to the true (genuine) out-of-sample errors and can be used to improve coverage of true out-of-sample forecasts when the model is finally deployed.
+
+
+## Worked out example of comparing several models
+
+1. Basic (naive) models: average / climatology / HWinters
+
+2. Commonly or previously used model (GLM)
+
+3. State-of-the-science or proposed model
+
+
+## Conclusion
+
