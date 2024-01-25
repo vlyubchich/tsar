@@ -437,7 +437,7 @@ shapiro.test(mod1$residuals)
 ### Summary of the simple linear regression residual diagnostics
 
 1. The residuals do not have a constant mean.
-1. The residuals seem to have a constant variance.
+1. The residuals do not seem to have a constant variance.
 1. The residuals are positively correlated.
 1. The residuals look normally distributed (but the SW statistic might be affected by the serial correlation of the residuals).
 
