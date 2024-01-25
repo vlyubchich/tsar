@@ -289,7 +289,7 @@ Graphical methods visualize differences between empirical data and theoretical n
 Numerical methods conduct statistical tests on the null hypothesis that the variable is normally distributed.
 
 
-#### Graphical methods
+**Graphical methods**
 
 Graphical methods visualize the data using graphs, such as histograms, stem-and-leaf plots, box plots, etc. 
 For example, @fig-Histograms shows a histogram of the simulated normally distributed data and the residuals from the dishwasher example with superimposed normal curves with the corresponding mean and standard deviation.
