@@ -71,7 +71,7 @@ ggplot2::autoplot(MASS::accdeaths) +
     ylab("Number of accidental deaths")
 ```
 
-In this course, we will be interested in constructing time series models to learn more about their properties and to forecast (predict) future values of $Y_t$, i.e., values of $Y_t$ for $t$ beyond the end of the data set. 
+In this course, we will be interested in modeling time series to learn more about their properties and to forecast (predict) future values of $Y_t$, i.e., values of $Y_t$ for $t$ beyond the end of the data set. 
 Typically, we will use the historical data (or some appropriate subset of it) to build our forecasting models.
 
 
@@ -126,7 +126,7 @@ ggplot2::autoplot(decompose(births))
     * any outlying observations.
 1. Remove the trend and periodic components to get stationary residuals (this step is called *detrending and deseasonalizing*). 
 Broadly speaking, a time series is said to be *stationary* if there is
-    1) no systematic change in the mean (no trend);
+    1) no systematic change in the mean (no trend),
     1) no systematic change in the variance, and
     1) no strictly periodic variations.
 1. Choose a model to fit the residuals, making use of various sample statistics, including the *sample autocorrelation function* (ACF).
@@ -138,9 +138,9 @@ There are two general classes of forecasting models.
 The characteristic feature of these models is that we need only *one time series* to start with ($Y_t$), then we can build a regression of this time series over time ($Y_t \sim t$) for estimating the trend or, for example, an autoregressive model ('auto' $=$ self). 
 In the autoregressive approach, the current value $Y_t$ is modeled as a function of the past values:
 $$
-Y_t = f(Y_{t-1}, Y_{t-2}, \dots, Y_{t-p}) + \epsilon_t,
+Y_t = f(Y_{t-1}, Y_{t-2}, \dots, Y_{t-p}) + \epsilon_t.
 $${#eq-funiv}
-while a linear autoregressive model has the form (assume that function $f(\cdot)$ is a linear parametric function, with parameters $\phi_0, \phi_1, \dots, \phi_p$):
+A linear autoregressive model has the following form (assume that function $f(\cdot)$ is a linear parametric function, with parameters $\phi_0, \phi_1, \dots, \phi_p$):
 $$
 Y_t = \phi_0 + \phi_1 Y_{t-1} + \phi_2 Y_{t-2} + \dots +\phi_p Y_{t-p} + \epsilon_t.
 $$
@@ -150,7 +150,7 @@ A multivariate time series model can be as simple as the multiple regression
 $$
 Y_t = f(X_{1,t}, X_{2,t}, \dots, X_{k,t}) + \epsilon_t,
 $$
-or involve autoregressive components of the response (and predictors):
+or involve lagged values of the response and predictors:
 $$
 \begin{split}
 Y_t = f(&X_{1,t}, X_{2,t}, \dots, X_{k,t}, \\
@@ -201,7 +201,7 @@ ggplot2::autoplot(Nile) +
 
 ggplot2::autoplot(co2) + 
     xlab("") + 
-    ylab("Concentration (ppm)")
+    ylab(bquote(CO[2]~'concentration (ppm)'))
 ```
 
 ```{r}
@@ -219,7 +219,7 @@ ggplot2::autoplot(Ecdat::Consumption[,"yd"]/1000) +
 
 forecast::autoplot(as.ts(Ecdat::SP500[,1])) + 
     xlab("") + 
-    ylab("Earnings per share (USD)")
+    ylab("Daily return")
 ```
 :::
 
@@ -298,7 +298,7 @@ So in the vast majority of cases, we are satisfied with the weak stationarity.
 Moreover, we usually omit the word 'weak' and simply talk about stationarity (but have the weak stationary in mind).
 :::
 
-Given the second condition of weak stationarity in @eq-weakstat, we can write for *stationary(!)* time series the *autocovariance function* (ACVF) for the lag $h$:
+Given the second condition of weak stationarity in @eq-weakstat, we can write *for stationary(!)* time series the *autocovariance function* (ACVF) for the lag $h$:
 $$
 \gamma_X(h)= \gamma_X(t+h,t) = \mathrm{cov}(X_{t+h},X_t)
 $$
