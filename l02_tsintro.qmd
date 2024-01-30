@@ -365,7 +365,7 @@ In R, this test is implemented in the function `Box.test()` with the argument `t
 
 The time series plot of births in @fig-birthsACF shows a trend. 
 The time series is not stationary. 
-Thus, the calculated ACF is useless (it is calculated under the assumption of stationarity), but we notice some periodicity in the ACF -- it is a sign of periodicity in the time series itself (seasonality). 
+Thus, the calculated ACF is mostly useless (it is calculated under the assumption of stationarity), but we notice some periodicity in the ACF -- it is a sign of periodicity in the time series itself (seasonality). 
 Need to remove the trend (and seasonality) and repeat the ACF analysis.
 
 Compare with the plots for accidental deaths in @fig-accdeathsACF.
@@ -397,6 +397,9 @@ p2 <- forecast::ggAcf(MASS::accdeaths) +
 p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```
+
+@fig-accdeathsACF shows a slight trend of declining, then increasing deaths; the seasonal component in this time series is more dominant.
+The seasonal cycle of 12 months is clearly visible in the ACF.
 :::
 
 ::: {.callout-note}
