@@ -132,6 +132,10 @@ p3 <- ggplot(D, aes(x = RES, y = mod1$residuals)) +
 p1 + p2 + p3 +
     plot_annotation(tag_levels = 'A')
 ```
+
+In @fig-DishResiduals, we see a pattern of residuals increasing in time, and a pattern of lower variability for high fitted values or high residential investments.
+Thus, the assumption of homoskedasticity is violated.
+In @fig-IdealResiduals, no such patterns are observed.
 :::
 
 
@@ -397,6 +401,8 @@ p2 <- ggpubr::ggqqplot(mod1$residuals) +
 p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```
+
+Both Q-Q plots in @fig-QQ show a good correspondence of the sample quantiles with theoretical normal quantiles, providing no sufficient evidence against normality of the underlying distributions.
 :::
 
 Although visually appealing, these graphical methods do not provide objective criteria to determine the normality of variables.
@@ -590,6 +596,9 @@ We have a high $R^2_{adj} =$ `r summary(mod2)$adj.r.squared` and both predictors
 We need to perform the residual diagnostics.
 
 Plot the estimated residuals $\hat{\epsilon}_{t} = \hat{Y}_{t} - Y_{t}$ vs. the observed $Y_{t}$ ($t = 1, 2, \dots, 26$ or `Year`) -- see @fig-DishResiduals2.
+The plots show a remaining pattern, with residuals peaking, then declining.
+The assumption of homoskedasticity is violated.
+We should update the model so that this pattern is modeled or removed.
 
 ```{r}
 #| label: fig-DishResiduals2
@@ -622,6 +631,8 @@ lmtest::dwtest(D$DISH ~ D$RES + D$DUR)
 lawstat::runs.test(mod2$residuals, plot.it = FALSE)
 ```
 
+Both the tests reject $H_0$ of no autocorrelation; hence the assumption of uncorrelatedness is violated.
+
 Check that the residuals $\epsilon_{t}$ are normally distributed using the Q-Q plot (@fig-QQ2) and Shapiro--Wilk test.
 
 ```{r}
@@ -637,6 +648,9 @@ shapiro.test(mod2$residuals)
 ggpubr::ggqqplot(mod2$residuals) + 
     xlab("Standard normal quantiles")
 ```
+
+@fig-QQ2 and $p$-value of the Shapiro--Wilk test do not provide evidence against the null hypothesis of normality.
+The assumption of normality is satisfied.
 :::
 
 
