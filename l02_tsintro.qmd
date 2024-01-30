@@ -31,10 +31,10 @@ You should become confident in identifying and characterizing trends, seasonal a
 
 ## Time series and its components
 
-A *time series* is a set of observations $Y_t$, each one being recorded at a specific time $t$ [@Brockwell:Davis:2002]. 
+'A *time series* is a set of observations $Y_t$, each one being recorded at a specific time $t$' [@Brockwell:Davis:2002]. 
 The index $t$ will typically refer to some standard unit of time, e.g., seconds, hours, days, weeks, months, or years.
 
-A *time series* is a collection of observations made sequentially through time [@Chatfield:2000].
+'A *time series* is a collection of observations made sequentially through time' [@Chatfield:2000].
 
 A *stochastic process* is a sequence of random variables $Y_t$, $t = 1, 2, \dots$ indexed by time $t$, which can be written as $Y_t$, $t \in [1,T]$. 
 A time series is a realization of a stochastic process.
