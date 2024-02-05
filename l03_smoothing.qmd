@@ -531,7 +531,7 @@ An exponential smoothing over an already smoothed time series is called *double 
 In some cases, it might be necessary to extend it even to a *triple exponential smoothing*.
 
 **Holt's linear exponential smoothing** Suppose that the series $Y_t$ is non-seasonal but displays a trend. 
-Now we need to estimate both the current mean (or *level* in some professional jargon) and the current trend.
+Now we need to estimate both the current mean (a.k.a. *level*) and the current trend.
 
 The updating equations express ideas similar to those for exponential smoothing. 
 However, now we have two smoothing parameters, $\alpha$ and $\beta$ ($\alpha \in [0, 1]$; $\beta \in [0, 1]$).
@@ -651,7 +651,8 @@ where $k = 1, 2, \dots, m$.
 ## Example: Airline passengers non-seasonal and seasonal exponential smoothing
 
 Monthly totals of international airline passengers, 1949--1960 (see @fig-airpassangers). 
-This is a classical example and benchmark in time series analysis.
+This is a classical example in time series analysis.
+Note that the seasonal variability increases with the increasing mean, hence, we deal with the multiplicative seasonality.
 
 ```{r}
 #| label: fig-airpassangers
@@ -790,7 +791,7 @@ Therefore, model `tm2.3` is preferred, because it is evaluated on orthogonal pol
 
 To each time $t$ and each season $k$ we will assign an indicator that 'turns on' if and only if $t$ falls into that season. 
 In principle, a seasonal period of any positive integer length $m \geqslant 2$ is possible, however, in most cases, the length of the seasonal cycle is one year and so the seasonal period of the time series depends on the number of observations per year. 
-The most common periods are $m = 12$ (monthly data) and $m = 4$ (quarterly data). 
+Some common periods are $m = 12$ (monthly data) and $m = 4$ (quarterly data). 
 For each $k = 1, \dots, m$, we define the indicator
 $$
 X_{k,t} = \left\{
@@ -829,7 +830,7 @@ $$
 where $X_{i,t}$ are the dummy variables for the months. 
 (Here the first month has been dropped from the model, the same as in R the first factor level is dropped.)
 
-If we were doing the regression analysis by hand, we would create a design matrix with a few top rows looking like this:
+If we were doing the regression analysis by hand, we would create a design matrix with its few top rows looking like this:
 
 ```{r}
 #| echo: false
@@ -969,7 +970,7 @@ colnames(S3) <- paste0("B", 1:ncol(S3))
 
 Instead of fitting a global nonlinear function like in a polynomial regression (@sec-regressionTime) or fitting simpler local polynomials directly like in lowess smoothing (@sec-lowess), we can construct a basis from basic splines (B-splines).
 B-splines are simple functions, which vanish outside the intervals defined by time points called the 'knots.'
-These splines are defined recursively, from the lowest to higher orders, starting from a simple indicator function for the intervals between the knots [see Appendix to Chapter 5 in @Hastie:etal:2009 or Chapter 4.1 in @Wood:2006book for the recursive formulas]. 
+These splines are defined recursively, from the lowest to higher orders, starting from a simple indicator function for the intervals between the knots [see Appendix to Chapter 5 in @Hastie:etal:2009; or Chapter 4.1 in @Wood:2006book for the recursive formulas]. 
 Here we show the results of the recursive computations, for times $t = 1, \dots,$ `r max(t)` and knots `r paste0(tau, collapse = ", ")` spaced unequally for illustration purposes (uniformly-spaced knots give us cardinal B-splines).
 @fig-BS1 shows a basis formed by B-splines of degree one, and @fig-BS2 shows splines of degree two.
 
@@ -1121,7 +1122,8 @@ $$
 g(\mu_t) = \alpha_0 + f_1(t) + f_2(Month_t).
 $$
 This model will capture a potentially non-monotonic trend and seasonality.
-We will use cyclical splines for $f_2(\cdot)$, with an additional penalty to ensure a smooth transition between the last and the first month of the annual cycle.
+We will use cyclical splines for $f_2(\cdot)$. 
+Cyclical splines have an additional penalty to ensure a smooth transition between the last and the first month of the annual cycle (from December to January).
 
 Below we fit the model for both distribution families, lognormal with the identity link function (@eq-GAMlno) and normal with the logarithmic link (@eq-GAMno):
 
@@ -1351,7 +1353,7 @@ p6 <- forecast::ggAcf(D1D12) +
 ## Conclusion
 
 We have implemented various methods for trend visualization, modeling, and trend removal. 
-In each case, the method could be extended to additionally remove from a time series a strong seasonal signal. 
+In each case, the method could be extended to also remove a strong seasonal signal. 
 The choice of a method depends on many things, such as:
 
 * The methods require different skill levels (and time commitment) for their implementation and can be categorized as automatic and non-automatic.
@@ -1375,7 +1377,7 @@ While the considered methods are among the most common, there are many more smoo
 ## Example: Smoothing blocks
 
 A student was concerned about applying smoothing to data with a block-like structure. 
-Without a real data set on hand, below we simulate a series $X_t$ with the mentioned structure.
+Without a real dataset on hand, below we simulate a series $X_t$ with the mentioned structure.
 
 ```{r}
 set.seed(123)

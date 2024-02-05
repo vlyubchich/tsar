@@ -15,6 +15,7 @@ Remember that all predictive inference is based on the assumptions that the rela
 
 a.k.a.
 changepoint
+dataset
 heteroskedasticity
 homoskedasticity
 hyperparameter
