@@ -14,6 +14,22 @@ theme_set(theme_light())
 
 # Practice exercises
 
+## Intro practice {#sec-intropractice}
+
+Answer whether each of these statements is true or false.
+
+1. The highest autocorrelation is observed when each next observation is exactly the same as the previous.
+1. 'Time series is autocorrelated' means there is a trend.
+1. Autocorrelation goes away if we smooth the data, for example, with a moving average.
+1. 'Random variables $X$ and $Y$ are uncorrelated' means $X$ and $Y$ are independent.
+1. Time series is an uninterrupted sequence of observations. Missing observations break the sequence into multiple separate time series.
+1. The most appropriate statistical tool to detect a trend is the simple Student's $t$-test.
+1. If there is no autocorrelation at the first lag, i.e., $\mathrm{cor}(X_t, X_{t-1}) = 0$, then $\mathrm{cor}(X_t, X_{t-2}) = 0$.
+1. Prediction mean absolute error (PMAE) measures the quality of point forecasts, whereas prediction mean squared error (PMSE) measures the quality of interval forecasts. 
+1. If a time series $X_t$ ($t = 1, \dots, T$) is stationary, then all predictions for times $T+1$, $T+2$, $\dots$ are the same.
+1. White noise is a sequence of weakly correlated random variables.
+
+
 ## ARMA practice {#sec-acfpractice}
 
 Below are several examples of time series with their ACF and PACF plots. 
@@ -94,7 +110,6 @@ pacf(Yt, las = 1, main = "")
 ## Trend practice {#sec-trendpractice}
 
 Answer whether each of these statements is true or false.
-
 
 1. If ACF values at the first ten lags are statistically significant, then the time series is not stationary.
 1. If $X_t$ is an ARIMA$(p,d,q)$ process, then $(1-B)^d X_t$ is an ARMA$(p,q)$ process.
