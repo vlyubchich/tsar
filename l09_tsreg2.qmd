@@ -276,7 +276,7 @@ A slightly different solution is possible using a *generalized autoregressive mo
 
 ::: {.callout-note icon=false}
 
-## Example: Golden tilefish ARIMAX
+## Example: Golden tilefish and AMO
 
 Here we have time series of 1918--2017 annual landings of golden tilefish (tonne) in the U.S. North Atlantic region and the Atlantic Multi-decadal Oscillation (AMO) index characterizing climatic conditions (@fig-tilefishTS). 
 These time series were described in @Nesslage:etal:2021:environmental with R code by  @lyubchich3732840.
@@ -321,12 +321,10 @@ D %>%
 
 ```{r}
 #| label: fig-tilefishCCF
-#| fig-cap: "Estimated cross-correlation function (CCF) of time series of the landings and AMO."
+#| fig-cap: "Estimated cross-correlation function (CCF) of the AMO and landings time series."
 
-par(mar = c(4, 5, 1, 1) + 0.1, mgp = c(3, 1, 0), mfrow = c(1, 1))
-with(D,
-     ccf(AMO, Landings_noNA_sqrt, las = 1)
-)
+forecast::ggCcf(D$AMO, D$Landings_noNA_sqrt) + 
+    ggtitle("")
 ```
 
 Based on the strongest lagged correlations (@fig-tilefishCCF), implement a model
@@ -432,13 +430,13 @@ Hence, we will still keep the current precipitation and additionally explore the
 
 ```{r}
 #| label: fig-insCCF
-#| fig-cap: "Estimated cross-correlation function (CCF) of time series of the number of home insurance claims and precipitation."
+#| fig-cap: "Estimated cross-correlation function (CCF) of precipitation and number of home insurance claims."
 
-par(mar = c(4, 5, 1, 1) + 0.1, mgp = c(3, 1, 0), mfrow = c(1, 1))
 logconstant <- 1
-with(Insurance,
-     ccf(Precipitation, log(Claims + logconstant), las = 1, lag.max = 3)
-)
+forecast::ggCcf(Insurance$Precipitation, 
+                log(Insurance$Claims + logconstant),
+                lag.max = 3) + 
+    ggtitle("")
 ```
 
 Based on the estimated CCFs (@fig-insCCF), past-week precipitation is significantly correlated with the current-week number of claims, so we can add the lagged predictor into our models.
