@@ -68,8 +68,8 @@ The functions `ccf()` and `forecast::ggCcf()` estimate the cross-correlation fun
 The functions use the notations like in @eq-ccf, hence when using `ccf(x, y)` we are typically interested in identifying *negative* $k$s that correspond to correlation between past values of the predictor $X_t$ and current values of the response $Y_t$.
 
 For example, @fig-CCFBJ shows the CCF for two time series of sales that have been detrended by taking differences. 
-From this plot, lagged values of the first series, $\Delta \mathrm{BJsales.lead}_{t - 2}$ and $\Delta \mathrm{BJsales.lead}_{t - 3}$ are significantly correlated with current values of the second series, $\Delta \mathrm{BJsales}_{t}$. 
-Hence, we can call `BJsales.lead` a leading indicator for `BJsales`.
+From this plot, lagged values of the first series, $\Delta \mathrm{BJsales{.}lead}_{t - 2}$ and $\Delta \mathrm{BJsales{.}lead}_{t - 3}$ are significantly correlated with current values of the second series, $\Delta \mathrm{BJsales}_{t}$. 
+Hence, we can call `BJsales{.}lead` a leading indicator for `BJsales`.
 
 ```{r}
 #| label: fig-CCFBJ
