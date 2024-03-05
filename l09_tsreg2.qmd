@@ -604,7 +604,7 @@ g_k(\boldsymbol{\theta}_k) = h_k\left(\boldsymbol{X}_k,\boldsymbol{\beta}_k\righ
 $${#eq-GAMLSS}
 where $k=1$ produces model for the mean; $h_k(\cdot)$ and $h_{jk}(\cdot)$ are nonlinear functions; $\boldsymbol{\beta}_k$ is a parameter vector of length $J_k$; $\boldsymbol{X}_k$ is an $n\times J_k$ design matrix; $\boldsymbol{x}_{jk}$ are vectors of length $n$. 
 The terms in the GAMLSS provide a flexible framework to specify nonlinearities, random effects, and correlation structure as in the mixed effects models [@Zuur:etal:2009]; see Table 3 by @Stasinopoulos:Rigby:2007 for the possible specifications of the additive terms. 
-Hence, a model of the form @eq-GAMLSS may accommodate non-normal distributions, possibly nonlinear relationships, and spatiotemporal dependencies in the data.
+Hence, a model as in @eq-GAMLSS may accommodate non-normal distributions, possibly nonlinear relationships, and spatiotemporal dependencies in the data.
 
 :::{.callout-note icon=false}
 
