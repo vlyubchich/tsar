@@ -474,7 +474,7 @@ $$
 1 & \text{if } h = 0 \\
 \mathrm{cor}(X_t, X_{t+1}) = \rho(1) & \text{if } h = 1 \\
 \mathrm{cor}(X_t - P(X_t | X_{t+1}, \dots, X_{t+h-1}), \\
-\quad\;\; X_{t+1} - P(X_{t+h} | X_{t+1}, \dots, X_{t+h-1})) & \text{if } h > 1.
+\quad\;\; X_{t+h} - P(X_{t+h} | X_{t+1}, \dots, X_{t+h-1})) & \text{if } h > 1.
 \end{cases}
 $$
 
