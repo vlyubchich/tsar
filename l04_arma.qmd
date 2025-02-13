@@ -247,7 +247,7 @@ $$
 $${#eq-ar1var}
 
 ::: {.callout-note}
-Note that for @eq-ar1var to make sense, we require $|\phi_{1}| < 1$. 
+For @eq-ar1var to make sense, we require $|\phi_{1}| < 1$. 
 This is the condition under which AR(1) process is (*weakly*) *stationary*. 
 E.g., if $\phi_{1} = \pm 1$ then the process is a random walk and is also not stationary. 
 We shall see later that all AR processes require some condition of this nature.
@@ -323,9 +323,10 @@ $$
 $$
 where $\phi(\lambda)$ is the polynomial $\phi(\lambda) = 1 - \phi_{1} \lambda - \phi_{2} \lambda^{2} - \dots - \phi_{p} \lambda^{p}$.
 
-
 The stationarity condition for AR($p$) model is defined through the polynomial $\phi(\lambda)$. 
 Specifically, *all the roots of the function $\phi(\lambda)$ lie outside the unit circle in the complex plane*.
+
+**ACF of AR processes**
 
 To compute ACVF and ACF for the AR($p$) model, multiplying both sides of @eq-ARp by $Y_{t - k}$ for $k \geqslant p$ and taking expectations yields
 $$
