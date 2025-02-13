@@ -186,7 +186,7 @@ where $X_t \sim \mathrm{i.i.d.}(a, \sigma^2)$, $a = 0.2$, and $\sigma = 2$.
 
 ```{r}
 #| label: fig-rw2
-#| fig-cap: "White noise with drift as specified in @eq-rw2."
+#| fig-cap: "Random walk with drift as specified in @eq-rw2."
 #| fig-height: 3
 
 # Sample data
