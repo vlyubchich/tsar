@@ -1,3 +1,7 @@
+---
+engine: knitr
+---
+
 ## Preface {.unnumbered}
 
 This is a collection of lecture notes on applied time series analysis and forecasting using the statistical programming language R. 

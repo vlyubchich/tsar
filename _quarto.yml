@@ -22,30 +22,30 @@ book:
     chapters:
         - index.qmd
         - l01_regression.qmd
-        - l02_tsintro.qmd
-        - l03_smoothing.qmd
-        - l04_arma.qmd
-        - l05_arima.qmd
-        - l06_garch.qmd
-        - l07_trendtest.qmd
-        - l08_tsreg1.qmd
-        - l09_tsreg2.qmd
+        # - l02_tsintro.qmd
+        # - l03_smoothing.qmd
+        # - l04_arma.qmd
+        # - l05_arima.qmd
+        # - l06_garch.qmd
+        # - l07_trendtest.qmd
+        # - l08_tsreg1.qmd
+        # - l09_tsreg2.qmd
         # - l10_causality.qmd
         # - l11_panel.qmd
         # - l12_forecast.qmd
-        - l13_spectral.qmd
+        # - l13_spectral.qmd
         - software.qmd
         - references.qmd
     appendices:
         - s1_wls.qmd
         - s2_gls.qmd
-        - s4_trendsync.qmd
-        - s_practice.qmd
+        # - s4_trendsync.qmd
+        # - s_practice.qmd
 
 bibliography:
     - references.bib
     - refpackages.bib
-csl: C:/Users/Slava/Documents/tsar/springerbasicVL.csl
+csl: springerbasicVL.csl
 
 appendix-style: default
 
@@ -57,6 +57,7 @@ format:
         fig-width: 8
         fig-height: 5
 
+engine: knitr
 knitr:
     opts_chunk:
         collapse: false
@@ -65,3 +66,6 @@ knitr:
         comment: "#>"
         R.options:
             knitr.graphics.auto_pdf: true
+execute:
+    eval: true
+    echo: true
