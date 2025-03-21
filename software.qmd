@@ -78,7 +78,6 @@ packages2cite <- sort(c(
     ,'readr'
     ,'rmarkdown'
     ,'signal'
-    ,'splines'
     ,'tseries'
     ,'TSstudio'
     ,'urca'
