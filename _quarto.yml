@@ -21,7 +21,7 @@ book:
         search: true
     chapters:
         - index.qmd
-        - l01_regression.qmd
+        # - l01_regression.qmd
         # - l02_tsintro.qmd
         # - l03_smoothing.qmd
         # - l04_arma.qmd
@@ -37,9 +37,10 @@ book:
         - software.qmd
         - references.qmd
     appendices:
-        - s1_wls.qmd
-        - s2_gls.qmd
+        # - s1_wls.qmd
+        # - s2_gls.qmd
         # - s4_trendsync.qmd
+        - s6_extremes.qmd
         # - s_practice.qmd
 
 bibliography:

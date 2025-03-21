@@ -1,0 +1,17 @@
+---
+output: html_document
+editor_options:
+    chunk_output_type: console
+---
+
+```{r, echo=FALSE}
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+options(digits = 3)
+theme_set(theme_light())
+```
+
+# Analysis of precipitation extremes and climate projections {#sec-extremes}
+
+Text
