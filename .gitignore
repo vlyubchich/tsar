@@ -11,3 +11,5 @@
 *.pdf
 
 Screenshot*
+
+**/*.quarto_ipynb
