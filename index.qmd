@@ -24,11 +24,11 @@ generalized additive models).
 
 ## Authors {.unnumbered}
 
-Vyacheslav Lyubchich is an Associate Research Professor at the University of Maryland Center for Environmental Science. 
+Vyacheslav Lyubchich is a Research Professor at the University of Maryland Center for Environmental Science. 
 <https://www.umces.edu/vyacheslav-lyubchich>
 
-Yulia R. Gel is a Professor of Statistics at the University of Texas at Dallas.
-<https://personal.utdallas.edu/~yxg142030/>
+Yulia R. Gel is a Professor of Statistics at the Virginia Polytechnic Institute and State University.
+<https://www.stat.vt.edu/people/stat-faculty/gel-yulia.html>
 
 
 ## Citation {.unnumbered}
