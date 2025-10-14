@@ -57,7 +57,7 @@ packages2cite <- sort(c(
     ,'funtimes'
     ,'gamlss'
     ,'gamlss.ggplots'
-    # ,'gamlss.util' # Archived on 2020-09-03
+    ,'gamlss.util' # Archived on 2020-09-03
     ,'GGally'
     # # ,'ggfortify'
     ,'ggplot2'

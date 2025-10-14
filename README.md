@@ -1,6 +1,4 @@
 # Future work
-- make ARMA example in l04 real data
-- move garma to appendix
 - make causality a separate lecture 10, add on diff-in-diff with cannabis example.
 + add example coverage calculations Lect 2 or ARIMA, eventually move part of the material 
 from l02 to a separate lecture on Model evaluation and forecasting. forecast::accuracy(). 

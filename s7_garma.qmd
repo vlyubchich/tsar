@@ -1,0 +1,140 @@
+---
+output: html_document
+editor_options:
+    chunk_output_type: console
+---
+
+```{r, echo=FALSE}
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+options(digits = 3)
+theme_set(theme_light())
+```
+
+# Generalized autoregressive moving average (GARMA) models {#sec-GARMA}
+
+Let $Y_t$ be the observed time series and $\boldsymbol{X_t}$ exogenous regressors. 
+Then, we can model the conditional distribution of $Y_t$, given $Y_1,\dots,Y_{t-1}$, $\boldsymbol{X_1,\dots,X_{t}}$ as
+$$
+g(\mu_t)=\boldsymbol{X}'_t\beta+\sum_{j=1}^p\phi_j\{g(Y_{t-j})- \boldsymbol{X}'_{t-j}\beta\}
++\sum_{j=1}^q\theta_j \{g(Y_{t-j})-g(\mu_{t-j})\},
+$${#eq-GARMA}
+where $g(\cdot)$ is an appropriate link function; $\mu_t$ is a conditional mean of the dependent variable; $\boldsymbol{\beta}$ is a vector of regression coefficients; $\phi_j$, $j=1,\dots, p$, are the autoregressive coefficients; $\theta_j$, $j=1,\dots,q$, are the moving average coefficients, while $p$ and $q$ are the autoregressive and moving average orders, respectively.
+
+In certain cases, the function $g(\cdot)$ requires some transformation of the original series $Y_{t-j}$ to avoid the non-existence of $g(Y_{t-j})$ [@Benjamin:etal:2003].
+
+The generalized autoregressive moving average model (@eq-GARMA), GARMA($p,q$), represents a flexible observation-driven modification of the classical Box--Jenkins methodology and GLMs for integer-valued time series. 
+GARMA further advances the classical Gaussian ARMA model to a case where the distribution of the dependent variable is not only non-Gaussian but can be discrete. 
+The dependent variable is assumed to belong to a conditional exponential family distribution given the past information of the process and thus the GARMA can be used to model a variety of discrete distributions [@Benjamin:etal:2003]. 
+The GARMA model also extends the work of @Zeger:Qaqish:1988, who proposed an autoregressive exponential family model, and @Li:1994, who introduced its moving average counterpart.
+
+:::{.callout-note icon=false}
+
+## Example: Insurance claims GARMA model
+
+Here, we revisit the insurance claims example from @sec-GAMLSS.
+
+```{r}
+logconstant <- 1
+Insurance <- read.csv("data/insurance_weekly.csv") %>%
+    dplyr::select(Claims, Precipitation) %>% 
+    mutate(Precipitation_lag1 = dplyr::lag(Precipitation, 1),
+           Week = 1:nrow(.),
+           Year = rep(2002:2011, each = 52),
+           Claims_ln = log(Claims + logconstant))
+summary(Insurance)
+```
+
+Fit a GARMA model relating the weekly number of insurance claims to the total precipitation during that and previous weeks.
+For fitting the model, you will need the `gamlss.util` package, which is archived on CRAN.
+Follow the [link](https://cran.r-project.org/src/contrib/Archive/gamlss.util/) to download the latest version, then install it from the archive.
+
+```{r}
+#| code-fold: false
+
+# The model function doesn't accept NAs, so remove them
+Insurance_noNA <- na.omit(Insurance)
+
+library(gamlss.util)
+m00zip <- garmaFit(Claims ~ Precipitation + Week + Precipitation_lag1
+                   ,family = ZIP
+                   ,data = Insurance_noNA)
+m00nbi <- garmaFit(Claims ~ Precipitation + Week + Precipitation_lag1
+                   ,family = NBI
+                   ,data = Insurance_noNA)
+AIC(m00zip, m00nbi)
+```
+
+Based on the smallest AIC, select negative binomial distribution (NBI) for the GARMA model.
+Obtain ACF and PACF plots of the model residuals to select ARMA order (@fig-insresACF00).
+
+```{r}
+#| label: fig-insresACF00
+#| fig-cap: "ACF and PACF plots of residuals of the base model GARMA(0,0) based on NBI distribution."
+
+p1 <- forecast::ggAcf(m00nbi$residuals) +
+    ggtitle("") +
+    xlab("Lag (weeks)")
+p2 <- forecast::ggAcf(m00nbi$residuals, type = "partial") +
+    ggtitle("") +
+    xlab("Lag (weeks)")
+p1 + p2 +
+    plot_annotation(tag_levels = 'A')
+```
+
+Based on the observed ACF and PACF patterns (@fig-insresACF00), an appropriate model for the temporal dependence could be ARMA(1,0), ARMA(3,0), or ARMA(1,1), among the most parsimonious options.
+Alternatively, we can select the orders based on AIC:
+
+```{r}
+#| code-fold: false
+
+(res_arma <- forecast::auto.arima(m00nbi$residuals, 
+                                  d = 0, D = 0, 
+                                  stepwise = FALSE))
+
+# Extract the orders, see the value 'arma' in ?stats::arima
+p <- res_arma$arma[1]
+q <- res_arma$arma[2]
+```
+
+Refit the GARMA model specifying these orders. 
+Then verify that the temporal dependence in residuals was removed (@fig-m10nbiACF), and assess other assumptions (@fig-m10nbi), including homogeneity and normality of the quantile residuals.
+
+```{r}
+#| code-fold: false
+
+set.seed(12345)
+m10nbi <- garmaFit(Claims ~ Precipitation + Week + Precipitation_lag1
+                   ,order = c(1, 0)
+                   ,family = NBI
+                   ,data = Insurance_noNA)
+summary(m10nbi)
+```
+
+```{r}
+#| label: fig-m10nbiACF
+#| fig-cap: "ACF and PACF plots of the GARMA(1,0) model residuals based on NBI distribution."
+
+p1 <- forecast::ggAcf(m10nbi$residuals) +
+    ggtitle("") +
+    xlab("Lag (weeks)")
+p2 <- forecast::ggAcf(m10nbi$residuals, type = "partial") +
+    ggtitle("") +
+    xlab("Lag (weeks)")
+p1 + p2 +
+    plot_annotation(tag_levels = 'A')
+```
+
+```{r}
+#| label: fig-m10nbi
+#| fig-cap: "Default diagnostics of the GARMA(1,0) model residuals based on NBI distribution."
+#| fig-height: 7
+
+plot(m10nbi, ts = FALSE)
+```
+
+The residual diagnostics look somewhat adequate. 
+The issue is with the residuals showing high kurtosis (recall that kurtosis of normal distribution equals 3) and some outliers in the right tail.
+Also, consider @sec-GAMLSS for another analysis of this dataset.
+:::

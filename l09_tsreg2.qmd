@@ -381,30 +381,27 @@ report(m3)
 :::
 
 
-## GARMA {#sec-GARMA}
+## GAMLSS {#sec-GAMLSS}
 
-Let $Y_t$ be the observed time series and $\boldsymbol{X_t}$ exogenous regressors. 
-Then, we can model the conditional distribution of $Y_t$, given $Y_1,\dots,Y_{t-1}$, $\boldsymbol{X_1,\dots,X_{t}}$ as
+@Stasinopoulos:Rigby:2007 provide an extension of a generalized additive model to $k=1,2,3,4$ parameters $\boldsymbol{\theta}_k$ of a distribution in a so-called *generalized additive model for location scale and shape* (GAMLSS).
+The $k$ parameters represent the location parameter $\mu$ (it is what we typically model with regression models), scale $\sigma$, and two shape parameters: skewness and kurtosis.
+The model can be further generalized for $k>4$ if needed.
+It allows us to fit $k$ individual models to study relationships between regressors $\boldsymbol{x}$ and parameters of the response distribution:
 $$
-g(\mu_t)=\boldsymbol{X}'_t\beta+\sum_{j=1}^p\phi_j\{g(Y_{t-j})- \boldsymbol{X}'_{t-j}\beta\}
-+\sum_{j=1}^q\theta_j \{g(Y_{t-j})-g(\mu_{t-j})\},
-$${#eq-GARMA}
-where $g(\cdot)$ is an appropriate link function; $\mu_t$ is a conditional mean of the dependent variable; $\boldsymbol{\beta}$ is a vector of regression coefficients; $\phi_j$, $j=1,\dots, p$, are the autoregressive coefficients; $\theta_j$, $j=1,\dots,q$, are the moving average coefficients, while $p$ and $q$ are the autoregressive and moving average orders, respectively.
-
-In certain cases, the function $g(\cdot)$ requires some transformation of the original series $Y_{t-j}$ to avoid the non-existence of $g(Y_{t-j})$ [@Benjamin:etal:2003].
-
-The generalized autoregressive moving average model (@eq-GARMA), GARMA($p,q$), represents a flexible observation-driven modification of the classical Box--Jenkins methodology and GLMs for integer-valued time series. 
-GARMA further advances the classical Gaussian ARMA model to a case where the distribution of the dependent variable is not only non-Gaussian but can be discrete. 
-The dependent variable is assumed to belong to a conditional exponential family distribution given the past information of the process and thus the GARMA can be used to model a variety of discrete distributions [@Benjamin:etal:2003]. 
-The GARMA model also extends the work of @Zeger:Qaqish:1988, who proposed an autoregressive exponential family model, and @Li:1994, who introduced its moving average counterpart.
+g_k(\boldsymbol{\theta}_k) = h_k\left(\boldsymbol{X}_k,\boldsymbol{\beta}_k\right) + \sum_{j=1}^{J_k}h_{jk}(\boldsymbol{x}_{jk}),
+$${#eq-GAMLSS}
+where $k=1$ produces model for the mean; $h_k(\cdot)$ and $h_{jk}(\cdot)$ are nonlinear functions; $\boldsymbol{\beta}_k$ is a parameter vector of length $J_k$; $\boldsymbol{X}_k$ is an $n\times J_k$ design matrix; $\boldsymbol{x}_{jk}$ are vectors of length $n$. 
+The terms in the GAMLSS provide a flexible framework to specify nonlinearities, random effects, and correlation structure as in the mixed effects models [@Zuur:etal:2009]; see Table 3 by @Stasinopoulos:Rigby:2007 for the possible specifications of the additive terms. 
+Hence, a model as in @eq-GAMLSS may accommodate non-normal distributions, possibly nonlinear relationships, and spatiotemporal dependencies in the data.
 
 :::{.callout-note icon=false}
 
-## Example: Insurance claims GARMA model
+## Example: Insurance claims GAMLSS
 
 Consider the weekly number of house insurance claims related to water and weather damage in one Canadian city. 
 The number is standardized by the daily number of insured properties in that city. 
-Explore the relationship between the number of claims and weekly total precipitation (mm).
+The date of the claim corresponds to reported date of water weather damage, not the date when the claim was filed.
+This allows us to explore the relationship between the number of claims and weekly total precipitation (mm).
 
 ```{r}
 Insurance <- read.csv("data/insurance_weekly.csv") %>%
@@ -420,13 +417,13 @@ Insurance %>%
     GGally::ggpairs()
 ```
 
-Based on the distribution plots in @fig-insScatter, the data are highly right-skewed (have heavy right tails). 
+Based on the distribution plots in @fig-insScatter, the data are highly right-skewed (the distributions have heavy right tails). 
 The number of claims is also a discrete variable. 
 Therefore, we deal with non-normal distributions and need to use generalized-type models, like the generalized linear or additive models (GLMs or GAMs).
-Since there are many zeros in the counts of claims, we can start with the zero-adjusted Poisson distribution to model the number of claims [@Stasinopoulos:Rigby:2007;@Gupta:etal:1996].
+Since the claim counts contain many zeros and exhibit overdispersion, we might need to use the zero-adjusted Poisson distribution or negative binomial distribution for this response variable [@Stasinopoulos:Rigby:2007;@Gupta:etal:1996].
 
 In our case, there is just a slight chance that past-week precipitation affects the current-week insurance claims. 
-Hence, we will still keep the current precipitation and additionally explore the lagged effects, using the cross-correlation function (@fig-insCCF).
+Hence, we will keep the current precipitation and additionally explore the lagged effects, using the cross-correlation function (@fig-insCCF).
 
 ```{r}
 #| label: fig-insCCF
@@ -442,14 +439,20 @@ forecast::ggCcf(Insurance$Precipitation,
 Based on the estimated CCFs (@fig-insCCF), past-week precipitation is significantly correlated with the current-week number of claims, so we can add the lagged predictor into our models.
 
 ```{r}
+#| code-fold: false
+
 Insurance <- Insurance %>%
     mutate(Precipitation_lag1 = dplyr::lag(Precipitation, 1),
            Week = 1:nrow(Insurance),
            Year = rep(2002:2011, each = 52),
-           Claims_ln = log(Claims + logconstant))
+           Claims_ln = log(Claims + logconstant)) %>% 
+    mutate(Claims_ln_lag1 = dplyr::lag(Claims_ln, 1))
+
+# The model function doesn't accept NAs, so remove them
+Insurance_noNA <- na.omit(Insurance)
 ```
 
-Based on @fig-insACF, there might be an increasing trend in the number of claims that we might be able to approximate with a linear function.
+Based on @fig-insACF, there might be an increasing trend in the number of claims that we can approximate with a linear function.
 
 ```{r}
 #| label: fig-insACF
@@ -477,142 +480,10 @@ Insurance %>%
     GGally::ggpairs()
 ```
 
-Fit a GARMA model relating the weekly number of insurance claims to the total precipitation during that and previous weeks.
-
-```{r}
-#| code-fold: false
-
-# The model function doesn't accept NAs, so remove them
-Insurance_noNA <- na.omit(Insurance)
-
-library(gamlss.util)
-m00zip <- garmaFit(Claims ~ Precipitation + Week + Precipitation_lag1
-                   ,family = ZIP
-                   ,data = Insurance_noNA)
-```
-
-Obtain ACF and PACF plots of the model residuals to select ARMA order (@fig-insresACF00).
-
-```{r}
-#| label: fig-insresACF00
-#| fig-cap: "ACF and PACF plots of residuals of the base model GARMA(0,0) based on ZIP distribution."
-
-p1 <- forecast::ggAcf(m00zip$residuals) +
-    ggtitle("") +
-    xlab("Lag (weeks)")
-p2 <- forecast::ggAcf(m00zip$residuals, type = "partial") +
-    ggtitle("") +
-    xlab("Lag (weeks)")
-p1 + p2 +
-    plot_annotation(tag_levels = 'A')
-```
-
-Based on the observed ACF and PACF patterns in @fig-insresACF00, an appropriate model for the temporal dependence could be ARMA(3,0). 
-Refit the GARMA model specifying these orders. 
-Then verify that the temporal dependence in residuals was removed (@fig-m03zipACF), and assess other assumptions (@fig-m03zip), including homogeneity and normality of the quantile residuals.
-
-```{r}
-#| code-fold: false
-
-set.seed(12345)
-m30zip <- garmaFit(Claims ~ Precipitation + Week + Precipitation_lag1
-                ,order = c(3, 0)
-                ,family = ZIP
-                ,data = Insurance_noNA)
-summary(m30zip)
-```
-
-```{r}
-#| label: fig-m03zipACF
-#| fig-cap: "ACF and PACF plots of the GARMA(0,3) model residuals based on ZIP distribution."
-
-p1 <- forecast::ggAcf(m30zip$residuals) +
-    ggtitle("") +
-    xlab("Lag (weeks)")
-p2 <- forecast::ggAcf(m30zip$residuals, type = "partial") +
-    ggtitle("") +
-    xlab("Lag (weeks)")
-p1 + p2 +
-    plot_annotation(tag_levels = 'A')
-```
-
-
-```{r}
-#| label: fig-m03zip
-#| fig-cap: "Default diagnostics of the GARMA(0,3) model residuals based on ZIP distribution."
-#| fig-height: 7
-
-plot(m30zip)
-```
-
-See @Dunn:Smyth:1996 for the details on randomized quantile residuals. 
-Overall, their poor correspondence with the standard normal distribution shows a lack of fit of the model. 
-See `?gamlss.family` for other distribution families, continuous and discrete; somewhat out-of-date tables with many of these distributions listed are available from @Stasinopoulos:Rigby:2007.
-
-Here we try one other distribution appropriate for modeling overdispersed count data -- negative binomial distribution. 
-See the model summary below and the verification of residuals in @fig-m03nbiACF and @fig-m03nbi.
-
-```{r}
-#| code-fold: false
-
-set.seed(12345)
-m03nbi <- garmaFit(Claims ~ Precipitation + Week + Precipitation_lag1
-                ,order = c(0, 3)
-                ,family = NBI
-                ,data = Insurance_noNA)
-summary(m03nbi)
-```
-
-```{r}
-#| label: fig-m03nbiACF
-#| fig-cap: "ACF and PACF plots of the GARMA(0,3) model residuals based on NBI distribution."
-
-p1 <- forecast::ggAcf(m03nbi$residuals) +
-    ggtitle("") +
-    xlab("Lag (weeks)")
-p2 <- forecast::ggAcf(m03nbi$residuals, type = "partial") +
-    ggtitle("") +
-    xlab("Lag (weeks)")
-p1 + p2 +
-    plot_annotation(tag_levels = 'A')
-```
-
-
-```{r}
-#| label: fig-m03nbi
-#| fig-cap: "Default diagnostics of the GARMA(0,3) model residuals based on NBI distribution."
-#| fig-height: 7
-
-plot(m03nbi)
-```
-
-The residual diagnostics look better for the latter model. 
-One could also consider modeling the strictly periodical component such as using the Fourier series, however, @fig-insACF did not show a prominent seasonality.
-:::
-
-
-## GAMLSS {#sec-GAMLSS}
-
-@Stasinopoulos:Rigby:2007 provide an extension of a generalized additive model to $k=1,2,3,4$ parameters $\boldsymbol{\theta}_k$ of a distribution in a so-called *generalized additive model for location scale and shape* (GAMLSS).
-The $k$ parameters represent the location parameter $\mu$ (it is what we typically model with regression models), scale $\sigma$, and two shape parameters: skewness and kurtosis.
-The model can be further generalized for $k>4$ if needed.
-It allows us to fit $k$ individual models to study relationships between regressors $\boldsymbol{x}$ and parameters of the response distribution:
-$$
-g_k(\boldsymbol{\theta}_k) = h_k\left(\boldsymbol{X}_k,\boldsymbol{\beta}_k\right) + \sum_{j=1}^{J_k}h_{jk}(\boldsymbol{x}_{jk}),
-$${#eq-GAMLSS}
-where $k=1$ produces model for the mean; $h_k(\cdot)$ and $h_{jk}(\cdot)$ are nonlinear functions; $\boldsymbol{\beta}_k$ is a parameter vector of length $J_k$; $\boldsymbol{X}_k$ is an $n\times J_k$ design matrix; $\boldsymbol{x}_{jk}$ are vectors of length $n$. 
-The terms in the GAMLSS provide a flexible framework to specify nonlinearities, random effects, and correlation structure as in the mixed effects models [@Zuur:etal:2009]; see Table 3 by @Stasinopoulos:Rigby:2007 for the possible specifications of the additive terms. 
-Hence, a model as in @eq-GAMLSS may accommodate non-normal distributions, possibly nonlinear relationships, and spatiotemporal dependencies in the data.
-
-:::{.callout-note icon=false}
-
-## Example: Insurance claims GAMLSS
-
-Here, we use insights from the latest GARMA model and specify the same regressors and distribution family of the response variable in a GAMLSS.
-
 Negative binomial distribution has two parameters (see `?NBI`) -- location and scale -- so the GAMLSS using this distribution family can include up to two equations ($k = 1, 2$ in @eq-GAMLSS).
+See `?gamlss.family` and `gamlss::chooseDist()` for other distribution families, continuous and discrete; somewhat out-of-date tables with many of these distributions listed are available from @Stasinopoulos:Rigby:2007.
 
-We will keep a linear relationship between claims and the week number (parametric linear trend; note that the variable `Week` here is the time index, not the week of the year) but will use nonparametric additive smooths for the relationships between number of claims and precipitation amounts.
+We will model a linear relationship between claims and the week number (parametric linear trend; note that the variable `Week` here is the time index, not the week of the year) but will use nonparametric additive smooths for the relationships between number of claims and precipitation amounts.
 
 We will model the scale (variability) of the number of claims using a smooth term of the week number.
 
@@ -623,14 +494,13 @@ Claims_t &= NegBin(\mu_t, \sigma_t) \\
 \ln(\mu_t) &= a_0 + a_1 Week_t + f_1(Precipitation_t) + f_2(Precipitation_{t-1}) + \epsilon_t \\
 \ln(\sigma_t) &= b_0 + f_3(Week) \\
 \end{split}
-$${#eq-GAMLSSins}
+$${#eq-GAMLSSins0}
 where $\epsilon_t \sim \mathrm{WN}(0,\sigma^2)$; $a_0$, $a_1$, and $b_0$ are parametric coefficients; $f_1$, $f_2$, and $f_3$ are nonparametric smooths.
 
 In its expandable collection of smoothers, the R package `gamlss` features penalized B-splines.
 See the help files `?gamlss` and `?pb` for more details and the review of spline functions in R by @Perperoglou:etal:2019.
-However, we used the original P-splines `ps()` because they provided more visually smooth results than `pb()` under the default settings.
-Note that the model summary below has a table for each parameter of the distribution.
-The obtained term plots are in @fig-m00gamlssTermsMu and @fig-m00gamlssTermsSigma.
+However, here we used the original P-splines `ps()` because they provided more visually smooth results than `pb()` under the default settings.
+The control arguments change the default settings to speed up the algorithm convergence.
 
 ```{r}
 #| code-fold: false
@@ -642,82 +512,113 @@ m00_gamlss <- gamlss(Claims ~ ps(Precipitation) + Week + ps(Precipitation_lag1)
                      ,family = NBI
                      ,control = gamlss.control(c.crit = 0.01, trace = FALSE)
                      ,data = Insurance_noNA)
-summary(m00_gamlss)
+```
+
+Based on the observed ACF and PACF patterns in @fig-m00gamlssRES, an appropriate model for the temporal dependence could be ARMA(1,0), ARMA(0,3), or ARMA(1,1). 
+<!-- Refit the model specifying ARMA(1,0) for its residuals as the most parsimonious altermative.  -->
+Since the package `gamlss` does not have built-in functionality to specify correlation structures in the residuals, we will include the lagged claims as a predictor in the model.
+
+```{r}
+#| label: fig-m00gamlssRES
+#| fig-cap: "Residual diagnostics of the initial GAMLSS for the number of home insurance claims."
+
+plot(m00_gamlss, ts = TRUE)
 ```
 
 ```{r}
-#| label: fig-m00gamlssTermsMu
+#| code-fold: false
+
+set.seed(12345)
+m10_gamlss <- gamlss(Claims ~ ps(Precipitation) + Week + ps(Precipitation_lag1) + Claims_ln_lag1
+                     ,sigma.formula = ~ps(Week)
+                     ,family = NBI
+                     ,control = gamlss.control(c.crit = 0.01, trace = FALSE)
+                     ,data = Insurance_noNA)
+```
+
+Residual diagnostics of the resulting GAMLSS look satisfactory (@fig-m10gamlssRES), with most of the correlations disappeared, and the residuals being approximately normally distributed.
+See @Dunn:Smyth:1996 for the details on randomized quantile residuals.
+
+```{r}
+#| label: fig-m10gamlssRES
+#| fig-cap: "Residual diagnostics of the GAMLSS for the number of home insurance claims."
+
+plot(m10_gamlss, ts = TRUE)
+```
+
+See the model summary below.
+Note it has a table for each parameter of the distribution.
+
+```{r}
+#| code-fold: false
+
+summary(m10_gamlss)
+```
+
+Since the model passes residual diagnostics and all coefficients are significant, we can stop refining the model.
+This is the selected model in mathematical notations:
+$$
+\begin{split}
+Claims_t &= NegBin(\mu_t, \sigma_t) \\
+\ln(\mu_t) &= a_0 + a_1 Week_t + a_2 ln(Claims_{t-1}) + f_1(Precipitation_t) + f_2(Precipitation_{t-1}) + \epsilon_t \\
+\ln(\sigma_t) &= b_0 + f_3(Week) \\
+\end{split}
+$${#eq-GAMLSSins}
+where $\epsilon_t \sim \mathrm{WN}(0,\sigma^2)$; $a_0$, $a_1$, $a_2$, and $b_0$ are parametric coefficients; $f_1$, $f_2$, and $f_3$ are nonparametric smooths.
+
+The term plots visualize the relationships represented by the model (@fig-m10gamlssTermsMu and @fig-m00gamlssTermsSigma).
+
+```{r}
+#| label: fig-m10gamlssTermsMu
 #| fig-cap: "GAMLSS terms showing the estimated relationships between the regressors and the *location* parameter for the distribution of the number of home insurance claims."
 
-gamlss.ggplots::fitted_terms(m00_gamlss, rug = TRUE, nrow = 1, what = "mu")
+gamlss.ggplots::fitted_terms(m10_gamlss, rug = TRUE, nrow = 2, what = "mu")
 ```
 
 ```{r}
 #| label: fig-m00gamlssTermsSigma
 #| fig-cap: "GAMLSS terms showing the estimated relationships between the regressors and the *scale* parameter for the distribution of the number of home insurance claims."
 
-gamlss.ggplots::fitted_terms(m00_gamlss, rug = TRUE, nrow = 1, what = "sigma")
+gamlss.ggplots::fitted_terms(m10_gamlss, rug = TRUE, nrow = 1, what = "sigma")
 ```
 
-For the correlation estimates to work, we need to specify a grouping factor for the random effects.
-To create a grouping factor, we added a variable with the city ID; here it has only one level `"City A"` and hence does not affect the estimates substantially.
-If we had information from multiple cities, the specified form of autoregressive structure `form = ~Week|City` could readily accommodate it.
-
-The code below estimates the model from @eq-GAMLSSins again but assumes the new autocorrelation structure in the residuals: $\epsilon_t \sim$ ARMA(0,3).
-The control arguments change the default settings to speed up the algorithm convergence.
-See the model summary below and the verification of residuals in @fig-m03gamlssRES.
+A similar result can be achieved by using a generalized additive mixed model (GAMM) with ARMA errors, using the package `mgcv`.
 
 ```{r}
+#| code-fold: false
 #| eval: false
-#| echo: true
-#| code-fold: false
 
-set.seed(12345)
-Insurance_noNA$City <- as.factor("City A")
-m03_gamlss <- gamlss(Claims ~ re(fixed = ~ps(Precipitation) + Week + ps(Precipitation_lag1)
-                                 ,random = ~1|City
-                                 ,correlation = corARMA(form = ~Week|City, q = 3)
-                                 ,method = "REML")
-                     ,sigma.formula = ~ps(Week)
-                     ,family = NBI
-                     ,i.control = glim.control(cc = 0.01, bf.cyc = 100, bf.tol = 0.01)
-                     ,control = gamlss.control(c.crit = 0.01, trace = FALSE)
+library(mgcv)
+
+# Fit the model using gam() to estimate theta
+gam_fit <- mgcv::gam(Claims ~ s(Precipitation) + Week + s(Precipitation_lag1)
+                     ,family = nb() # nb() automatically estimates theta
+                     ,method = "REML"
                      ,data = Insurance_noNA)
+
+# Extract the estimated theta
+estimated_theta <- exp(gam_fit$family$getTheta(TRUE))
+
+# Fit the GAMM with the estimated theta and AR(1) correlation structure
+m10_gamm <- mgcv::gamm(Claims ~ s(Precipitation) + Week + s(Precipitation_lag1)
+                       ,family = negbin(theta = estimated_theta)
+                       ,method = "REML"
+                       ,correlation = corARMA(p = 1, q = 0)
+                       ,data = Insurance_noNA)
+
+# Summary of the GAM part
+summary(m10_gamm$gam)
+
+# Summary of the mixed part (GAM smooths are treated as linear predictors)
+summary(m10_gamm$lme)
 ```
 
-```{r}
-#| eval: true
-#| echo: false
 
-# saveRDS(m03_gamlss, file = "data/m03_gamlss.RData")
-m03_gamlss <- readRDS("data/m03_gamlss.RData")
-```
 
-Model summary for the location parameter:
+Overall, the package `gamlss` allowed us to model different parameters (location, scale, etc.) of the distribution of claims, using additive models and a wide range of distributions; we specified autocorrelations manually by incorporating lagged versions of the variables.
+In contrast, `mgcv::gamm()` allowed us to specify the correlation structure directly, but we were limited in the selection of distributions and in modeling only the location parameter of the distribution.
 
-```{r}
-#| code-fold: false
-
-summary(getSmo(m03_gamlss))
-```
-
-Model summary for all distribution parameters:
-
-```{r}
-#| code-fold: false
-
-summary(m03_gamlss)
-```
-
-```{r}
-#| label: fig-m03gamlssRES
-#| fig-cap: "Residual diagnostics of the GAMLSS for the number of home insurance claims."
-
-plot(m03_gamlss, ts = TRUE)
-```
-
-Hence, compared with the GARMA model from the previous section, the GAMLSS @eq-GAMLSSins uses the same predictors and distribution family and specifies ARMA(0,3) dependence in the residuals.
-What differs is that the GAMLSS allows nonlinear relationships between the number of claims and precipitation and models the variability changing nonlinearly across weeks.
+Also, see the generalized autoregressive moving average (GARMA) model applied in @sec-GARMA.
 :::
 
 
