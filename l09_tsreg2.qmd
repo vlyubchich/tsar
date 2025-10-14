@@ -278,7 +278,7 @@ A slightly different solution is possible using a *generalized autoregressive mo
 
 ## Example: Golden tilefish and AMO
 
-Here we have time series of 1918--2017 annual landings of golden tilefish (tonne) in the U.S. North Atlantic region and the Atlantic Multi-decadal Oscillation (AMO) index characterizing climatic conditions (@fig-tilefishTS). 
+Here we revisit time series of 1918--2017 annual landings of golden tilefish in the U.S. North Atlantic region and the Atlantic Multi-decadal Oscillation (AMO) index characterizing climatic conditions (@fig-tilefishTS). 
 These time series were described in @Nesslage:etal:2021:environmental with R code by  @lyubchich3732840.
 The goal is to develop a regression model to explore the relationship between the landings and AMO.
 

@@ -27,7 +27,7 @@ generalized additive models).
 Vyacheslav Lyubchich is a Research Professor at the University of Maryland Center for Environmental Science. 
 <https://www.umces.edu/vyacheslav-lyubchich>
 
-Yulia R. Gel is a Professor of Statistics at the Virginia Polytechnic Institute and State University.
+Yulia R. Gel is a Professor at the Virginia Polytechnic Institute and State University.
 <https://www.stat.vt.edu/people/stat-faculty/gel-yulia.html>
 
 

@@ -350,7 +350,7 @@ To identify the decay, we need the $p$ starting correlations $\rho(1), \rho(2), 
 **PACF of AR processes**
 
 An AR($p$) model implies $Y_{t+h} = \sum_{i=1}^p\phi_{i} Y_{t + h - i} + \epsilon_{t+h}$, where the roots of $\phi(\lambda)$ are outside the unit circle.
-When $h > p$, the regression of $Y_{t+h}$ on $\{ Y_{t+1},\dots, Y_{t+h-1}\}$ is
+When $h > p$, the regression of $Y_{t+h}$ on $\{ Y_{t+1}, \dots, Y_{t+h-1}\}$ is
 $$
 \hat{Y}_{t+h} = \sum^p_{i=1} \phi_i Y_{t+h-i}.
 $$
@@ -852,29 +852,58 @@ Use the examples in @sec-acfpractice to practice the implementation of the rules
 
 ## Example analysis
 
-```{r}
-#| echo: false
+Consider a univariate time series $Y_t$ of 1918--2017 annual landings of golden tilefish in the U.S. North Atlantic region [@Nesslage:etal:2021:environmental;@lyubchich3732840].
 
-set.seed(1)
-Y <- arima.sim(list(order = c(2, 0, 1), ar = c(0.5, 0.3), ma = c(0.2)), n = T)
+```{r}
+#| code-fold: false
+
+D <- read.csv("data/tilefish.csv")
+Y <- ts(D$Landings, start = min(D$Year), frequency = 1)
 ```
 
-Suppose we are given a univariate time series $Y_t$.
-
-First, plot the data (@fig-simYt).
+First, plot the data (@fig-Yt).
 
 ```{r}
-#| label: fig-simYt
-#| fig-cap: "Plot of the time series $Y_t$."
+#| label: fig-Yt
+#| fig-cap: "Annual golden tilefish landings."
 
-ggplot2::autoplot(Y)
+ggplot2::autoplot(Y) + 
+    xlab("Year") +
+    ylab("Landings (tonne)")
 ```
 
-If no obvious trend, plot sample ACF and PACF (@fig-simYtacf).
+::: {.callout-note}
+There are some missing values in the time series, which present a problem for model fitting.
+Generally, ARMA models assume the input time series is ordered chronologically, with the same time differences between all consecutive observations (equally-spaced time series); these models cannot handle missing values.
+Omitting the missing values to bridge the gaps, such as using the function `na.omit()`, is not recommended since it breaks the time sequence (the time series becomes unequally-spaced) and may bias estimates of the time dependencies.
+Some functions may work with missing values, but their ways of handling the NAs may differ.
+For example, `acf()` with the argument `na.action = na.pass` computes the ACF using all available pairs of observations, and `arima()` generally allows missing values.
+However, one may prefer to impute missing values, with commonly used methods like linear interpolation of neighboring observations or an AR model.
+:::
+
+Since we are just learning about AR models, consider filling in the missing values using linear interpolation (@fig-Yt2).
 
 ```{r}
-#| label: fig-simYtacf
-#| fig-cap: "Estimated ACF and PACF of $Y_t$."
+#| code-fold: false
+
+Y <- forecast::na.interp(Y)
+```
+
+```{r}
+#| label: fig-Yt2
+#| fig-cap: "Annual golden tilefish landings, with the imputed values shown in red."
+
+ggplot2::autoplot(Y) + 
+    geom_point(pch = 21, fill = ifelse(is.na(D$Landings), "red", "white")) +
+    xlab("Year") +
+    ylab("Landings (tonne)")
+```
+
+If no obvious trend, plot sample ACF and PACF (@fig-Ytacf).
+
+```{r}
+#| label: fig-Ytacf
+#| fig-cap: "Estimated ACF and PACF of the annual golden tilefish landings $Y_t$."
 
 p1 <- forecast::ggAcf(Y) +
     ggtitle("")
@@ -884,20 +913,25 @@ p1 + p2 +
     plot_annotation(tag_levels = 'A')
 ```
 
-Based on the plots (@fig-simYtacf), *ACF decays faster than linearly* (some indication of stationarity), and *PACF is non-zero up to lag 2* (cuts off after lag 2). 
+The *ACF decays faster than linearly* (some indication of stationarity), even though the autocorrelations are statistically significant up to the lag of 6 years (@fig-Ytacf A).
+The *PACF is non-zero up to lag 2* (cuts off after lag 2; @fig-Ytacf B). 
+There is another significant spike at lag 7, but it is likely due to the sample variability and can be ignored.
 Knowing the expected behavior of ACF and PACF for ARMA models (see @tbl-arma), AR(2) can be suggested in this case, which is equivalent to ARMA(2,0). 
 
-Given the potential sample variability affecting the estimates of ACF and PACF, there could be other model specifications close to the selected one that may perform similarly or even slightly better when compared to the one selected based on the visual analysis. 
-For example, we can check other suitable combinations within the maximal lag of 2 we identified: ARMA(1,0), (2,0), (0,1), (1,1), (2,1), (0,2), (1,2), and ARMA(2,2). 
-With so many choices, we need some quantitative criteria to select the best model.
+Given the potential sample variability affecting the estimates of ACF and PACF, there could be other model specifications, close to the selected one, that may perform similarly or even slightly better when compared to the one selected based on the visual analysis. 
+For example, we can check other suitable combinations: ARMA(1,0) and ARMA(1,1). 
 
-The code below uses a 'manual' approach of calculating Akaike and Bayesian information criteria (AIC and BIC) to select the model from the specified set, but see the next section for R functions that do it more automatically.
+We need some quantitative criteria to select the best model.
+The code below uses a 'manual' approach of calculating Akaike and Bayesian information criteria (AIC and BIC) to select the model from the specified set, but the next section lists R functions that do it more automatically.
 
 ```{r}
 #| code-fold: false
 
-# Combinations of p and q, without p = q = 0
-results <- expand.grid(p = c(0, 1, 2), q = c(0, 1, 2))[-1, ] 
+# Combinations of p and q
+results <- data.frame(p = c(2, 1, 1), 
+                      q = c(0, 0, 1))
+
+# For each combination, fit the model and extract AIC and BIC values
 for (i in 1:nrow(results)) {
     mod <- arima(Y, order = c(results$p[i], 0, results$q[i]))
     results$aic[i] <- mod$aic
@@ -909,7 +943,7 @@ results
 
 ### Automatic model selection
 
-For example, the function `stats::ar()` by default uses the Yule--Walker method to estimate the coefficients and AIC to select the best order for AR($p$) model, where the maximum of $p$ can be set by the user.
+The function `stats::ar()` by default uses the Yule--Walker method to estimate the coefficients and AIC to select the best order for AR($p$) model, where the maximum of $p$ can be set by the user.
 
 ```{r}
 #| code-fold: false
@@ -952,38 +986,53 @@ m <- as_tsibble(Y) %>%
 report(m)
 ```
 
-In all considered cases the model ARMA(2,0), which is equivalent to AR(2), was selected. 
+The AIC in `ar()` selects AR(2), while BIC in `funtimes::ARest()` and `fable::ARIMA()` selects AR(1).
+Note, the `ar()` estimates suggest a model that might be close to being nonstationary, since the absolute value of the estimated coefficient is close to 1.
+Formally check the stationarity of the AR(2) model below.
+
+```{r}
+#| code-fold: false
+
+# Calculate the roots of characteristic polynomial
+roots <- polyroot(c(1, -ar(Y, order.max = 11)$ar))
+
+# The AR model is causal (future-independent) 
+# and stationary if |roots| > 1
+all(Mod(roots) > 1)
+```
+
+For now, continue with the model ARMA(1,0), which is equivalent to AR(1). 
 Our next step is the residual diagnostics -- check the residuals for homoskedasticity, uncorrelatedness, and normality (@fig-resfable).
 
 ```{r}
 #| label: fig-resfable
-#| fig-cap: "Residual diagnostics for the ARMA(2,0) model estimated using the package `fable`."
+#| fig-cap: "Residual diagnostics for the ARMA(1,0) model estimated using the package `fable`."
 #| fig-height: 7
 
-feasts::gg_tsresiduals(m)
+ggtime::gg_tsresiduals(m)
 ```
 
-Based on the plots, the residuals do not violate the assumptions, so proceed with forecasting (@fig-fcstfable).
+If the residuals do not violate the assumptions, proceed with forecasting (@fig-fcstfable).
 
 ```{r}
 #| label: fig-fcstfable
-#| fig-cap: "Predictions 10 steps ahead from the ARMA(2,0) model estimated using the package `fable`."
+#| fig-cap: "Predictions 10 steps ahead from the ARMA(1,0) model estimated using the package `fable`."
 
 m %>%
     fabletools::forecast(h = 10) %>%
     autoplot(Y)
 ```
 
-However, the syntax and outputs of the package `fable` are quite different from typical R alternatives.
+However, the syntax and outputs of the package `fable` are quite different from the typical R alternatives.
 See @fig-res with results still plotted using the package `ggplot2`, but obtained using the base-R functions. 
 Also, see the base-R function `tsdiag()` for residual diagnostics.
 
 ```{r}
 #| label: fig-res
-#| fig-cap: "Residual diagnostics and predictions 10 steps ahead from the ARMA(2,0) model estimated using the base-R function `stats::arima()`."
+#| fig-cap: "Residual diagnostics and predictions 10 steps ahead from the ARMA(1,0) model estimated using the base-R function `stats::arima()`."
 #| fig-height: 9
 
-m <- arima(Y, order = c(2, 0, 0))
+m <- arima(Y, order = c(1, 0, 0))
 e <- m$residuals
 p1 <- ggplot2::autoplot(e) + 
     ylab("Residuals")
@@ -991,21 +1040,22 @@ p2 <- forecast::ggAcf(e) +
     ggtitle("")
 p3 <- ggpubr::ggqqplot(e) + 
     xlab("Standard normal quantiles")
-p4 <- ggplot2::autoplot(forecast::forecast(m, h = 10))
+p4 <- forecast::forecast(m, h = 10) %>% 
+    ggplot2::autoplot()
 p1 / (p2 + p3) / p4 +
     plot_annotation(tag_levels = 'A')
 ```
 
-Using the estimated residuals, $\hat{\epsilon}_t = Y_t - \hat{Y}_t$, we can get the 'fitted' values, $\hat{Y}_t$ (technically, these are one-step-ahead predictions), see @fig-simYtfit.
+Using the estimated residuals, $\hat{\epsilon}_t = Y_t - \hat{Y}_t$, we can get the 'fitted' values, $\hat{Y}_t$ (technically, these are one-step-ahead predictions), see @fig-Ytfit.
 
 ```{r}
-#| label: fig-simYtfit
-#| fig-cap: "Oberved time series (black) and one-step-ahead predictions (red) from the ARMA(2,0) model."
+#| label: fig-Ytfit
+#| fig-cap: "Oberved time series (black) and one-step-ahead predictions (red) from the ARMA(1,0) model."
 
 Fit <- Y - e
 ggplot2::autoplot(Y) + 
-    autolayer(Fit) +
-    ylab("Y")
+    autolayer(Fit, color = "blue") +
+    ylab("Landings (tonne)")
 ```
 
 

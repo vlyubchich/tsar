@@ -51,6 +51,7 @@ nonlinear
 nonnegative
 nonparametric
 nonstationarity
+non-causal
 non-existent
 non-monotonic
 non-normal
