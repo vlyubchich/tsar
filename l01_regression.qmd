@@ -283,6 +283,14 @@ lawstat::runs.test(mod1$residuals, plot.it = TRUE)
 ```
 
 The $p$-value for the runs test for the residuals is very low (@fig-Runs), which supports the findings of the DW test that residuals are first-order serially correlated.
+
+Alternative versions of the runs test are available, e.g., in the package `randtests`.
+
+```{r}
+#| code-fold: false
+
+randtests::runs.test(mod1$residuals)
+```
 :::
 
 
@@ -692,14 +700,6 @@ The statistical techniques we will learn aim to model or extract as much informa
 
 
 ## Appendix {#sec-diffsign}
-
-Alternative versions of the runs test are available, e.g., in the package `randtests`.
-
-```{r}
-#| code-fold: false
-
-randtests::runs.test(mod2$residuals)
-```
 
 **Difference sign test**
 
