@@ -244,7 +244,10 @@ Consider monthly data of Secchi disk depth measured at station CB1.1 in Chesapea
 #| label: fig-Secchi
 #| fig-cap: "Monthly average Secchi disk depth at station CB1.1 and its ACF."
 
-load("data/Secchi_CB1.1.RData")
+secchi_data <- read.csv("data/Secchi_CB1.1.csv", header = TRUE)
+Secchi <- ts(secchi_data$Value,
+             start = c(min(secchi_data$Year), min(secchi_data$Month)),
+             frequency = 12)
 pSecchi <- ggplot2::autoplot(Secchi, col = "grey50") + 
     xlab("Year") + 
     ylab("Secchi depth (m)")

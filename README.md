@@ -146,3 +146,19 @@ text
 
 Collapse All — Alt+O.
 Expand All — Shift+Alt+O.
+
+
+# Save RData as CSV
+load("data/Secchi_CB1.1.RData")
+secchi_df <- data.frame(Year = floor(time(Secchi)),
+                        Month = cycle(Secchi),
+                        Value = as.numeric(Secchi))
+write.csv(secchi_df, "data/Secchi_CB1.1.csv", row.names = FALSE)
+
+# Reload as ts
+secchi_data <- read.csv("data/Secchi_CB1.1.csv")
+Secchi <- ts(secchi_data$Value,
+start = c(min(secchi_data$Year), min(secchi_data$Month)),
+frequency = 12)
+
+
