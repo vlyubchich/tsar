@@ -105,6 +105,21 @@ As an alternative, it is common to use automatic or semi-automatic univariate pr
 For example, consider exponential smoothing, Holt--Winters smoothing, and auto-selected SARIMA/ARIMA/ARMA/AR/MA models—all those can be automated for a large number of forecasts to make.
 
 
+### Typical set of models to compare
+
+In practice, when comparing forecasting models we often consider:
+
+1. Basic (naive) models: average, climatology, seasonal naive, Holt--Winters, the last value. 
+These serve as benchmarks -- more complex models should outperform them.
+
+2. Commonly or previously used model: GLM or simpler ARIMA specification that has been used in the field or in previous studies. 
+This provides a baseline representing current practice.
+
+3. State-of-the-science or proposed model: advanced methods (e.g., ARIMAX with exogenous predictors, machine learning, or nonparametric approaches) that incorporate domain knowledge or recent methodological developments.
+
+The insurance example below uses a set like this and quantitatively assesses forecasting performance of the different models. 
+
+
 ## Cross-validation schemes
 
 Suppose we have used the data $Y_1, \dots, Y_n$ to build $M$ forecasting models $\hat{Y}^{(m)}_t$ ($m = 1,\dots,M$) and we now obtain future observations $Y_{n+1}, \dots, Y_{n+k}$ that were not used to fit the models (also called *out-of-sample* data, after-sample, or the testing set; $k$ is the size of this set). 
@@ -122,14 +137,16 @@ For that, you may consider
 - Update frequency: will you refit the model weekly, monthly, or never (e.g., if the model is deployed on a remote buoy with limited bandwidth/power)?
 - Availability of predictors: are they leading indicators (ex-ante usable) or must they be predicted too?
 
-**Principles for designing CV for time series**
+
+### Principles for designing CV for time series
 
 - Respect temporal order: never train on information from the future relative to validation points.
 - Evaluate at the target horizon: if you need 1-week-ahead forecasts, it is impractical to assess model performance on 1-year-ahead horizons (and vice versa).
 - Match refit cadence: if you plan monthly refits, validate with monthly refits; if the model is frozen, validate with a single fit and no refitting.
 - Avoid data leakage: when using predictors, supply leading indicators or forecast predictors when necessary.
 
-**Common schemes**
+
+### Common schemes
 
 1. Single holdout (train/test split). 
 Fit the model once on the training period; evaluate on a future block. 
@@ -151,7 +168,7 @@ We may compare a great number of models using the training set and choose the be
 Thus, it is advisable to have one more chunk of the same time series that was not used for model specification, estimation, or selection. 
 Errors of the selected model on this *validation set* will be closer to the true (genuine) out-of-sample errors and can be used to assess coverage of true out-of-sample forecasts when the model is finally deployed.
 
-**R implementations**
+### R implementations
 
 You may find useful the following R functions for running CV: `for()`, `while()`, `sapply()`, and `zoo::rollapply()` loops, `purrr::map()`, or similar constructs. 
 Also, consider if you should run heavy computations in parallel, with functions like `parallel::parSapply()`, `future.apply::future_sapply()`, or `furrr::future_map()`.
@@ -630,28 +647,12 @@ For truly out-of-sample forecasting, ARIMA model was the best among the consider
 ARIMA delivered RMSE just below that of the naive model, but the coverage and width of ARIMA prediction intervals were considerably better.
 :::
 
-
-## Typical set of models to compare
-
-In practice, when comparing forecasting models we often consider:
-
-1. Basic (naive) models: average, climatology, seasonal naive, Holt--Winters, the last value. 
-These serve as benchmarks -- more complex models should outperform them.
-
-2. Commonly or previously used model: GLM or simpler ARIMA specification that has been used in the field or in previous studies. 
-This provides a baseline representing current practice.
-
-3. State-of-the-science or proposed model: advanced methods (e.g., ARIMAX with exogenous predictors, machine learning, or nonparametric approaches) that incorporate domain knowledge or recent methodological developments.
-
-The insurance example above uses a set like this and quantitatively assesses forecasting performance of the different models. 
-
-
 ## Conclusion
 
 This lecture covered comprehensive evaluation of time series forecasting models:
 
 - We illustrated how to assess point forecasts via RMSE, MAE, and interval forecasts via empirical coverage and average widths. See `forecast::accuracy()` for automatic calculation of some of these and other metrics.
-- We demonstrated data leakage by comparign ex-post and ex-ante forecasts by GAMLSS and compared it against univariate methods.
+- We demonstrated data leakage by comparing ex-post and ex-ante forecasts by GAMLSS and compared it against univariate methods.
 - Cross-validation schemes should mirror operational use: match the target horizon, refit cadence, and predictor availability to deployment conditions.
 - Prefer rolling-origin cross-validation to reduce model selection bias and to diagnose overfitting; keep models parsimonious (AICc helps) and always check that assumptions are plausible for future deployment.
 - When multiple models perform similarly on point metrics, interval calibration and operational constraints (computation, interpretability) guide the final choice.
