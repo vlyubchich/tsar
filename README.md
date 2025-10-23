@@ -30,6 +30,7 @@ from Lyubchich, V. and Gel, Y. R. (2025) Time Series Analysis: Lecture Notes wit
 
 The audio was generated using AI and may be inaccurate. Please refer to the original lecture notes for accurate information.
 
+[**Audio overview**](https://youtu.be/GmJLSaD29gY)
 
 ## Spellings
 

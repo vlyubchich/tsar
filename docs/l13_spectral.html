@@ -2,9 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.335">
+<meta name="generator" content="quarto-1.8.25">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>Time Series Analysis - 10&nbsp; Spectral Analysis</title>
+<title>11&nbsp; Spectral Analysis – Time Series Analysis</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -14,9 +14,11 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -43,48 +45,19 @@ pre.numberSource code > span > a:first-child::before
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
     padding: 0 4px; width: 4em;
-    color: #aaaaaa;
   }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
 div.sourceCode
   {   }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+/* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
 }
-.hanging div.csl-entry {
+.hanging-indent div.csl-entry {
   margin-left:2em;
   text-indent:-2em;
 }
@@ -98,8 +71,7 @@ div.csl-right-inline {
 }
 div.csl-indent {
   margin-left: 2em;
-}
-</style>
+}</style>
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
@@ -109,23 +81,31 @@ div.csl-indent {
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./software.html" rel="next">
-<link href="./l09_tsreg2.html" rel="prev">
-<link href="./TSAfav.png" rel="icon" type="image/png">
-<script src="site_libs/quarto-html/quarto.js"></script>
+<link href="./l12_forecast.html" rel="prev">
+<link href="./tsar_fav.png" rel="icon" type="image/png">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -134,30 +114,62 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
-}</script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+}</script><script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 </head>
-<body class="nav-sidebar floating">
+<body class="nav-sidebar floating quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">
-<span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Spectral Analysis</span>
-</h1>
-      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
-        <i class="bi bi-chevron-right"></i>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./l13_spectral.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Spectral Analysis</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
       </button>
     </div>
   </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Time Series Analysis</a> 
         <div class="sidebar-tools-main">
-    <a href="https://github.com/vlyubchich/tsar/" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
-  <a href="" class="quarto-reader-toggle sidebar-tool" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+    <a href="https://github.com/vlyubchich/tsar/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
   <i class="bi"></i>
   </div>
@@ -165,128 +177,160 @@ div.csl-indent {
 </div>
     </div>
       </div>
-      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
         <div id="quarto-search" class="" title="Search"></div>
         </div>
-      </div>
+        </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./l01_regression.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Review of Linear Regression</span></a>
+  <a href="./l01_regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Review of Linear Regression</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./l02_tsintro.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to Time Series Analysis</span></a>
+  <a href="./l02_tsintro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to Time Series Analysis</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./l03_smoothing.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Smoothing, Detrending, and Deseasonalizing</span></a>
+  <a href="./l03_smoothing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Smoothing, Detrending, and Deseasonalizing</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./l04_arma.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Autoregressive Moving Average (ARMA) Models</span></a>
+  <a href="./l04_arma.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Autoregressive Moving Average (ARMA) Models</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./l05_arima.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Autoregressive Integrated Moving Average (ARIMA) Models</span></a>
+  <a href="./l05_arima.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Autoregressive Integrated Moving Average (ARIMA) Models</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./l06_garch.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Generalized Autoregressive Conditional Heteroskedasticity (GARCH) Models</span></a>
+  <a href="./l06_garch.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Generalized Autoregressive Conditional Heteroskedasticity (GARCH) Models</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./l07_trendtest.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Trend Detection</span></a>
+  <a href="./l07_trendtest.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Trend Detection</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./l08_tsreg1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Time Series Regression with Trends</span></a>
+  <a href="./l08_tsreg1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Time Series Regression with Trends</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./l09_tsreg2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Time Series Regression with Correlated Errors</span></a>
+  <a href="./l09_tsreg2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Time Series Regression with Correlated Errors</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./l13_spectral.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Spectral Analysis</span></a>
+  <a href="./l12_forecast.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Model Evaluation and Forecasting</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./software.html" class="sidebar-item-text sidebar-link">Software</a>
+  <a href="./l13_spectral.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Spectral Analysis</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  <a href="./software.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Software</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Appendices</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./s1_wls.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Weighted least squares</span></a>
+  <a href="./s1_wls.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Weighted least squares</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./s2_gls.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Generalized least squares</span></a>
+  <a href="./s2_gls.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Generalized least squares</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./s4_trendsync.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Synchrony of parametric trends</span></a>
+  <a href="./s4_trendsync.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Synchrony of parametric trends</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./s_practice.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Practice exercises</span></a>
+  <a href="./s7_garma.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Generalized autoregressive moving average (GARMA) models</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./s_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">Practice exercises</span></span></a>
   </div>
 </li>
       </ul>
 </li>
     </ul>
 </div>
-</nav><!-- margin-sidebar --><div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="toc-section-number">10.1</span>  Introduction</a></li>
-  <li><a href="#regression-on-sinusoidal-components" id="toc-regression-on-sinusoidal-components" class="nav-link" data-scroll-target="#regression-on-sinusoidal-components"><span class="toc-section-number">10.2</span>  Regression on sinusoidal components</a></li>
-  <li><a href="#periodogram" id="toc-periodogram" class="nav-link" data-scroll-target="#periodogram"><span class="toc-section-number">10.3</span>  Periodogram</a></li>
-  <li><a href="#smoothing" id="toc-smoothing" class="nav-link" data-scroll-target="#smoothing"><span class="toc-section-number">10.4</span>  Smoothing</a></li>
-  <li><a href="#periodogram-for-unequally-spaced-time-series" id="toc-periodogram-for-unequally-spaced-time-series" class="nav-link" data-scroll-target="#periodogram-for-unequally-spaced-time-series"><span class="toc-section-number">10.5</span>  Periodogram for unequally-spaced time series</a></li>
-  <li><a href="#frequency-estimation-in-time" id="toc-frequency-estimation-in-time" class="nav-link" data-scroll-target="#frequency-estimation-in-time"><span class="toc-section-number">10.6</span>  Frequency estimation in time</a></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="toc-section-number">10.7</span>  Conclusion</a></li>
-  <li><a href="#appendix" id="toc-appendix" class="nav-link" data-scroll-target="#appendix"><span class="toc-section-number">10.8</span>  Appendix</a></li>
-  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/vlyubchich/tsar/edit/master/l13_spectral.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/vlyubchich/tsar/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">11.1</span> Introduction</a></li>
+  <li><a href="#regression-on-sinusoidal-components" id="toc-regression-on-sinusoidal-components" class="nav-link" data-scroll-target="#regression-on-sinusoidal-components"><span class="header-section-number">11.2</span> Regression on sinusoidal components</a></li>
+  <li><a href="#periodogram" id="toc-periodogram" class="nav-link" data-scroll-target="#periodogram"><span class="header-section-number">11.3</span> Periodogram</a></li>
+  <li><a href="#smoothing" id="toc-smoothing" class="nav-link" data-scroll-target="#smoothing"><span class="header-section-number">11.4</span> Smoothing</a></li>
+  <li><a href="#periodogram-for-unequally-spaced-time-series" id="toc-periodogram-for-unequally-spaced-time-series" class="nav-link" data-scroll-target="#periodogram-for-unequally-spaced-time-series"><span class="header-section-number">11.5</span> Periodogram for unequally-spaced time series</a></li>
+  <li><a href="#frequency-estimation-in-time" id="toc-frequency-estimation-in-time" class="nav-link" data-scroll-target="#frequency-estimation-in-time"><span class="header-section-number">11.6</span> Frequency estimation in time</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">11.7</span> Conclusion</a></li>
+  <li><a href="#appendix" id="toc-appendix" class="nav-link" data-scroll-target="#appendix"><span class="header-section-number">11.8</span> Appendix</a></li>
+  </ul><div class="toc-actions"><ul><li><a href="https://github.com/vlyubchich/tsar/edit/master/l13_spectral.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/vlyubchich/tsar/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
-<h1 class="title d-none d-lg-block">
-<span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Spectral Analysis</span>
+<h1 class="title">
+<span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Spectral Analysis</span>
 </h1>
 </div>
 
@@ -300,10 +344,8 @@ div.csl-indent {
   </div>
   
 
-</header><div class="cell">
 
-</div>
-<p>The goal of this lecture is to learn how to view time series from the frequency perspective. You should be able to recognize features of time series from a periodogram similar to how we did it using plots of the autocorrelation function (ACF).</p>
+</header><p>The goal of this lecture is to learn how to view time series from the frequency perspective. You should be able to recognize features of time series from a periodogram similar to how we did it using plots of the autocorrelation function (ACF).</p>
 <p><strong>Objectives</strong></p>
 <ol type="1">
 <li>Describe the mechanics of Fourier transform for time series.</li>
@@ -318,27 +360,27 @@ div.csl-indent {
 <li>
 <span class="citation" data-cites="Nason:2008">Nason (<a href="references.html#ref-Nason:2008" role="doc-biblioref">2008</a>)</span> on wavelet analysis</li>
 </ul>
-<section id="introduction" class="level2" data-number="10.1"><h2 data-number="10.1" class="anchored" data-anchor-id="introduction">
-<span class="header-section-number">10.1</span> Introduction</h2>
+<section id="introduction" class="level2" data-number="11.1"><h2 data-number="11.1" class="anchored" data-anchor-id="introduction">
+<span class="header-section-number">11.1</span> Introduction</h2>
 <p>By now, we have been working in the <em>time domain</em>, such that our analysis could be seen as a regression of the present on the past (for example, ARIMA models). We have been using many time series plots with time on the <span class="math inline">\(x\)</span>-axis.</p>
 <p>An alternative approach is to analyze time series in a <em>spectral domain</em>, such that use a regression of present on a linear combination of sine and cosine functions. In this type of analysis, we often use periodogram plots, with frequency or period on the <span class="math inline">\(x\)</span>-axis.</p>
-</section><section id="regression-on-sinusoidal-components" class="level2" data-number="10.2"><h2 data-number="10.2" class="anchored" data-anchor-id="regression-on-sinusoidal-components">
-<span class="header-section-number">10.2</span> Regression on sinusoidal components</h2>
+</section><section id="regression-on-sinusoidal-components" class="level2" data-number="11.2"><h2 data-number="11.2" class="anchored" data-anchor-id="regression-on-sinusoidal-components">
+<span class="header-section-number">11.2</span> Regression on sinusoidal components</h2>
 <p>The simplest form of spectral analysis consists of regression on a periodic component: <span id="eq-regr"><span class="math display">\[
 Y_t = A\cos \omega t + B \sin \omega t + C + \epsilon_t,
-\tag{10.1}\]</span></span> where <span class="math inline">\(t =1,\dots,T\)</span> and <span class="math inline">\(\epsilon_t \sim \mathrm{WN}(0, \sigma^2)\)</span>. Without loss of generality, we assume <span class="math inline">\(0 \leqslant \omega \leqslant \pi\)</span>. In fact, for discrete data, frequencies outside this range are aliased into this range. For example, suppose that <span class="math inline">\(-\pi &lt; (\omega = \pi - \delta) &lt; 0\)</span>, then <span class="math display">\[
+\tag{11.1}\]</span></span> where <span class="math inline">\(t =1,\dots,T\)</span> and <span class="math inline">\(\epsilon_t \sim \mathrm{WN}(0, \sigma^2)\)</span>. Without loss of generality, we assume <span class="math inline">\(0 \leqslant \omega \leqslant \pi\)</span>. In fact, for discrete data, frequencies outside this range are aliased into this range. For example, suppose that <span class="math inline">\(-\pi &lt; (\omega = \pi - \delta) &lt; 0\)</span>, then <span class="math display">\[
 \begin{split}
 \cos(\omega t) &amp;= \cos((\pi - \delta)t) \\
 &amp; = \cos(\pi t) \cos(\delta t) + \sin(\pi t) \sin(\delta t) \\
 &amp; = \cos(\delta t).
 \end{split}
 \]</span> Hence, a sampled sinusoid with a frequency smaller than 0 appears to coincide with a sinusoid with frequency in the interval <span class="math inline">\([0, \pi]\)</span>.</p>
-<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Note
 </div>
 </div>
@@ -349,7 +391,7 @@ Note
 <p>Consider monthly data that exhibit a 12-month seasonality. Hence, the period <span class="math inline">\(2\pi / \omega = 12\)</span>, which implies the angular frequency <span class="math inline">\(\omega = \pi / 6\)</span>. The frequency, measured in cycles per time unit, is given by the inverse <span class="math display">\[
 \frac{\omega}{2\pi} = \frac{1}{12} \approx 0.08.
 \]</span></p>
-<p>The formulas to estimate parameters of regression in <a href="#eq-regr">Equation&nbsp;<span>10.1</span></a> take a much simpler form if <span class="math inline">\(\omega\)</span> is one of the Fourier frequencies, defined by <span class="math display">\[
+<p>The formulas to estimate parameters of regression in <a href="#eq-regr" class="quarto-xref">Equation&nbsp;<span>11.1</span></a> take a much simpler form if <span class="math inline">\(\omega\)</span> is one of the Fourier frequencies, defined by <span class="math display">\[
 \omega_j=\frac{2\pi j}{T}, \quad  j=0,\dots, \frac{T}{2},
 \]</span> then <span class="math display">\[
 \begin{split}
@@ -361,8 +403,8 @@ Note
 <p>A suitable way of testing the significance of the sinusoidal component with frequency <span class="math inline">\(\omega_j\)</span> is using its contribution to the sum of squares <span class="math display">\[
 R_T(\omega_j)=\frac{T}{2}\left( \hat{A}^2+\hat{B}^2 \right).
 \]</span> If the <span class="math inline">\(\epsilon_t \sim N(0, \sigma^2)\)</span>, then it follows that <span class="math inline">\(\hat{A}\)</span> and <span class="math inline">\(\hat{B}\)</span> are also independent normal, each with the variance <span class="math inline">\(2\sigma^2/T\)</span>, so under the null hypothesis of <span class="math inline">\(A = B = 0\)</span> we find that <span class="math display">\[\frac{R_T(\omega_j)}{\sigma^2}\sim \chi_2^2\]</span> or equivalently that <span class="math inline">\(R_T(\omega_j)/(2\sigma^2)\)</span> has an exponential distribution with mean 1. The above theory can be extended to the simultaneous estimation of several periodic components.</p>
-</section><section id="periodogram" class="level2" data-number="10.3"><h2 data-number="10.3" class="anchored" data-anchor-id="periodogram">
-<span class="header-section-number">10.3</span> Periodogram</h2>
+</section><section id="periodogram" class="level2" data-number="11.3"><h2 data-number="11.3" class="anchored" data-anchor-id="periodogram">
+<span class="header-section-number">11.3</span> Periodogram</h2>
 <p>The <em>Fourier transform</em> uses Fourier series, such as the pairs of sines and cosines with different periods, to describe the frequencies present in the original time series.</p>
 <p>The Fourier transform applied to an equally-spaced time series <span class="math inline">\(Y_t\)</span> (where <span class="math inline">\(t = 1,\dots,T\)</span>) is also called the <em>discrete Fourier transform</em> (DFT) because the time is discrete (not the values <span class="math inline">\(Y_t\)</span>).</p>
 <p>To reduce the computational complexity of DFT and speed up the computations, one of the <em>fast Fourier transform</em> (FFT) algorithms is typically used.</p>
@@ -384,8 +426,8 @@ I_T(\omega_j) \sim \frac{f(\omega_j)}{2} \chi^2_2.
 f(\omega) = \sum_{h=-\infty}^{+\infty} \gamma(h) e^{-2\pi i \omega h}.
 \]</span></p>
 <p>In the language of advanced calculus, the autocovariance and spectral density are Fourier transform pairs. These Fourier transform equations show that there is a direct link between the time domain representation and the frequency domain representation of a time series.</p>
-</section><section id="smoothing" class="level2" data-number="10.4"><h2 data-number="10.4" class="anchored" data-anchor-id="smoothing">
-<span class="header-section-number">10.4</span> Smoothing</h2>
+</section><section id="smoothing" class="level2" data-number="11.4"><h2 data-number="11.4" class="anchored" data-anchor-id="smoothing">
+<span class="header-section-number">11.4</span> Smoothing</h2>
 <p>The idea behind smoothing is to take weighted averages over neighboring frequencies to reduce the variability associated with individual periodogram values. However, such an operation necessarily introduces some bias into the estimation procedure. Theoretical studies focus on the amount of smoothing that is required to obtain an optimum trade-off between bias and variance. In practice, this usually means that the choice of a kernel and amount of smoothing is somewhat subjective.</p>
 <p>The main form of a smoothed estimator is given by <span class="math display">\[
 \hat{f}(\lambda) = \int^{\pi}_{-\pi}\frac{1}{h}K\left( \frac{\omega-\lambda}{h}\right)I_T(\omega)d\omega,
@@ -393,12 +435,12 @@ f(\omega) = \sum_{h=-\infty}^{+\infty} \gamma(h) e^{-2\pi i \omega h}.
 K(x)=\frac{3}{4\sqrt{5}}\left(1-\frac{x^2}{5} \right), \quad -\sqrt{5}\leqslant x \leqslant \sqrt{5},
 \]</span> which is 0 outside the interval <span class="math inline">\([-\sqrt{5}, \sqrt{5}]\)</span>. This choice of kernel function has some optimality properties. However, in practice, this optimality is less important than the choice of bandwidth <span class="math inline">\(h\)</span>, which effectively controls the range over which the periodogram is smoothed.</p>
 <p>There are some additional difficulties with the performance of the sample periodogram in the presence of a sinusoidal variation whose frequency is not one of the Fourier frequencies. This effect is known as <em>leakage</em>. The reason of leakage is that we always consider a truncated periodogram. Truncation implicitly assumes that the time series is periodic with a period <span class="math inline">\(T\)</span>, which, of course, is not always true. So we artificially introduce non-existent periodicities into the estimated spectrum, i.e., cause ‘leakage’ of the spectrum. (If the time series is perfectly periodic over <span class="math inline">\(T\)</span> then there is no leakage.) The leakage can be treated using an operation of tapering on the periodogram, i.e., by choosing appropriate periodogram windows.</p>
-<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Note
 </div>
 </div>
@@ -406,7 +448,7 @@ Note
 <p>When we work with periodograms, we lose all phase (relative location/time origin) information: the periodogram will be the same if all the data were circularly rotated to a new time origin, i.e., the observed data are treated as perfectly periodic.</p>
 </div>
 </div>
-<p>Another popular choice to smooth a periodogram is the <em>Daniell kernel</em> (with parameter <span class="math inline">\(m\)</span>). For a time series, it is a centered moving average of values between the times <span class="math inline">\(t - m\)</span> and <span class="math inline">\(t + m\)</span> (inclusive). For example, the smoothing formula for a Daniell kernel with <span class="math inline">\(m = 2\)</span> is <span class="math display">\[
+<p>Another popular choice to smooth a periodogram is the <em>Daniell kernel</em> (with parameter <span class="math inline">\(m\)</span>). For a time series, it is a centered moving average of values between the times <span class="math inline">\(t - m\)</span> and <span class="math inline">\(t  + m\)</span> (inclusive). For example, the smoothing formula for a Daniell kernel with <span class="math inline">\(m = 2\)</span> is <span class="math display">\[
 \begin{split}
 \hat{x}_t &amp;= \frac{x_{t-2}+x_{t-1}+x_t + x_{t+1}+x_{t+2}}{5} \\
 &amp;= 0.2x_{t-2} + 0.2x_{t-1} +0.2x_t + 0.2x_{t+1} +0.2x_{t+2}.
@@ -414,7 +456,7 @@ Note
 \]</span></p>
 <p>The weighting coefficients for a Daniell kernel with <span class="math inline">\(m = 2\)</span> can be checked using the function <code><a href="https://rdrr.io/r/stats/kernel.html">kernel()</a></code>. In the output, the indices in <code>coef[ ]</code> refer to the time difference from the center of the average at the time <span class="math inline">\(t\)</span>.</p>
 <div class="cell">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/kernel.html">kernel</a></span><span class="op">(</span><span class="st">"daniell"</span>, m <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/kernel.html">kernel</a></span><span class="op">(</span><span class="st">"daniell"</span>, m <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; Daniell(2) 
 #&gt; coef[-2] = 0.2
@@ -432,7 +474,7 @@ Note
 \]</span></p>
 <p>List the weighting coefficients:</p>
 <div class="cell">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/kernel.html">kernel</a></span><span class="op">(</span><span class="st">"modified.daniell"</span>, m <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/kernel.html">kernel</a></span><span class="op">(</span><span class="st">"modified.daniell"</span>, m <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; mDaniell(2) 
 #&gt; coef[-2] = 0.125
@@ -447,7 +489,7 @@ Note
 \]</span></p>
 <p>The weights for averaging the original data for convoluted Daniell kernels with <span class="math inline">\(m = 2\)</span> in both smooths will be</p>
 <div class="cell">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/kernel.html">kernel</a></span><span class="op">(</span><span class="st">"daniell"</span>, m <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/kernel.html">kernel</a></span><span class="op">(</span><span class="st">"daniell"</span>, m <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; Daniell(2,2) 
 #&gt; coef[-4] = 0.04
@@ -460,7 +502,7 @@ Note
 #&gt; coef[ 3] = 0.08
 #&gt; coef[ 4] = 0.04</code></pre>
 </div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/kernel.html">kernel</a></span><span class="op">(</span><span class="st">"modified.daniell"</span>, m <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/kernel.html">kernel</a></span><span class="op">(</span><span class="st">"modified.daniell"</span>, m <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; mDaniell(2,2) 
 #&gt; coef[-4] = 0.0156
@@ -476,20 +518,20 @@ Note
 </div>
 <p>The center values are weighted slightly more heavily in the modified Daniell kernel than in the unmodified one.</p>
 <p>When we smooth a periodogram, we are smoothing <em>across frequencies</em> rather than across times.</p>
-<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
-Example: Spectral analysis of the airline passenger data
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Example: Spectral analysis of the airline passenger data
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Recall the airline passenger time series (<a href="l03_smoothing.html#fig-airpassangers">Figure&nbsp;<span>3.12</span></a>) that has an increasing trend and strong multiplicative seasonality.</p>
+<p>Recall the airline passenger time series (<a href="l03_smoothing.html#fig-airpassangers" class="quarto-xref">Figure&nbsp;<span>3.12</span></a>) that has an increasing trend and strong multiplicative seasonality.</p>
 <p>The series should be detrended before a spectral analysis. For demonstration purposes, compute periodogram for the raw data and log-transformed and detrended.</p>
 <div class="cell">
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Fit a quadratic trend to log-transformed data</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Fit a quadratic trend to log-transformed data</span></span>
 <span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/time.html">time</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log10</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html">poly</a></span><span class="op">(</span><span class="va">t</span>, degree <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/ts.html">ts</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">residuals</span><span class="op">)</span></span>
@@ -497,12 +539,12 @@ Example: Spectral analysis of the airline passenger data
 <span></span>
 <span><span class="co"># Compute spectra</span></span>
 <span><span class="va">spec_raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/spec.pgram.html">spec.pgram</a></span><span class="op">(</span><span class="va">AirPassengers</span>, detrend <span class="op">=</span> <span class="cn">FALSE</span>, plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="va">spec_log_detrend</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/spec.pgram.html">spec.pgram</a></span><span class="op">(</span><span class="va">res</span>, detrend <span class="op">=</span> <span class="cn">FALSE</span>, plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="va">spec_log_detrend</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/spec.pgram.html">spec.pgram</a></span><span class="op">(</span><span class="va">res</span>, detrend <span class="op">=</span> <span class="cn">FALSE</span>, plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The <span class="math inline">\(x\)</span>-axes of the periodograms correspond to <span class="math inline">\(\omega / (2\pi)\)</span> or the number of cycles per the time series period specified in the <code>ts</code> object (12 months). If the frequency of 12 was not specified for this time series, the <span class="math inline">\(x\)</span>-axes would be different, and the first spectrum peak would correspond to <span class="math inline">\(\approx 0.08\)</span>.</p>
-<p><a href="#fig-airpassangersFFT">Figure&nbsp;<span>10.1</span></a> B shows that the spectrum of the raw data is dominated by low frequencies (trend). After detrending the data (<a href="#fig-airpassangersFFT">Figure&nbsp;<span>10.1</span></a> C), the spectrum at frequency 1 (meaning one cycle per year) is the dominant one.</p>
+<p><a href="#fig-airpassangersFFT" class="quarto-xref">Figure&nbsp;<span>11.1</span></a> B shows that the spectrum of the raw data is dominated by low frequencies (trend). After detrending the data (<a href="#fig-airpassangersFFT" class="quarto-xref">Figure&nbsp;<span>11.1</span></a> C), the spectrum at frequency 1 (meaning one cycle per year) is the dominant one.</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pAirPassengers</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">AirPassengers</span>, col <span class="op">=</span> <span class="st">"grey50"</span><span class="op">)</span> <span class="op">+</span> </span>
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pAirPassengers</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">AirPassengers</span>, col <span class="op">=</span> <span class="st">"grey50"</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Year"</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">"Airline passengers (thousand)"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Raw series"</span><span class="op">)</span></span>
@@ -523,120 +565,138 @@ Example: Spectral analysis of the airline passenger data
 <span>    <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">""</span><span class="op">)</span></span>
 <span><span class="op">(</span><span class="va">pAirPassengers</span> <span class="op">+</span> <span class="va">p2</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="va">p3</span> <span class="op">+</span> <span class="va">p4</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">plot_annotation</span><span class="op">(</span>tag_levels <span class="op">=</span> <span class="st">'A'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>    <span class="fu">plot_annotation</span><span class="op">(</span>tag_levels <span class="op">=</span> <span class="st">'A'</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
-<div id="fig-airpassangersFFT" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="l13_spectral_files/figure-html/fig-airpassangersFFT-1.png" class="img-fluid figure-img" width="768"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;10.1: Monthly <code>AirPassengers</code> time series, log-transformed and detrended, and the corresponding fast Fourier transforms.</figcaption><p></p>
-</figure>
+<div id="fig-airpassangersFFT" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-airpassangersFFT-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="l13_spectral_files/figure-html/fig-airpassangersFFT-1.png" class="img-fluid figure-img" width="768">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-airpassangersFFT-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;11.1: Monthly <code>AirPassengers</code> time series, log-transformed and detrended, and the corresponding fast Fourier transforms.
+</figcaption></figure>
 </div>
 </div>
 </div>
-<p>Note that the function <code><a href="https://rdrr.io/r/stats/spec.pgram.html">spec.pgram()</a></code> has the option of removing a simpler (linear) trend and showing the results as a base-R plot. The confidence band in the upper right corner of this plot helps to identify the statistical significance of the peaks (<a href="#fig-airpassangersFFTsm">Figure&nbsp;<span>10.2</span></a>).</p>
+<p>Note that the function <code><a href="https://rdrr.io/r/stats/spec.pgram.html">spec.pgram()</a></code> has the option of removing a simpler (linear) trend and showing the results as a base-R plot. The confidence band in the upper right corner of this plot helps to identify the statistical significance of the peaks (<a href="#fig-airpassangersFFTsm" class="quarto-xref">Figure&nbsp;<span>11.2</span></a>).</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/spec.pgram.html">spec.pgram</a></span><span class="op">(</span><span class="va">res</span>, spans <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/spec.pgram.html">spec.pgram</a></span><span class="op">(</span><span class="va">res</span>, spans <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/spec.pgram.html">spec.pgram</a></span><span class="op">(</span><span class="va">res</span>, spans <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">7</span>, <span class="fl">7</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/stats/spec.pgram.html">spec.pgram</a></span><span class="op">(</span><span class="va">res</span>, spans <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">11</span>, <span class="fl">11</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/spec.pgram.html">spec.pgram</a></span><span class="op">(</span><span class="va">res</span>, spans <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">11</span>, <span class="fl">11</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
-<div id="fig-airpassangersFFTsm" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="l13_spectral_files/figure-html/fig-airpassangersFFTsm-1.png" class="img-fluid figure-img" width="768"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;10.2: Smoothed periodograms of monthly log-transformed and detrended <code>AirPassengers</code> time series.</figcaption><p></p>
-</figure>
+<div id="fig-airpassangersFFTsm" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-airpassangersFFTsm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="l13_spectral_files/figure-html/fig-airpassangersFFTsm-1.png" class="img-fluid figure-img" width="768">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-airpassangersFFTsm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;11.2: Smoothed periodograms of monthly log-transformed and detrended <code>AirPassengers</code> time series.
+</figcaption></figure>
 </div>
 </div>
 </div>
 <p>Another method of testing the reality of a peak is to look at its harmonics. It is extremely unlikely that a true cycle will be shaped perfectly as a sine curve, hence at least a few of the first harmonics will show up as well. For example, in monthly data with annual seasonality (period of 12 months), we often observe peaks at 6, 4, and 3 months. This is exactly the pattern that we see in the figures above.</p>
-<p>We can also approximate our data with an AR model and then plot the approximating periodogram of the AR model (<a href="#fig-airpassangersFFTar">Figure&nbsp;<span>10.3</span></a>).</p>
+<p>We can also approximate our data with an AR model and then plot the approximating periodogram of the AR model (<a href="#fig-airpassangersFFTar" class="quarto-xref">Figure&nbsp;<span>11.3</span></a>).</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/spectrum.html">spectrum</a></span><span class="op">(</span><span class="va">res</span>, method <span class="op">=</span> <span class="st">"ar"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/spectrum.html">spectrum</a></span><span class="op">(</span><span class="va">res</span>, method <span class="op">=</span> <span class="st">"ar"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
-<div id="fig-airpassangersFFTar" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="l13_spectral_files/figure-html/fig-airpassangersFFTar-1.png" class="img-fluid figure-img" width="768"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;10.3: Periodogram of AR process approximating the monthly log-transformed and detrended <code>AirPassengers</code> time series.</figcaption><p></p>
-</figure>
+<div id="fig-airpassangersFFTar" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-airpassangersFFTar-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="l13_spectral_files/figure-html/fig-airpassangersFFTar-1.png" class="img-fluid figure-img" width="768">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-airpassangersFFTar-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;11.3: Periodogram of AR process approximating the monthly log-transformed and detrended <code>AirPassengers</code> time series.
+</figcaption></figure>
 </div>
 </div>
 </div>
 </div>
 </div>
-</section><section id="periodogram-for-unequally-spaced-time-series" class="level2" data-number="10.5"><h2 data-number="10.5" class="anchored" data-anchor-id="periodogram-for-unequally-spaced-time-series">
-<span class="header-section-number">10.5</span> Periodogram for unequally-spaced time series</h2>
+</section><section id="periodogram-for-unequally-spaced-time-series" class="level2" data-number="11.5"><h2 data-number="11.5" class="anchored" data-anchor-id="periodogram-for-unequally-spaced-time-series">
+<span class="header-section-number">11.5</span> Periodogram for unequally-spaced time series</h2>
 <p>Unequally/unevenly-spaced time series or gaps in observations (missing data) can be handled with the Lomb–Scargle periodogram calculation. This method was originally developed for the analysis of unevenly-spaced astronomical signals <span class="citation" data-cites="Lomb:1976 Scargle:1982">(<a href="references.html#ref-Lomb:1976" role="doc-biblioref">Lomb 1976</a>; <a href="references.html#ref-Scargle:1982" role="doc-biblioref">Scargle 1982</a>)</span> but found application in many other domains, including environmental science <span class="citation" data-cites="Ruf:1999 Campos:etal:2008 Siskey:etal:2016:periodicity">(e.g., <a href="references.html#ref-Ruf:1999" role="doc-biblioref">Ruf 1999</a>; <a href="references.html#ref-Campos:etal:2008" role="doc-biblioref">Campos et al. 2008</a>; <a href="references.html#ref-Siskey:etal:2016:periodicity" role="doc-biblioref">Siskey et al. 2016</a>)</span>.</p>
-<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
-Example: Ammonium concentration in wastewater system
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Example: Ammonium concentration in wastewater system
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>For example, consider a time series <code><a href="https://SteffenMoritz.github.io/imputeTS/reference/tsNH4.html">imputeTS::tsNH4</a></code> of ammonium (NH<span class="math inline">\(_4\)</span>) concentration in a wastewater system (<a href="#fig-NH4">Figure&nbsp;<span>10.4</span></a>). This time series contains observations from regular 10-minute intervals, but some of the observations are missing.</p>
+<p>For example, consider a time series <code><a href="https://SteffenMoritz.github.io/imputeTS/reference/tsNH4.html">imputeTS::tsNH4</a></code> of ammonium (NH<span class="math inline">\(_4\)</span>) concentration in a wastewater system (<a href="#fig-NH4" class="quarto-xref">Figure&nbsp;<span>11.4</span></a>). This time series contains observations from regular 10-minute intervals, but some of the observations are missing.</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="fu">imputeTS</span><span class="fu">::</span><span class="va"><a href="https://SteffenMoritz.github.io/imputeTS/reference/tsNH4.html">tsNH4</a></span><span class="op">)</span> <span class="op">+</span></span>
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="fu">imputeTS</span><span class="fu">::</span><span class="va"><a href="https://SteffenMoritz.github.io/imputeTS/reference/tsNH4.html">tsNH4</a></span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Day"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">ylab</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/bquote.html">bquote</a></span><span class="op">(</span><span class="va">NH</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span><span class="op">~</span><span class="va">concentration</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>    <span class="fu">ylab</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/bquote.html">bquote</a></span><span class="op">(</span><span class="va">NH</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span><span class="op">~</span><span class="va">concentration</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
-<div id="fig-NH4" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="l13_spectral_files/figure-html/fig-NH4-1.png" class="img-fluid figure-img" width="768"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;10.4: Time series of ammonium concentration in a wastewater system.</figcaption><p></p>
-</figure>
+<div id="fig-NH4" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-NH4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="l13_spectral_files/figure-html/fig-NH4-1.png" class="img-fluid figure-img" width="768">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-NH4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;11.4: Time series of ammonium concentration in a wastewater system.
+</figcaption></figure>
 </div>
 </div>
 </div>
 <p>Save the data in a format acceptable by the Lomb–Scargle function.</p>
 <div class="cell">
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">D</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>NH4 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="fu">imputeTS</span><span class="fu">::</span><span class="va"><a href="https://SteffenMoritz.github.io/imputeTS/reference/tsNH4.html">tsNH4</a></span><span class="op">)</span>,</span>
-<span>                Time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/time.html">time</a></span><span class="op">(</span><span class="fu">imputeTS</span><span class="fu">::</span><span class="va"><a href="https://SteffenMoritz.github.io/imputeTS/reference/tsNH4.html">tsNH4</a></span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">D</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>NH4 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="fu">imputeTS</span><span class="fu">::</span><span class="va"><a href="https://SteffenMoritz.github.io/imputeTS/reference/tsNH4.html">tsNH4</a></span><span class="op">)</span>,</span>
+<span>                Time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/time.html">time</a></span><span class="op">(</span><span class="fu">imputeTS</span><span class="fu">::</span><span class="va"><a href="https://SteffenMoritz.github.io/imputeTS/reference/tsNH4.html">tsNH4</a></span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>If needed, <code>na.omit(D)</code> can be used to remove the rows with missing values.</p>
-<p><a href="#fig-NH4lombf">Figure&nbsp;<span>10.5</span></a> and <a href="#fig-NH4lombp">Figure&nbsp;<span>10.6</span></a> show periodograms calculated based on these data. Note that the function <code><a href="https://rdrr.io/pkg/lomb/man/lsp.html">lomb::lsp()</a></code> has arguments adjusting the span of the frequencies and significance level.</p>
+<p><a href="#fig-NH4lombf" class="quarto-xref">Figure&nbsp;<span>11.5</span></a> and <a href="#fig-NH4lombp" class="quarto-xref">Figure&nbsp;<span>11.6</span></a> show periodograms calculated based on these data. Note that the function <code><a href="https://rdrr.io/pkg/lomb/man/lsp.html">lomb::lsp()</a></code> has arguments adjusting the span of the frequencies and significance level.</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu">lomb</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lomb/man/lsp.html">lsp</a></span><span class="op">(</span><span class="va">D</span><span class="op">$</span><span class="va">NH4</span>, times <span class="op">=</span> <span class="va">D</span><span class="op">$</span><span class="va">Time</span>, type <span class="op">=</span> <span class="st">"frequency"</span>, alpha <span class="op">=</span> <span class="fl">0.05</span>, main <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">lomb</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lomb/man/lsp.html">lsp</a></span><span class="op">(</span><span class="va">D</span><span class="op">$</span><span class="va">NH4</span>, times <span class="op">=</span> <span class="va">D</span><span class="op">$</span><span class="va">Time</span>, type <span class="op">=</span> <span class="st">"frequency"</span>, alpha <span class="op">=</span> <span class="fl">0.05</span>, main <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
-<div id="fig-NH4lombf" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="l13_spectral_files/figure-html/fig-NH4lombf-1.png" class="img-fluid figure-img" width="768"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;10.5: Lomb–Scargle periodograms computed for the unequally-spaced time series of ammonium concentration.</figcaption><p></p>
-</figure>
+<div id="fig-NH4lombf" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-NH4lombf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="l13_spectral_files/figure-html/fig-NH4lombf-1.png" class="img-fluid figure-img" width="768">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-NH4lombf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;11.5: Lomb–Scargle periodograms computed for the unequally-spaced time series of ammonium concentration.
+</figcaption></figure>
 </div>
 </div>
 </div>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">lomb</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lomb/man/lsp.html">lsp</a></span><span class="op">(</span><span class="va">D</span><span class="op">$</span><span class="va">NH4</span>, times <span class="op">=</span> <span class="va">D</span><span class="op">$</span><span class="va">Time</span>, type <span class="op">=</span> <span class="st">"period"</span>, alpha <span class="op">=</span> <span class="fl">0.05</span>, main <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">lomb</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lomb/man/lsp.html">lsp</a></span><span class="op">(</span><span class="va">D</span><span class="op">$</span><span class="va">NH4</span>, times <span class="op">=</span> <span class="va">D</span><span class="op">$</span><span class="va">Time</span>, type <span class="op">=</span> <span class="st">"period"</span>, alpha <span class="op">=</span> <span class="fl">0.05</span>, main <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
-<div id="fig-NH4lombp" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="l13_spectral_files/figure-html/fig-NH4lombp-1.png" class="img-fluid figure-img" width="768"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;10.6: Lomb–Scargle periodograms computed for the unequally-spaced time series of ammonium concentration.</figcaption><p></p>
-</figure>
+<div id="fig-NH4lombp" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-NH4lombp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="l13_spectral_files/figure-html/fig-NH4lombp-1.png" class="img-fluid figure-img" width="768">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-NH4lombp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;11.6: Lomb–Scargle periodograms computed for the unequally-spaced time series of ammonium concentration.
+</figcaption></figure>
 </div>
 </div>
 </div>
 </div>
 </div>
-</section><section id="frequency-estimation-in-time" class="level2" data-number="10.6"><h2 data-number="10.6" class="anchored" data-anchor-id="frequency-estimation-in-time">
-<span class="header-section-number">10.6</span> Frequency estimation in time</h2>
+</section><section id="frequency-estimation-in-time" class="level2" data-number="11.6"><h2 data-number="11.6" class="anchored" data-anchor-id="frequency-estimation-in-time">
+<span class="header-section-number">11.6</span> Frequency estimation in time</h2>
 <p>The assumption of a whole time series having a constant spectrum might be very limiting for the analysis of long time series. An estimation of frequencies locally in time allows us to study how the spectrum changes in time, and also detect smaller (short-lived) signals that would be averaged out otherwise. A straightforward solution is to separate the time series into windows (sub-periods) and estimate a spectrum in each such window.</p>
 <p>The windowed analysis makes sense when in each window we have enough observations to estimate the frequencies. As a guide, we should have at least two observations per period to be able to represent the signal in the discrete Fourier transform. For example, we cannot estimate the seasonality if we sample once per year – this is our <em>sampling rate</em> or <em>sampling frequency</em> <span class="math inline">\(F_s\)</span>. To start identifying seasonal periodicity, our sampling rate should be at least 2 samples per year. The highest frequency we can work with is limited by the <em>Nyquist frequency</em> <span class="math display">\[
 F_N = \frac{F_s}{2},
 \]</span> which is half of the sampling frequency.</p>
 <p>After applying the FFT in each window, the results can be visualized in a <em>spectrogram</em>. The spectrogram combines information from multiple periodograms: it shows time on the <span class="math inline">\(x\)</span>-axis, frequency on the <span class="math inline">\(y\)</span>-axis, and the corresponding spectrum power as the color.</p>
-<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
-Example: Spectrograms for the NAO
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Example: Spectrograms for the NAO
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Consider a long time series of the North Atlantic Oscillation (NAO) index obtained from an ensemble of 100 model-constrained NAO reconstructions (<a href="#fig-NAO">Figure&nbsp;<span>10.7</span></a>).</p>
+<p>Consider a long time series of the North Atlantic Oscillation (NAO) index obtained from an ensemble of 100 model-constrained NAO reconstructions (<a href="#fig-NAO" class="quarto-xref">Figure&nbsp;<span>11.7</span></a>).</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">NAOdf</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="st">"data/NAO.csv"</span>, skip <span class="op">=</span> <span class="fl">12</span>, show_col_types <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">NAOdf</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="st">"data/NAO.csv"</span>, skip <span class="op">=</span> <span class="fl">12</span>, show_col_types <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>    <span class="fu">rename</span><span class="op">(</span>NAOproxy <span class="op">=</span> <span class="va">nao_mc_mean</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>    <span class="fu">select</span><span class="op">(</span><span class="va">Year</span>, <span class="va">NAOproxy</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>    <span class="fu">arrange</span><span class="op">(</span><span class="va">Year</span><span class="op">)</span></span>
@@ -644,11 +704,11 @@ Example: Spectrograms for the NAO
 <span><span class="va">spec_raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/spec.pgram.html">spec.pgram</a></span><span class="op">(</span><span class="va">NAO</span>, detrend <span class="op">=</span> <span class="cn">FALSE</span>, plot <span class="op">=</span> <span class="cn">FALSE</span>, spans <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Find the frequency with the max power</span></span>
-<span><span class="va">fmax</span> <span class="op">&lt;-</span> <span class="va">spec_raw</span><span class="op">$</span><span class="va">freq</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.min.html">which.max</a></span><span class="op">(</span><span class="va">spec_raw</span><span class="op">$</span><span class="va">spec</span><span class="op">)</span><span class="op">]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="va">fmax</span> <span class="op">&lt;-</span> <span class="va">spec_raw</span><span class="op">$</span><span class="va">freq</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.min.html">which.max</a></span><span class="op">(</span><span class="va">spec_raw</span><span class="op">$</span><span class="va">spec</span><span class="op">)</span><span class="op">]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">NAO</span><span class="op">)</span> <span class="op">+</span></span>
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">NAO</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"Year"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">"NAO"</span><span class="op">)</span></span>
 <span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>Spectrum <span class="op">=</span> <span class="va">spec_raw</span><span class="op">$</span><span class="va">spec</span>, </span>
@@ -666,29 +726,32 @@ Example: Spectrograms for the NAO
 <span>    <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">""</span><span class="op">)</span></span>
 <span><span class="va">p1</span> <span class="op">/</span> <span class="op">(</span><span class="va">p2</span> <span class="op">+</span> <span class="va">p3</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>    <span class="fu">plot_annotation</span><span class="op">(</span>tag_levels <span class="op">=</span> <span class="st">'A'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>    <span class="fu">plot_annotation</span><span class="op">(</span>tag_levels <span class="op">=</span> <span class="st">'A'</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
-<div id="fig-NAO" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="l13_spectral_files/figure-html/fig-NAO-1.png" class="img-fluid figure-img" width="768"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;10.7: North Atlantic Oscillation (NAO) winter index (December, January, and February) calculated as the mean of 100 model-constrained NAO reconstructions, along with its smoothed periodograms. The dashed lines denote the maximal magnitude of the spectrum.</figcaption><p></p>
-</figure>
+<div id="fig-NAO" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-NAO-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="l13_spectral_files/figure-html/fig-NAO-1.png" class="img-fluid figure-img" width="768">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-NAO-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;11.7: North Atlantic Oscillation (NAO) winter index (December, January, and February) calculated as the mean of 100 model-constrained NAO reconstructions, along with its smoothed periodograms. The dashed lines denote the maximal magnitude of the spectrum.
+</figcaption></figure>
 </div>
 </div>
 </div>
 <p>This is an annual time series, hence the sampling frequency <span class="math inline">\(F_s = 1\)</span>. From the global FFT results, the frequency with the maximal power is 0.019 year<span class="math inline">\(^{-1}\)</span>, which is equivalent to the period of about 53.3 years. We will set the window for the FFT and calculate the spectrogram. Note that we can use overlapping windows for a smoother picture.</p>
 <div class="cell">
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Set the window size (years), for applying the FFT in each window</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Set the window size (years), for applying the FFT in each window</span></span>
 <span><span class="va">window_size</span> <span class="op">=</span> <span class="fl">30</span></span>
 <span></span>
 <span><span class="co"># Compute the spectrogram</span></span>
 <span><span class="va">SP</span> <span class="op">&lt;-</span> <span class="fu">signal</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/signal/man/specgram.html">specgram</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">NAO</span>,</span>
 <span>                       n <span class="op">=</span> <span class="va">window_size</span>,</span>
 <span>                       overlap <span class="op">=</span> <span class="va">window_size</span><span class="op">/</span><span class="fl">3</span>,</span>
-<span>                       Fs <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>                       Fs <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>See the spectrograms in <a href="#fig-NAOspect">Figure&nbsp;<span>10.8</span></a> and compare them with the time series plot in <a href="#fig-NAO">Figure&nbsp;<span>10.7</span></a> A.</p>
+<p>See the spectrograms in <a href="#fig-NAOspect" class="quarto-xref">Figure&nbsp;<span>11.8</span></a> and compare them with the time series plot in <a href="#fig-NAO" class="quarto-xref">Figure&nbsp;<span>11.7</span></a> A.</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Plot the spectrogram without decorations</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">SP</span>, main <span class="op">=</span> <span class="st">"A) Raw results"</span><span class="op">)</span></span>
@@ -712,203 +775,476 @@ Example: Spectrograms for the NAO
 <span>            xlab <span class="op">=</span> <span class="st">"Year"</span>,</span>
 <span>            main <span class="op">=</span> <span class="st">"B) After normalization and adding colors"</span>,</span>
 <span>            drawPalette <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>            decimate <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>            decimate <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
-<div id="fig-NAOspect" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="l13_spectral_files/figure-html/fig-NAOspect-1.png" class="img-fluid figure-img" width="768"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;10.8: Spectrograms for North Atlantic Oscillation (NAO) winter index.</figcaption><p></p>
-</figure>
+<div id="fig-NAOspect" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-NAOspect-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="l13_spectral_files/figure-html/fig-NAOspect-1.png" class="img-fluid figure-img" width="768">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-NAOspect-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;11.8: Spectrograms for North Atlantic Oscillation (NAO) winter index.
+</figcaption></figure>
 </div>
 </div>
 </div>
 </div>
 </div>
-</section><section id="conclusion" class="level2" data-number="10.7"><h2 data-number="10.7" class="anchored" data-anchor-id="conclusion">
-<span class="header-section-number">10.7</span> Conclusion</h2>
+</section><section id="conclusion" class="level2" data-number="11.7"><h2 data-number="11.7" class="anchored" data-anchor-id="conclusion">
+<span class="header-section-number">11.7</span> Conclusion</h2>
 <p>For challenging problems, smoothing, multitapering, linear filtering, (repeated) pre-whitening, and Lomb–Scargle can be used together. Beware that aperiodic but autoregressive processes produce peaks in spectral densities. Harmonic analysis is a complicated art rather than a straightforward procedure.</p>
 <p>It is extremely difficult to derive the significance of a weak periodicity from harmonic analysis. Do not believe analytical estimates (e.g., exponential probability), as they rarely apply to real data. It is essential to make simulations, typically permuting or bootstrapping the data keeping the observing times fixed. Simulations of the final model with the observation times are also advised.</p>
-</section><section id="appendix" class="level2" data-number="10.8"><h2 data-number="10.8" class="anchored" data-anchor-id="appendix">
-<span class="header-section-number">10.8</span> Appendix</h2>
+</section><section id="appendix" class="level2" data-number="11.8"><h2 data-number="11.8" class="anchored" data-anchor-id="appendix">
+<span class="header-section-number">11.8</span> Appendix</h2>
 <p><strong>Wavelet analysis</strong></p>
 <p>An alternative to the windowed FFT is the wavelet analysis, which also estimates the strength of time series variations for different frequencies and times. <em>Wavelet</em> is a ‘small wave’ or function <span class="math inline">\(\psi(t)\)</span> approximating the variations. Popular wavelet functions are Meyer, Morlet, and Mexican hat.</p>
-<p><a href="#fig-NAOwv">Figure&nbsp;<span>10.9</span></a> shows the results of using the Morlet wavelet to process the NAO time series.</p>
+<p><a href="#fig-NAOwv" class="quarto-xref">Figure&nbsp;<span>11.9</span></a> shows the results of using the Morlet wavelet to process the NAO time series.</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AndyBunn/dplR">dplR</a></span><span class="op">)</span></span>
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/OpenDendro/dplR">dplR</a></span><span class="op">)</span></span>
 <span><span class="va">wv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/dplR/man/morlet.html">morlet</a></span><span class="op">(</span>y1 <span class="op">=</span> <span class="va">NAOdf</span><span class="op">$</span><span class="va">NAOproxy</span>, x1 <span class="op">=</span> <span class="va">NAOdf</span><span class="op">$</span><span class="va">Year</span><span class="op">)</span></span>
 <span><span class="va">levs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="va">wv</span><span class="op">$</span><span class="va">Power</span>, probs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="fl">0.9</span>, <span class="fl">0.95</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/dplR/man/wavelet.plot.html">wavelet.plot</a></span><span class="op">(</span><span class="va">wv</span>, wavelet.levels <span class="op">=</span> <span class="va">levs</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/pkg/dplR/man/wavelet.plot.html">wavelet.plot</a></span><span class="op">(</span><span class="va">wv</span>, wavelet.levels <span class="op">=</span> <span class="va">levs</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
-<div id="fig-NAOwv" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="l13_spectral_files/figure-html/fig-NAOwv-1.png" class="img-fluid figure-img" width="768"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;10.9: Wavelet analysis of the North Atlantic Oscillation (NAO) winter index.</figcaption><p></p>
-</figure>
+<div id="fig-NAOwv" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-NAOwv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="l13_spectral_files/figure-html/fig-NAOwv-1.png" class="img-fluid figure-img" width="768">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-NAOwv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;11.9: Wavelet analysis of the North Atlantic Oscillation (NAO) winter index.
+</figcaption></figure>
 </div>
 </div>
 </div>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
-<div id="ref-Campos:etal:2008" class="csl-entry" role="doc-biblioentry">
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-Campos:etal:2008" class="csl-entry" role="listitem">
 Campos MC, Costa JL, Quintella BR, et al (2008) Activity and movement patterns of the <span>Lusitanian</span> toadfish inferred from pressure-sensitive data-loggers in the <span>Mira</span> estuary (<span>Portugal</span>). Fisheries Management and Ecology 15:449–458. <a href="https://doi.org/10.1111/j.1365-2400.2008.00629.x">https://doi.org/10.1111/j.1365-2400.2008.00629.x</a>
 </div>
-<div id="ref-Lomb:1976" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Lomb:1976" class="csl-entry" role="listitem">
 Lomb NR (1976) Least-squares frequency analysis of unequally spaced data. Astrophysics and Space Science 39:447–462. <a href="https://doi.org/10.1007/BF00648343">https://doi.org/10.1007/BF00648343</a>
 </div>
-<div id="ref-Nason:2008" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Nason:2008" class="csl-entry" role="listitem">
 Nason GP (2008) <a href="https://doi.org/10.1007/978-0-387-75961-6_2">Wavelet methods in statistics with <span>R</span></a>. Springer, New York, NY, USA
 </div>
-<div id="ref-Ruf:1999" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Ruf:1999" class="csl-entry" role="listitem">
 Ruf T (1999) The <span>Lomb–Scargle</span> periodogram in biological rhythm research: Analysis of incomplete and unequally spaced time-series. Biological Rhythm Research 30:178–201. <a href="https://doi.org/10.1076/brhm.30.2.178.1422">https://doi.org/10.1076/brhm.30.2.178.1422</a>
 </div>
-<div id="ref-Scargle:1982" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Scargle:1982" class="csl-entry" role="listitem">
 Scargle JD (1982) Studies in astronomical time series analysis. <span>II</span> – statistical aspects of spectral analysis of unevenly spaced data. Astrophysical Journal 263:835–853. <a href="https://doi.org/10.1086/160554">https://doi.org/10.1086/160554</a>
 </div>
-<div id="ref-Shumway:Stoffer:2017" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Shumway:Stoffer:2017" class="csl-entry" role="listitem">
 Shumway RH, Stoffer DS (2017) <a href="https://doi.org/10.1007/978-3-319-52452-8">Time series analysis and its applications with <span>R</span> examples</a>, 4th edn. Springer, New York, NY, USA
 </div>
-<div id="ref-Siskey:etal:2016:periodicity" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Siskey:etal:2016:periodicity" class="csl-entry" role="listitem">
 Siskey MR, Lyubchich V, Liang D, et al (2016) Periodicity of <span class="nocase">strontium:calcium</span> across annuli further validates otolith-ageing for <span>Atlantic</span> bluefin tuna (<span>Thunnus</span> thynnus). Fisheries Research 177:13–17. <a href="https://doi.org/10.1016/j.fishres.2016.01.004">https://doi.org/10.1016/j.fishres.2016.01.004</a>
 </div>
 </div>
 </section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
-window.document.addEventListener("DOMContentLoaded", function (event) {
-  const toggleBodyColorMode = (bsSheetEl) => {
-    const mode = bsSheetEl.getAttribute("data-mode");
-    const bodyEl = window.document.querySelector("body");
-    if (mode === "dark") {
-      bodyEl.classList.add("quarto-dark");
-      bodyEl.classList.remove("quarto-light");
-    } else {
-      bodyEl.classList.add("quarto-light");
-      bodyEl.classList.remove("quarto-dark");
-    }
-  }
-  const toggleBodyColorPrimary = () => {
-    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-    if (bsSheetEl) {
-      toggleBodyColorMode(bsSheetEl);
-    }
-  }
-  toggleBodyColorPrimary();  
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
-  };
-  anchorJS.add('.anchored');
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
-    }
-  });
-  clipboard.on('success', function(e) {
-    // button target
-    const button = e.trigger;
-    // don't keep focus
-    button.blur();
-    // flash "checked"
-    button.classList.add('code-copy-button-checked');
-    var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copied!");
-    let tooltip;
-    if (window.bootstrap) {
-      button.setAttribute("data-bs-toggle", "tooltip");
-      button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
-      tooltip = new bootstrap.Tooltip(button, 
-        { trigger: "manual", 
-          customClass: "code-copy-button-tooltip",
-          offset: [0, -8]});
-      tooltip.show();    
-    }
-    setTimeout(function() {
-      if (tooltip) {
-        tooltip.hide();
-        button.removeAttribute("data-bs-title");
-        button.removeAttribute("data-bs-toggle");
-        button.removeAttribute("data-bs-placement");
-      }
-      button.setAttribute("title", currentTitle);
-      button.classList.remove('code-copy-button-checked');
-    }, 1000);
-    // clear code selection
-    e.clearSelection();
-  });
-  function tippyHover(el, contentFn) {
-    const config = {
-      allowHTML: true,
-      content: contentFn,
-      maxWidth: 500,
-      delay: 100,
-      arrow: false,
-      appendTo: function(el) {
-          return el.parentElement;
-      },
-      interactive: true,
-      interactiveBorder: 10,
-      theme: 'quarto',
-      placement: 'bottom-start'
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
     };
-    window.tippy(el, config); 
-  }
-  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-  for (var i=0; i<noterefs.length; i++) {
-    const ref = noterefs[i];
-    tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-      try { href = new URL(href).hash; } catch {}
-      const id = href.replace(/^#\/?/, "");
-      const note = window.document.getElementById(id);
-      return note.innerHTML;
-    });
-  }
-  const findCites = (el) => {
-    const parentEl = el.parentElement;
-    if (parentEl) {
-      const cites = parentEl.dataset.cites;
-      if (cites) {
-        return {
-          el,
-          cites: cites.split(' ')
-        };
-      } else {
-        return findCites(el.parentElement)
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
       }
-    } else {
-      return undefined;
+      return false;
     }
-  };
-  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-  for (var i=0; i<bibliorefs.length; i++) {
-    const ref = bibliorefs[i];
-    const citeInfo = findCites(ref);
-    if (citeInfo) {
-      tippyHover(citeInfo.el, function() {
-        var popup = window.document.createElement('div');
-        citeInfo.cites.forEach(function(cite) {
-          var citeDiv = window.document.createElement('div');
-          citeDiv.classList.add('hanging-indent');
-          citeDiv.classList.add('csl-entry');
-          var biblioDiv = window.document.getElementById('ref-' + cite);
-          if (biblioDiv) {
-            citeDiv.innerHTML = biblioDiv.innerHTML;
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
           }
-          popup.appendChild(citeDiv);
-        });
-        return popup.innerHTML;
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
       });
     }
-  }
-});
-</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
-      <a href="./l09_tsreg2.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Time Series Regression with Correlated Errors</span></span>
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="./l12_forecast.html" class="pagination-link" aria-label="Model Evaluation and Forecasting">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Model Evaluation and Forecasting</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./software.html" class="pagination-link">
+      <a href="./software.html" class="pagination-link" aria-label="Software">
         <span class="nav-page-text">Software</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
@@ -917,4 +1253,4 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
-</body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/vlyubchich/tsar/edit/master/l13_spectral.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/vlyubchich/tsar/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

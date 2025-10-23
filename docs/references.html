@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.335">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Time Series Analysis - References</title>
+<title>References – Time Series Analysis</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -17,14 +17,15 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
 }
-.hanging div.csl-entry {
+.hanging-indent div.csl-entry {
   margin-left:2em;
   text-indent:-2em;
 }
@@ -38,8 +39,7 @@ div.csl-right-inline {
 }
 div.csl-indent {
   margin-left: 2em;
-}
-</style>
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -51,23 +51,31 @@ div.csl-indent {
 <meta name="quarto:offset" content="./">
 <link href="./s1_wls.html" rel="next">
 <link href="./software.html" rel="prev">
-<link href="./TSAfav.png" rel="icon" type="image/png">
-<script src="site_libs/quarto-html/quarto.js"></script>
+<link href="./tsar_fav.png" rel="icon" type="image/png">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -76,23 +84,30 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 
 
 </head>
 
-<body class="nav-sidebar floating">
+<body class="nav-sidebar floating quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-    <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">References</h1>
-      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
-        <i class="bi bi-chevron-right"></i>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./references.html">References</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
       </button>
     </div>
   </nav>
@@ -100,13 +115,15 @@ div.csl-indent {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Time Series Analysis</a> 
         <div class="sidebar-tools-main">
-    <a href="https://github.com/vlyubchich/tsar/" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
-  <a href="" class="quarto-reader-toggle sidebar-tool" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+    <a href="https://github.com/vlyubchich/tsar/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
   <i class="bi"></i>
   </div>
@@ -114,104 +131,134 @@ div.csl-indent {
 </div>
     </div>
       </div>
-      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
         <div id="quarto-search" class="" title="Search"></div>
         </div>
-      </div>
+        </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./l01_regression.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Review of Linear Regression</span></a>
+  <a href="./l01_regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Review of Linear Regression</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./l02_tsintro.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to Time Series Analysis</span></a>
+  <a href="./l02_tsintro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to Time Series Analysis</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./l03_smoothing.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Smoothing, Detrending, and Deseasonalizing</span></a>
+  <a href="./l03_smoothing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Smoothing, Detrending, and Deseasonalizing</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./l04_arma.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Autoregressive Moving Average (ARMA) Models</span></a>
+  <a href="./l04_arma.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Autoregressive Moving Average (ARMA) Models</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./l05_arima.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Autoregressive Integrated Moving Average (ARIMA) Models</span></a>
+  <a href="./l05_arima.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Autoregressive Integrated Moving Average (ARIMA) Models</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./l06_garch.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Generalized Autoregressive Conditional Heteroskedasticity (GARCH) Models</span></a>
+  <a href="./l06_garch.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Generalized Autoregressive Conditional Heteroskedasticity (GARCH) Models</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./l07_trendtest.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Trend Detection</span></a>
+  <a href="./l07_trendtest.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Trend Detection</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./l08_tsreg1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Time Series Regression with Trends</span></a>
+  <a href="./l08_tsreg1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Time Series Regression with Trends</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./l09_tsreg2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Time Series Regression with Correlated Errors</span></a>
+  <a href="./l09_tsreg2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Time Series Regression with Correlated Errors</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./l13_spectral.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Spectral Analysis</span></a>
+  <a href="./l12_forecast.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Model Evaluation and Forecasting</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./software.html" class="sidebar-item-text sidebar-link">Software</a>
+  <a href="./l13_spectral.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Spectral Analysis</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./references.html" class="sidebar-item-text sidebar-link active">References</a>
+  <a href="./software.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Software</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">References</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Appendices</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./s1_wls.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Weighted least squares</span></a>
+  <a href="./s1_wls.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Weighted least squares</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./s2_gls.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Generalized least squares</span></a>
+  <a href="./s2_gls.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Generalized least squares</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./s4_trendsync.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Synchrony of parametric trends</span></a>
+  <a href="./s4_trendsync.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Synchrony of parametric trends</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./s_practice.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Practice exercises</span></a>
+  <a href="./s7_garma.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Generalized autoregressive moving average (GARMA) models</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./s_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">Practice exercises</span></span></a>
   </div>
 </li>
       </ul>
@@ -219,8 +266,9 @@ div.csl-indent {
     </ul>
     </div>
 </nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
         
     </div>
 <!-- main -->
@@ -228,7 +276,7 @@ div.csl-indent {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">References</h1>
+<h1 class="title">References</h1>
 </div>
 
 
@@ -241,541 +289,546 @@ div.csl-indent {
   </div>
   
 
+
 </header>
 
-<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
-<div id="ref-R-rmarkdown" class="csl-entry" role="doc-biblioentry">
-Allaire J, Xie Y, Dervieux C, et al (2023) Rmarkdown: Dynamic documents
-for r. R package version 2.22, <a href="https://CRAN.R-project.org/package=rmarkdown">https://CRAN.R-project.org/package=rmarkdown</a>
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-R-rmarkdown" class="csl-entry" role="listitem">
+Allaire J, Xie Y, Dervieux C, et al (2025) Rmarkdown: Dynamic documents
+for r. R package version 2.30, <a href="https://github.com/rstudio/rmarkdown">https://github.com/rstudio/rmarkdown</a>
 </div>
-<div id="ref-Benjamin:etal:2003" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Benjamin:etal:2003" class="csl-entry" role="listitem">
 Benjamin MA, Rigby RA, Stasinopoulos DM (2003) Generalized
 autoregressive moving average models. Journal of the American
 Statistical Association 98:214–223. <a href="https://doi.org/10.1198/016214503388619238">https://doi.org/10.1198/016214503388619238</a>
 </div>
-<div id="ref-Benson:etal:2020" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Benson:etal:2020" class="csl-entry" role="listitem">
 Benson B, Magnuson J, Sharma S (2020) <a href="https://doi.org/10.7265/N5W66HP8">Global lake and river ice
 phenology database. <span>Version 1 (G01377)</span></a>. <span>National
 Snow and Ice Data Center</span>, Boulder, CO, USA
 </div>
-<div id="ref-Berk:2016" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Berk:2016" class="csl-entry" role="listitem">
 Berk RA (2016) <a href="https://doi.org/10.1007/978-3-319-44048-4">Statistical learning
 from a regression perspective</a>, 2nd edn. Springer, Switzerland
 </div>
-<div id="ref-Bickel:etal:1997" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Bickel:etal:1997" class="csl-entry" role="listitem">
 Bickel PJ, Götze F, Zwet WR van (1997) Resampling fewer than <span class="math inline"><em>n</em></span> observations: Gains, losses, and
 remedies for losses. Statistica Sinica 7:1–31
 </div>
-<div id="ref-Bollerslev:1986" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Bollerslev:1986" class="csl-entry" role="listitem">
 Bollerslev T (1986) Generalized autoregressive conditional
 heteroskedasticity. Journal of Econometrics 31:307–327. <a href="https://doi.org/10.1016/0304-4076(86)90063-1">https://doi.org/10.1016/0304-4076(86)90063-1</a>
 </div>
-<div id="ref-Bollerslev:2009" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Bollerslev:2009" class="csl-entry" role="listitem">
 Bollerslev T (2009) <a href="https://doi.org/10.2139/ssrn.1263250">Glossary to
 <span>ARCH</span> <span>(GARCH)</span></a>. In: Volatility and time
 series econometrics: Essays in honour of <span>Robert F. Engle</span>.
 SSRN
 </div>
-<div id="ref-R-pracma" class="csl-entry" role="doc-biblioentry">
-Borchers HW (2022) Pracma: Practical numerical math functions. R package
-version 2.4.2, <a href="https://CRAN.R-project.org/package=pracma">https://CRAN.R-project.org/package=pracma</a>
+<div id="ref-R-pracma" class="csl-entry" role="listitem">
+Borchers HW (2023) Pracma: Practical numerical math functions. R package
+version 2.4.4, <a href="https://CRAN.R-project.org/package=pracma">https://CRAN.R-project.org/package=pracma</a>
 </div>
-<div id="ref-Box:Jenkins:1976" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Box:Jenkins:1976" class="csl-entry" role="listitem">
 Box GEP, Jenkins GM (1976) Time series analysis: Forecasting and
 control. Holden-Day, San Francisco, CA, USA
 </div>
-<div id="ref-Brockwell:Davis:2002" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Brockwell:Davis:2002" class="csl-entry" role="listitem">
 Brockwell PJ, Davis RA (2002) Introduction to time series and
 forecasting, 2nd edn. Springer, New York, NY, USA
 </div>
-<div id="ref-Brooks:Burke:2003" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Brooks:Burke:2003" class="csl-entry" role="listitem">
 Brooks C, Burke SP (2003) Information criteria for <span>GARCH</span>
 model selection. The European Journal of Finance 9:557–580. <a href="https://doi.org/10.1080/1351847021000029188">https://doi.org/10.1080/1351847021000029188</a>
 </div>
-<div id="ref-Buhlmann:2002" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Buhlmann:2002" class="csl-entry" role="listitem">
 Bühlmann P (2002) Bootstraps for time series. Statistical Science
 17:52–72. <a href="https://doi.org/10.1214/ss/1023798998">https://doi.org/10.1214/ss/1023798998</a>
 </div>
-<div id="ref-R-dplR" class="csl-entry" role="doc-biblioentry">
-Bunn A, Korpela M, Biondi F, et al (2022) dplR: Dendrochronology program
-library in r. R package version 1.7.4, <a href="https://github.com/AndyBunn/dplR">https://github.com/AndyBunn/dplR</a>
+<div id="ref-R-dplR" class="csl-entry" role="listitem">
+Bunn A, Korpela M, Biondi F, et al (2025) dplR: Dendrochronology program
+library in r. R package version 1.7.8, <a href="https://github.com/OpenDendro/dplR">https://github.com/OpenDendro/dplR</a>
 </div>
-<div id="ref-Cabilio:etal:2013" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Cabilio:etal:2013" class="csl-entry" role="listitem">
 Cabilio P, Zhang Y, Chen X (2013) Bootstrap rank tests for trend in time
 series. Environmetrics 24:537–549. <a href="https://doi.org/10.1002/env.2250">https://doi.org/10.1002/env.2250</a>
 </div>
-<div id="ref-R-randtests" class="csl-entry" role="doc-biblioentry">
-Caeiro F, Mateus A (2022) Randtests: Testing randomness in r. R package
-version 1.0.1, <a href="https://CRAN.R-project.org/package=randtests">https://CRAN.R-project.org/package=randtests</a>
+<div id="ref-R-randtests" class="csl-entry" role="listitem">
+Caeiro F, Mateus A (2024) Randtests: Testing randomness in r. R package
+version 1.0.2, <a href="https://CRAN.R-project.org/package=randtests">https://CRAN.R-project.org/package=randtests</a>
 </div>
-<div id="ref-Campbell:Diebold:2005" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Campbell:Diebold:2005" class="csl-entry" role="listitem">
 Campbell SD, Diebold FX (2005) Weather forecasting for weather
 derivatives. Journal of the American Statistical Association 100:6–16.
 <a href="https://doi.org/10.1198/016214504000001051">https://doi.org/10.1198/016214504000001051</a>
 </div>
-<div id="ref-Campos:etal:2008" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Campos:etal:2008" class="csl-entry" role="listitem">
 Campos MC, Costa JL, Quintella BR, et al (2008) Activity and movement
 patterns of the <span>Lusitanian</span> toadfish inferred from
 pressure-sensitive data-loggers in the <span>Mira</span> estuary
 (<span>Portugal</span>). Fisheries Management and Ecology 15:449–458. <a href="https://doi.org/10.1111/j.1365-2400.2008.00629.x">https://doi.org/10.1111/j.1365-2400.2008.00629.x</a>
 </div>
-<div id="ref-Chatfield:2000" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Chatfield:2000" class="csl-entry" role="listitem">
 Chatfield C (2000) Time-series forecasting. CRC Press, Boca Raton, FL,
 USA
 </div>
-<div id="ref-Chatterjee:Hadi:2006" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Chatterjee:Hadi:2006" class="csl-entry" role="listitem">
 Chatterjee S, Hadi AS (2006) Regression analysis by example, 4th edn.
 John Wiley &amp; Sons, Hoboken, NJ, USA
 </div>
-<div id="ref-Chatterjee:Simonoff:2013" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Chatterjee:Simonoff:2013" class="csl-entry" role="listitem">
 Chatterjee S, Simonoff JS (2013) Handbook of regression analysis. John
 Wiley &amp; Sons, Hoboken, NJ, USA
 </div>
-<div id="ref-Cleveland:1979" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Cleveland:1979" class="csl-entry" role="listitem">
 Cleveland WS (1979) Robust locally weighted regression and smoothing
 scatterplots. Journal of the American Statistical Association
 74:829–836. <a href="https://doi.org/10.1080/01621459.1979.10481038">https://doi.org/10.1080/01621459.1979.10481038</a>
 </div>
-<div id="ref-Cochrane:Orcutt:1949" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Cochrane:Orcutt:1949" class="csl-entry" role="listitem">
 Cochrane D, Orcutt GH (1949) Application of least squares regression to
 relationships containing auto-correlated error terms. Journal of the
 American Statistical Association 44:32–61. <a href="https://doi.org/10.2307/2280349">https://doi.org/10.2307/2280349</a>
 </div>
-<div id="ref-Cripps:Dunsmuir:2003" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Cripps:Dunsmuir:2003" class="csl-entry" role="listitem">
 Cripps E, Dunsmuir WTM (2003) Modeling the variability of
 <span>Sydney</span> <span>Harbor</span> wind measurements. Journal of
 Applied Meteorology 42:1131–1138. <a href="https://doi.org/10.1175/1520-0450(2003)042<1131:MTVOSH>2.0.CO;2">https://doi.org/10.1175/1520-0450(2003)042&lt;1131:MTVOSH&gt;2.0.CO;2</a>
 </div>
-<div id="ref-R-Ecdat" class="csl-entry" role="doc-biblioentry">
-Croissant Y, Graves S (2022) Ecdat: Data sets for econometrics. R
-package version 0.4-2, <a href="https://www.r-project.org">https://www.r-project.org</a>
+<div id="ref-R-Ecdat" class="csl-entry" role="listitem">
+Croissant Y, Graves S (2025) Ecdat: Data sets for econometrics. R
+package version 0.4.7, <a href="https://www.r-project.org">https://www.r-project.org</a>
 </div>
-<div id="ref-Davison:Hinkley:1997" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Davison:Hinkley:1997" class="csl-entry" role="listitem">
 Davison AC, Hinkley DV (1997) Bootstrap methods and their application.
 Cambridge University Press, Cambridge, UK
 </div>
-<div id="ref-Dean:Dunsmuir:2016" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Dean:Dunsmuir:2016" class="csl-entry" role="listitem">
 Dean RT, Dunsmuir WTM (2016) Dangers and uses of cross-correlation in
 analyzing time series in perception, performance, movement, and
 neuroscience: The importance of constructing transfer function
 autoregressive models. Behavior Research Methods 48:783–802. <a href="https://doi.org/10.3758/s13428-015-0611-2">https://doi.org/10.3758/s13428-015-0611-2</a>
 </div>
-<div id="ref-Degras:etal:2012" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Degras:etal:2012" class="csl-entry" role="listitem">
 Degras D, Xu Z, Zhang T, Wu WB (2012) Testing for parallelism among
 trends in multiple time series. <span>IEEE</span> Transactions on Signal
 Processing 60:1087–1097. <a href="https://doi.org/10.1109/TSP.2011.2177831">https://doi.org/10.1109/TSP.2011.2177831</a>
 </div>
-<div id="ref-Dickey:Fuller:1979" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Dickey:Fuller:1979" class="csl-entry" role="listitem">
 Dickey DA, Fuller WA (1979) Distribution of the estimators for
 autoregressive time series with a unit root. Journal of the American
 Statistical Association 74:427–431. <a href="https://doi.org/10.2307/2286348">https://doi.org/10.2307/2286348</a>
 </div>
-<div id="ref-Duguay:etal:2013" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Duguay:etal:2013" class="csl-entry" role="listitem">
 Duguay CR, Brown L, Kang K-K, Kheyrollah Pour H (2013) State of the
 climate in 2012: Lake ice. Bulletin of the American Meteorological
 Society 94:S124–S126. <a href="https://doi.org/10.1175/2013BAMSStateoftheClimate.1">https://doi.org/10.1175/2013BAMSStateoftheClimate.1</a>
 </div>
-<div id="ref-Dunn:Smyth:1996" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Dunn:Smyth:1996" class="csl-entry" role="listitem">
 Dunn PK, Smyth GK (1996) Randomized quantile residuals. Journal of
 Computational and Graphical Statistics 5:236–244. <a href="https://doi.org/10.2307/1390802">https://doi.org/10.2307/1390802</a>
 </div>
-<div id="ref-Efron:1979" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Efron:1979" class="csl-entry" role="listitem">
 Efron B (1979) Bootstrap methods: Another look at the jackknife. The
 Annals of Statistics 7:1–26. <a href="https://doi.org/10.1214/aos/1176344552">https://doi.org/10.1214/aos/1176344552</a>
 </div>
-<div id="ref-Engle:1982" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Engle:1982" class="csl-entry" role="listitem">
 Engle RF (1982) Autoregressive conditional heteroscedasticity with
 estimates of the variance of <span>United</span> <span>Kingdom</span>
 inflation. Econometrica 50:987–1007. <a href="https://doi.org/10.2307/1912773">https://doi.org/10.2307/1912773</a>
 </div>
-<div id="ref-Engle:Granger:1987" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Engle:Granger:1987" class="csl-entry" role="listitem">
 Engle RF, Granger CWJ (1987) Co-integration and error correction:
 Representation, estimation, and testing. Econometrica 55:251–276. <a href="https://doi.org/10.2307/1913236">https://doi.org/10.2307/1913236</a>
 </div>
-<div id="ref-Esterby:1996" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Esterby:1996" class="csl-entry" role="listitem">
 Esterby SR (1996) Review of methods for the detection and estimation of
 trends with emphasis on water quality applications. Hydrological
 Processes 10:127–149. <a href="https://doi.org/10.1002/(SICI)1099-1085(199602)10:2<127::AID-HYP354>3.0.CO;2-8">https://doi.org/10.1002/(SICI)1099-1085(199602)10:2&lt;127::AID-HYP354&gt;3.0.CO;2-8</a>
 </div>
-<div id="ref-Eun:Lee:2010" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Eun:Lee:2010" class="csl-entry" role="listitem">
 Eun CS, Lee J (2010) Mean-variance convergence around the world. Journal
 of Banking &amp; Finance 34:856–870. <a href="https://doi.org/10.1016/j.jbankfin.2009.09.016">https://doi.org/10.1016/j.jbankfin.2009.09.016</a>
 </div>
-<div id="ref-R-mgcViz" class="csl-entry" role="doc-biblioentry">
-Fasiolo M, Nedellec R (2021) mgcViz: Visualisations for generalized
-additive models. R package version 0.1.9, <a href="https://github.com/mfasiolo/mgcViz">https://github.com/mfasiolo/mgcViz</a>
+<div id="ref-R-mgcViz" class="csl-entry" role="listitem">
+Fasiolo M, Nedellec R (2025) mgcViz: Visualisations for generalized
+additive models. R package version 0.2.1, <a href="https://github.com/mfasiolo/mgcViz">https://github.com/mfasiolo/mgcViz</a>
 </div>
-<div id="ref-R-lawstat" class="csl-entry" role="doc-biblioentry">
+<div id="ref-R-lawstat" class="csl-entry" role="listitem">
 Gastwirth JL, Gel YR, Hui WLW, et al (2023) Lawstat: Tools for
 biostatistics, public policy, and law. R package version 3.6, <a href="https://CRAN.R-project.org/package=lawstat">https://CRAN.R-project.org/package=lawstat</a>
 </div>
-<div id="ref-Granger:1969" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Granger:1969" class="csl-entry" role="listitem">
 Granger CWJ (1969) Investigating causal relations by econometric models
 and cross-spectral methods. Econometrica 37:424–438. <a href="https://doi.org/10.2307/1912791">https://doi.org/10.2307/1912791</a>
 </div>
-<div id="ref-R-FinTS" class="csl-entry" role="doc-biblioentry">
-Graves S (2019) FinTS: Companion to tsay (2005) analysis of financial
-time series. R package version 0.4-6, <a href="https://r-forge.r-project.org/projects/fints/">https://r-forge.r-project.org/projects/fints/</a>
+<div id="ref-R-FinTS" class="csl-entry" role="listitem">
+Graves S (2024) FinTS: Companion to tsay (2005) analysis of financial
+time series. R package version 0.4-9, <a href="https://geobosh.github.io/FinTSDoc/">https://geobosh.github.io/FinTSDoc/</a>
 </div>
-<div id="ref-Gupta:etal:1996" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Gupta:etal:1996" class="csl-entry" role="listitem">
 Gupta PL, Gupta RC, Tripathi RC (1996) Analysis of zero-adjusted count
 data. Computational Statistics &amp; Data Analysis 23:207–218. <a href="https://doi.org/10.1016/S0167-9473(96)00032-1">https://doi.org/10.1016/S0167-9473(96)00032-1</a>
 </div>
-<div id="ref-Hall:VanKeilegom:2003" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Hall:VanKeilegom:2003" class="csl-entry" role="listitem">
 Hall P, Van Keilegom I (2003) Using difference-based methods for
 inference in nonparametric regression with time series errors. Journal
 of the Royal Statistical Society: Series B (Statistical Methodology)
 65:443–456. <a href="https://doi.org/10.1111/1467-9868.00395">https://doi.org/10.1111/1467-9868.00395</a>
 </div>
-<div id="ref-Hansen:Lunde:2005" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Hansen:Lunde:2005" class="csl-entry" role="listitem">
 Hansen PR, Lunde A (2005) A comparison of volatility models: Does
 anything beat a <span>GARCH</span>(1, 1)? Journal of Applied
 Econometrics 20:873–889. <a href="https://doi.org/10.1002/jae.800">https://doi.org/10.1002/jae.800</a>
 </div>
-<div id="ref-Hardle:etal:2003" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Hardle:etal:2003" class="csl-entry" role="listitem">
 Härdle W, Horowitz J, Kreiss J-P (2003) Bootstrap methods for time
 series. International Statistical Review 71:435–459. <a href="https://doi.org/10.1111/j.1751-5823.2003.tb00485.x">https://doi.org/10.1111/j.1751-5823.2003.tb00485.x</a>
 </div>
-<div id="ref-Hastie:etal:2009" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Hastie:etal:2009" class="csl-entry" role="listitem">
 Hastie TJ, Tibshirani RJ, Friedman JH (2009) <a href="https://doi.org/10.1007/978-0-387-84858-7">The elements of
 statistical learning: Data mining, inference, and prediction</a>, 2nd
 edn. Springer, New York, NY, USA
 </div>
-<div id="ref-Hirsch:etal:1982" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Hirsch:etal:1982" class="csl-entry" role="listitem">
 Hirsch RM, Slack JR, Smith RA (1982) Techniques of trend analysis for
 monthly water quality data. Water Resources Research 18:107–121. <a href="https://doi.org/10.1029/WR018i001p00107">https://doi.org/10.1029/WR018i001p00107</a>
 </div>
-<div id="ref-R-lmtest" class="csl-entry" role="doc-biblioentry">
+<div id="ref-R-lmtest" class="csl-entry" role="listitem">
 Hothorn T, Zeileis A, Farebrother RW, Cummins C (2022) Lmtest: Testing
 linear regression models. R package version 0.9-40, <a href="https://CRAN.R-project.org/package=lmtest">https://CRAN.R-project.org/package=lmtest</a>
 </div>
-<div id="ref-R-fma" class="csl-entry" role="doc-biblioentry">
+<div id="ref-R-fma" class="csl-entry" role="listitem">
 Hyndman R (2023) Fma: Data sets from "forecasting: Methods and
 applications" by makridakis, wheelwright &amp; hyndman (1998). R package
-version 2.5, <a href="https://CRAN.R-project.org/package=fma">https://CRAN.R-project.org/package=fma</a>
+version 2.5, <a href="https://pkg.robjhyndman.com/fma/">https://pkg.robjhyndman.com/fma/</a>
 </div>
-<div id="ref-R-forecast" class="csl-entry" role="doc-biblioentry">
-Hyndman R, Athanasopoulos G, Bergmeir C, et al (2023) Forecast:
+<div id="ref-R-forecast" class="csl-entry" role="listitem">
+Hyndman R, Athanasopoulos G, Bergmeir C, et al (2025) Forecast:
 Forecasting functions for time series and linear models. R package
-version 8.21, <a href="https://CRAN.R-project.org/package=forecast">https://CRAN.R-project.org/package=forecast</a>
+version 8.24.0, <a href="https://pkg.robjhyndman.com/forecast/">https://pkg.robjhyndman.com/forecast/</a>
 </div>
-<div id="ref-R-ggpubr" class="csl-entry" role="doc-biblioentry">
-Kassambara A (2023) Ggpubr: ggplot2 based publication ready plots. R
-package version 0.6.0, <a href="https://rpkgs.datanovia.com/ggpubr/">https://rpkgs.datanovia.com/ggpubr/</a>
+<div id="ref-R-ggpubr" class="csl-entry" role="listitem">
+Kassambara A (2025) Ggpubr: ggplot2 based publication ready plots. R
+package version 0.6.1, <a href="https://rpkgs.datanovia.com/ggpubr/">https://rpkgs.datanovia.com/ggpubr/</a>
 </div>
-<div id="ref-R-oce" class="csl-entry" role="doc-biblioentry">
-Kelley D, Richards C (2023) Oce: Analysis of oceanographic data. R
-package version 1.8-1, <a href="https://dankelley.github.io/oce/">https://dankelley.github.io/oce/</a>
+<div id="ref-R-oce" class="csl-entry" role="listitem">
+Kelley D, Richards C (2024) Oce: Analysis of oceanographic data. R
+package version 1.8-3, <a href="https://dankelley.github.io/oce/">https://dankelley.github.io/oce/</a>
 </div>
-<div id="ref-Kendall:1975" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Kendall:1975" class="csl-entry" role="listitem">
 Kendall MG (1975) Rank correlation methods, 4th edn. Charles Griffin,
 London, UK
 </div>
-<div id="ref-Kirchgassner:Wolters:2007" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Kirchgassner:Wolters:2007" class="csl-entry" role="listitem">
 Kirchgässner G, Wolters J (2007) <a href="https://doi.org/10.1007/978-3-540-73291-4">Introduction to modern
 time series analysis</a>. Springer-Verlag, Berlin, Germany
 </div>
-<div id="ref-Kohn:etal:2000" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Kohn:etal:2000" class="csl-entry" role="listitem">
 Kohn R, Schimek MG, Smith M (2000) <a href="https://doi.org/10.1002/9781118150658.ch6">Spline and kernel
 regression for dependent data</a>. In: Schimek MG (ed) Smoothing and
 regression: Approaches, computation, and application. John Wiley &amp;
 Sons, Inc., New York, pp 135–158
 </div>
-<div id="ref-Kreiss:etal:2011" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Kreiss:etal:2011" class="csl-entry" role="listitem">
 Kreiss J-P, Paparoditis E, Politis DN (2011) On the range of validity of
 the autoregressive sieve bootstrap. Annals of Statistics 39:2103–2130.
 <a href="https://doi.org/10.1214/11-AOS900">https://doi.org/10.1214/11-AOS900</a>
 </div>
-<div id="ref-R-TSstudio" class="csl-entry" role="doc-biblioentry">
-Krispin R (2020) TSstudio: Functions for time series analysis and
-forecasting. R package version 0.1.6, <a href="https://github.com/RamiKrispin/TSstudio">https://github.com/RamiKrispin/TSstudio</a>
+<div id="ref-R-TSstudio" class="csl-entry" role="listitem">
+Krispin R (2023) TSstudio: Functions for time series analysis and
+forecasting. R package version 0.1.7, <a href="https://github.com/RamiKrispin/TSstudio">https://github.com/RamiKrispin/TSstudio</a>
 </div>
-<div id="ref-Latifovic:Pouliot:2007" class="csl-entry" role="doc-biblioentry">
+<div id="ref-R-caret" class="csl-entry" role="listitem">
+Kuhn M (2024) Caret: Classification and regression training. R package
+version 7.0-1, <a href="https://github.com/topepo/caret/">https://github.com/topepo/caret/</a>
+</div>
+<div id="ref-Latifovic:Pouliot:2007" class="csl-entry" role="listitem">
 Latifovic R, Pouliot D (2007) Analysis of climate change impacts on lake
 ice phenology in <span>Canada</span> using the historical satellite data
 record. Remote Sensing of Environment 106:492–507. <a href="https://doi.org/10.1016/j.rse.2006.09.015">https://doi.org/10.1016/j.rse.2006.09.015</a>
 </div>
-<div id="ref-Li:1994" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Li:1994" class="csl-entry" role="listitem">
 Li WK (1994) Time series models based on generalized linear models: Some
 further results. Biometrics 50:506–511. <a href="https://doi.org/10.2307/2533393">https://doi.org/10.2307/2533393</a>
 </div>
-<div id="ref-R-signal" class="csl-entry" role="doc-biblioentry">
-Ligges U, Short T, Kienzle P (2021) Signal: Signal processing. R package
-version 0.7-7, <a href="https://CRAN.R-project.org/package=signal">https://CRAN.R-project.org/package=signal</a>
+<div id="ref-R-signal" class="csl-entry" role="listitem">
+Ligges U, Short T, Kienzle P (2024) Signal: Signal processing. R package
+version 1.8-1, <a href="https://signal.R-forge.R-project.org">https://signal.R-forge.R-project.org</a>
 </div>
-<div id="ref-Ljung:Box:1978" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Ljung:Box:1978" class="csl-entry" role="listitem">
 Ljung GM, Box GEP (1978) On a measure of lack of fit in time series
 models. Biometrika 65:297–303. <a href="https://doi.org/10.1093/biomet/65.2.297">https://doi.org/10.1093/biomet/65.2.297</a>
 </div>
-<div id="ref-Lomb:1976" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Lomb:1976" class="csl-entry" role="listitem">
 Lomb NR (1976) Least-squares frequency analysis of unequally spaced
 data. Astrophysics and Space Science 39:447–462. <a href="https://doi.org/10.1007/BF00648343">https://doi.org/10.1007/BF00648343</a>
 </div>
-<div id="ref-Lyubchich:2016:trends" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Lyubchich:2016:trends" class="csl-entry" role="listitem">
 Lyubchich V (2016) Detecting time series trends and their
 synchronization in climate data. Intelligence Innovations Investments
 12:132–137. <a href="https://www.researchgate.net/publication/318283780_Detecting_time_series_trends_and_their_synchronization_in_climate_data">https://www.researchgate.net/publication/318283780_Detecting_time_series_trends_and_their_synchronization_in_climate_data</a>
 </div>
-<div id="ref-Lyubchich:Gel:2016:synchronism" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Lyubchich:Gel:2016:synchronism" class="csl-entry" role="listitem">
 Lyubchich V, Gel YR (2016) A local factor nonparametric test for trend
 synchronism in multiple time series. Journal of Multivariate Analysis
 150:91–104. <a href="https://doi.org/10.1016/j.jmva.2016.05.004">https://doi.org/10.1016/j.jmva.2016.05.004</a>
 </div>
-<div id="ref-Lyubchich:etal:2013:wavk" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Lyubchich:etal:2013:wavk" class="csl-entry" role="listitem">
 Lyubchich V, Gel YR, El‐Shaarawi A (2013) On detecting non‐monotonic
 trends in environmental time series: A fusion of local regression and
 bootstrap. Environmetrics 24:209–226. <a href="https://doi.org/10.1002/env.2212">https://doi.org/10.1002/env.2212</a>
 </div>
-<div id="ref-R-funtimes" class="csl-entry" role="doc-biblioentry">
+<div id="ref-R-funtimes" class="csl-entry" role="listitem">
 Lyubchich V, Gel YR, Vishwakarma S (2023) Funtimes: Functions for time
 series analysis. R package version 9.1, <a href="https://CRAN.R-project.org/package=funtimes">https://CRAN.R-project.org/package=funtimes</a>
 </div>
-<div id="ref-lyubchich3732840" class="csl-entry" role="doc-biblioentry">
+<div id="ref-lyubchich3732840" class="csl-entry" role="listitem">
 Lyubchich V, Nesslage G (2020) <a href="https://doi.org/10.5281/zenodo.3732839"><span class="nocase">Environmental drivers of golden tilefish fisheries
 v1.0</span></a>. Version v1.0. Zenodo
 </div>
-<div id="ref-Lyubchich:etal:2016:symmetry" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Lyubchich:etal:2016:symmetry" class="csl-entry" role="listitem">
 Lyubchich V, Wang X, Heyes A, Gel YR (2016) A distribution-free <span class="math inline"><em>m</em></span>-out-of-<span class="math inline"><em>n</em></span> bootstrap approach to testing
 symmetry about an unknown median. Computational Statistics &amp; Data
 Analysis 104:1–9. <a href="https://doi.org/10.1016/j.csda.2016.05.004">https://doi.org/10.1016/j.csda.2016.05.004</a>
 </div>
-<div id="ref-Marinova:McAleer:2003" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Marinova:McAleer:2003" class="csl-entry" role="listitem">
 Marinova D, McAleer M (2003) Modelling trends and volatility in
 ecological patents in the <span>USA</span>. Environmental Modelling
 &amp; Software 18:195–203. <a href="https://doi.org/10.1016/S1364-8152(02)00079-8">https://doi.org/10.1016/S1364-8152(02)00079-8</a>
 </div>
-<div id="ref-R-Kendall" class="csl-entry" role="doc-biblioentry">
+<div id="ref-R-Kendall" class="csl-entry" role="listitem">
 McLeod AI (2022) Kendall: Kendall rank correlation and mann-kendall
 trend test. R package version 2.2.1, <a href="http://www.stats.uwo.ca/faculty/aim">http://www.stats.uwo.ca/faculty/aim</a>
 </div>
-<div id="ref-Nason:2008" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Nason:2008" class="csl-entry" role="listitem">
 Nason GP (2008) <a href="https://doi.org/10.1007/978-0-387-75961-6_2">Wavelet methods in
 statistics with <span>R</span></a>. Springer, New York, NY, USA
 </div>
-<div id="ref-Nesslage:etal:2021:environmental" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Nesslage:etal:2021:environmental" class="csl-entry" role="listitem">
 Nesslage G, Lyubchich V, Nitschke P, et al (2021) Environmental drivers
 of golden tilefish (<span class="nocase">Lopholatilus
 chamaeleonticeps</span>) commercial landings and catch-per-unit-effort.
 Fisheries Oceanography 30:608–622. <a href="https://doi.org/10.1111/fog.12540">https://doi.org/10.1111/fog.12540</a>
 </div>
-<div id="ref-Noguchi:etal:2011" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Noguchi:etal:2011" class="csl-entry" role="listitem">
 Noguchi K, Gel YR, Duguay CR (2011) Bootstrap-based tests for trends in
 hydrological time series, with application to ice phenology data.
 Journal of Hydrology 410:150–161. <a href="https://doi.org/10.1016/j.jhydrol.2011.09.008">https://doi.org/10.1016/j.jhydrol.2011.09.008</a>
 </div>
-<div id="ref-R-fable" class="csl-entry" role="doc-biblioentry">
-O’Hara-Wild M, Hyndman R, Wang E (2023a) Fable: Forecasting models for
-tidy time series. R package version 0.3.3, <a href="https://CRAN.R-project.org/package=fable">https://CRAN.R-project.org/package=fable</a>
+<div id="ref-R-ggtime" class="csl-entry" role="listitem">
+O’Hara-Wild M, Huang CA, Kay M, Hyndman R (2025) Ggtime: Grammar of
+graphics and plot helpers for time series visualization. R package
+version 0.1.0, <a href="https://CRAN.R-project.org/package=ggtime">https://CRAN.R-project.org/package=ggtime</a>
 </div>
-<div id="ref-R-feasts" class="csl-entry" role="doc-biblioentry">
-O’Hara-Wild M, Hyndman R, Wang E (2023b) Feasts: Feature extraction and
-statistics for time series. R package version 0.3.1, <a href="https://CRAN.R-project.org/package=feasts">https://CRAN.R-project.org/package=feasts</a>
+<div id="ref-R-fable" class="csl-entry" role="listitem">
+O’Hara-Wild M, Hyndman R, Wang E (2024) Fable: Forecasting models for
+tidy time series. R package version 0.4.1, <a href="https://fable.tidyverts.org">https://fable.tidyverts.org</a>
 </div>
-<div id="ref-Park:etal:2014" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Park:etal:2014" class="csl-entry" role="listitem">
 Park C, Hannig J, Kang K-H (2014) Nonparametric comparison of multiple
 regression curves in scale-space. Journal of Computational and Graphical
 Statistics 23:657–677. <a href="https://doi.org/10.1080/10618600.2013.822816">https://doi.org/10.1080/10618600.2013.822816</a>
 </div>
-<div id="ref-Park:etal:2009" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Park:etal:2009" class="csl-entry" role="listitem">
 Park C, Vaughan A, Hannig J, Kang K-H (2009) Si<span>Z</span>er analysis
 for the comparison of time series. Journal of Statistical Planning and
 Inference 139:3974–3988. <a href="https://doi.org/10.1016/j.jspi.2009.05.003">https://doi.org/10.1016/j.jspi.2009.05.003</a>
 </div>
-<div id="ref-Pearl:2009" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Pearl:2009" class="csl-entry" role="listitem">
 Pearl J (2009) Causality: Models, reasoning, and inference, 2nd edn.
 Cambridge University Press, Cambridge, UK
 </div>
-<div id="ref-R-patchwork" class="csl-entry" role="doc-biblioentry">
-Pedersen TL (2022) Patchwork: The composer of plots. R package version
-1.1.2, <a href="https://CRAN.R-project.org/package=patchwork">https://CRAN.R-project.org/package=patchwork</a>
+<div id="ref-R-patchwork" class="csl-entry" role="listitem">
+Pedersen TL (2025) Patchwork: The composer of plots. R package version
+1.3.2, <a href="https://patchwork.data-imaginist.com">https://patchwork.data-imaginist.com</a>
 </div>
-<div id="ref-Perperoglou:etal:2019" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Perperoglou:etal:2019" class="csl-entry" role="listitem">
 Perperoglou A, Sauerbrei W, Abrahamowicz M, Schmid M (2019) A review of
 spline function procedures in <span>R</span>. BMC Medical Research
 Methodology 19: <a href="https://doi.org/10.1186/s12874-019-0666-3">https://doi.org/10.1186/s12874-019-0666-3</a>
 </div>
-<div id="ref-R-urca" class="csl-entry" role="doc-biblioentry">
-Pfaff B (2022) Urca: Unit root and cointegration tests for time series
-data. R package version 1.3-3, <a href="https://CRAN.R-project.org/package=urca">https://CRAN.R-project.org/package=urca</a>
+<div id="ref-R-urca" class="csl-entry" role="listitem">
+Pfaff B (2024) Urca: Unit root and cointegration tests for time series
+data. R package version 1.3-4, <a href="https://CRAN.R-project.org/package=urca">https://CRAN.R-project.org/package=urca</a>
 </div>
-<div id="ref-R-nlme" class="csl-entry" role="doc-biblioentry">
-Pinheiro J, Bates D, R Core Team (2023) Nlme: Linear and nonlinear mixed
-effects models. R package version 3.1-162, <a href="https://svn.r-project.org/R-packages/trunk/nlme/">https://svn.r-project.org/R-packages/trunk/nlme/</a>
+<div id="ref-R-nlme" class="csl-entry" role="listitem">
+Pinheiro J, Bates D, R Core Team (2025) Nlme: Linear and nonlinear mixed
+effects models. R package version 3.1-168, <a href="https://svn.r-project.org/R-packages/trunk/nlme/">https://svn.r-project.org/R-packages/trunk/nlme/</a>
 </div>
-<div id="ref-Powell:Xu:2011" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Powell:Xu:2011" class="csl-entry" role="listitem">
 Powell AM, Xu J (2011) Abrupt climate regime shifts, their potential
 forcing and fisheries impacts. Atmospheric and Climate Sciences 1:33. <a href="https://doi.org/10.4236/acs.2011.12004">https://doi.org/10.4236/acs.2011.12004</a>
 </div>
-<div id="ref-Rebane:Pearl:1987" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Rebane:Pearl:1987" class="csl-entry" role="listitem">
 Rebane G, Pearl J (1987) The recovery of causal poly-trees from
 statistical data. In: Proceedings of the third annual conference on
 uncertainty in artificial intelligence. pp 222–228
 </div>
-<div id="ref-Rice:1984" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Rice:1984" class="csl-entry" role="listitem">
 Rice J (1984) Bandwidth choice for nonparametric regression. The Annals
 of Statistics 12:1215–1230. <a href="https://doi.org/10.1214/aos/1176346788">https://doi.org/10.1214/aos/1176346788</a>
 </div>
-<div id="ref-Ruf:1999" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Ruf:1999" class="csl-entry" role="listitem">
 Ruf T (1999) The <span>Lomb–Scargle</span> periodogram in biological
 rhythm research: Analysis of incomplete and unequally spaced
 time-series. Biological Rhythm Research 30:178–201. <a href="https://doi.org/10.1076/brhm.30.2.178.1422">https://doi.org/10.1076/brhm.30.2.178.1422</a>
 </div>
-<div id="ref-R-lomb" class="csl-entry" role="doc-biblioentry">
-Ruf T, C original by Press et al. partially based on, Python module
-Astropy. the (2022) Lomb: Lomb-scargle periodogram. R package version
-2.1.0, <a href="https://CRAN.R-project.org/package=lomb">https://CRAN.R-project.org/package=lomb</a>
+<div id="ref-R-lomb" class="csl-entry" role="listitem">
+Ruf T (2024) Lomb: Lomb-scargle periodogram. R package version 2.5.0, <a href="https://CRAN.R-project.org/package=lomb">https://CRAN.R-project.org/package=lomb</a>
 </div>
-<div id="ref-Rydberg:2000" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Rydberg:2000" class="csl-entry" role="listitem">
 Rydberg TH (2000) Realistic statistical modelling of financial data.
 International Statistical Review 68:233–258. <a href="https://doi.org/10.2307/1403412">https://doi.org/10.2307/1403412</a>
 </div>
-<div id="ref-Scargle:1982" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Scargle:1982" class="csl-entry" role="listitem">
 Scargle JD (1982) Studies in astronomical time series analysis.
 <span>II</span> – statistical aspects of spectral analysis of unevenly
 spaced data. Astrophysical Journal 263:835–853. <a href="https://doi.org/10.1086/160554">https://doi.org/10.1086/160554</a>
 </div>
-<div id="ref-R-GGally" class="csl-entry" role="doc-biblioentry">
-Schloerke B, Cook D, Larmarange J, et al (2021) GGally: Extension to
-ggplot2. R package version 2.1.2, <a href="https://CRAN.R-project.org/package=GGally">https://CRAN.R-project.org/package=GGally</a>
+<div id="ref-R-GGally" class="csl-entry" role="listitem">
+Schloerke B, Cook D, Larmarange J, et al (2025) GGally: Extension to
+ggplot2. R package version 2.4.0, <a href="https://ggobi.github.io/ggally/">https://ggobi.github.io/ggally/</a>
 </div>
-<div id="ref-Seidel:etal:2004" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Seidel:etal:2004" class="csl-entry" role="listitem">
 Seidel DJ, Lanzante JR (2004) An assessment of three alternatives to
 linear trends for characterizing global atmospheric temperature changes.
 Journal of Geophysical Research: Atmospheres 109: <a href="https://doi.org/10.1029/2003JD004414">https://doi.org/10.1029/2003JD004414</a>
 </div>
-<div id="ref-Shumway:Stoffer:2011" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Shumway:Stoffer:2011" class="csl-entry" role="listitem">
 Shumway RH, Stoffer DS (2011) <a href="https://doi.org/10.1007/978-1-4419-7865-3">Time series analysis
 and its applications with <span>R</span> examples</a>, 3rd edn.
 Springer, New York, NY, USA
 </div>
-<div id="ref-Shumway:Stoffer:2014" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Shumway:Stoffer:2014" class="csl-entry" role="listitem">
 Shumway RH, Stoffer DS (2014) Time series analysis and its applications
 with <span>R</span> examples, 3-EZ. Free Texts in Statistics
 </div>
-<div id="ref-Shumway:Stoffer:2017" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Shumway:Stoffer:2017" class="csl-entry" role="listitem">
 Shumway RH, Stoffer DS (2017) <a href="https://doi.org/10.1007/978-3-319-52452-8">Time series analysis
 and its applications with <span>R</span> examples</a>, 4th edn.
 Springer, New York, NY, USA
 </div>
-<div id="ref-R-plotly" class="csl-entry" role="doc-biblioentry">
-Sievert C, Parmer C, Hocking T, et al (2023) Plotly: Create interactive
-web graphics via plotly.js. R package version 4.10.2, <a href="https://CRAN.R-project.org/package=plotly">https://CRAN.R-project.org/package=plotly</a>
+<div id="ref-R-plotly" class="csl-entry" role="listitem">
+Sievert C, Parmer C, Hocking T, et al (2025) Plotly: Create interactive
+web graphics via plotly.js. R package version 4.11.0, <a href="https://plotly-r.com">https://plotly-r.com</a>
 </div>
-<div id="ref-Siskey:etal:2016:periodicity" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Siskey:etal:2016:periodicity" class="csl-entry" role="listitem">
 Siskey MR, Lyubchich V, Liang D, et al (2016) Periodicity of <span class="nocase">strontium:calcium</span> across annuli further validates
 otolith-ageing for <span>Atlantic</span> bluefin tuna
 (<span>Thunnus</span> thynnus). Fisheries Research 177:13–17. <a href="https://doi.org/10.1016/j.fishres.2016.01.004">https://doi.org/10.1016/j.fishres.2016.01.004</a>
 </div>
-<div id="ref-Soliman:etal:2019:influenza" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Soliman:etal:2019:influenza" class="csl-entry" role="listitem">
 Soliman M, Lyubchich V, Gel YR (2019) Complementing the power of deep
 learning with statistical model fusion: Probabilistic forecasting of
 influenza in <span>Dallas County, Texas, USA</span>. Epidemics
 28:100345. <a href="https://doi.org/10.1016/j.epidem.2019.05.004">https://doi.org/10.1016/j.epidem.2019.05.004</a>
 </div>
-<div id="ref-Stasinopoulos:Rigby:2007" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Stasinopoulos:Rigby:2007" class="csl-entry" role="listitem">
 Stasinopoulos DM, Rigby RA (2007) Generalized additive models for
 location scale and shape (<span>GAMLSS</span>) in <span>R</span>.
 Journal of Statistical Software 23:1–46. <a href="https://doi.org/10.18637/jss.v023.i07">https://doi.org/10.18637/jss.v023.i07</a>
 </div>
-<div id="ref-R-gamlss" class="csl-entry" role="doc-biblioentry">
-Stasinopoulos M, Rigby B (2023) Gamlss: Generalised additive models for
-location scale and shape. R package version 5.4-12, <a href="https://www.gamlss.com/">https://www.gamlss.com/</a>
-</div>
-<div id="ref-R-gamlss.ggplots" class="csl-entry" role="doc-biblioentry">
-Stasinopoulos M, Rigby B, De Bastiani F, Merder J (2023) Gamlss.ggplots:
-Plotting generalised additive model for location, scale and shape. R
-package version 2.1-2, <a href="https://www.gamlss.com/">https://www.gamlss.com/</a>
-</div>
-<div id="ref-R-gamlss.util" class="csl-entry" role="doc-biblioentry">
+<div id="ref-R-gamlss.util" class="csl-entry" role="listitem">
 Stasinopoulos M, Rigby B, Eilers P (2016) Gamlss.util: GAMLSS utilities.
 R package version 4.3-4, <a href="http://www.gamlss.org/">http://www.gamlss.org/</a>
 </div>
-<div id="ref-R-astsa" class="csl-entry" role="doc-biblioentry">
-Stoffer D, Poison N (2023) Astsa: Applied statistical time series
-analysis. R package version 2.0, <a href="https://CRAN.R-project.org/package=astsa">https://CRAN.R-project.org/package=astsa</a>
+<div id="ref-R-gamlss" class="csl-entry" role="listitem">
+Stasinopoulos M, Rigby R (2025) Gamlss: Generalized additive models for
+location scale and shape. R package version 5.5-0, <a href="https://www.gamlss.com/">https://www.gamlss.com/</a>
 </div>
-<div id="ref-Taylor:Buizza:2004" class="csl-entry" role="doc-biblioentry">
+<div id="ref-R-gamlss.ggplots" class="csl-entry" role="listitem">
+Stasinopoulos M, Rigby R, De Bastiani F (2024) Gamlss.ggplots: Plotting
+functions for generalized additive model for location scale and shape. R
+package version 2.1-12, <a href="https://www.gamlss.com/">https://www.gamlss.com/</a>
+</div>
+<div id="ref-R-astsa" class="csl-entry" role="listitem">
+Stoffer D (2025) Astsa: Applied statistical time series analysis. R
+package version 2.3, <a href="https://dsstoffer.github.io/">https://dsstoffer.github.io/</a>
+</div>
+<div id="ref-Taylor:Buizza:2004" class="csl-entry" role="listitem">
 Taylor JW, Buizza R (2004) A comparison of temperature density forecasts
 from <span>GARCH</span> and atmospheric models. Journal of Forecasting
 23:337–355. <a href="https://doi.org/10.1002/for.917">https://doi.org/10.1002/for.917</a>
 </div>
-<div id="ref-R-tseries" class="csl-entry" role="doc-biblioentry">
-Trapletti A, Hornik K (2023) Tseries: Time series analysis and
-computational finance. R package version 0.10-54, <a href="https://CRAN.R-project.org/package=tseries">https://CRAN.R-project.org/package=tseries</a>
+<div id="ref-R-tseries" class="csl-entry" role="listitem">
+Trapletti A, Hornik K (2024) Tseries: Time series analysis and
+computational finance. R package version 0.10-58, <a href="https://CRAN.R-project.org/package=tseries">https://CRAN.R-project.org/package=tseries</a>
 </div>
-<div id="ref-Tsay:2005" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Tsay:2005" class="csl-entry" role="listitem">
 Tsay RS (2005) Analysis of financial time series, 2nd edn. John Wiley
 &amp; Sons, Hoboken, NJ, USA
 </div>
-<div id="ref-VF:GM:2004" class="csl-entry" role="doc-biblioentry">
+<div id="ref-VF:GM:2004" class="csl-entry" role="listitem">
 Vilar-Fernández JM, González-Manteiga W (2004) Nonparametric comparison
 of curves with dependent errors. Statistics 38:81–99. <a href="https://doi.org/10.1080/02331880310001634656">https://doi.org/10.1080/02331880310001634656</a>
 </div>
-<div id="ref-Vogelsang:Franses:2005" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Vogelsang:Franses:2005" class="csl-entry" role="listitem">
 Vogelsang TJ, Franses PH (2005) Testing for common deterministic trend
 slopes. Journal of Econometrics 126:1–24. <a href="https://doi.org/10.1016/j.jeconom.2004.02.004">https://doi.org/10.1016/j.jeconom.2004.02.004</a>
 </div>
-<div id="ref-Wang:etal:2008" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Wang:etal:2008" class="csl-entry" role="listitem">
 Wang L, Akritas MG, Van Keilegom I (2008) An <span>ANOVA</span>-type
 nonparametric diagnostic test for heteroscedastic regression models.
 Journal of Nonparametric Statistics 20:365–382. <a href="https://doi.org/10.1080/10485250802066112">https://doi.org/10.1080/10485250802066112</a>
 </div>
-<div id="ref-R-downlit" class="csl-entry" role="doc-biblioentry">
-Wickham H (2023) Downlit: Syntax highlighting and automatic linking. R
-package version 0.4.3, <a href="https://CRAN.R-project.org/package=downlit">https://CRAN.R-project.org/package=downlit</a>
+<div id="ref-R-downlit" class="csl-entry" role="listitem">
+Wickham H (2024) Downlit: Syntax highlighting and automatic linking. R
+package version 0.4.4, <a href="https://downlit.r-lib.org/">https://downlit.r-lib.org/</a>
 </div>
-<div id="ref-R-ggplot2" class="csl-entry" role="doc-biblioentry">
-Wickham H, Chang W, Henry L, et al (2023a) ggplot2: Create elegant data
-visualisations using the grammar of graphics. R package version 3.4.2,
-<a href="https://CRAN.R-project.org/package=ggplot2">https://CRAN.R-project.org/package=ggplot2</a>
+<div id="ref-R-ggplot2" class="csl-entry" role="listitem">
+Wickham H, Chang W, Henry L, et al (2025a) ggplot2: Create elegant data
+visualisations using the grammar of graphics. R package version 4.0.0,
+<a href="https://ggplot2.tidyverse.org">https://ggplot2.tidyverse.org</a>
 </div>
-<div id="ref-R-dplyr" class="csl-entry" role="doc-biblioentry">
-Wickham H, François R, Henry L, et al (2023b) Dplyr: A grammar of data
-manipulation. R package version 1.1.2, <a href="https://CRAN.R-project.org/package=dplyr">https://CRAN.R-project.org/package=dplyr</a>
+<div id="ref-R-dplyr" class="csl-entry" role="listitem">
+Wickham H, François R, Henry L, et al (2023) Dplyr: A grammar of data
+manipulation. R package version 1.1.4, <a href="https://dplyr.tidyverse.org">https://dplyr.tidyverse.org</a>
 </div>
-<div id="ref-R-readr" class="csl-entry" role="doc-biblioentry">
-Wickham H, Hester J, Bryan J (2023c) Readr: Read rectangular text data.
-R package version 2.1.4, <a href="https://CRAN.R-project.org/package=readr">https://CRAN.R-project.org/package=readr</a>
+<div id="ref-R-readr" class="csl-entry" role="listitem">
+Wickham H, Hester J, Bryan J (2024) Readr: Read rectangular text data. R
+package version 2.1.5, <a href="https://readr.tidyverse.org">https://readr.tidyverse.org</a>
 </div>
-<div id="ref-R-xml2" class="csl-entry" role="doc-biblioentry">
-Wickham H, Hester J, Ooms J (2023d) xml2: Parse XML. R package version
-1.3.4, <a href="https://CRAN.R-project.org/package=xml2">https://CRAN.R-project.org/package=xml2</a>
+<div id="ref-R-xml2" class="csl-entry" role="listitem">
+Wickham H, Hester J, Ooms J (2025b) xml2: Parse XML. R package version
+1.4.0, <a href="https://xml2.r-lib.org">https://xml2.r-lib.org</a>
 </div>
-<div id="ref-R-mgcv" class="csl-entry" role="doc-biblioentry">
-Wood S (2023) Mgcv: Mixed GAM computation vehicle with automatic
-smoothness estimation. R package version 1.8-42, <a href="https://CRAN.R-project.org/package=mgcv">https://CRAN.R-project.org/package=mgcv</a>
+<div id="ref-R-mgcv" class="csl-entry" role="listitem">
+Wood S (2025) Mgcv: Mixed GAM computation vehicle with automatic
+smoothness estimation. R package version 1.9-3, <a href="https://CRAN.R-project.org/package=mgcv">https://CRAN.R-project.org/package=mgcv</a>
 </div>
-<div id="ref-Wood:2006book" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Wood:2006book" class="csl-entry" role="listitem">
 Wood SN (2006) Generalized additive models: An introduction with r.
 Chapman; Hall/CRC, New York, NY, USA
 </div>
-<div id="ref-Wooldridge:2013" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Wooldridge:2013" class="csl-entry" role="listitem">
 Wooldridge JM (2013) Introductory econometrics: A modern approach, 5th
 edn. Cengage Learning, Mason, OH, USA
 </div>
-<div id="ref-R-fGarch" class="csl-entry" role="doc-biblioentry">
-Wuertz D, Chalabi Y, Setz T, Maechler M (2022) fGarch: Rmetrics -
+<div id="ref-R-fGarch" class="csl-entry" role="listitem">
+Wuertz D, Chalabi Y, Setz T, et al (2024) fGarch: Rmetrics -
 autoregressive conditional heteroskedastic modelling. R package version
-4022.89, <a href="https://www.rmetrics.org">https://www.rmetrics.org</a>
+4033.92, <a href="https://geobosh.github.io/fGarchDoc/">https://geobosh.github.io/fGarchDoc/</a>
 </div>
-<div id="ref-R-knitr" class="csl-entry" role="doc-biblioentry">
-Xie Y (2023) Knitr: A general-purpose package for dynamic report
-generation in r. R package version 1.42, <a href="https://yihui.org/knitr/">https://yihui.org/knitr/</a>
+<div id="ref-R-knitr" class="csl-entry" role="listitem">
+Xie Y (2025) Knitr: A general-purpose package for dynamic report
+generation in r. R package version 1.50, <a href="https://yihui.org/knitr/">https://yihui.org/knitr/</a>
 </div>
-<div id="ref-Zeger:Qaqish:1988" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Zeger:Qaqish:1988" class="csl-entry" role="listitem">
 Zeger SL, Qaqish B (1988) Markov regression models for time series: A
 quasi-likelihood approach. Biometrics 44:1019–1031. <a href="https://doi.org/10.2307/2531732">https://doi.org/10.2307/2531732</a>
 </div>
-<div id="ref-R-dynlm" class="csl-entry" role="doc-biblioentry">
+<div id="ref-R-dynlm" class="csl-entry" role="listitem">
 Zeileis A (2019) Dynlm: Dynamic linear regression. R package version
 0.3-6, <a href="https://CRAN.R-project.org/package=dynlm">https://CRAN.R-project.org/package=dynlm</a>
 </div>
-<div id="ref-Zhang:2013" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Zhang:2013" class="csl-entry" role="listitem">
 Zhang T (2013) Clustering high-dimensional time series based on
 parallelism. Journal of the American Statistical Association
 108:577–588. <a href="https://doi.org/10.1080/01621459.2012.760458">https://doi.org/10.1080/01621459.2012.760458</a>
 </div>
-<div id="ref-Zuur:etal:2009" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Zuur:etal:2009" class="csl-entry" role="listitem">
 Zuur A, Ieno EN, Walker NJ, et al (2009) <a href="https://doi.org/10.1007/978-0-387-87458-6">Mixed effects models
 and extensions in ecology with <span>R</span></a>. Springer, New York
 </div>
@@ -785,146 +838,413 @@ and extensions in ecology with <span>R</span></a>. Springer, New York
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
-window.document.addEventListener("DOMContentLoaded", function (event) {
-  const toggleBodyColorMode = (bsSheetEl) => {
-    const mode = bsSheetEl.getAttribute("data-mode");
-    const bodyEl = window.document.querySelector("body");
-    if (mode === "dark") {
-      bodyEl.classList.add("quarto-dark");
-      bodyEl.classList.remove("quarto-light");
-    } else {
-      bodyEl.classList.add("quarto-light");
-      bodyEl.classList.remove("quarto-dark");
-    }
-  }
-  const toggleBodyColorPrimary = () => {
-    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-    if (bsSheetEl) {
-      toggleBodyColorMode(bsSheetEl);
-    }
-  }
-  toggleBodyColorPrimary();  
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
-  };
-  anchorJS.add('.anchored');
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
-    }
-  });
-  clipboard.on('success', function(e) {
-    // button target
-    const button = e.trigger;
-    // don't keep focus
-    button.blur();
-    // flash "checked"
-    button.classList.add('code-copy-button-checked');
-    var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copied!");
-    let tooltip;
-    if (window.bootstrap) {
-      button.setAttribute("data-bs-toggle", "tooltip");
-      button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
-      tooltip = new bootstrap.Tooltip(button, 
-        { trigger: "manual", 
-          customClass: "code-copy-button-tooltip",
-          offset: [0, -8]});
-      tooltip.show();    
-    }
-    setTimeout(function() {
-      if (tooltip) {
-        tooltip.hide();
-        button.removeAttribute("data-bs-title");
-        button.removeAttribute("data-bs-toggle");
-        button.removeAttribute("data-bs-placement");
-      }
-      button.setAttribute("title", currentTitle);
-      button.classList.remove('code-copy-button-checked');
-    }, 1000);
-    // clear code selection
-    e.clearSelection();
-  });
-  function tippyHover(el, contentFn) {
-    const config = {
-      allowHTML: true,
-      content: contentFn,
-      maxWidth: 500,
-      delay: 100,
-      arrow: false,
-      appendTo: function(el) {
-          return el.parentElement;
-      },
-      interactive: true,
-      interactiveBorder: 10,
-      theme: 'quarto',
-      placement: 'bottom-start'
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
     };
-    window.tippy(el, config); 
-  }
-  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-  for (var i=0; i<noterefs.length; i++) {
-    const ref = noterefs[i];
-    tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-      try { href = new URL(href).hash; } catch {}
-      const id = href.replace(/^#\/?/, "");
-      const note = window.document.getElementById(id);
-      return note.innerHTML;
-    });
-  }
-  const findCites = (el) => {
-    const parentEl = el.parentElement;
-    if (parentEl) {
-      const cites = parentEl.dataset.cites;
-      if (cites) {
-        return {
-          el,
-          cites: cites.split(' ')
-        };
-      } else {
-        return findCites(el.parentElement)
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
       }
-    } else {
-      return undefined;
+      return false;
     }
-  };
-  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-  for (var i=0; i<bibliorefs.length; i++) {
-    const ref = bibliorefs[i];
-    const citeInfo = findCites(ref);
-    if (citeInfo) {
-      tippyHover(citeInfo.el, function() {
-        var popup = window.document.createElement('div');
-        citeInfo.cites.forEach(function(cite) {
-          var citeDiv = window.document.createElement('div');
-          citeDiv.classList.add('hanging-indent');
-          citeDiv.classList.add('csl-entry');
-          var biblioDiv = window.document.getElementById('ref-' + cite);
-          if (biblioDiv) {
-            citeDiv.innerHTML = biblioDiv.innerHTML;
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
           }
-          popup.appendChild(citeDiv);
-        });
-        return popup.innerHTML;
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
       });
     }
-  }
-});
-</script>
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./software.html" class="pagination-link">
+      <a href="./software.html" class="pagination-link" aria-label="Software">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Software</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./s1_wls.html" class="pagination-link">
+      <a href="./s1_wls.html" class="pagination-link" aria-label="Weighted least squares">
         <span class="nav-page-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Weighted least squares</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
@@ -933,4 +1253,5 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
-</body></html>
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions"><ul><li><a href="https://github.com/vlyubchich/tsar/edit/master/references.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/vlyubchich/tsar/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

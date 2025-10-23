@@ -2,9 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.335">
+<meta name="generator" content="quarto-1.8.25">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>Time Series Analysis - Appendix C — Synchrony of parametric trends</title>
+<title>Appendix C — Synchrony of parametric trends – Time Series Analysis</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -14,9 +14,11 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -43,48 +45,19 @@ pre.numberSource code > span > a:first-child::before
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
     padding: 0 4px; width: 4em;
-    color: #aaaaaa;
   }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
 div.sourceCode
   {   }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+/* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
 }
-.hanging div.csl-entry {
+.hanging-indent div.csl-entry {
   margin-left:2em;
   text-indent:-2em;
 }
@@ -98,8 +71,7 @@ div.csl-right-inline {
 }
 div.csl-indent {
   margin-left: 2em;
-}
-</style>
+}</style>
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
@@ -108,24 +80,32 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./s_practice.html" rel="next">
+<link href="./s7_garma.html" rel="next">
 <link href="./s2_gls.html" rel="prev">
-<link href="./TSAfav.png" rel="icon" type="image/png">
-<script src="site_libs/quarto-html/quarto.js"></script>
+<link href="./tsar_fav.png" rel="icon" type="image/png">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -134,28 +114,62 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
-}</script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+}</script><script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 </head>
-<body class="nav-sidebar floating">
+<body class="nav-sidebar floating quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">Appendix C — Synchrony of parametric trends</h1>
-      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
-        <i class="bi bi-chevron-right"></i>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./s1_wls.html">Appendices</a></li><li class="breadcrumb-item"><a href="./s4_trendsync.html"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Synchrony of parametric trends</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
       </button>
     </div>
   </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Time Series Analysis</a> 
         <div class="sidebar-tools-main">
-    <a href="https://github.com/vlyubchich/tsar/" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
-  <a href="" class="quarto-reader-toggle sidebar-tool" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+    <a href="https://github.com/vlyubchich/tsar/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
   <i class="bi"></i>
   </div>
@@ -163,116 +177,148 @@ div.csl-indent {
 </div>
     </div>
       </div>
-      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
         <div id="quarto-search" class="" title="Search"></div>
         </div>
-      </div>
+        </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./l01_regression.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Review of Linear Regression</span></a>
+  <a href="./l01_regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Review of Linear Regression</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./l02_tsintro.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to Time Series Analysis</span></a>
+  <a href="./l02_tsintro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to Time Series Analysis</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./l03_smoothing.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Smoothing, Detrending, and Deseasonalizing</span></a>
+  <a href="./l03_smoothing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Smoothing, Detrending, and Deseasonalizing</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./l04_arma.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Autoregressive Moving Average (ARMA) Models</span></a>
+  <a href="./l04_arma.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Autoregressive Moving Average (ARMA) Models</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./l05_arima.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Autoregressive Integrated Moving Average (ARIMA) Models</span></a>
+  <a href="./l05_arima.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Autoregressive Integrated Moving Average (ARIMA) Models</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./l06_garch.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Generalized Autoregressive Conditional Heteroskedasticity (GARCH) Models</span></a>
+  <a href="./l06_garch.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Generalized Autoregressive Conditional Heteroskedasticity (GARCH) Models</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./l07_trendtest.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Trend Detection</span></a>
+  <a href="./l07_trendtest.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Trend Detection</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./l08_tsreg1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Time Series Regression with Trends</span></a>
+  <a href="./l08_tsreg1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Time Series Regression with Trends</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./l09_tsreg2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Time Series Regression with Correlated Errors</span></a>
+  <a href="./l09_tsreg2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Time Series Regression with Correlated Errors</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./l13_spectral.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Spectral Analysis</span></a>
+  <a href="./l12_forecast.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Model Evaluation and Forecasting</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./software.html" class="sidebar-item-text sidebar-link">Software</a>
+  <a href="./l13_spectral.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Spectral Analysis</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  <a href="./software.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Software</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Appendices</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./s1_wls.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Weighted least squares</span></a>
+  <a href="./s1_wls.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Weighted least squares</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./s2_gls.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Generalized least squares</span></a>
+  <a href="./s2_gls.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Generalized least squares</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./s4_trendsync.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Synchrony of parametric trends</span></a>
+  <a href="./s4_trendsync.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Synchrony of parametric trends</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./s_practice.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Practice exercises</span></a>
+  <a href="./s7_garma.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Generalized autoregressive moving average (GARMA) models</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./s_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">Practice exercises</span></span></a>
   </div>
 </li>
       </ul>
 </li>
     </ul>
 </div>
-</nav><!-- margin-sidebar --><div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
         
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
-<h1 class="title"><span id="sec-syncparam" class="quarto-section-identifier d-none d-lg-block">Appendix C — Synchrony of parametric trends</span></h1>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./s1_wls.html">Appendices</a></li><li class="breadcrumb-item"><a href="./s4_trendsync.html"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Synchrony of parametric trends</span></a></li></ol></nav><div class="quarto-title">
+<h1 class="title"><span id="sec-syncparam" class="quarto-section-identifier">Appendix C — Synchrony of parametric trends</span></h1>
 </div>
 
 
@@ -285,19 +331,17 @@ div.csl-indent {
   </div>
   
 
-</header><div class="cell">
 
-</div>
-<p>The problem of detecting joint trend dynamics in time series is essential in a variety of applications, ranging from the analysis of macroeconomic indicators <span class="citation" data-cites="Vogelsang:Franses:2005 Eun:Lee:2010">(<a href="references.html#ref-Vogelsang:Franses:2005" role="doc-biblioref">Vogelsang and Franses 2005</a>; <a href="references.html#ref-Eun:Lee:2010" role="doc-biblioref">Eun and Lee 2010</a>)</span> to assessing patterns in ice phenology measurements from multiple locations <span class="citation" data-cites="Latifovic:Pouliot:2007 Duguay:etal:2013">(<a href="references.html#ref-Latifovic:Pouliot:2007" role="doc-biblioref">Latifovic and Pouliot 2007</a>; <a href="references.html#ref-Duguay:etal:2013" role="doc-biblioref">Duguay et al. 2013</a>)</span> to evaluating yields of financial instruments at various maturity levels <span class="citation" data-cites="Park:etal:2009">(<a href="references.html#ref-Park:etal:2009" role="doc-biblioref">Park et al. 2009</a>)</span> and cell phone download activity at different area codes <span class="citation" data-cites="Degras:etal:2012">(<a href="references.html#ref-Degras:etal:2012" role="doc-biblioref">Degras et al. 2012</a>)</span>.</p>
+</header><p>The problem of detecting joint trend dynamics in time series is essential in a variety of applications, ranging from the analysis of macroeconomic indicators <span class="citation" data-cites="Vogelsang:Franses:2005 Eun:Lee:2010">(<a href="references.html#ref-Vogelsang:Franses:2005" role="doc-biblioref">Vogelsang and Franses 2005</a>; <a href="references.html#ref-Eun:Lee:2010" role="doc-biblioref">Eun and Lee 2010</a>)</span> to assessing patterns in ice phenology measurements from multiple locations <span class="citation" data-cites="Latifovic:Pouliot:2007 Duguay:etal:2013">(<a href="references.html#ref-Latifovic:Pouliot:2007" role="doc-biblioref">Latifovic and Pouliot 2007</a>; <a href="references.html#ref-Duguay:etal:2013" role="doc-biblioref">Duguay et al. 2013</a>)</span> to evaluating yields of financial instruments at various maturity levels <span class="citation" data-cites="Park:etal:2009">(<a href="references.html#ref-Park:etal:2009" role="doc-biblioref">Park et al. 2009</a>)</span> and cell phone download activity at different area codes <span class="citation" data-cites="Degras:etal:2012">(<a href="references.html#ref-Degras:etal:2012" role="doc-biblioref">Degras et al. 2012</a>)</span>.</p>
 <p>The extensive research on comparing trend patterns follows two main directions:</p>
 <ol type="1">
 <li>Testing for joint mean functions.</li>
-<li>Analysis of joint stochastic trends, which is closely linked to the cointegration notion by <span class="citation" data-cites="Engle:Granger:1987">Engle and Granger (<a href="references.html#ref-Engle:Granger:1987" role="doc-biblioref">1987</a>)</span> (<a href="l08_tsreg1.html#sec-cointegration"><span>Section&nbsp;8.3</span></a>).</li>
+<li>Analysis of joint stochastic trends, which is closely linked to the cointegration notion by <span class="citation" data-cites="Engle:Granger:1987">Engle and Granger (<a href="references.html#ref-Engle:Granger:1987" role="doc-biblioref">1987</a>)</span> (<a href="l08_tsreg1.html#sec-cointegration" class="quarto-xref"><span>Section 8.3</span></a>).</li>
 </ol>
 <p>Here we explore the first direction, that is, assess whether several observed time series follow the same hypothesized parametric trend.</p>
 <p>There exist many tests for comparing mean functions, but most of the developed methods assume independent errors. Substantially less is known about testing for joint deterministic trends in a time series framework.</p>
 <p>One of the methods developed for time series is by <span class="citation" data-cites="Degras:etal:2012">Degras et al. (<a href="references.html#ref-Degras:etal:2012" role="doc-biblioref">2012</a>)</span> and <span class="citation" data-cites="Zhang:2013">Zhang (<a href="references.html#ref-Zhang:2013" role="doc-biblioref">2013</a>)</span> who extended the integrated square error (ISE) based approach of <span class="citation" data-cites="VF:GM:2004">Vilar-Fernández and González-Manteiga (<a href="references.html#ref-VF:GM:2004" role="doc-biblioref">2004</a>)</span> to a case of multiple time series with weakly dependent (non)stationary errors. For a comprehensive literature review of available methodology for comparing mean functions embedded into independent errors in a time series framework, see <span class="citation" data-cites="Degras:etal:2012">Degras et al. (<a href="references.html#ref-Degras:etal:2012" role="doc-biblioref">2012</a>)</span> and <span class="citation" data-cites="Park:etal:2014">Park et al. (<a href="references.html#ref-Park:etal:2014" role="doc-biblioref">2014</a>)</span>. Most of these methods, however, either focus on aligning only two curves or require us to select multiple hyperparameters, such as the bandwidth, level of smoothness, and window size for a long-run variance function. As mentioned by <span class="citation" data-cites="Park:etal:2014">Park et al. (<a href="references.html#ref-Park:etal:2014" role="doc-biblioref">2014</a>)</span>, the choice of such <em>multiple nuisance parameters</em> is challenging for a comparison of curves (even under the independent and identically distributed setup) and often leads to inadequate performance, especially in samples of moderate size.</p>
-<p>As an alternative, consider an extension of the WAVK test (<a href="l07_trendtest.html#sec-WAVK"><span>Section&nbsp;7.4.2</span></a>) to a case of multiple time series <span class="citation" data-cites="Lyubchich:Gel:2016:synchronism">(<a href="references.html#ref-Lyubchich:Gel:2016:synchronism" role="doc-biblioref">Lyubchich and Gel 2016</a>)</span>. Let us observe <span class="math inline">\(N\)</span> time series <span class="math display">\[
+<p>As an alternative, consider an extension of the WAVK test (<a href="l07_trendtest.html#sec-WAVK" class="quarto-xref"><span>Section 7.4.2</span></a>) to a case of multiple time series <span class="citation" data-cites="Lyubchich:Gel:2016:synchronism">(<a href="references.html#ref-Lyubchich:Gel:2016:synchronism" role="doc-biblioref">Lyubchich and Gel 2016</a>)</span>. Let us observe <span class="math inline">\(N\)</span> time series <span class="math display">\[
 Y_{it} = \mu_i(t/T) + \epsilon_{it},
 \]</span> where <span class="math inline">\(i = 1, \dots, N\)</span> (<span class="math inline">\(N\)</span> is the number of time series), <span class="math inline">\(t=1, \dots, T\)</span> (<span class="math inline">\(T\)</span> is the length of the time series), <span class="math inline">\(\mu_i(u)\)</span> (<span class="math inline">\(0&lt;u\leqslant 1\)</span>) are unknown smooth trend functions, and the noise <span class="math inline">\(\epsilon_{it}\)</span> can be represented as a finite-order AR(<span class="math inline">\(p\)</span>) process or infinite-order AR(<span class="math inline">\(\infty\)</span>) process with i.i.d. innovations <span class="math inline">\({e}_{it}\)</span>.</p>
 <p>We are interested in testing whether these <span class="math inline">\(N\)</span> observed time series have the same trend of some pre-specified smooth parametric form <span class="math inline">\(f(\theta, u)\)</span>:</p>
@@ -335,13 +379,13 @@ s_i^2= \frac{\sum_{t=2}^T(\hat{e}_{it}-\hat{e}_{i,t-1})^2}{2(T-1)}.
 </ol>
 <p>See the application of both the WAVK and synchrony tests in <span class="citation" data-cites="Lyubchich:2016:trends">Lyubchich (<a href="references.html#ref-Lyubchich:2016:trends" role="doc-biblioref">2016</a>)</span>.</p>
 <p>If the null hypothesis is rejected, the method does not tell, however, what was the reason, and which particular time series caused the rejection of the <span class="math inline">\(H_0\)</span>. One can remove the time series (or several time series at once) with the largest WAVK statistic(s) and apply the test again, although repeated testing increases the probability of Type I error. For an application of this method in trend clustering, see <a href="https://cran.r-project.org/web/packages/funtimes/vignettes/tsclusters.html">this vignette</a>.</p>
-<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
-Example: CMIP5 vs.&nbsp;observations
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Example: CMIP5 vs.&nbsp;observations
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -351,31 +395,34 @@ Example: CMIP5 vs.&nbsp;observations
 <li>observed global temperature anomalies relative to the base period of 1981–2010.</li>
 </ul>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">D</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"data/CMIP5.csv"</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">D</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"data/CMIP5.csv"</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="fl">1948</span> <span class="op">&lt;=</span> <span class="va">Year</span> <span class="op">&amp;</span> <span class="va">Year</span> <span class="op">&lt;=</span> <span class="fl">2013</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>    <span class="fu">mutate</span><span class="op">(</span>Temp_CMIP5 <span class="op">=</span> <span class="va">Temp_CMIP5</span> <span class="op">-</span> <span class="fl">273.15</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>    <span class="fu">mutate</span><span class="op">(</span>Temp_CMIP5 <span class="op">=</span> <span class="va">Temp_CMIP5</span> <span class="op">-</span> <span class="fl">273.15</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<p>See <a href="#fig-CMIP5">Figure&nbsp;<span>C.1</span></a> showing the time series plots after converting the CMIP data to degrees Celsius.</p>
+<p>See <a href="#fig-CMIP5" class="quarto-xref">Figure&nbsp;<span>C.1</span></a> showing the time series plots after converting the CMIP data to degrees Celsius.</p>
 <div class="cell">
-<details><summary>Code</summary><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="va">D</span> <span class="op">%&gt;%</span> <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Year</span>, y <span class="op">=</span> <span class="va">Temp_CMIP5</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="va">D</span> <span class="op">%&gt;%</span> <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Year</span>, y <span class="op">=</span> <span class="va">Temp_CMIP5</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="va">D</span> <span class="op">%&gt;%</span> <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Year</span>, y <span class="op">=</span> <span class="va">Temp_obs</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span></span>
-<span>    <span class="fu">plot_annotation</span><span class="op">(</span>tag_levels <span class="op">=</span> <span class="st">'A'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>    <span class="fu">plot_annotation</span><span class="op">(</span>tag_levels <span class="op">=</span> <span class="st">'A'</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
-<div id="fig-CMIP5" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="s4_trendsync_files/figure-html/fig-CMIP5-1.png" class="img-fluid figure-img" width="768"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;C.1: Global annual mean temperature (°C) in 1948–2013: CMIP5 multi-model average and observed anomalies relative to the base period of 1981–2010.</figcaption><p></p>
-</figure>
+<div id="fig-CMIP5" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-CMIP5-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="s4_trendsync_files/figure-html/fig-CMIP5-1.png" class="img-fluid figure-img" width="768">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-CMIP5-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;C.1: Global annual mean temperature (°C) in 1948–2013: CMIP5 multi-model average and observed anomalies relative to the base period of 1981–2010.
+</figcaption></figure>
 </div>
 </div>
 </div>
 <p>Test the synchrony of parametric <em>linear</em> trends in these time series:</p>
 <div class="cell">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
-<span><span class="fu">funtimes</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/funtimes/man/sync_test.html">sync_test</a></span><span class="op">(</span><span class="va">D</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Temp_CMIP5"</span>, <span class="st">"Temp_obs"</span><span class="op">)</span><span class="op">]</span> <span class="op">~</span> <span class="va">t</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="fu">funtimes</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/funtimes/man/sync_test.html">sync_test</a></span><span class="op">(</span><span class="va">D</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Temp_CMIP5"</span>, <span class="st">"Temp_obs"</span><span class="op">)</span><span class="op">]</span> <span class="op">~</span> <span class="va">t</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Nonparametric test for synchronism of parametric trends
@@ -410,8 +457,8 @@ Example: CMIP5 vs.&nbsp;observations
 <p>The <span class="math inline">\(p\)</span>-value below the usual significance level <span class="math inline">\(\alpha = 0.05\)</span> allows us to reject the null hypothesis, however, as <span class="citation" data-cites="Lyubchich:2016:trends">Lyubchich (<a href="references.html#ref-Lyubchich:2016:trends" role="doc-biblioref">2016</a>)</span> pointed out, the decision would differ if more confidence is required (e.g., <span class="math inline">\(\alpha = 0.01\)</span>). Note that the <span class="math inline">\(p\)</span>-value of 0.012 reported by <span class="citation" data-cites="Lyubchich:2016:trends">Lyubchich (<a href="references.html#ref-Lyubchich:2016:trends" role="doc-biblioref">2016</a>)</span> differs from the one reported above due to the function settings and randomness due to the bootstrapping. We should save the random number generator state with <code><a href="https://rdrr.io/r/base/Random.html">set.seed()</a></code> for replicability (so the test results are exactly the same every time the test is applied), and use a larger number of bootstrap replications <code>B</code> for consistency (so the test leads to the same conclusions when the function <code><a href="https://rdrr.io/r/base/Random.html">set.seed()</a></code> is not used).</p>
 <p>Now test the synchrony of parametric <em>quadratic</em> trends in these time series:</p>
 <div class="cell">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
-<span><span class="fu">funtimes</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/funtimes/man/sync_test.html">sync_test</a></span><span class="op">(</span><span class="va">D</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Temp_CMIP5"</span>, <span class="st">"Temp_obs"</span><span class="op">)</span><span class="op">]</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html">poly</a></span><span class="op">(</span><span class="va">t</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="fu">funtimes</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/funtimes/man/sync_test.html">sync_test</a></span><span class="op">(</span><span class="va">D</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Temp_CMIP5"</span>, <span class="st">"Temp_obs"</span><span class="op">)</span><span class="op">]</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html">poly</a></span><span class="op">(</span><span class="va">t</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt;  Nonparametric test for synchronism of parametric trends
@@ -422,7 +469,7 @@ Example: CMIP5 vs.&nbsp;observations
 #&gt; sample estimates:
 #&gt; $common_trend_estimates
 #&gt;             Estimate Std. Error  t value Pr(&gt;|t|)
-#&gt; (Intercept) 7.52e-16     0.0324 2.32e-14 1.00e+00
+#&gt; (Intercept) 6.72e-16     0.0324 2.07e-14 1.00e+00
 #&gt; poly(t, 2)1 7.27e+00     0.2632 2.76e+01 6.20e-37
 #&gt; poly(t, 2)2 2.28e+00     0.2632 8.65e+00 2.62e-12
 #&gt; 
@@ -449,188 +496,455 @@ Example: CMIP5 vs.&nbsp;observations
 </div>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
-<div id="ref-Degras:etal:2012" class="csl-entry" role="doc-biblioentry">
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-Degras:etal:2012" class="csl-entry" role="listitem">
 Degras D, Xu Z, Zhang T, Wu WB (2012) Testing for parallelism among trends in multiple time series. <span>IEEE</span> Transactions on Signal Processing 60:1087–1097. <a href="https://doi.org/10.1109/TSP.2011.2177831">https://doi.org/10.1109/TSP.2011.2177831</a>
 </div>
-<div id="ref-Duguay:etal:2013" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Duguay:etal:2013" class="csl-entry" role="listitem">
 Duguay CR, Brown L, Kang K-K, Kheyrollah Pour H (2013) State of the climate in 2012: Lake ice. Bulletin of the American Meteorological Society 94:S124–S126. <a href="https://doi.org/10.1175/2013BAMSStateoftheClimate.1">https://doi.org/10.1175/2013BAMSStateoftheClimate.1</a>
 </div>
-<div id="ref-Engle:Granger:1987" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Engle:Granger:1987" class="csl-entry" role="listitem">
 Engle RF, Granger CWJ (1987) Co-integration and error correction: Representation, estimation, and testing. Econometrica 55:251–276. <a href="https://doi.org/10.2307/1913236">https://doi.org/10.2307/1913236</a>
 </div>
-<div id="ref-Eun:Lee:2010" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Eun:Lee:2010" class="csl-entry" role="listitem">
 Eun CS, Lee J (2010) Mean-variance convergence around the world. Journal of Banking &amp; Finance 34:856–870. <a href="https://doi.org/10.1016/j.jbankfin.2009.09.016">https://doi.org/10.1016/j.jbankfin.2009.09.016</a>
 </div>
-<div id="ref-Latifovic:Pouliot:2007" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Latifovic:Pouliot:2007" class="csl-entry" role="listitem">
 Latifovic R, Pouliot D (2007) Analysis of climate change impacts on lake ice phenology in <span>Canada</span> using the historical satellite data record. Remote Sensing of Environment 106:492–507. <a href="https://doi.org/10.1016/j.rse.2006.09.015">https://doi.org/10.1016/j.rse.2006.09.015</a>
 </div>
-<div id="ref-Lyubchich:2016:trends" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Lyubchich:2016:trends" class="csl-entry" role="listitem">
 Lyubchich V (2016) Detecting time series trends and their synchronization in climate data. Intelligence Innovations Investments 12:132–137. <a href="https://www.researchgate.net/publication/318283780_Detecting_time_series_trends_and_their_synchronization_in_climate_data">https://www.researchgate.net/publication/318283780_Detecting_time_series_trends_and_their_synchronization_in_climate_data</a>
 </div>
-<div id="ref-Lyubchich:Gel:2016:synchronism" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Lyubchich:Gel:2016:synchronism" class="csl-entry" role="listitem">
 Lyubchich V, Gel YR (2016) A local factor nonparametric test for trend synchronism in multiple time series. Journal of Multivariate Analysis 150:91–104. <a href="https://doi.org/10.1016/j.jmva.2016.05.004">https://doi.org/10.1016/j.jmva.2016.05.004</a>
 </div>
-<div id="ref-Park:etal:2014" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Park:etal:2014" class="csl-entry" role="listitem">
 Park C, Hannig J, Kang K-H (2014) Nonparametric comparison of multiple regression curves in scale-space. Journal of Computational and Graphical Statistics 23:657–677. <a href="https://doi.org/10.1080/10618600.2013.822816">https://doi.org/10.1080/10618600.2013.822816</a>
 </div>
-<div id="ref-Park:etal:2009" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Park:etal:2009" class="csl-entry" role="listitem">
 Park C, Vaughan A, Hannig J, Kang K-H (2009) Si<span>Z</span>er analysis for the comparison of time series. Journal of Statistical Planning and Inference 139:3974–3988. <a href="https://doi.org/10.1016/j.jspi.2009.05.003">https://doi.org/10.1016/j.jspi.2009.05.003</a>
 </div>
-<div id="ref-Rice:1984" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Rice:1984" class="csl-entry" role="listitem">
 Rice J (1984) Bandwidth choice for nonparametric regression. The Annals of Statistics 12:1215–1230. <a href="https://doi.org/10.1214/aos/1176346788">https://doi.org/10.1214/aos/1176346788</a>
 </div>
-<div id="ref-VF:GM:2004" class="csl-entry" role="doc-biblioentry">
+<div id="ref-VF:GM:2004" class="csl-entry" role="listitem">
 Vilar-Fernández JM, González-Manteiga W (2004) Nonparametric comparison of curves with dependent errors. Statistics 38:81–99. <a href="https://doi.org/10.1080/02331880310001634656">https://doi.org/10.1080/02331880310001634656</a>
 </div>
-<div id="ref-Vogelsang:Franses:2005" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Vogelsang:Franses:2005" class="csl-entry" role="listitem">
 Vogelsang TJ, Franses PH (2005) Testing for common deterministic trend slopes. Journal of Econometrics 126:1–24. <a href="https://doi.org/10.1016/j.jeconom.2004.02.004">https://doi.org/10.1016/j.jeconom.2004.02.004</a>
 </div>
-<div id="ref-Zhang:2013" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Zhang:2013" class="csl-entry" role="listitem">
 Zhang T (2013) Clustering high-dimensional time series based on parallelism. Journal of the American Statistical Association 108:577–588. <a href="https://doi.org/10.1080/01621459.2012.760458">https://doi.org/10.1080/01621459.2012.760458</a>
 </div>
 </div>
 
 </main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
-window.document.addEventListener("DOMContentLoaded", function (event) {
-  const toggleBodyColorMode = (bsSheetEl) => {
-    const mode = bsSheetEl.getAttribute("data-mode");
-    const bodyEl = window.document.querySelector("body");
-    if (mode === "dark") {
-      bodyEl.classList.add("quarto-dark");
-      bodyEl.classList.remove("quarto-light");
-    } else {
-      bodyEl.classList.add("quarto-light");
-      bodyEl.classList.remove("quarto-dark");
-    }
-  }
-  const toggleBodyColorPrimary = () => {
-    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-    if (bsSheetEl) {
-      toggleBodyColorMode(bsSheetEl);
-    }
-  }
-  toggleBodyColorPrimary();  
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
-  };
-  anchorJS.add('.anchored');
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
-    }
-  });
-  clipboard.on('success', function(e) {
-    // button target
-    const button = e.trigger;
-    // don't keep focus
-    button.blur();
-    // flash "checked"
-    button.classList.add('code-copy-button-checked');
-    var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copied!");
-    let tooltip;
-    if (window.bootstrap) {
-      button.setAttribute("data-bs-toggle", "tooltip");
-      button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
-      tooltip = new bootstrap.Tooltip(button, 
-        { trigger: "manual", 
-          customClass: "code-copy-button-tooltip",
-          offset: [0, -8]});
-      tooltip.show();    
-    }
-    setTimeout(function() {
-      if (tooltip) {
-        tooltip.hide();
-        button.removeAttribute("data-bs-title");
-        button.removeAttribute("data-bs-toggle");
-        button.removeAttribute("data-bs-placement");
-      }
-      button.setAttribute("title", currentTitle);
-      button.classList.remove('code-copy-button-checked');
-    }, 1000);
-    // clear code selection
-    e.clearSelection();
-  });
-  function tippyHover(el, contentFn) {
-    const config = {
-      allowHTML: true,
-      content: contentFn,
-      maxWidth: 500,
-      delay: 100,
-      arrow: false,
-      appendTo: function(el) {
-          return el.parentElement;
-      },
-      interactive: true,
-      interactiveBorder: 10,
-      theme: 'quarto',
-      placement: 'bottom-start'
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
     };
-    window.tippy(el, config); 
-  }
-  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-  for (var i=0; i<noterefs.length; i++) {
-    const ref = noterefs[i];
-    tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-      try { href = new URL(href).hash; } catch {}
-      const id = href.replace(/^#\/?/, "");
-      const note = window.document.getElementById(id);
-      return note.innerHTML;
-    });
-  }
-  const findCites = (el) => {
-    const parentEl = el.parentElement;
-    if (parentEl) {
-      const cites = parentEl.dataset.cites;
-      if (cites) {
-        return {
-          el,
-          cites: cites.split(' ')
-        };
-      } else {
-        return findCites(el.parentElement)
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
       }
-    } else {
-      return undefined;
+      return false;
     }
-  };
-  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-  for (var i=0; i<bibliorefs.length; i++) {
-    const ref = bibliorefs[i];
-    const citeInfo = findCites(ref);
-    if (citeInfo) {
-      tippyHover(citeInfo.el, function() {
-        var popup = window.document.createElement('div');
-        citeInfo.cites.forEach(function(cite) {
-          var citeDiv = window.document.createElement('div');
-          citeDiv.classList.add('hanging-indent');
-          citeDiv.classList.add('csl-entry');
-          var biblioDiv = window.document.getElementById('ref-' + cite);
-          if (biblioDiv) {
-            citeDiv.innerHTML = biblioDiv.innerHTML;
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
           }
-          popup.appendChild(citeDiv);
-        });
-        return popup.innerHTML;
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
       });
     }
-  }
-});
-</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
-      <a href="./s2_gls.html" class="pagination-link">
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="./s2_gls.html" class="pagination-link" aria-label="Generalized least squares">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Generalized least squares</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./s_practice.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Practice exercises</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./s7_garma.html" class="pagination-link" aria-label="Generalized autoregressive moving average (GARMA) models">
+        <span class="nav-page-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Generalized autoregressive moving average (GARMA) models</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -638,4 +952,4 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
-</body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions"><ul><li><a href="https://github.com/vlyubchich/tsar/edit/master/s4_trendsync.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/vlyubchich/tsar/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

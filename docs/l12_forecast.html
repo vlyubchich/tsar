@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>10&nbsp; Model Evaluation and Forecasting – Time Series Analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./l13_spectral.html" rel="next">
+<link href="./l09_tsreg2.html" rel="prev">
+<link href="./tsar_fav.png" rel="icon" type="image/png">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script><script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+</head>
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./l12_forecast.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Model Evaluation and Forecasting</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Time Series Analysis</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/vlyubchich/tsar/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l01_regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Review of Linear Regression</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l02_tsintro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to Time Series Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l03_smoothing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Smoothing, Detrending, and Deseasonalizing</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l04_arma.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Autoregressive Moving Average (ARMA) Models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l05_arima.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Autoregressive Integrated Moving Average (ARIMA) Models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l06_garch.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Generalized Autoregressive Conditional Heteroskedasticity (GARCH) Models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l07_trendtest.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Trend Detection</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l08_tsreg1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Time Series Regression with Trends</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l09_tsreg2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Time Series Regression with Correlated Errors</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l12_forecast.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Model Evaluation and Forecasting</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l13_spectral.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Spectral Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./software.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Software</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./s1_wls.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Weighted least squares</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./s2_gls.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Generalized least squares</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./s4_trendsync.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Synchrony of parametric trends</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./s7_garma.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Generalized autoregressive moving average (GARMA) models</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./s_practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">Practice exercises</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+    </ul>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+<li>
+<a href="#time-series-forecasts" id="toc-time-series-forecasts" class="nav-link active" data-scroll-target="#time-series-forecasts"><span class="header-section-number">10.1</span> Time series forecasts</a>
+  <ul class="collapse">
+<li><a href="#assumptions" id="toc-assumptions" class="nav-link" data-scroll-target="#assumptions"><span class="header-section-number">10.1.1</span> Assumptions</a></li>
+  <li><a href="#how-to-obtain-forecasts-from-different-types-of-models" id="toc-how-to-obtain-forecasts-from-different-types-of-models" class="nav-link" data-scroll-target="#how-to-obtain-forecasts-from-different-types-of-models"><span class="header-section-number">10.1.2</span> How to obtain forecasts from different types of models</a></li>
+  <li><a href="#types-of-forecasts-ex-post-vs.-ex-ante" id="toc-types-of-forecasts-ex-post-vs.-ex-ante" class="nav-link" data-scroll-target="#types-of-forecasts-ex-post-vs.-ex-ante"><span class="header-section-number">10.1.3</span> Types of forecasts: ex-post vs.&nbsp;ex-ante</a></li>
+  <li><a href="#typical-set-of-models-to-compare" id="toc-typical-set-of-models-to-compare" class="nav-link" data-scroll-target="#typical-set-of-models-to-compare"><span class="header-section-number">10.1.4</span> Typical set of models to compare</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#cross-validation-schemes" id="toc-cross-validation-schemes" class="nav-link" data-scroll-target="#cross-validation-schemes"><span class="header-section-number">10.2</span> Cross-validation schemes</a>
+  <ul class="collapse">
+<li><a href="#principles-for-designing-cv-for-time-series" id="toc-principles-for-designing-cv-for-time-series" class="nav-link" data-scroll-target="#principles-for-designing-cv-for-time-series"><span class="header-section-number">10.2.1</span> Principles for designing CV for time series</a></li>
+  <li><a href="#common-schemes" id="toc-common-schemes" class="nav-link" data-scroll-target="#common-schemes"><span class="header-section-number">10.2.2</span> Common schemes</a></li>
+  <li><a href="#r-implementations" id="toc-r-implementations" class="nav-link" data-scroll-target="#r-implementations"><span class="header-section-number">10.2.3</span> R implementations</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#metrics-for-model-comparison" id="toc-metrics-for-model-comparison" class="nav-link" data-scroll-target="#metrics-for-model-comparison"><span class="header-section-number">10.3</span> Metrics for model comparison</a>
+  <ul class="collapse">
+<li><a href="#point-forecast-metrics" id="toc-point-forecast-metrics" class="nav-link" data-scroll-target="#point-forecast-metrics"><span class="header-section-number">10.3.1</span> Point forecast metrics</a></li>
+  <li><a href="#interval-forecast-metrics" id="toc-interval-forecast-metrics" class="nav-link" data-scroll-target="#interval-forecast-metrics"><span class="header-section-number">10.3.2</span> Interval forecast metrics</a></li>
+  </ul>
+</li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">10.4</span> Conclusion</a></li>
+  </ul><div class="toc-actions"><ul><li><a href="https://github.com/vlyubchich/tsar/edit/master/l12_forecast.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/vlyubchich/tsar/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<h1 class="title"><span id="sec-evalforecast" class="quarto-section-identifier"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Model Evaluation and Forecasting</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header><p>This lecture covers evaluation of time series forecasting models, including both point and interval forecasts. We discuss cross-validation schemes tailored to time series and strategies to avoid overfitting and data leakage.</p>
+<p><strong>Objectives</strong></p>
+<ol type="1">
+<li>Recognize the typical assumptions implied when making forecasts.</li>
+<li>Distinguish <em>ex-post</em> from <em>ex-ante</em> forecasts.</li>
+<li>Discuss peculiarities of assessing (cross-validating) regression models built for time series.</li>
+<li>Define metrics used to assess quality of point forecasts and interval forecasts.</li>
+<li>Design and implement cross-validation for time series models.</li>
+</ol>
+<p><strong>Reading materials</strong></p>
+<ul>
+<li>Chapter 9 in <span class="citation" data-cites="Brockwell:Davis:2002">Brockwell and Davis (<a href="references.html#ref-Brockwell:Davis:2002" role="doc-biblioref">2002</a>)</span>
+</li>
+<li>Chapter 7 in <span class="citation" data-cites="Hastie:etal:2009">Hastie et al. (<a href="references.html#ref-Hastie:etal:2009" role="doc-biblioref">2009</a>)</span>
+</li>
+</ul>
+<section id="time-series-forecasts" class="level2" data-number="10.1"><h2 data-number="10.1" class="anchored" data-anchor-id="time-series-forecasts">
+<span class="header-section-number">10.1</span> Time series forecasts</h2>
+<section id="assumptions" class="level3" data-number="10.1.1"><h3 data-number="10.1.1" class="anchored" data-anchor-id="assumptions">
+<span class="header-section-number">10.1.1</span> Assumptions</h3>
+<p>Forecasting models typically rely on several key assumptions:</p>
+<ul>
+<li>
+<em>Structural stability</em>: relationships among variables and their dynamics are assumed to remain the same in the future as in the past (see also <a href="l01_regression.html" class="quarto-xref"><span>Chapter 1</span></a> and <a href="l09_tsreg2.html" class="quarto-xref"><span>Chapter 9</span></a>). Violations (regime shifts, interventions) undermine predictive validity.</li>
+<li>
+<em>Data-generating process</em>: models embed assumptions such as linearity, stationarity, seasonality, or error structure (white noise, ARMA). Forecast intervals also assume a specific distribution of errors (often Gaussian) unless bootstrapped.</li>
+<li>
+<em>Timing of the dataset</em>: genuine forecasts must only use information available at the forecast origin; using future predictors is data leakage.</li>
+<li>
+<em>Exogeneity of predictors</em>: for regression with x-variables, either use leading indicators or forecast the predictors themselves (with added uncertainty).</li>
+<li>
+<em>Measurement and preprocessing</em>: missing values, outliers, and calendar effects should be handled consistently between training and deployment.</li>
+</ul></section><section id="how-to-obtain-forecasts-from-different-types-of-models" class="level3" data-number="10.1.2"><h3 data-number="10.1.2" class="anchored" data-anchor-id="how-to-obtain-forecasts-from-different-types-of-models">
+<span class="header-section-number">10.1.2</span> How to obtain forecasts from different types of models</h3>
+<p>Different model classes require different forecasting approaches.</p>
+<p><strong>White noise and simple trend models</strong></p>
+<p>For models with deterministic trends and white noise errors (e.g., linear regression), forecasts are simply the fitted values at future time points. Prediction intervals assume constant variance or use residual resampling (bootstrap).</p>
+<p>For trends fitted via <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code>, <code><a href="https://rdrr.io/pkg/mgcv/man/gam.html">mgcv::gam()</a></code>, or a similar function, use <code>predict(model, newdata = future_df)</code> to obtain point forecasts, where <code>future_df</code> should include new values of the time indices used to model the trends. Check for other arguments in the <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> method for the given object class (e.g., <code><a href="https://rdrr.io/r/stats/predict.lm.html">?predict.lm</a></code> or <code><a href="https://rdrr.io/pkg/mgcv/man/predict.gam.html">?mgcv::predict.gam</a></code>) to specify prediction intervals (e.g., <code>interval = "prediction", level = 0.95</code>) or extract standard errors (e.g., <code>se.fit = TRUE</code>) to compute custom prediction intervals.</p>
+<p><strong>Recursive models</strong></p>
+<p>ARIMA, SARIMA models and exponential smoothing methods (simple, Holt, Holt–Winters) generate forecasts recursively, with their 1-step-ahead forecasts usually being most accurate. Multi-step forecasts from these models rely on their past forecasts, so forecast uncertainty grows with the forecast horizon.</p>
+<p>Recursive forecasts typically require just the number of steps ahead, <code>h</code>, to forecast. E.g., use <code>predict(ARIMAmodel, n.ahead = h)</code> for ARIMA models fitted in base R (see <code><a href="https://rdrr.io/r/stats/predict.arima.html">?predict.Arima</a></code> or <code><a href="https://rdrr.io/r/stats/ar.html">?predict.ar</a></code>). The R package <code>forecast</code> provides a unified interface: its <code>forecast(model, h = h)</code> works for objects from <code><a href="https://pkg.robjhyndman.com/forecast/reference/ets.html">ets()</a></code>, <code><a href="https://pkg.robjhyndman.com/forecast/reference/auto.arima.html">auto.arima()</a></code>, <code><a href="https://pkg.robjhyndman.com/forecast/reference/Arima.html">Arima()</a></code>, <code><a href="https://rdrr.io/r/stats/HoltWinters.html">HoltWinters()</a></code>, and many others, returning point forecasts and prediction intervals.</p>
+<p><strong>Regression models</strong></p>
+<p>When a regression includes explanatory variables, forecasting requires values of future predictors (see discussion of ex-ante vs ex-post forecasts below), which are passed to the function using the arguments <code>newdata</code>, <code>newxreg</code>, or <code>xreg</code>. If the regression includes an ARMA component for its errors, it is predicted recursively (see the relevant help files for details, such as <code><a href="https://rdrr.io/r/stats/predict.arima.html">?predict.Arima</a></code> and <code><a href="https://pkg.robjhyndman.com/forecast/reference/forecast.Arima.html">?forecast::forecast.Arima</a></code>).</p>
+</section><section id="types-of-forecasts-ex-post-vs.-ex-ante" class="level3" data-number="10.1.3"><h3 data-number="10.1.3" class="anchored" data-anchor-id="types-of-forecasts-ex-post-vs.-ex-ante">
+<span class="header-section-number">10.1.3</span> Types of forecasts: ex-post vs.&nbsp;ex-ante</h3>
+<p>Let <span class="math inline">\(\hat{Y}_T(h)\)</span> be a forecast <span class="math inline">\(h\)</span> steps ahead made at time <span class="math inline">\(T\)</span>. If <span class="math inline">\(\hat{Y}_T(h)\)</span> only uses information up to time <span class="math inline">\(T\)</span>, the resulting forecasts are called out-of-sample forecasts. <span class="citation" data-cites="Chatfield:2000">Chatfield (<a href="references.html#ref-Chatfield:2000" role="doc-biblioref">2000</a>)</span> listed several ways to unfairly ‘improve’ forecasts:</p>
+<ol type="1">
+<li>Fitting the model to all the data including the testing set.</li>
+<li>Fitting several models to the training set and choosing the model which gives the best ‘forecasts’ of the testing set. The selected model is then used (again) to produce forecasts of the testing set, even though the latter has already been used in the modeling process.</li>
+<li>Using the known test-set values of ‘future’ observations on the explanatory variables in multivariate forecasting. This will improve forecasts of the dependent variable in the testing set, but these future values of predictors will not be known at the time the forecast is supposedly made. Economists call such forecasts <em>ex-post</em> forecasts to distinguish them from <em>ex-ante</em> forecasts. The latter, being genuinely out-of-sample, use forecasts of future values of explanatory variables, where necessary, to compute forecasts of the response variable. <em>Ex-post</em> forecasts can be useful for assessing the effects of explanatory variables, provided the analyst does not pretend that they are genuine out-of-sample forecasts.</li>
+</ol>
+<p>So what to do if we put lots of effort to build a regression model using time series and need to forecast the response, <span class="math inline">\(Y_t\)</span>, which is modeled using independent variables <span class="math inline">\(X_{t,p}\)</span> (<span class="math inline">\(p=1,\dots,P\)</span>)? Two options are possible.</p>
+<p><strong>Option 1: Use leading indicators</strong></p>
+<p>If <span class="math inline">\(X_{t,p}\)</span>’s are leading indicators with lags starting at <span class="math inline">\(l\)</span>, we generally would not need their future values to obtain the forecasts <span class="math inline">\(\hat{Y}_T(h)\)</span>, where <span class="math inline">\(h\leqslant l\)</span>. For example, the model for insurance claims tested in <a href="l09_tsreg2.html#sec-Granger" class="quarto-xref"><span>Section 9.6</span></a> shows that precipitation with lag 1 is a good predictor for current losses, i.e., precipitation is a leading indicator. The 1-week-ahead forecast of <span class="math inline">\(Y_{t+1}\)</span> can be obtained using the current precipitation <span class="math inline">\(X_t\)</span> (all data are available). If <span class="math inline">\(h&gt;l\)</span>, we will be forced to forecast the independent variables, <span class="math inline">\(X_{t,p}\)</span>’s—see the next option.</p>
+<p><strong>Option 2: Start by forecasting predictors</strong></p>
+<p>If we opt for forecasting <span class="math inline">\(X_{t,p}\)</span>’s, the errors (uncertainty) of the resulting forecasts for <span class="math inline">\(Y_t\)</span> will be larger, because future <span class="math inline">\(X_{t,p}\)</span>’s themselves will be the estimates. Nevertheless, it might be the only choice when leading indicators are not available. Building a full and comprehensive model with all diagnostics for each regressor is usually unfeasible and even problematic if we plan to consider multivariate models for regressors (the complexity of models will quickly escalate). As an alternative, it is common to use automatic or semi-automatic univariate procedures that can help to forecast each of the <span class="math inline">\(X_{t,p}\)</span>’s. For example, consider exponential smoothing, Holt–Winters smoothing, and auto-selected SARIMA/ARIMA/ARMA/AR/MA models—all those can be automated for a large number of forecasts to make.</p>
+</section><section id="typical-set-of-models-to-compare" class="level3" data-number="10.1.4"><h3 data-number="10.1.4" class="anchored" data-anchor-id="typical-set-of-models-to-compare">
+<span class="header-section-number">10.1.4</span> Typical set of models to compare</h3>
+<p>In practice, when comparing forecasting models we often consider:</p>
+<ol type="1">
+<li><p>Basic (naive) models: average, climatology, seasonal naive, Holt–Winters, the last value. These serve as benchmarks – more complex models should outperform them.</p></li>
+<li><p>Commonly or previously used model: GLM or simpler ARIMA specification that has been used in the field or in previous studies. This provides a baseline representing current practice.</p></li>
+<li><p>State-of-the-science or proposed model: advanced methods (e.g., ARIMAX with exogenous predictors, machine learning, or nonparametric approaches) that incorporate domain knowledge or recent methodological developments.</p></li>
+</ol>
+<p>The insurance example below uses a set like this and quantitatively assesses forecasting performance of the different models.</p>
+</section></section><section id="cross-validation-schemes" class="level2" data-number="10.2"><h2 data-number="10.2" class="anchored" data-anchor-id="cross-validation-schemes">
+<span class="header-section-number">10.2</span> Cross-validation schemes</h2>
+<p>Suppose we have used the data <span class="math inline">\(Y_1, \dots, Y_n\)</span> to build <span class="math inline">\(M\)</span> forecasting models <span class="math inline">\(\hat{Y}^{(m)}_t\)</span> (<span class="math inline">\(m = 1,\dots,M\)</span>) and we now obtain future observations <span class="math inline">\(Y_{n+1}, \dots, Y_{n+k}\)</span> that were not used to fit the models (also called <em>out-of-sample</em> data, after-sample, or the testing set; <span class="math inline">\(k\)</span> is the size of this set). The difference <span class="math inline">\(Y_t - \hat{Y}^{(m)}_t\)</span> is the forecast (or prediction) error at time <span class="math inline">\(t\)</span> for the <span class="math inline">\(m\)</span>th model. However, an approach like this might require us to wait for future observations to assess and compare the models. A way around this is to take the historical dataset <span class="math inline">\(Y_1, \dots, Y_n\)</span> and split it into a <em>training set</em> and a <em>testing set</em>.</p>
+<p>Cross-validation (CV) is a standard approach to formal assessment of model performance and generalization ability. By repeating the training and evaluation process on different data splits, CV provides robust estimates of out-of-sample accuracy and helps detect overfitting. Designing CV for time series models is more complex than for independent data due to temporal dependence and the need to respect time order. Choose a CV scheme that mirrors how the model will be used in practice. For that, you may consider</p>
+<ul>
+<li>Forecast horizon: 1 week vs.&nbsp;4 weeks vs.&nbsp;1 year ahead (different error dynamics and interval calibration).</li>
+<li>Update frequency: will you refit the model weekly, monthly, or never (e.g., if the model is deployed on a remote buoy with limited bandwidth/power)?</li>
+<li>Availability of predictors: are they leading indicators (ex-ante usable) or must they be predicted too?</li>
+</ul>
+<section id="principles-for-designing-cv-for-time-series" class="level3" data-number="10.2.1"><h3 data-number="10.2.1" class="anchored" data-anchor-id="principles-for-designing-cv-for-time-series">
+<span class="header-section-number">10.2.1</span> Principles for designing CV for time series</h3>
+<ul>
+<li>Respect temporal order: never train on information from the future relative to validation points.</li>
+<li>Evaluate at the target horizon: if you need 1-week-ahead forecasts, it is impractical to assess model performance on 1-year-ahead horizons (and vice versa).</li>
+<li>Match refit cadence: if you plan monthly refits, validate with monthly refits; if the model is frozen, validate with a single fit and no refitting.</li>
+<li>Avoid data leakage: when using predictors, supply leading indicators or forecast predictors when necessary.</li>
+</ul></section><section id="common-schemes" class="level3" data-number="10.2.2"><h3 data-number="10.2.2" class="anchored" data-anchor-id="common-schemes">
+<span class="header-section-number">10.2.2</span> Common schemes</h3>
+<ol type="1">
+<li><p>Single holdout (train/test split). Fit the model once on the training period; evaluate on a future block. Appropriate when a model is deployed once for a long time without refitting.</p></li>
+<li><p>Expanding window (a.k.a. walk-forward). Increase the training window over time, refit the model each time, and forecast <span class="math inline">\(h\)</span> steps ahead. Mirrors frequent updates with accumulating data.</p></li>
+<li><p>Fixed window (moving window). Use a sliding window of fixed length (last <span class="math inline">\(W\)</span> observations), refit the model each time, forecast <span class="math inline">\(h\)</span> steps. Useful when stationarity is local and old data become less relevant.</p></li>
+<li><p>Periodic refits. Refit the model only every certain number of steps (e.g., monthly) and use the same fitted model between refits. Balances compute/operational constraints with adaptation.</p></li>
+</ol>
+<p>We may compare a great number of models using the training set and choose the best one (with the smallest errors); however, it would be unfair to use the out-of-sample errors from the testing set for demonstrating the model performance because this part of the sample was used to select the model. Thus, it is advisable to have one more chunk of the same time series that was not used for model specification, estimation, or selection. Errors of the selected model on this <em>validation set</em> will be closer to the true (genuine) out-of-sample errors and can be used to assess coverage of true out-of-sample forecasts when the model is finally deployed.</p>
+</section><section id="r-implementations" class="level3" data-number="10.2.3"><h3 data-number="10.2.3" class="anchored" data-anchor-id="r-implementations">
+<span class="header-section-number">10.2.3</span> R implementations</h3>
+<p>You may find useful the following R functions for running CV: <code>for()</code>, <code>while()</code>, <code><a href="https://rdrr.io/r/base/lapply.html">sapply()</a></code>, and <code><a href="https://rdrr.io/pkg/zoo/man/rollapply.html">zoo::rollapply()</a></code> loops, <code><a href="https://purrr.tidyverse.org/reference/map.html">purrr::map()</a></code>, or similar constructs. Also, consider if you should run heavy computations in parallel, with functions like <code><a href="https://rdrr.io/r/parallel/clusterApply.html">parallel::parSapply()</a></code>, <code><a href="https://future.apply.futureverse.org/reference/future_lapply.html">future.apply::future_sapply()</a></code>, or <code>furrr::future_map()</code>. Several R packages provide built-in functions for time-series CV:</p>
+<ul>
+<li>
+<code><a href="https://pkg.robjhyndman.com/forecast/reference/tsCV.html">forecast::tsCV()</a></code> automates rolling-origin errors for a user-specified forecast function; ideal for 1-step errors and extendable for <span class="math inline">\(h\)</span>-step forecasts.</li>
+<li>
+<code><a href="https://rdrr.io/pkg/caret/man/createDataPartition.html">caret::createTimeSlices()</a></code> (and <code>trainControl(method = "timeslice")</code>) creates indices for time-slice resampling that you can loop over with your own modeling function.</li>
+</ul>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Example: Cross-validation schemes in R
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Examples below use the <code>AirPassengers</code> dataset (monthly international airline passenger numbers, 1949–1960) available in base R.</p>
+<ol type="1">
+<li>Single holdout (train/test split). Use 70% of data for training, last 30% of data for testing.</li>
+</ol>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Sample size</span></span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Training and testing set sizes</span></span>
+<span><span class="va">n_train</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">floor</a></span><span class="op">(</span><span class="fl">0.7</span> <span class="op">*</span> <span class="va">n</span><span class="op">)</span></span>
+<span><span class="va">h</span> <span class="op">&lt;-</span> <span class="va">n</span> <span class="op">-</span> <span class="va">n_train</span></span>
+<span></span>
+<span><span class="co"># For subsetting the ts object</span></span>
+<span><span class="va">train_end_time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html">time</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">[</span><span class="va">n_train</span><span class="op">]</span></span>
+<span><span class="va">test_start_time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html">time</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">[</span><span class="va">n_train</span> <span class="op">+</span> <span class="fl">1</span><span class="op">]</span></span>
+<span></span>
+<span><span class="co"># Training and testing sets</span></span>
+<span><span class="va">y_train</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/window.html">window</a></span><span class="op">(</span><span class="va">AirPassengers</span>, end <span class="op">=</span> <span class="va">train_end_time</span><span class="op">)</span></span>
+<span><span class="va">y_test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/window.html">window</a></span><span class="op">(</span><span class="va">AirPassengers</span>, start <span class="op">=</span> <span class="va">test_start_time</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Fit models on training data</span></span>
+<span><span class="va">m_ets</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/ets.html">ets</a></span><span class="op">(</span><span class="va">y_train</span><span class="op">)</span></span>
+<span><span class="va">m_arima</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/auto.arima.html">auto.arima</a></span><span class="op">(</span><span class="va">y_train</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Forecasts</span></span>
+<span><span class="va">fc_ets</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/forecast.html">forecast</a></span><span class="op">(</span><span class="va">m_ets</span>, h <span class="op">=</span> <span class="va">h</span><span class="op">)</span></span>
+<span><span class="va">fc_arima</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/forecast.html">forecast</a></span><span class="op">(</span><span class="va">m_arima</span>, h <span class="op">=</span> <span class="va">h</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># RMSE calculation</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>RMSE_ETS    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">y_test</span> <span class="op">-</span> <span class="va">fc_ets</span><span class="op">$</span><span class="va">mean</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  RMSE_ARIMA  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">y_test</span> <span class="op">-</span> <span class="va">fc_arima</span><span class="op">$</span><span class="va">mean</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt;   RMSE_ETS RMSE_ARIMA 
+#&gt;       55.1       26.2</code></pre>
+</div>
+</div>
+<ol start="2" type="1">
+<li>Expanding window, <span class="math inline">\(h\)</span>-step forecasts with <code><a href="https://pkg.robjhyndman.com/forecast/reference/tsCV.html">forecast::tsCV()</a></code>.</li>
+</ol>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://pkg.robjhyndman.com/forecast/">forecast</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Set the forecast horizon (6 months ahead)</span></span>
+<span><span class="va">h_target</span> <span class="op">&lt;-</span> <span class="fl">6</span></span>
+<span></span>
+<span><span class="co"># Set the initial training size (e.g., first 10 years)</span></span>
+<span><span class="va">n_train_initial</span> <span class="op">&lt;-</span> <span class="fl">120</span>  <span class="co"># 10 years * 12 months</span></span>
+<span></span>
+<span><span class="co"># Compute forecast errors using tsCV()</span></span>
+<span><span class="va">e_ets_h</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/tsCV.html">tsCV</a></span><span class="op">(</span><span class="va">AirPassengers</span>, initial <span class="op">=</span> <span class="va">n_train_initial</span>,</span>
+<span>                  forecastfunction <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">z</span>, <span class="va">h</span><span class="op">)</span> </span>
+<span>                      <span class="fu"><a href="https://generics.r-lib.org/reference/forecast.html">forecast</a></span><span class="op">(</span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/ets.html">ets</a></span><span class="op">(</span><span class="va">z</span><span class="op">)</span>, h <span class="op">=</span> <span class="va">h</span><span class="op">)</span>, h <span class="op">=</span> <span class="va">h_target</span><span class="op">)</span></span>
+<span><span class="va">e_arima_h</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/tsCV.html">tsCV</a></span><span class="op">(</span><span class="va">AirPassengers</span>, initial <span class="op">=</span> <span class="va">n_train_initial</span>, </span>
+<span>                  forecastfunction <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">z</span>, <span class="va">h</span><span class="op">)</span></span>
+<span>                      <span class="fu"><a href="https://generics.r-lib.org/reference/forecast.html">forecast</a></span><span class="op">(</span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/auto.arima.html">auto.arima</a></span><span class="op">(</span><span class="va">z</span><span class="op">)</span>, h <span class="op">=</span> <span class="va">h</span><span class="op">)</span>, h <span class="op">=</span> <span class="va">h_target</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># RMSE calculation for each model and horizon</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>    RMSE_ETS_h   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">e_ets_h</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    RMSE_ARIMA_h <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">e_arima_h</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt;     RMSE_ETS_h RMSE_ARIMA_h
+#&gt; h=1       20.5         17.4
+#&gt; h=2       26.4         19.7
+#&gt; h=3       31.0         20.0
+#&gt; h=4       38.7         21.2
+#&gt; h=5       40.2         20.9
+#&gt; h=6       39.7         21.3</code></pre>
+</div>
+</div>
+<ol start="3" type="1">
+<li>Fixed window (moving window) with a custom loop.</li>
+</ol>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Set the forecast horizon (6 months ahead)</span></span>
+<span><span class="va">h_target</span> <span class="op">&lt;-</span> <span class="fl">6</span></span>
+<span></span>
+<span><span class="co"># Set the fixed training size (e.g., the last 10 years)</span></span>
+<span><span class="va">n_train</span> <span class="op">&lt;-</span> <span class="fl">120</span>  <span class="co"># 10 years * 12 months</span></span>
+<span></span>
+<span><span class="co"># Initialize error storage</span></span>
+<span><span class="va">e_ets_h</span> <span class="op">&lt;-</span> <span class="va">e_arima_h</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="cn">NA</span>, nrow <span class="op">=</span> <span class="fl">0</span>, ncol <span class="op">=</span> <span class="va">h_target</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Loop over time points with seq(); can change the argument "by" to skip some points</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="va">n_train</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span> <span class="op">-</span> <span class="va">h_target</span>, by <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">y_train</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/window.html">window</a></span><span class="op">(</span><span class="va">AirPassengers</span>, </span>
+<span>                      start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html">time</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">[</span><span class="va">i</span> <span class="op">-</span> <span class="va">n_train</span> <span class="op">+</span> <span class="fl">1</span><span class="op">]</span>, </span>
+<span>                      end <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html">time</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
+<span>    <span class="va">y_test</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/window.html">window</a></span><span class="op">(</span><span class="va">AirPassengers</span>, </span>
+<span>                      start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html">time</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">[</span><span class="va">i</span> <span class="op">+</span> <span class="fl">1</span><span class="op">]</span>, </span>
+<span>                      end <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html">time</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">[</span><span class="va">i</span> <span class="op">+</span> <span class="va">h_target</span><span class="op">]</span><span class="op">)</span></span>
+<span>    </span>
+<span>    <span class="co"># Fit models</span></span>
+<span>    <span class="va">m_ets</span>   <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/ets.html">ets</a></span><span class="op">(</span><span class="va">y_train</span><span class="op">)</span></span>
+<span>    <span class="va">m_arima</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/auto.arima.html">auto.arima</a></span><span class="op">(</span><span class="va">y_train</span><span class="op">)</span></span>
+<span>    </span>
+<span>    <span class="co"># Forecasts</span></span>
+<span>    <span class="va">fc_ets</span>   <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/forecast.html">forecast</a></span><span class="op">(</span><span class="va">m_ets</span>, h <span class="op">=</span> <span class="va">h_target</span><span class="op">)</span></span>
+<span>    <span class="va">fc_arima</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/forecast.html">forecast</a></span><span class="op">(</span><span class="va">m_arima</span>, h <span class="op">=</span> <span class="va">h_target</span><span class="op">)</span></span>
+<span>    </span>
+<span>    <span class="co"># Forecast errors</span></span>
+<span>    <span class="va">e_ets_h</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">e_ets_h</span>, <span class="va">y_test</span> <span class="op">-</span> <span class="va">fc_ets</span><span class="op">$</span><span class="va">mean</span><span class="op">)</span></span>
+<span>    <span class="va">e_arima_h</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">e_arima_h</span>, <span class="va">y_test</span> <span class="op">-</span> <span class="va">fc_arima</span><span class="op">$</span><span class="va">mean</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># RMSE calculation for each model and horizon</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>    RMSE_ETS_h   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">e_ets_h</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    RMSE_ARIMA_h <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">e_arima_h</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt;   RMSE_ETS_h RMSE_ARIMA_h
+#&gt; 1       20.9         18.2
+#&gt; 2       25.7         20.1
+#&gt; 3       30.9         23.3
+#&gt; 4       38.6         23.6
+#&gt; 5       39.9         25.2
+#&gt; 6       38.7         25.0</code></pre>
+</div>
+</div>
+<ol start="4" type="1">
+<li>Periodic refits (e.g., yearly), <span class="math inline">\(h\)</span>-step-ahead. Modify the loop above with <code>if()</code> statement and <code>time_since_last_refit</code> counter to refit only every <code>refit_every</code> steps.</li>
+</ol>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Set the forecast horizon (6 months ahead)</span></span>
+<span><span class="va">h_target</span> <span class="op">&lt;-</span> <span class="fl">6</span></span>
+<span></span>
+<span><span class="co"># Set the fixed training size (e.g., the last 10 years)</span></span>
+<span><span class="va">n_train</span> <span class="op">&lt;-</span> <span class="fl">120</span>  <span class="co"># 10 years * 12 months</span></span>
+<span></span>
+<span><span class="co"># How often to refit (in loop steps). Example: refit every 12 months</span></span>
+<span><span class="va">refit_every</span> <span class="op">&lt;-</span> <span class="fl">12</span></span>
+<span><span class="va">time_since_last_refit</span> <span class="op">&lt;-</span> <span class="va">refit_every</span>  <span class="co"># Force refit at first iteration</span></span>
+<span></span>
+<span><span class="co"># Initialize error storage</span></span>
+<span><span class="va">e_ets_h</span> <span class="op">&lt;-</span> <span class="va">e_arima_h</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="cn">NA</span>, nrow <span class="op">=</span> <span class="fl">0</span>, ncol <span class="op">=</span> <span class="va">h_target</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Loop over time points with seq()</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="va">n_train</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span> <span class="op">-</span> <span class="va">h_target</span>, by <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">y_train</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/window.html">window</a></span><span class="op">(</span><span class="va">AirPassengers</span>, </span>
+<span>                      start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html">time</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">[</span><span class="va">i</span> <span class="op">-</span> <span class="va">n_train</span> <span class="op">+</span> <span class="fl">1</span><span class="op">]</span>, </span>
+<span>                      end <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html">time</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
+<span>    <span class="va">y_test</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/window.html">window</a></span><span class="op">(</span><span class="va">AirPassengers</span>, </span>
+<span>                      start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html">time</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">[</span><span class="va">i</span> <span class="op">+</span> <span class="fl">1</span><span class="op">]</span>, </span>
+<span>                      end <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html">time</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">[</span><span class="va">i</span> <span class="op">+</span> <span class="va">h_target</span><span class="op">]</span><span class="op">)</span></span>
+<span>    </span>
+<span>    <span class="kw">if</span> <span class="op">(</span><span class="va">time_since_last_refit</span> <span class="op">&gt;=</span> <span class="va">refit_every</span><span class="op">)</span> <span class="op">{</span></span>
+<span>        <span class="co"># Fit models</span></span>
+<span>        <span class="va">m_ets</span>   <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/ets.html">ets</a></span><span class="op">(</span><span class="va">y_train</span><span class="op">)</span></span>
+<span>        <span class="va">m_arima</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/auto.arima.html">auto.arima</a></span><span class="op">(</span><span class="va">y_train</span><span class="op">)</span></span>
+<span>        </span>
+<span>        <span class="co"># Reset counter</span></span>
+<span>        <span class="va">time_since_last_refit</span> <span class="op">&lt;-</span> <span class="fl">0</span> </span>
+<span>        </span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"Refitted at time index:"</span>, <span class="va">i</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
+<span>    </span>
+<span>    <span class="co"># Forecasts</span></span>
+<span>    <span class="co"># If not refitted, use the last fitted model and forecast further ahead</span></span>
+<span>    <span class="va">fc_ets</span>   <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/forecast.html">forecast</a></span><span class="op">(</span><span class="va">m_ets</span>, h <span class="op">=</span> <span class="va">h_target</span> <span class="op">+</span> <span class="va">time_since_last_refit</span><span class="op">)</span></span>
+<span>    <span class="va">fc_arima</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/forecast.html">forecast</a></span><span class="op">(</span><span class="va">m_arima</span>, h <span class="op">=</span> <span class="va">h_target</span> <span class="op">+</span> <span class="va">time_since_last_refit</span><span class="op">)</span></span>
+<span>    </span>
+<span>    <span class="co"># Select only the relevant forecasts (last h_target steps)</span></span>
+<span>    <span class="va">last_h_target</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">time_since_last_refit</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span><span class="op">:</span><span class="op">(</span><span class="va">time_since_last_refit</span> <span class="op">+</span> <span class="va">h_target</span><span class="op">)</span></span>
+<span>    </span>
+<span>    <span class="co"># Forecast errors</span></span>
+<span>    <span class="va">e_ets_h</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">e_ets_h</span>, <span class="va">y_test</span> <span class="op">-</span> <span class="va">fc_ets</span><span class="op">$</span><span class="va">mean</span><span class="op">[</span><span class="va">last_h_target</span><span class="op">]</span><span class="op">)</span></span>
+<span>    <span class="va">e_arima_h</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">e_arima_h</span>, <span class="va">y_test</span> <span class="op">-</span> <span class="va">fc_arima</span><span class="op">$</span><span class="va">mean</span><span class="op">[</span><span class="va">last_h_target</span><span class="op">]</span><span class="op">)</span></span>
+<span>    </span>
+<span>    <span class="co"># Increment counter</span></span>
+<span>    <span class="va">time_since_last_refit</span> <span class="op">&lt;-</span> <span class="va">time_since_last_refit</span> <span class="op">+</span> <span class="fl">1</span></span>
+<span><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; [1] "Refitted at time index: 120"
+#&gt; [1] "Refitted at time index: 132"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># RMSE calculation for each model and horizon</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>    RMSE_ETS_h   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">e_ets_h</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    RMSE_ARIMA_h <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">e_arima_h</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt;   RMSE_ETS_h RMSE_ARIMA_h
+#&gt; 1       44.3         40.2
+#&gt; 2       47.3         43.4
+#&gt; 3       48.3         46.0
+#&gt; 4       47.7         45.9
+#&gt; 5       50.7         51.1
+#&gt; 6       53.5         55.1</code></pre>
+</div>
+</div>
+</div>
+</div>
+</section></section><section id="metrics-for-model-comparison" class="level2" data-number="10.3"><h2 data-number="10.3" class="anchored" data-anchor-id="metrics-for-model-comparison">
+<span class="header-section-number">10.3</span> Metrics for model comparison</h2>
+<section id="point-forecast-metrics" class="level3" data-number="10.3.1"><h3 data-number="10.3.1" class="anchored" data-anchor-id="point-forecast-metrics">
+<span class="header-section-number">10.3.1</span> Point forecast metrics</h3>
+<p>For each model, compute the prediction mean square error (PMSE) <span id="eq-pmse"><span class="math display">\[
+PMSE_m = k^{-1}\sum_{t=n+1}^{n+k}\left(Y_t - \hat{Y}^{(m)}_t\right)^2
+\tag{10.1}\]</span></span> or prediction root mean square error (PRMSE) <span id="eq-prmse"><span class="math display">\[
+PRMSE_m = \sqrt{PMSE_m},
+\tag{10.2}\]</span></span> prediction mean absolute error (PMAE) <span id="eq-pmae"><span class="math display">\[
+PMAE_m = k^{-1}\sum_{t=n+1}^{n+k}\left|Y_t - \hat{Y}^{(m)}_t\right|,
+\tag{10.3}\]</span></span> or prediction mean absolute percentage error (PMAPE, if <span class="math inline">\(Y_t \neq 0\)</span> in the testing period), etc. We choose the model with the smallest error. If two models produce approximately the same errors, we choose the model that is simpler (involves fewer variables). This is called the <em>law of parsimony</em>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>PMSE and PRMSE penalize larger errors more heavily than PMAE due to squaring the errors. Most fitting algorithms (e.g., least squares) minimize squared errors, so PMSE/PRMSE often align better with the model’s optimization criterion.</p>
+</div>
+</div>
+<!-- ### Probabilistic forecast metrics -->
+<!-- While point forecast metrics evaluate only the mean or median prediction, probabilistic metrics assess the quality of the entire predictive distribution (or prediction intervals). -->
+<!-- The *continuous ranked probability score* (CRPS) is a strictly proper scoring rule that generalizes the mean absolute error to probabilistic forecasts [@Gneiting:Raftery:2007].  -->
+<!-- For a forecast distribution $F$ and realization $y$, the CRPS is defined as -->
+<!-- $$ -->
+<!-- \text{CRPS}(F, y) = \int_{-\infty}^{\infty} \left(F(x) - \mathbf{1}\{y \leqslant x\}\right)^2 dx, -->
+<!-- $${#eq-crps} -->
+<!-- where $F(x)$ is the cumulative distribution function of the forecast, and $\mathbf{1}\{ \cdot \}$ is the indicator function (Heaviside step function) for the observation, it equals 1 if the condition is true and 0 otherwise.  -->
+<!-- The CRPS can be interpreted as: -->
+<!-- - A measure of the distance between the forecast CDF and the empirical CDF of the observation. -->
+<!-- - Reducing to MAE when the forecast is deterministic (point forecast). -->
+<!-- - Rewarding both accuracy (forecast close to observation) and sharpness (narrow predictive distribution). -->
+<!-- Lower CRPS values indicate better probabilistic forecasts.  -->
+<!-- For Gaussian predictive distributions with mean $\mu$ and standard deviation $\sigma$, the CRPS has a closed form: -->
+<!-- $$ -->
+<!-- \text{CRPS}(\mathcal{N}(\mu, \sigma^2), y) = \sigma\left(\frac{y - \mu}{\sigma}\left(2\Phi\left(\frac{y - \mu}{\sigma}\right) - 1\right) + 2\phi\left(\frac{y - \mu}{\sigma}\right) - \frac{1}{\sqrt{\pi}}\right), -->
+<!-- $${#eq-crps-gaussian} -->
+<!-- where $\Phi(\cdot)$ and $\phi(\cdot)$ are the standard normal CDF and PDF, respectively. -->
+<!-- The average CRPS over the testing set is -->
+<!-- $$ -->
+<!-- \overline{\text{CRPS}}_m = k^{-1}\sum_{t=n+1}^{n+k}\text{CRPS}(F_t^{(m)}, Y_t), -->
+<!-- $${#eq-avg-crps} -->
+<!-- where $F_t^{(m)}$ is the predictive distribution from model $m$ for time $t$. -->
+</section><section id="interval-forecast-metrics" class="level3" data-number="10.3.2"><h3 data-number="10.3.2" class="anchored" data-anchor-id="interval-forecast-metrics">
+<span class="header-section-number">10.3.2</span> Interval forecast metrics</h3>
+<p>To assess the quality of interval forecasts from model <span class="math inline">\(m\)</span>, compute the <em>empirical coverage</em>, <span class="math inline">\(\hat{C}_m\)</span>, as the proportion of observations in the testing set that are within – covered by – corresponding prediction intervals for a given confidence <span class="math inline">\(C\)</span>, e.g., <span class="math inline">\(C = 0.95\)</span> or 95%): <span class="math display">\[
+\hat{C}_m = k^{-1}\sum_{t=n+1}^{n+k} \mathbf{1}\{Y_t \in PI_t^{(m)}\},
+\]</span> where <span class="math inline">\(PI_t^{(m)} = \left[PI_{t,lower}^{(m)}, PI_{t,upper}^{(m)}\right]\)</span> is the prediction interval from model <span class="math inline">\(m\)</span> at time <span class="math inline">\(t\)</span>. To select the best coverage, one can calculate the absolute differences between each empirical coverage <span class="math inline">\(\hat{C}_m\)</span> and the nominal coverage <span class="math inline">\(C\)</span>: <span class="math display">\[
+\Delta_m = |\hat{C}_m - C|.
+\]</span> Hence, we select the model with the smallest <span class="math inline">\(\Delta_m\)</span>, not the largest coverage <span class="math inline">\(\hat{C}_m\)</span>.</p>
+<p>Additionally, compute the <em>average interval width</em> <span class="math display">\[
+\text{Width}_m = k^{-1}\sum_{t=n+1}^{n+k} \left(PI_{t,upper}^{(m)} - PI_{t,lower}^{(m)}\right)
+\]</span> and prefer models with narrower intervals, all else equal.</p>
+<p>Prediction intervals are well-calibrated if their empirical coverage is close to <span class="math inline">\(C\)</span> (more important) while the intervals are not too wide (less important). The trade-off between coverage and width is crucial: overly wide intervals may achieve nominal coverage but provide little practical value.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>It is possible to obtain different prediction intervals from the same model. For example, we can calculate prediction intervals based on normal, t, and bootstrapped distributions. In this case, point forecasts are the same, but interval forecasts differ.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Example: Insurance claims forecasting
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We evaluate forecasts of weekly home insurance data using point and interval metrics using alternative models: seasonal naive, ARIMA, and GAMLSS. For GAMLSS (developed in <a href="l09_tsreg2.html#sec-GAMLSS" class="quarto-xref"><span>Section 9.5</span></a>), we develop ex-post forecasts using the known precipitation data for the forecast week, and ex-ante forecasts where we predict precipitation with a simple univariate model. Overall, we compare four combinations of models and forecasts.</p>
+<p>For the cross-validation scheme, we use an expanding window with weekly refits and 4-week-ahead forecasts. With 10 years of data, we use the first 9 years for initial training and the last 1 year for testing.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://www.gamlss.com/">gamlss</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Read and prepare a weekly time series</span></span>
+<span><span class="va">logconstant</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
+<span><span class="va">Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"data/insurance_weekly.csv"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">Claims</span>, <span class="va">Precipitation</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>    <span class="fu">mutate</span><span class="op">(</span>Precipitation_lag1 <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html">lag</a></span><span class="op">(</span><span class="va">Precipitation</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>           Week <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu">n</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>           Year <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">2002</span><span class="op">:</span><span class="fl">2011</span>, each <span class="op">=</span> <span class="fl">52</span><span class="op">)</span>,</span>
+<span>           Claims_ln <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">Claims</span> <span class="op">+</span> <span class="va">logconstant</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>    <span class="fu">mutate</span><span class="op">(</span>Claims_ln_lag1 <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html">lag</a></span><span class="op">(</span><span class="va">Claims_ln</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Set the forecast horizon (4 weeks ahead)</span></span>
+<span><span class="va">h_target</span> <span class="op">&lt;-</span> <span class="fl">4</span></span>
+<span></span>
+<span><span class="co"># Set the initial training size (the first 9 years)</span></span>
+<span><span class="va">n_train_initial</span> <span class="op">&lt;-</span> <span class="fl">9</span> <span class="op">*</span> <span class="fl">52</span></span>
+<span></span>
+<span><span class="co"># Set confidence level for prediction intervals</span></span>
+<span><span class="va">C</span> <span class="op">&lt;-</span> <span class="fl">0.95</span></span>
+<span><span class="va">lower_p</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">C</span><span class="op">)</span> <span class="op">/</span> <span class="fl">2</span></span>
+<span><span class="va">upper_p</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">-</span> <span class="va">lower_p</span></span>
+<span></span>
+<span><span class="co"># Initialize storage for performance metrics</span></span>
+<span><span class="va">e_naive_h</span> <span class="op">&lt;-</span> <span class="va">e_arima_h</span> <span class="op">&lt;-</span> <span class="va">e_gamlss_xp_h</span> <span class="op">&lt;-</span> <span class="va">e_gamlss_xa_h</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="cn">NA</span>, nrow <span class="op">=</span> <span class="fl">0</span>, ncol <span class="op">=</span> <span class="va">h_target</span><span class="op">)</span></span>
+<span><span class="va">c_naive_h</span> <span class="op">&lt;-</span> <span class="va">c_arima_h</span> <span class="op">&lt;-</span> <span class="va">c_gamlss_xp_h</span> <span class="op">&lt;-</span> <span class="va">c_gamlss_xa_h</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="cn">NA</span>, nrow <span class="op">=</span> <span class="fl">0</span>, ncol <span class="op">=</span> <span class="va">h_target</span><span class="op">)</span></span>
+<span><span class="va">w_naive_h</span> <span class="op">&lt;-</span> <span class="va">w_arima_h</span> <span class="op">&lt;-</span> <span class="va">w_gamlss_xp_h</span> <span class="op">&lt;-</span> <span class="va">w_gamlss_xa_h</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="cn">NA</span>, nrow <span class="op">=</span> <span class="fl">0</span>, ncol <span class="op">=</span> <span class="va">h_target</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Loop over time points with seq(); can change the argument "by" to skip some points</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="va">n_train_initial</span>, <span class="va">n</span> <span class="op">-</span> <span class="va">h_target</span>, by <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="co"># 1. Training and testing sets</span></span>
+<span>    <span class="va">Y_train</span> <span class="op">&lt;-</span> <span class="va">Y</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">i</span>, <span class="op">]</span></span>
+<span>    <span class="va">Y_train_noNA</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html">na.omit</a></span><span class="op">(</span><span class="va">Y_train</span><span class="op">)</span></span>
+<span>    <span class="va">y_train</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/ts.html">ts</a></span><span class="op">(</span><span class="va">Y_train</span><span class="op">$</span><span class="va">Claims</span>, frequency <span class="op">=</span> <span class="fl">52</span><span class="op">)</span></span>
+<span>    <span class="va">Y_test</span> <span class="op">&lt;-</span> <span class="va">Y</span><span class="op">[</span><span class="op">(</span><span class="va">i</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span><span class="op">:</span><span class="op">(</span><span class="va">i</span> <span class="op">+</span> <span class="va">h_target</span><span class="op">)</span>, <span class="op">]</span></span>
+<span>    <span class="va">y_test</span> <span class="op">&lt;-</span> <span class="va">Y_test</span><span class="op">$</span><span class="va">Claims</span></span>
+<span>    </span>
+<span>    <span class="co"># 2. Fit models</span></span>
+<span>    <span class="va">m_arima</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/auto.arima.html">auto.arima</a></span><span class="op">(</span><span class="va">y_train</span><span class="op">)</span></span>
+<span>    <span class="va">m_gamlss</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/gamlss/man/gamlss.html">gamlss</a></span><span class="op">(</span><span class="va">Claims</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/gamlss/man/ps.html">ps</a></span><span class="op">(</span><span class="va">Precipitation</span><span class="op">)</span> <span class="op">+</span> <span class="va">Week</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/gamlss/man/ps.html">ps</a></span><span class="op">(</span><span class="va">Precipitation_lag1</span><span class="op">)</span> <span class="op">+</span> <span class="va">Claims_ln_lag1</span></span>
+<span>                       ,sigma.formula <span class="op">=</span> <span class="op">~</span><span class="fu"><a href="https://rdrr.io/pkg/gamlss/man/ps.html">ps</a></span><span class="op">(</span><span class="va">Week</span><span class="op">)</span></span>
+<span>                       ,family <span class="op">=</span> <span class="va">NBI</span></span>
+<span>                       ,control <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gamlss/man/gamlss.control.html">gamlss.control</a></span><span class="op">(</span>c.crit <span class="op">=</span> <span class="fl">0.01</span>, trace <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>                       ,data <span class="op">=</span> <span class="va">Y_train_noNA</span><span class="op">)</span></span>
+<span>    </span>
+<span>    <span class="co"># 3. Forecasts</span></span>
+<span>    <span class="co"># Seasonal naive forecast ("climatology" for the number of claims)</span></span>
+<span>    <span class="va">fc_naive</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/naive.html">snaive</a></span><span class="op">(</span><span class="va">y_train</span>, level <span class="op">=</span> <span class="va">C</span> <span class="op">*</span> <span class="fl">100</span>, h <span class="op">=</span> <span class="va">h_target</span><span class="op">)</span></span>
+<span>    </span>
+<span>    <span class="co"># ARIMA forecast</span></span>
+<span>    <span class="va">fc_arima</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/forecast.html">forecast</a></span><span class="op">(</span><span class="va">m_arima</span>, h <span class="op">=</span> <span class="va">h_target</span>, level <span class="op">=</span> <span class="va">C</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span></span>
+<span>    </span>
+<span>    <span class="co"># GAMLSS ex-post forecast, see ?gamlss::predict.gamlss</span></span>
+<span>    <span class="va">pred_mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">m_gamlss</span>, </span>
+<span>                       newdata <span class="op">=</span> <span class="va">Y_test</span>, </span>
+<span>                       what <span class="op">=</span> <span class="st">"mu"</span>, </span>
+<span>                       type <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span></span>
+<span>    <span class="va">pred_sigma</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">m_gamlss</span>, </span>
+<span>                          newdata <span class="op">=</span> <span class="va">Y_test</span>, </span>
+<span>                          what <span class="op">=</span> <span class="st">"sigma"</span>, </span>
+<span>                          type <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span></span>
+<span>    <span class="va">lower_bound</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/gamlss.dist/man/NBI.html">qNBI</a></span><span class="op">(</span><span class="va">lower_p</span>, mu <span class="op">=</span> <span class="va">pred_mu</span>, sigma <span class="op">=</span> <span class="va">pred_sigma</span><span class="op">)</span></span>
+<span>    <span class="va">upper_bound</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/gamlss.dist/man/NBI.html">qNBI</a></span><span class="op">(</span><span class="va">upper_p</span>, mu <span class="op">=</span> <span class="va">pred_mu</span>, sigma <span class="op">=</span> <span class="va">pred_sigma</span><span class="op">)</span></span>
+<span>    <span class="va">fc_gamlss_xp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="va">pred_mu</span>,</span>
+<span>                               lower <span class="op">=</span> <span class="va">lower_bound</span>,</span>
+<span>                               upper <span class="op">=</span> <span class="va">upper_bound</span><span class="op">)</span></span>
+<span>    </span>
+<span>    <span class="co"># GAMLSS ex-ante forecast</span></span>
+<span>    <span class="co"># Simple precipitation forecast: use naive seasonal forecast</span></span>
+<span>    <span class="va">last_precip</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">tail</a></span><span class="op">(</span><span class="va">Y_train</span><span class="op">$</span><span class="va">Precipitation</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span>    <span class="va">new_precip</span> <span class="op">&lt;-</span> <span class="fu">forecast</span><span class="fu">::</span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/naive.html">snaive</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/ts.html">ts</a></span><span class="op">(</span><span class="va">Y_train</span><span class="op">$</span><span class="va">Precipitation</span>, frequency <span class="op">=</span> <span class="fl">52</span><span class="op">)</span>, </span>
+<span>                                   h <span class="op">=</span> <span class="va">h_target</span><span class="op">)</span><span class="op">$</span><span class="va">mean</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="va">Y_test_exante</span> <span class="op">&lt;-</span> <span class="va">Y_test</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>        <span class="fu">mutate</span><span class="op">(</span>Precipitation <span class="op">=</span> <span class="va">new_precip</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>        <span class="fu">mutate</span><span class="op">(</span>Precipitation_lag1 <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html">lag</a></span><span class="op">(</span><span class="va">Precipitation</span>, <span class="fl">1</span>, default <span class="op">=</span> <span class="va">last_precip</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="co"># Since we have the lagged claims as one of the predictors (unknown when forecasting),  </span></span>
+<span>    <span class="co"># we need to do recursive forecasts for GAMLSS ex-ante</span></span>
+<span>    <span class="va">lower_bound_xa</span> <span class="op">&lt;-</span> <span class="va">upper_bound_xa</span> <span class="op">&lt;-</span> <span class="va">pred_mu_xa</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="va">h_target</span><span class="op">)</span></span>
+<span>    <span class="kw">for</span> <span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">h_target</span><span class="op">)</span> <span class="op">{</span></span>
+<span>        <span class="va">pred_mu_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">m_gamlss</span>, </span>
+<span>                             newdata <span class="op">=</span> <span class="va">Y_test_exante</span><span class="op">[</span><span class="va">j</span>, , drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span>,</span>
+<span>                             what <span class="op">=</span> <span class="st">"mu"</span>, </span>
+<span>                             type <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span></span>
+<span>        <span class="va">pred_sigma_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">m_gamlss</span>, </span>
+<span>                              newdata <span class="op">=</span> <span class="va">Y_test_exante</span><span class="op">[</span><span class="va">j</span>, , drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span>, </span>
+<span>                              what <span class="op">=</span> <span class="st">"sigma"</span>, </span>
+<span>                              type <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span></span>
+<span>        <span class="va">pred_mu_xa</span><span class="op">[</span><span class="va">j</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">pred_mu_1</span></span>
+<span>        <span class="va">lower_bound_xa</span><span class="op">[</span><span class="va">j</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/gamlss.dist/man/NBI.html">qNBI</a></span><span class="op">(</span><span class="va">lower_p</span>, mu <span class="op">=</span> <span class="va">pred_mu_1</span>, sigma <span class="op">=</span> <span class="va">pred_sigma_1</span><span class="op">)</span></span>
+<span>        <span class="va">upper_bound_xa</span><span class="op">[</span><span class="va">j</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/gamlss.dist/man/NBI.html">qNBI</a></span><span class="op">(</span><span class="va">upper_p</span>, mu <span class="op">=</span> <span class="va">pred_mu_1</span>, sigma <span class="op">=</span> <span class="va">pred_sigma_1</span><span class="op">)</span></span>
+<span>        <span class="co"># Update lagged claims for next step</span></span>
+<span>        <span class="kw">if</span> <span class="op">(</span><span class="va">j</span> <span class="op">&lt;</span> <span class="va">h_target</span><span class="op">)</span> <span class="op">{</span></span>
+<span>            <span class="va">Y_test_exante</span><span class="op">$</span><span class="va">Claims_ln_lag1</span><span class="op">[</span><span class="va">j</span> <span class="op">+</span> <span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">pred_mu_1</span> <span class="op">+</span> <span class="va">logconstant</span><span class="op">)</span></span>
+<span>        <span class="op">}</span></span>
+<span>    <span class="op">}</span></span>
+<span>    <span class="va">fc_gamlss_xa</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="va">pred_mu_xa</span>,</span>
+<span>                               lower <span class="op">=</span> <span class="va">lower_bound_xa</span>,</span>
+<span>                               upper <span class="op">=</span> <span class="va">upper_bound_xa</span><span class="op">)</span></span>
+<span>    </span>
+<span>    <span class="co"># 4.1 Forecast errors</span></span>
+<span>    <span class="va">e_naive_h</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">e_naive_h</span>, <span class="va">y_test</span> <span class="op">-</span> <span class="va">fc_naive</span><span class="op">$</span><span class="va">mean</span><span class="op">)</span></span>
+<span>    <span class="va">e_arima_h</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">e_arima_h</span>, <span class="va">y_test</span> <span class="op">-</span> <span class="va">fc_arima</span><span class="op">$</span><span class="va">mean</span><span class="op">)</span></span>
+<span>    <span class="va">e_gamlss_xp_h</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">e_gamlss_xp_h</span>, <span class="va">y_test</span> <span class="op">-</span> <span class="va">fc_gamlss_xp</span><span class="op">$</span><span class="va">mean</span><span class="op">)</span></span>
+<span>    <span class="va">e_gamlss_xa_h</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">e_gamlss_xa_h</span>, <span class="va">y_test</span> <span class="op">-</span> <span class="va">fc_gamlss_xa</span><span class="op">$</span><span class="va">mean</span><span class="op">)</span></span>
+<span>    </span>
+<span>    <span class="co"># 4.2 Forecast coverage</span></span>
+<span>    <span class="va">c_naive_h</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">c_naive_h</span>, </span>
+<span>                         <span class="op">(</span><span class="va">y_test</span> <span class="op">&gt;=</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="va">fc_naive</span><span class="op">$</span><span class="va">lower</span><span class="op">)</span><span class="op">)</span> <span class="op">&amp;</span> </span>
+<span>                           <span class="op">(</span><span class="va">y_test</span> <span class="op">&lt;=</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="va">fc_naive</span><span class="op">$</span><span class="va">upper</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="va">c_arima_h</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">c_arima_h</span>, </span>
+<span>                       <span class="op">(</span><span class="va">y_test</span> <span class="op">&gt;=</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="va">fc_arima</span><span class="op">$</span><span class="va">lower</span><span class="op">)</span><span class="op">)</span> <span class="op">&amp;</span> </span>
+<span>                           <span class="op">(</span><span class="va">y_test</span> <span class="op">&lt;=</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="va">fc_arima</span><span class="op">$</span><span class="va">upper</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="va">c_gamlss_xp_h</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">c_gamlss_xp_h</span>, </span>
+<span>                           <span class="op">(</span><span class="va">y_test</span> <span class="op">&gt;=</span> <span class="va">fc_gamlss_xp</span><span class="op">$</span><span class="va">lower</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">(</span><span class="va">y_test</span> <span class="op">&lt;=</span> <span class="va">fc_gamlss_xp</span><span class="op">$</span><span class="va">upper</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="va">c_gamlss_xa_h</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">c_gamlss_xa_h</span>, </span>
+<span>                           <span class="op">(</span><span class="va">y_test</span> <span class="op">&gt;=</span> <span class="va">fc_gamlss_xa</span><span class="op">$</span><span class="va">lower</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">(</span><span class="va">y_test</span> <span class="op">&lt;=</span> <span class="va">fc_gamlss_xa</span><span class="op">$</span><span class="va">upper</span><span class="op">)</span><span class="op">)</span></span>
+<span>    </span>
+<span>    <span class="co"># 4.3 Forecast interval width</span></span>
+<span>    <span class="va">w_naive_h</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">w_naive_h</span>, <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="va">fc_naive</span><span class="op">$</span><span class="va">upper</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="va">fc_naive</span><span class="op">$</span><span class="va">lower</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="va">w_arima_h</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">w_arima_h</span>, <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="va">fc_arima</span><span class="op">$</span><span class="va">upper</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="va">fc_arima</span><span class="op">$</span><span class="va">lower</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="va">w_gamlss_xp_h</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">w_gamlss_xp_h</span>, <span class="va">fc_gamlss_xp</span><span class="op">$</span><span class="va">upper</span> <span class="op">-</span> <span class="va">fc_gamlss_xp</span><span class="op">$</span><span class="va">lower</span><span class="op">)</span></span>
+<span>    <span class="va">w_gamlss_xa_h</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">w_gamlss_xa_h</span>, <span class="va">fc_gamlss_xa</span><span class="op">$</span><span class="va">upper</span> <span class="op">-</span> <span class="va">fc_gamlss_xa</span><span class="op">$</span><span class="va">lower</span><span class="op">)</span></span>
+<span>    </span>
+<span><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># RMSE for each model and horizon</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>    RMSE_naive_h <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">e_naive_h</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    RMSE_arima_h <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">e_arima_h</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    RMSE_gamlss_xp_h <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">e_gamlss_xp_h</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    RMSE_gamlss_xa_h <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">e_gamlss_xa_h</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details><div class="cell-output cell-output-stdout">
+<pre><code>#&gt;   RMSE_naive_h RMSE_arima_h RMSE_gamlss_xp_h RMSE_gamlss_xa_h
+#&gt; 1         8.12         7.44             6.60             7.93
+#&gt; 2         8.13         7.90             6.65             8.43
+#&gt; 3         8.14         7.90             6.67             8.50
+#&gt; 4         7.78         7.58             6.38             8.16</code></pre>
+</div>
+</div>
+<p>The lowest RMSE across all horizons belongs to the ex-post forecasts from the GAMLSS, however, these forecasts are unfairly better because they use future precipitation data and future (lagged) claim counts. The ex-ante GAMLSS forecasts have considerably higher RMSE – even higher than the naive seasonal model. The RMSE of ARIMA model were second-lowest.</p>
+<div class="cell">
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Coverage for each model and horizon</span></span>
+<span><span class="op">(</span><span class="va">COV</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>    Coverage_naive_h <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">c_naive_h</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    Coverage_arima_h <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">c_arima_h</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    Coverage_gamlss_xp_h <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">c_gamlss_xp_h</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    Coverage_gamlss_xa_h <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">c_gamlss_xa_h</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details><div class="cell-output cell-output-stdout">
+<pre><code>#&gt;   Coverage_naive_h Coverage_arima_h Coverage_gamlss_xp_h Coverage_gamlss_xa_h
+#&gt; 1             0.98            0.959                0.959                0.939
+#&gt; 2             0.98            0.959                0.939                0.918
+#&gt; 3             0.98            0.959                0.939                0.918
+#&gt; 4             0.98            0.959                0.939                0.918</code></pre>
+</div>
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Difference from the nominal level</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">COV</span> <span class="op">-</span> <span class="va">C</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details><div class="cell-output cell-output-stdout">
+<pre><code>#&gt;   Coverage_naive_h Coverage_arima_h Coverage_gamlss_xp_h Coverage_gamlss_xa_h
+#&gt; 1           0.0296          0.00918              0.00918               0.0112
+#&gt; 2           0.0296          0.00918              0.01122               0.0316
+#&gt; 3           0.0296          0.00918              0.01122               0.0316
+#&gt; 4           0.0296          0.00918              0.01122               0.0316</code></pre>
+</div>
+</div>
+<p>The empirical coverage of ARIMA intervals is the closest to the nominal 95% level, followed by ex-post GAMLSS and the naive model. The ex-ante GAMLSS intervals are under-covering the true observations by about 3 percentage points.</p>
+<div class="cell">
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Average interval width calculation for each model and horizon</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>    Width_naive_h <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">w_naive_h</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    Width_arima_h <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">w_arima_h</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    Width_gamlss_xp_h <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">w_gamlss_xp_h</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    Width_gamlss_xa_h <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">w_gamlss_xa_h</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details><div class="cell-output cell-output-stdout">
+<pre><code>#&gt;   Width_naive_h Width_arima_h Width_gamlss_xp_h Width_gamlss_xa_h
+#&gt; 1          46.7          31.7              16.4              16.1
+#&gt; 2          46.7          32.0              16.5              16.7
+#&gt; 3          46.7          32.0              16.6              17.1
+#&gt; 4          46.7          32.0              16.6              17.2</code></pre>
+</div>
+</div>
+<p>The GAMLSS intervals of two types are the narrowest, followed by ARIMA, then the naive model. Except the naive model, the uncertainty increases with the forecast horizon for all models, as expected.</p>
+<p>Overall, while the GAMLSS provides explanatory power for the incurred weather-related home insurance losses, the model is not that suitable for out-of-sample forecasting when future precipitation is unknown. We attempted to forecast precipitation with a simple seasonal naive model, which likely contributed to the poor performance of the ex-ante GAMLSS forecasts. Perhaps, more sophisticated precipitation forecasts (not necessarily by us, can be from an external dataset of weather predictions) could improve the ex-ante GAMLSS results, but this remains to be tested. For truly out-of-sample forecasting, ARIMA model was the best among the considered alternatives. ARIMA delivered RMSE just below that of the naive model, but the coverage and width of ARIMA prediction intervals were considerably better.</p>
+</div>
+</div>
+</section></section><section id="conclusion" class="level2" data-number="10.4"><h2 data-number="10.4" class="anchored" data-anchor-id="conclusion">
+<span class="header-section-number">10.4</span> Conclusion</h2>
+<p>This lecture covered comprehensive evaluation of time series forecasting models:</p>
+<ul>
+<li>We illustrated how to assess point forecasts via RMSE, MAE, and interval forecasts via empirical coverage and average widths. See <code><a href="https://generics.r-lib.org/reference/accuracy.html">forecast::accuracy()</a></code> for automatic calculation of some of these and other metrics.</li>
+<li>We demonstrated data leakage by comparing ex-post and ex-ante forecasts by GAMLSS and compared it against univariate methods.</li>
+<li>Cross-validation schemes should mirror operational use: match the target horizon, refit cadence, and predictor availability to deployment conditions.</li>
+<li>Prefer rolling-origin cross-validation to reduce model selection bias and to diagnose overfitting; keep models parsimonious (AICc helps) and always check that assumptions are plausible for future deployment.</li>
+<li>When multiple models perform similarly on point metrics, interval calibration and operational constraints (computation, interpretability) guide the final choice.</li>
+</ul>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-Brockwell:Davis:2002" class="csl-entry" role="listitem">
+Brockwell PJ, Davis RA (2002) Introduction to time series and forecasting, 2nd edn. Springer, New York, NY, USA
+</div>
+<div id="ref-Chatfield:2000" class="csl-entry" role="listitem">
+Chatfield C (2000) Time-series forecasting. CRC Press, Boca Raton, FL, USA
+</div>
+<div id="ref-Hastie:etal:2009" class="csl-entry" role="listitem">
+Hastie TJ, Tibshirani RJ, Friedman JH (2009) <a href="https://doi.org/10.1007/978-0-387-84858-7">The elements of statistical learning: Data mining, inference, and prediction</a>, 2nd edn. Springer, New York, NY, USA
+</div>
+</div>
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="./l09_tsreg2.html" class="pagination-link" aria-label="Time Series Regression with Correlated Errors">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Time Series Regression with Correlated Errors</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./l13_spectral.html" class="pagination-link" aria-label="Spectral Analysis">
+        <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Spectral Analysis</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/vlyubchich/tsar/edit/master/l12_forecast.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/vlyubchich/tsar/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
