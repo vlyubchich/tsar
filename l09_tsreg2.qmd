@@ -12,7 +12,7 @@ options(digits = 3)
 theme_set(theme_light())
 ```
 
-# Time Series Regression with Correlated Errors
+# Time Series Regression with Correlated Errors {#sec-tsreg2}
 
 The goal of this lecture is to bring together knowledge about regression, time series trends, and autocorrelation with the goal of obtaining correct inference in regression problems involving time series. 
 You should become capable of suggesting a model that would meet the goal of data analysis (testing certain relationships) while satisfying assumptions (e.g., uncorrelatedness of residuals) and minimizing the risk of spurious results.
@@ -398,7 +398,7 @@ Hence, a model as in @eq-GAMLSS may accommodate non-normal distributions, possib
 
 ## Example: Insurance claims GAMLSS
 
-Consider the weekly number of house insurance claims related to water and weather damage in one Canadian city. 
+Consider the weekly number of home insurance claims related to water and weather damage in one Canadian city. 
 The number is standardized by the daily number of insured properties in that city. 
 The date of the claim corresponds to reported date of water weather damage, not the date when the claim was filed.
 This allows us to explore the relationship between the number of claims and weekly total precipitation (mm).

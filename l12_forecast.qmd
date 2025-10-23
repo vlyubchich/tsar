@@ -14,7 +14,8 @@ theme_set(theme_light())
 
 # Model Evaluation and Forecasting {#sec-evalforecast}
 
-This lecture ... 
+This lecture covers evaluation of time series forecasting models, including both point and interval forecasts. 
+We discuss cross-validation schemes tailored to time series and strategies to avoid overfitting and data leakage.
 
 **Objectives**
 
@@ -32,141 +33,625 @@ This lecture ...
 
 ## Time series forecasts
 
-### Assumptions 
+### Assumptions
+
+Forecasting models typically rely on several key assumptions:
+
+- *Structural stability*: relationships among variables and their dynamics are assumed to remain the same in the future as in the past (see also @sec-regression and @sec-tsreg2). Violations (regime shifts, interventions) undermine predictive validity.
+- *Data-generating process*: models embed assumptions such as linearity, stationarity, seasonality, or error structure (white noise, ARMA). Forecast intervals also assume a specific distribution of errors (often Gaussian) unless bootstrapped.
+- *Timing of the dataset*: genuine forecasts must only use information available at the forecast origin; using future predictors is data leakage.
+- *Exogeneity of predictors*: for regression with x-variables, either use leading indicators or forecast the predictors themselves (with added uncertainty).
+- *Measurement and preprocessing*: missing values, outliers, and calendar effects should be handled consistently between training and deployment.
 
 
-### How to obtain forecasts from different types of models (white noise-like; recursive like ARIMA and Exponential smoothing; with x-variables and ARMA structure; Examples in R)
+### How to obtain forecasts from different types of models
 
-Univariate models - extrapolation of trends;
-ARIMA are 1-step-ahead forecasts (AIC)
+Different model classes require different forecasting approaches.
 
-Types of forecasts (point prediction or intervals; can be different intervals for the same point prediction)
+**White noise and simple trend models**
+
+For models with deterministic trends and white noise errors (e.g., linear regression), forecasts are simply the fitted values at future time points. 
+Prediction intervals assume constant variance or use residual resampling (bootstrap).
+
+For trends fitted via `lm()`, `mgcv::gam()`, or a similar function, use `predict(model, newdata = future_df)` to obtain point forecasts, where `future_df` should include new values of the time indices used to model the trends.
+Check for other arguments in the `predict()` method for the given object class (e.g., `?predict.lm` or `?mgcv::predict.gam`) to specify prediction intervals (e.g., `interval = "prediction", level = 0.95`) or extract standard errors (e.g., `se.fit = TRUE`) to compute custom prediction intervals.
+
+**Recursive models**
+
+ARIMA, SARIMA models and exponential smoothing methods (simple, Holt, Holt--Winters) generate forecasts recursively, with their 1-step-ahead forecasts usually being most accurate.
+Multi-step forecasts from these models rely on their past forecasts, so forecast uncertainty grows with the forecast horizon. 
+
+Recursive forecasts typically require just the number of steps ahead, `h`, to forecast.
+E.g., use `predict(ARIMAmodel, n.ahead = h)` for ARIMA models fitted in base R (see `?predict.Arima` or `?predict.ar`).
+The R package `forecast` provides a unified interface: its `forecast(model, h = h)` works for objects from `ets()`, `auto.arima()`, `Arima()`, `HoltWinters()`, and many others, returning point forecasts and prediction intervals.
+
+**Regression models**
+
+When a regression includes explanatory variables, forecasting requires values of future predictors (see discussion of ex-ante vs ex-post forecasts below), which are passed to the function using the arguments `newdata`, `newxreg`, or `xreg`.
+If the regression includes an ARMA component for its errors, it is predicted recursively (see the relevant help files for details, such as `?predict.Arima` and `?forecast::forecast.Arima`).
 
 
+### Types of forecasts: ex-post vs. ex-ante
 
-### Types of forecasts, especially when multiple regression
-
-Types (*ex-post* from *ex-ante* forecasts)
-
-
-Let $\hat{Y}_T(h)$ be a forecast $h$ steps ahead made at the time $T$. 
+Let $\hat{Y}_T(h)$ be a forecast $h$ steps ahead made at time $T$. 
 If $\hat{Y}_T(h)$ only uses information up to time $T$, the resulting forecasts are called out-of-sample forecasts. 
-Economists call them *ex-ante* forecasts. 
-We have discussed several ways to select the optimal method or model for forecasting, e.g., using PMAE, PMSE, or coverage -- all calculated on a testing set. 
-@Chatfield:2000 lists several ways to unfairly 'improve' forecasts:
+@Chatfield:2000 listed several ways to unfairly 'improve' forecasts:
 
-1. Fitting the model to all the data including the test set.
-1. Fitting several models to the training set and choosing the model which gives the best 'forecasts' of the test set. 
-The selected model is then used (again) to produce forecasts of the test set, even though the latter has already been used in the modeling process.
+1. Fitting the model to all the data including the testing set.
+1. Fitting several models to the training set and choosing the model which gives the best 'forecasts' of the testing set. 
+The selected model is then used (again) to produce forecasts of the testing set, even though the latter has already been used in the modeling process.
 1. Using the known test-set values of 'future' observations on the explanatory variables in multivariate forecasting. 
-This will improve forecasts of the dependent variable in the test set, but these future values will not of course be known at the time the forecast is supposedly made (though in practice the 'forecast' is made at a later date). 
+This will improve forecasts of the dependent variable in the testing set, but these future values of predictors will not be known at the time the forecast is supposedly made. 
 Economists call such forecasts *ex-post* forecasts to distinguish them from *ex-ante* forecasts. 
 The latter, being genuinely out-of-sample, use forecasts of future values of explanatory variables, where necessary, to compute forecasts of the response variable. 
 *Ex-post* forecasts can be useful for assessing the effects of explanatory variables, provided the analyst does not pretend that they are genuine out-of-sample forecasts.
 
-So what to do if we put lots of effort to build a regression model using time series and need to forecast the response, $Y_t$, which is modeled using different independent variables $X_{t,k}$ ($k=1,\dots,K$)? 
+So what to do if we put lots of effort to build a regression model using time series and need to forecast the response, $Y_t$, which is modeled using independent variables $X_{t,p}$ ($p=1,\dots,P$)?
 Two options are possible.
 
-**Leading indicators**
+**Option 1: Use leading indicators**
 
-If $X_{t,k}$'s are leading indicators with lags starting at $l$, we, generally, would not need their future values to obtain the forecasts $\hat{Y}_T(h)$, where $h\leqslant l$. 
-For example, the model for losses tested in @sec-Granger shows that precipitation with lag 1 is a good predictor for current losses, i.e., precipitation is a leading indicator. 
-The 1-week ahead forecast of $Y_{t+1}$ can be obtained using the current precipitation $X_t$ (all data are available). 
-If $h>l$, we will be forced to forecast the independent variables, $X_{t,k}$'s -- see the next option.
+If $X_{t,p}$'s are leading indicators with lags starting at $l$, we generally would not need their future values to obtain the forecasts $\hat{Y}_T(h)$, where $h\leqslant l$. 
+For example, the model for insurance claims tested in @sec-Granger shows that precipitation with lag 1 is a good predictor for current losses, i.e., precipitation is a leading indicator. 
+The 1-week-ahead forecast of $Y_{t+1}$ can be obtained using the current precipitation $X_t$ (all data are available). 
+If $h>l$, we will be forced to forecast the independent variables, $X_{t,p}$'s—see the next option.
 
-**Forecast of predictors**
+**Option 2: Start by forecasting predictors**
 
-If we opt for forecasting $X_{t,k}$'s, the errors (uncertainty) of such forecasts will be larger, because future $X_{t,k}$'s themselves will be the estimates.
+If we opt for forecasting $X_{t,p}$'s, the errors (uncertainty) of the resulting forecasts for $Y_t$ will be larger, because future $X_{t,p}$'s themselves will be the estimates.
 Nevertheless, it might be the only choice when leading indicators are not available. 
 Building a full and comprehensive model with all diagnostics for each regressor is usually unfeasible and even problematic if we plan to consider multivariate models for regressors (the complexity of models will quickly escalate). 
-As an alternative, it is common to use automatic or semi-automatic univariate procedures that can help to forecast each of the $X_{t,k}$'s. 
-For example, consider exponential smoothing, Holt--Winters smoothing, and auto-selected SARIMA/ARIMA/ARMA/AR/MA models -- all those can be automated for a large number of forecasts to make.
-
-
+As an alternative, it is common to use automatic or semi-automatic univariate procedures that can help to forecast each of the $X_{t,p}$'s. 
+For example, consider exponential smoothing, Holt--Winters smoothing, and auto-selected SARIMA/ARIMA/ARMA/AR/MA models—all those can be automated for a large number of forecasts to make.
 
 
 ## Cross-validation schemes
 
-Goals and intended implementation of the model hence the selection of the scheme.
+Suppose we have used the data $Y_1, \dots, Y_n$ to build $M$ forecasting models $\hat{Y}^{(m)}_t$ ($m = 1,\dots,M$) and we now obtain future observations $Y_{n+1}, \dots, Y_{n+k}$ that were not used to fit the models (also called *out-of-sample* data, after-sample, or the testing set; $k$ is the size of this set). 
+The difference $Y_t - \hat{Y}^{(m)}_t$ is the forecast (or prediction) error at time $t$ for the $m$th model. 
+However, an approach like this might require us to wait for future observations to assess and compare the models. 
+A way around this is to take the historical dataset $Y_1, \dots, Y_n$ and split it into a *training set* and a *testing set*.
 
-Training - Testing
-(split %% and n)
+Cross-validation (CV) is a standard approach to formal assessment of model performance and generalization ability.
+By repeating the training and evaluation process on different data splits, CV provides robust estimates of out-of-sample accuracy and helps detect overfitting.
+Designing CV for time series models is more complex than for independent data due to temporal dependence and the need to respect time order. 
+Choose a CV scheme that mirrors how the model will be used in practice. 
+For that, you may consider
 
-Training - Testing - Evaluation
+- Forecast horizon: 1 week vs. 4 weeks vs. 1 year ahead (different error dynamics and interval calibration).
+- Update frequency: will you refit the model weekly, monthly, or never (e.g., if the model is deployed on a remote buoy with limited bandwidth/power)?
+- Availability of predictors: are they leading indicators (ex-ante usable) or must they be predicted too?
 
-Window approach caret::
-forecast::
+**Principles for designing CV for time series**
 
+- Respect temporal order: never train on information from the future relative to validation points.
+- Evaluate at the target horizon: if you need 1-week-ahead forecasts, it is impractical to assess model performance on 1-year-ahead horizons (and vice versa).
+- Match refit cadence: if you plan monthly refits, validate with monthly refits; if the model is frozen, validate with a single fit and no refitting.
+- Avoid data leakage: when using predictors, supply leading indicators or forecast predictors when necessary.
+
+**Common schemes**
+
+1. Single holdout (train/test split). 
+Fit the model once on the training period; evaluate on a future block. 
+Appropriate when a model is deployed once for a long time without refitting.
+
+1. Expanding window (a.k.a. walk-forward). 
+Increase the training window over time, refit the model each time, and forecast $h$ steps ahead. 
+Mirrors frequent updates with accumulating data.
+
+1. Fixed window (moving window).
+Use a sliding window of fixed length (last $W$ observations), refit the model each time, forecast $h$ steps. 
+Useful when stationarity is local and old data become less relevant.
+
+1. Periodic refits.
+Refit the model only every certain number of steps (e.g., monthly) and use the same fitted model between refits. 
+Balances compute/operational constraints with adaptation.
+
+We may compare a great number of models using the training set and choose the best one (with the smallest errors); however, it would be unfair to use the out-of-sample errors from the testing set for demonstrating the model performance because this part of the sample was used to select the model. 
+Thus, it is advisable to have one more chunk of the same time series that was not used for model specification, estimation, or selection. 
+Errors of the selected model on this *validation set* will be closer to the true (genuine) out-of-sample errors and can be used to assess coverage of true out-of-sample forecasts when the model is finally deployed.
+
+**R implementations**
+
+You may find useful the following R functions for running CV: `for()`, `while()`, `sapply()`, and `zoo::rollapply()` loops, `purrr::map()`, or similar constructs. 
+Also, consider if you should run heavy computations in parallel, with functions like `parallel::parSapply()`, `future.apply::future_sapply()`, or `furrr::future_map()`.
+Several R packages provide built-in functions for time-series CV:
+
+- `forecast::tsCV()` automates rolling-origin errors for a user-specified forecast function; ideal for 1-step errors and extendable for $h$-step forecasts.
+- `caret::createTimeSlices()` (and `trainControl(method = "timeslice")`) creates indices for time-slice resampling that you can loop over with your own modeling function.
+
+::: {.callout-note icon=false}
+
+## Example: Cross-validation schemes in R
+
+Examples below use the `AirPassengers` dataset (monthly international airline passenger numbers, 1949–1960) available in base R.
+
+1) Single holdout (train/test split). Use 70% of data for training, last 30% of data for testing.
+
+```{r}
+#| code-fold: false
+
+# Sample size
+n <- length(AirPassengers)
+
+# Training and testing set sizes
+n_train <- floor(0.7 * n)
+h <- n - n_train
+
+# For subsetting the ts object
+train_end_time <- time(AirPassengers)[n_train]
+test_start_time <- time(AirPassengers)[n_train + 1]
+
+# Training and testing sets
+y_train <- window(AirPassengers, end = train_end_time)
+y_test <- window(AirPassengers, start = test_start_time)
+
+# Fit models on training data
+m_ets <- forecast::ets(y_train)
+m_arima <- forecast::auto.arima(y_train)
+
+# Forecasts
+fc_ets <- forecast::forecast(m_ets, h = h)
+fc_arima <- forecast::forecast(m_arima, h = h)
+
+# RMSE calculation
+c(RMSE_ETS    = sqrt(mean((y_test - fc_ets$mean)^2)),
+  RMSE_ARIMA  = sqrt(mean((y_test - fc_arima$mean)^2))
+)
+```
+
+2) Expanding window, $h$-step forecasts with `forecast::tsCV()`.
+
+```{r}
+#| code-fold: false
+
+library(forecast)
+
+# Set the forecast horizon (6 months ahead)
+h_target <- 6
+
+# Set the initial training size (e.g., first 10 years)
+n_train_initial <- 120  # 10 years * 12 months
+
+# Compute forecast errors using tsCV()
+e_ets_h   <- tsCV(AirPassengers, initial = n_train_initial,
+                  forecastfunction = function(z, h) 
+                      forecast(ets(z), h = h), h = h_target)
+e_arima_h <- tsCV(AirPassengers, initial = n_train_initial, 
+                  forecastfunction = function(z, h)
+                      forecast(auto.arima(z), h = h), h = h_target)
+
+# RMSE calculation for each model and horizon
+data.frame(
+    RMSE_ETS_h   = apply(e_ets_h, 2, function(x) sqrt(mean(x^2, na.rm = TRUE))),
+    RMSE_ARIMA_h = apply(e_arima_h, 2, function(x) sqrt(mean(x^2, na.rm = TRUE)))
+)
+```
+
+3) Fixed window (moving window) with a custom loop.
+
+```{r}
+#| code-fold: false
+
+# Set the forecast horizon (6 months ahead)
+h_target <- 6
+
+# Set the fixed training size (e.g., the last 10 years)
+n_train <- 120  # 10 years * 12 months
+
+# Initialize error storage
+e_ets_h <- e_arima_h <- matrix(NA, nrow = 0, ncol = h_target)
+
+# Loop over time points with seq(); can change the argument "by" to skip some points
+for (i in seq(n_train, length(AirPassengers) - h_target, by = 1)) {
+    y_train <- window(AirPassengers, 
+                      start = time(AirPassengers)[i - n_train + 1], 
+                      end = time(AirPassengers)[i])
+    y_test  <- window(AirPassengers, 
+                      start = time(AirPassengers)[i + 1], 
+                      end = time(AirPassengers)[i + h_target])
+    
+    # Fit models
+    m_ets   <- forecast::ets(y_train)
+    m_arima <- forecast::auto.arima(y_train)
+    
+    # Forecasts
+    fc_ets   <- forecast::forecast(m_ets, h = h_target)
+    fc_arima <- forecast::forecast(m_arima, h = h_target)
+    
+    # Forecast errors
+    e_ets_h   <- rbind(e_ets_h, y_test - fc_ets$mean)
+    e_arima_h <- rbind(e_arima_h, y_test - fc_arima$mean)
+}
+
+# RMSE calculation for each model and horizon
+data.frame(
+    RMSE_ETS_h   = apply(e_ets_h, 2, function(x) sqrt(mean(x^2, na.rm = TRUE))),
+    RMSE_ARIMA_h = apply(e_arima_h, 2, function(x) sqrt(mean(x^2, na.rm = TRUE)))
+)
+```
+
+4) Periodic refits (e.g., yearly), $h$-step-ahead.
+Modify the loop above with `if()` statement and `time_since_last_refit` counter to refit only every `refit_every` steps.
+
+```{r}
+#| code-fold: false
+
+# Set the forecast horizon (6 months ahead)
+h_target <- 6
+
+# Set the fixed training size (e.g., the last 10 years)
+n_train <- 120  # 10 years * 12 months
+
+# How often to refit (in loop steps). Example: refit every 12 months
+refit_every <- 12
+time_since_last_refit <- refit_every  # Force refit at first iteration
+
+# Initialize error storage
+e_ets_h <- e_arima_h <- matrix(NA, nrow = 0, ncol = h_target)
+
+# Loop over time points with seq()
+for (i in seq(n_train, length(AirPassengers) - h_target, by = 1)) {
+    y_train <- window(AirPassengers, 
+                      start = time(AirPassengers)[i - n_train + 1], 
+                      end = time(AirPassengers)[i])
+    y_test  <- window(AirPassengers, 
+                      start = time(AirPassengers)[i + 1], 
+                      end = time(AirPassengers)[i + h_target])
+    
+    if (time_since_last_refit >= refit_every) {
+        # Fit models
+        m_ets   <- forecast::ets(y_train)
+        m_arima <- forecast::auto.arima(y_train)
+        
+        # Reset counter
+        time_since_last_refit <- 0 
+        
+        print(paste("Refitted at time index:", i))
+    }
+    
+    # Forecasts
+    # If not refitted, use the last fitted model and forecast further ahead
+    fc_ets   <- forecast::forecast(m_ets, h = h_target + time_since_last_refit)
+    fc_arima <- forecast::forecast(m_arima, h = h_target + time_since_last_refit)
+    
+    # Select only the relevant forecasts (last h_target steps)
+    last_h_target <- (time_since_last_refit + 1):(time_since_last_refit + h_target)
+    
+    # Forecast errors
+    e_ets_h   <- rbind(e_ets_h, y_test - fc_ets$mean[last_h_target])
+    e_arima_h <- rbind(e_arima_h, y_test - fc_arima$mean[last_h_target])
+    
+    # Increment counter
+    time_since_last_refit <- time_since_last_refit + 1
+}
+
+# RMSE calculation for each model and horizon
+data.frame(
+    RMSE_ETS_h   = apply(e_ets_h, 2, function(x) sqrt(mean(x^2, na.rm = TRUE))),
+    RMSE_ARIMA_h = apply(e_arima_h, 2, function(x) sqrt(mean(x^2, na.rm = TRUE)))
+)
+```
+:::
 
 
 ## Metrics for model comparison
 
-How do we compare forecasting models to decide which one is better? 
-We will look at various ways of choosing between models as the course progresses, but the most obvious answer is to see which one is better at predicting.
+### Point forecast metrics
 
-Suppose we have used the data $Y_1, \dots, Y_n$ to build $M$ forecasting models $\hat{Y}^{(m)}_t$ ($m = 1,\dots,M$) and we now obtain future observations $Y_{n+1}, \dots, Y_{n+k}$ that were not used to fit the models (also called *out-of-sample* data, after-sample, or the testing set; $k$ is the size of this set). 
-The difference $Y_t - \hat{Y}^{(m)}_t$ is the forecast (or prediction) error at the time $t$ for the $m$th model. 
 For each model, compute the prediction mean square error (PMSE)
 $$
 PMSE_m = k^{-1}\sum_{t=n+1}^{n+k}\left(Y_t - \hat{Y}^{(m)}_t\right)^2
 $${#eq-pmse}
-and prediction mean absolute error (PMAE)
+or prediction root mean square error (PRMSE) 
 $$
-PMAE_m = k^{-1}\sum_{t=n+1}^{n+k}\left|Y_t - \hat{Y}^{(m)}_t\right|
+PRMSE_m = \sqrt{PMSE_m},
+$$ {#eq-prmse}
+prediction mean absolute error (PMAE)
+$$
+PMAE_m = k^{-1}\sum_{t=n+1}^{n+k}\left|Y_t - \hat{Y}^{(m)}_t\right|,
 $${#eq-pmae}
-and, similarly, prediction root mean square error (PRMSE; $PRMSE = \sqrt{PMSE}$), prediction mean absolute percentage error (PMAPE, if $Y_t \neq 0$ in the testing period), etc. 
+or prediction mean absolute percentage error (PMAPE, if $Y_t \neq 0$ in the testing period), etc. 
 We choose the model with the smallest error.
-
-One obvious drawback to the above method is that it requires us to wait for future observations to compare models. 
-A way around this is to take the historical dataset $Y_1, \dots, Y_n$ and split it into a *training set* $Y_1, \dots, Y_k$ and a *testing set* $Y_{k+1}, \dots, Y_n$, where $(n - k)\ll k$, i.e., most of the data goes into the training set.
-
-::: {.callout-note}
-This scheme of splitting time series into the testing and training sets is a simple form of *cross-validation*. 
-Not all forms of cross-validation apply to time series due to the usual temporal dependence in time series data. 
-We need to select cross-validation techniques that can accommodate such dependence. 
-Usually, it implies selecting data for validation not at random but in consecutive chunks (periods) and, ideally, with testing or validation periods being after the training period.
-:::
-
-Forecasting models are then built using only the training set and used to 'forecast' values from the testing set. 
-Sometimes it is called an *out-of-sample forecast* because we predict values for the times we have not used for the model specification and estimation. 
-The testing set is used as a set of future observations to compute the PMSE. 
-The PMSE and other errors are computed for each model over the testing set and then compared to see errors for which models are smaller.
-
 If two models produce approximately the same errors, we choose the model that is simpler (involves fewer variables). 
 This is called the *law of parsimony*.
 
-The above error measures (PMSE, PRMSE, PMAE, etc.) compare observed and forecasted data points, hence, are measures of the accuracy of the *point forecasts*. 
-Another way of comparing models could be based on the quality of their *interval forecasts*, i.e., by assessing how good the prediction intervals are. 
-To assess the quality of interval forecasts, one may start by computing the *empirical coverage* (proportion of observations in the testing set that are within -- covered by -- corresponding prediction intervals for given confidence $C$, e.g., 95%) and *average interval width*. 
-Prediction intervals are well-calibrated if empirical coverage is close to $C$ (more important) while intervals are not too wide (less important).
-
 ::: {.callout-note}
-To select the best coverage, one can calculate the absolute differences between the nominal coverage $C$ and each empirical coverage $\hat{C}_m$:
+PMSE and PRMSE penalize larger errors more heavily than PMAE due to squaring the errors.
+Most fitting algorithms (e.g., least squares) minimize squared errors, so PMSE/PRMSE often align better with the model's optimization criterion.
+:::
+
+<!-- ### Probabilistic forecast metrics -->
+
+<!-- While point forecast metrics evaluate only the mean or median prediction, probabilistic metrics assess the quality of the entire predictive distribution (or prediction intervals). -->
+
+<!-- The *continuous ranked probability score* (CRPS) is a strictly proper scoring rule that generalizes the mean absolute error to probabilistic forecasts [@Gneiting:Raftery:2007].  -->
+<!-- For a forecast distribution $F$ and realization $y$, the CRPS is defined as -->
+<!-- $$ -->
+<!-- \text{CRPS}(F, y) = \int_{-\infty}^{\infty} \left(F(x) - \mathbf{1}\{y \leqslant x\}\right)^2 dx, -->
+<!-- $${#eq-crps} -->
+<!-- where $F(x)$ is the cumulative distribution function of the forecast, and $\mathbf{1}\{ \cdot \}$ is the indicator function (Heaviside step function) for the observation, it equals 1 if the condition is true and 0 otherwise.  -->
+
+<!-- The CRPS can be interpreted as: -->
+
+<!-- - A measure of the distance between the forecast CDF and the empirical CDF of the observation. -->
+<!-- - Reducing to MAE when the forecast is deterministic (point forecast). -->
+<!-- - Rewarding both accuracy (forecast close to observation) and sharpness (narrow predictive distribution). -->
+
+<!-- Lower CRPS values indicate better probabilistic forecasts.  -->
+<!-- For Gaussian predictive distributions with mean $\mu$ and standard deviation $\sigma$, the CRPS has a closed form: -->
+<!-- $$ -->
+<!-- \text{CRPS}(\mathcal{N}(\mu, \sigma^2), y) = \sigma\left(\frac{y - \mu}{\sigma}\left(2\Phi\left(\frac{y - \mu}{\sigma}\right) - 1\right) + 2\phi\left(\frac{y - \mu}{\sigma}\right) - \frac{1}{\sqrt{\pi}}\right), -->
+<!-- $${#eq-crps-gaussian} -->
+<!-- where $\Phi(\cdot)$ and $\phi(\cdot)$ are the standard normal CDF and PDF, respectively. -->
+
+<!-- The average CRPS over the testing set is -->
+<!-- $$ -->
+<!-- \overline{\text{CRPS}}_m = k^{-1}\sum_{t=n+1}^{n+k}\text{CRPS}(F_t^{(m)}, Y_t), -->
+<!-- $${#eq-avg-crps} -->
+<!-- where $F_t^{(m)}$ is the predictive distribution from model $m$ for time $t$. -->
+
+
+### Interval forecast metrics
+
+To assess the quality of interval forecasts from model $m$, compute the *empirical coverage*, $\hat{C}_m$, as the proportion of observations in the testing set that are within -- covered by -- corresponding prediction intervals for a given confidence $C$, e.g., $C = 0.95$ or 95%):
 $$
-\Delta_m = |C - \hat{C}_m|.
+\hat{C}_m = k^{-1}\sum_{t=n+1}^{n+k} \mathbf{1}\{Y_t \in PI_t^{(m)}\},
+$$
+where $PI_t^{(m)} = \left[PI_{t,lower}^{(m)}, PI_{t,upper}^{(m)}\right]$ is the prediction interval from model $m$ at time $t$.
+To select the best coverage, one can calculate the absolute differences between each empirical coverage $\hat{C}_m$ and the nominal coverage $C$:
+$$
+\Delta_m = |\hat{C}_m - C|.
 $$
 Hence, we select the model with the smallest $\Delta_m$, not the largest coverage $\hat{C}_m$.
-:::
+
+Additionally, compute the *average interval width*
+$$
+\text{Width}_m = k^{-1}\sum_{t=n+1}^{n+k} \left(PI_{t,upper}^{(m)} - PI_{t,lower}^{(m)}\right)
+$$
+and prefer models with narrower intervals, all else equal.
+
+Prediction intervals are well-calibrated if their empirical coverage is close to $C$ (more important) while the intervals are not too wide (less important).
+The trade-off between coverage and width is crucial: overly wide intervals may achieve nominal coverage but provide little practical value.
 
 ::: {.callout-note}
 It is possible to obtain different prediction intervals from the same model. 
-For example, we can calculate prediction intervals based on normal and bootstrapped distributions. 
+For example, we can calculate prediction intervals based on normal, t, and bootstrapped distributions. 
 In this case, point forecasts are the same, but interval forecasts differ.
 :::
 
-We may compare a great number of models using the training set, and choose the best one (with the smallest errors), however, it would be unfair to use the out-of-sample errors from the testing set for demonstrating the model performance because this part of the sample was used to select the model. 
-Thus, it is advisable to have one more chunk of the same time series that was not used for model specification, estimation, or selection. 
-Errors of the selected model on this *validation set* will be closer to the true (genuine) out-of-sample errors and can be used to improve coverage of true out-of-sample forecasts when the model is finally deployed.
 
 
-## Worked out example of comparing several models
+:::{.callout-note icon=false}
 
-1. Basic (naive) models: average / climatology / HWinters
+## Example: Insurance claims forecasting
 
-2. Commonly or previously used model (GLM)
+We evaluate forecasts of weekly home insurance data using point and interval metrics using alternative models: seasonal naive, ARIMA, and GAMLSS. 
+For GAMLSS (developed in @sec-GAMLSS), we develop ex-post forecasts using the known precipitation data for the forecast week, and ex-ante forecasts where we predict precipitation with a simple univariate model.
+Overall, we compare four combinations of models and forecasts.
 
-3. State-of-the-science or proposed model
+For the cross-validation scheme, we use an expanding window with weekly refits and 4-week-ahead forecasts.
+With 10 years of data, we use the first 9 years for initial training and the last 1 year for testing.
+
+```{r}
+#| eval: false
+#| echo: true
+#| code-fold: false
+
+library(gamlss)
+
+# Read and prepare a weekly time series
+logconstant <- 1
+Y <- read.csv("data/insurance_weekly.csv") %>%
+    dplyr::select(Claims, Precipitation) %>% 
+    mutate(Precipitation_lag1 = dplyr::lag(Precipitation, 1),
+           Week = 1:n(),
+           Year = rep(2002:2011, each = 52),
+           Claims_ln = log(Claims + logconstant)) %>% 
+    mutate(Claims_ln_lag1 = dplyr::lag(Claims_ln, 1))
+n <- nrow(Y)
+
+# Set the forecast horizon (4 weeks ahead)
+h_target <- 4
+
+# Set the initial training size (the first 9 years)
+n_train_initial <- 9 * 52
+
+# Set confidence level for prediction intervals
+C <- 0.95
+lower_p <- (1 - C) / 2
+upper_p <- 1 - lower_p
+
+# Initialize storage for performance metrics
+e_naive_h <- e_arima_h <- e_gamlss_xp_h <- e_gamlss_xa_h <- matrix(NA, nrow = 0, ncol = h_target)
+c_naive_h <- c_arima_h <- c_gamlss_xp_h <- c_gamlss_xa_h <- matrix(NA, nrow = 0, ncol = h_target)
+w_naive_h <- w_arima_h <- w_gamlss_xp_h <- w_gamlss_xa_h <- matrix(NA, nrow = 0, ncol = h_target)
+
+# Loop over time points with seq(); can change the argument "by" to skip some points
+for (i in seq(n_train_initial, n - h_target, by = 1)) {
+    # 1. Training and testing sets
+    Y_train <- Y[1:i, ]
+    Y_train_noNA <- na.omit(Y_train)
+    y_train <- ts(Y_train$Claims, frequency = 52)
+    Y_test <- Y[(i + 1):(i + h_target), ]
+    y_test <- Y_test$Claims
+    
+    # 2. Fit models
+    m_arima <- forecast::auto.arima(y_train)
+    m_gamlss <- gamlss(Claims ~ ps(Precipitation) + Week + ps(Precipitation_lag1) + Claims_ln_lag1
+                       ,sigma.formula = ~ps(Week)
+                       ,family = NBI
+                       ,control = gamlss.control(c.crit = 0.01, trace = FALSE)
+                       ,data = Y_train_noNA)
+    
+    # 3. Forecasts
+    # Seasonal naive forecast ("climatology" for the number of claims)
+    fc_naive <- forecast::snaive(y_train, level = C * 100, h = h_target)
+    
+    # ARIMA forecast
+    fc_arima <- forecast::forecast(m_arima, h = h_target, level = C * 100)
+    
+    # GAMLSS ex-post forecast, see ?gamlss::predict.gamlss
+    pred_mu <- predict(m_gamlss, 
+                       newdata = Y_test, 
+                       what = "mu", 
+                       type = "response")
+    pred_sigma <- predict(m_gamlss, 
+                          newdata = Y_test, 
+                          what = "sigma", 
+                          type = "response")
+    lower_bound <- qNBI(lower_p, mu = pred_mu, sigma = pred_sigma)
+    upper_bound <- qNBI(upper_p, mu = pred_mu, sigma = pred_sigma)
+    fc_gamlss_xp <- data.frame(mean = pred_mu,
+                               lower = lower_bound,
+                               upper = upper_bound)
+    
+    # GAMLSS ex-ante forecast
+    # Simple precipitation forecast: use naive seasonal forecast
+    last_precip <- tail(Y_train$Precipitation, 1)
+    new_precip <- forecast::snaive(ts(Y_train$Precipitation, frequency = 52), 
+                                   h = h_target)$mean %>% 
+        as.vector()
+    Y_test_exante <- Y_test %>%
+        mutate(Precipitation = new_precip) %>% 
+        mutate(Precipitation_lag1 = dplyr::lag(Precipitation, 1, default = last_precip))
+    # Since we have the lagged claims as one of the predictors (unknown when forecasting),  
+    # we need to do recursive forecasts for GAMLSS ex-ante
+    lower_bound_xa <- upper_bound_xa <- pred_mu_xa <- rep(NA, h_target)
+    for (j in 1:h_target) {
+        pred_mu_1 <- predict(m_gamlss, 
+                             newdata = Y_test_exante[j, , drop = FALSE],
+                             what = "mu", 
+                             type = "response")
+        pred_sigma_1 <- predict(m_gamlss, 
+                              newdata = Y_test_exante[j, , drop = FALSE], 
+                              what = "sigma", 
+                              type = "response")
+        pred_mu_xa[j] <- pred_mu_1
+        lower_bound_xa[j] <- qNBI(lower_p, mu = pred_mu_1, sigma = pred_sigma_1)
+        upper_bound_xa[j] <- qNBI(upper_p, mu = pred_mu_1, sigma = pred_sigma_1)
+        # Update lagged claims for next step
+        if (j < h_target) {
+            Y_test_exante$Claims_ln_lag1[j + 1] <- log(pred_mu_1 + logconstant)
+        }
+    }
+    fc_gamlss_xa <- data.frame(mean = pred_mu_xa,
+                               lower = lower_bound_xa,
+                               upper = upper_bound_xa)
+    
+    # 4.1 Forecast errors
+    e_naive_h   <- rbind(e_naive_h, y_test - fc_naive$mean)
+    e_arima_h <- rbind(e_arima_h, y_test - fc_arima$mean)
+    e_gamlss_xp_h <- rbind(e_gamlss_xp_h, y_test - fc_gamlss_xp$mean)
+    e_gamlss_xa_h <- rbind(e_gamlss_xa_h, y_test - fc_gamlss_xa$mean)
+    
+    # 4.2 Forecast coverage
+    c_naive_h <- rbind(c_naive_h, 
+                         (y_test >= as.vector(fc_naive$lower)) & 
+                           (y_test <= as.vector(fc_naive$upper)))
+    c_arima_h <- rbind(c_arima_h, 
+                       (y_test >= as.vector(fc_arima$lower)) & 
+                           (y_test <= as.vector(fc_arima$upper)))
+    c_gamlss_xp_h <- rbind(c_gamlss_xp_h, 
+                           (y_test >= fc_gamlss_xp$lower) & (y_test <= fc_gamlss_xp$upper))
+    c_gamlss_xa_h <- rbind(c_gamlss_xa_h, 
+                           (y_test >= fc_gamlss_xa$lower) & (y_test <= fc_gamlss_xa$upper))
+    
+    # 4.3 Forecast interval width
+    w_naive_h <- rbind(w_naive_h, as.vector(fc_naive$upper) - as.vector(fc_naive$lower))
+    w_arima_h <- rbind(w_arima_h, as.vector(fc_arima$upper) - as.vector(fc_arima$lower))
+    w_gamlss_xp_h <- rbind(w_gamlss_xp_h, fc_gamlss_xp$upper - fc_gamlss_xp$lower)
+    w_gamlss_xa_h <- rbind(w_gamlss_xa_h, fc_gamlss_xa$upper - fc_gamlss_xa$lower)
+    
+}
+```
+
+
+```{r}
+#| echo: false
+
+# Save results for later analysis
+# save(C,
+#      e_naive_h, e_arima_h, e_gamlss_xp_h, e_gamlss_xa_h,
+#      c_naive_h, c_arima_h, c_gamlss_xp_h, c_gamlss_xa_h,
+#      w_naive_h, w_arima_h, w_gamlss_xp_h, w_gamlss_xa_h,
+#      file = "data/insurance_forecast_cv.RData")
+load("data/insurance_forecast_cv.RData")
+```
+
+
+```{r}
+# RMSE for each model and horizon
+data.frame(
+    RMSE_naive_h = apply(e_naive_h, 2, function(x) sqrt(mean(x^2, na.rm = TRUE))),
+    RMSE_arima_h = apply(e_arima_h, 2, function(x) sqrt(mean(x^2, na.rm = TRUE))),
+    RMSE_gamlss_xp_h = apply(e_gamlss_xp_h, 2, function(x) sqrt(mean(x^2, na.rm = TRUE))),
+    RMSE_gamlss_xa_h = apply(e_gamlss_xa_h, 2, function(x) sqrt(mean(x^2, na.rm = TRUE)))
+)
+```
+
+The lowest RMSE across all horizons belongs to the ex-post forecasts from the GAMLSS, however, these forecasts are unfairly better because they use future precipitation data and future (lagged) claim counts.
+The ex-ante GAMLSS forecasts have considerably higher RMSE -- even higher than the naive seasonal model.
+The RMSE of ARIMA model were second-lowest.
+
+```{r}
+# Coverage for each model and horizon
+(COV <- data.frame(
+    Coverage_naive_h = apply(c_naive_h, 2, function(x) mean(x, na.rm = TRUE)),
+    Coverage_arima_h = apply(c_arima_h, 2, function(x) mean(x, na.rm = TRUE)),
+    Coverage_gamlss_xp_h = apply(c_gamlss_xp_h, 2, function(x) mean(x, na.rm = TRUE)),
+    Coverage_gamlss_xa_h = apply(c_gamlss_xa_h, 2, function(x) mean(x, na.rm = TRUE))
+))
+
+# Difference from the nominal level
+abs(COV - C)
+```
+
+The empirical coverage of ARIMA intervals is the closest to the nominal 95% level, followed by ex-post GAMLSS and the naive model.
+The ex-ante GAMLSS intervals are under-covering the true observations by about 3 percentage points.
+
+```{r}
+# Average interval width calculation for each model and horizon
+data.frame(
+    Width_naive_h = apply(w_naive_h, 2, function(x) mean(x, na.rm = TRUE)),
+    Width_arima_h = apply(w_arima_h, 2, function(x) mean(x, na.rm = TRUE)),
+    Width_gamlss_xp_h = apply(w_gamlss_xp_h, 2, function(x) mean(x, na.rm = TRUE)),
+    Width_gamlss_xa_h = apply(w_gamlss_xa_h, 2, function(x) mean(x, na.rm = TRUE))
+)
+```
+
+The GAMLSS intervals of two types are the narrowest, followed by ARIMA, then the naive model.
+Except the naive model, the uncertainty increases with the forecast horizon for all models, as expected.
+
+Overall, while the GAMLSS provides explanatory power for the incurred weather-related home insurance losses, the model is not that suitable for out-of-sample forecasting when future precipitation is unknown.
+We attempted to forecast precipitation with a simple seasonal naive model, which likely contributed to the poor performance of the ex-ante GAMLSS forecasts.
+Perhaps, more sophisticated precipitation forecasts (not necessarily by us, can be from an external dataset of weather predictions) could improve the ex-ante GAMLSS results, but this remains to be tested.
+For truly out-of-sample forecasting, ARIMA model was the best among the considered alternatives. 
+ARIMA delivered RMSE just below that of the naive model, but the coverage and width of ARIMA prediction intervals were considerably better.
+:::
+
+
+## Typical set of models to compare
+
+In practice, when comparing forecasting models we often consider:
+
+1. Basic (naive) models: average, climatology, seasonal naive, Holt--Winters, the last value. 
+These serve as benchmarks -- more complex models should outperform them.
+
+2. Commonly or previously used model: GLM or simpler ARIMA specification that has been used in the field or in previous studies. 
+This provides a baseline representing current practice.
+
+3. State-of-the-science or proposed model: advanced methods (e.g., ARIMAX with exogenous predictors, machine learning, or nonparametric approaches) that incorporate domain knowledge or recent methodological developments.
+
+The insurance example above uses a set like this and quantitatively assesses forecasting performance of the different models. 
 
 
 ## Conclusion
 
+This lecture covered comprehensive evaluation of time series forecasting models:
+
+- We illustrated how to assess point forecasts via RMSE, MAE, and interval forecasts via empirical coverage and average widths. See `forecast::accuracy()` for automatic calculation of some of these and other metrics.
+- We demonstrated data leakage by comparign ex-post and ex-ante forecasts by GAMLSS and compared it against univariate methods.
+- Cross-validation schemes should mirror operational use: match the target horizon, refit cadence, and predictor availability to deployment conditions.
+- Prefer rolling-origin cross-validation to reduce model selection bias and to diagnose overfitting; keep models parsimonious (AICc helps) and always check that assumptions are plausible for future deployment.
+- When multiple models perform similarly on point metrics, interval calibration and operational constraints (computation, interpretability) guide the final choice.

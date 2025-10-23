@@ -42,6 +42,7 @@ The R packages used in this book include (in alphabetic order):
 packages2cite <- sort(c(
     'astsa'
     # 'car'
+    ,'caret'
     ,'downlit'
     ,'dplR'
     ,'dplyr'
