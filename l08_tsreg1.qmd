@@ -27,6 +27,8 @@ You will become familiar with the problem of spurious correlation (regression) a
 * Chapter 10 in @Wooldridge:2013
 * Chapter 6 in @Kirchgassner:Wolters:2007 on cointegration
 
+[**Audio overview**](https://youtu.be/Y8KatyCy0nY)
+
 
 ## Spurious correlation
 

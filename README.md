@@ -1,14 +1,3 @@
-# Future work
-- make causality a separate lecture 10, add on diff-in-diff with cannabis example.
-- add a lecture on panel data analysis
-- expand on wavelets, add example of acoustic data
-- appendix or lecture on changepoint analysis
-- GLM or another generalized model with classification example for fisheries or ecology.
-- local stationarity, warping, time motifs, graph representation of time series
-- from NOAA project with G.N.: "Environmental Statistics 2: identification of different 
-types of rare events in time series (appendix?), time-series cross-validation (lect 11 done), 
-and GAMLSS (lect 9 on TSREG2 - done; lect 3 - done)"
-
 # Conventions and format examples
 
 ## Audio task notes
@@ -24,13 +13,22 @@ Keep the audio length between 15 and 20 minutes.
 as Dialogue -> Podcast Voice -> Clip Volume + 1.5 dB -> Export to mp3
 
 ### YouTube details:
-This is an audio overview of the lecture 
-"Title" 
-from Lyubchich, V. and Gel, Y. R. (2025) Time Series Analysis: Lecture Notes with Examples in R. https://vlyubchich.github.io/tsar/
+This audio overview is an adaptation by Vyacheslav Lyubchich. 
+It is based on the original work, "Time Series Analysis: Lecture Notes with Examples in R", by V. Lyubchich and Y. R. Gel, available at https://vlyubchich.github.io/tsar/ and licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
+This new, adapted work is also licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
 
-The audio was generated using AI and may be inaccurate. Please refer to the original lecture notes for accurate information.
+The audio was generated using AI and may be inaccurate. Please refer to the original work for accurate information.
+
+
+- Category: Education
+- License
+- Languages: English
+- Add specific keywords + time series, time series analysis, lecture notes, R, forecasting
+- End screen: 1 vid, 1 playlist, 1 subscribe
+- Visibility: Public
 
 [**Audio overview**](https://youtu.be/GmJLSaD29gY)
+
 
 ## Spellings
 

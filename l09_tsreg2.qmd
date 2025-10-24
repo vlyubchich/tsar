@@ -27,6 +27,8 @@ You should become capable of suggesting a model that would meet the goal of data
 * Chapters 3.8, 5.5, and 5.6 in @Shumway:Stoffer:2017
 * Chapter 3 in @Kirchgassner:Wolters:2007 on Granger causality
 
+[**Audio overview**](https://youtu.be/Z1lSUE-PFC0)
+
 
 ## Introduction
 

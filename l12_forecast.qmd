@@ -12,7 +12,7 @@ options(digits = 3)
 theme_set(theme_light())
 ```
 
-# Model Evaluation and Forecasting {#sec-evalforecast}
+# Forecasting and Model Evaluation {#sec-evalforecast}
 
 This lecture covers evaluation of time series forecasting models, including both point and interval forecasts. 
 We discuss cross-validation schemes tailored to time series and strategies to avoid overfitting and data leakage.
@@ -29,6 +29,8 @@ We discuss cross-validation schemes tailored to time series and strategies to av
 
 * Chapter 9 in @Brockwell:Davis:2002
 * Chapter 7 in @Hastie:etal:2009
+
+[**Audio overview**](https://youtu.be/ILM2kSnGqwA)
 
 
 ## Time series forecasts

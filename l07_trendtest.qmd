@@ -32,6 +32,8 @@ Moreover, you will become familiar with tests for non-monotonic parametric trend
 * @Buhlmann:2002 on bootstrap for time series
 * Chapter 6.3 in @Brockwell:Davis:2002 on unit-root tests
 
+[**Audio overview**](https://youtu.be/kA2604JKgYs)
+
 
 ## Introduction
 

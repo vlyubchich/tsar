@@ -29,6 +29,8 @@ You should be able to recognize features of time series from a periodogram simil
 * Chapter 4 in @Shumway:Stoffer:2017
 * @Nason:2008 on wavelet analysis
 
+[**Audio overview**](https://youtu.be/3BUjFjCgQ9c)
+
 
 ## Introduction
 

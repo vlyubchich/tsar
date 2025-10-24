@@ -28,6 +28,8 @@ You should be able to recognize when the differencing is needed based on the tim
 
 * Chapters 6.1--6.5 in @Brockwell:Davis:2002
 
+[**Audio overview**](https://youtu.be/npt8jGINDm0)
+
 
 ## Introduction to ARIMA
 

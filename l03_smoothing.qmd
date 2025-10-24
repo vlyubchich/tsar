@@ -32,6 +32,8 @@ We will start with simple and widely used methods that can be further combined i
 * Chapter 1.5 in @Brockwell:Davis:2002
 * Chapter 5 in @Kirchgassner:Wolters:2007 (optional)
 
+[**Audio overview**](https://youtu.be/4wRqXcOcBtY)
+
 
 ## Introduction
 

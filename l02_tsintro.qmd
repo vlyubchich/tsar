@@ -28,6 +28,8 @@ You should become confident in identifying and characterizing trends, seasonal a
 
 * Chapters 1.1--1.4 in @Brockwell:Davis:2002
 
+[**Audio overview**](https://youtu.be/XuYNHg3GdtQ)
+
 
 ## Time series and its components
 

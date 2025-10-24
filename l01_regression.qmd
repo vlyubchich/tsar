@@ -26,6 +26,8 @@ After this lecture, you should be competent (again) in assessing violations of v
 
 * Chapters 3--4 in @Chatterjee:Hadi:2006
 
+[**Audio overview**](https://youtu.be/egZwXSAXULo)
+
 
 ## Diagnostics for the simple linear regression: residual analysis
 

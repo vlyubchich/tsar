@@ -29,6 +29,8 @@ You will be able to recognize the presence of such heteroskedasticity from graph
 
 * Chapter 7 in @Kirchgassner:Wolters:2007
 
+[**Audio overview**](https://youtu.be/tIiAqhgC21E)
+
 
 ## Introduction
 

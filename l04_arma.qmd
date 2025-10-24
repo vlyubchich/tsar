@@ -29,6 +29,8 @@ You should recognize the difference between the AR and MA components and learn h
 
 * Chapters 2, 3, and 5 in @Brockwell:Davis:2002
 
+[**Audio overview**](https://youtu.be/oMMBEoLshRY)
+
 
 ## Introduction
 
