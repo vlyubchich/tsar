@@ -430,15 +430,15 @@ Figure&nbsp;D.1: ACF and PACF plots of residuals of the base model GARMA(0,0) ba
 <span>                                  stepwise <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; Series: m00nbi$residuals 
-#&gt; ARIMA(1,0,3) with zero mean 
+#&gt; ARIMA(1,0,2) with zero mean 
 #&gt; 
 #&gt; Coefficients:
-#&gt;         ar1     ma1     ma2    ma3
-#&gt;       0.860  -0.714  -0.119  0.099
-#&gt; s.e.  0.072   0.084   0.056  0.046
+#&gt;         ar1     ma1     ma2
+#&gt;       0.876  -0.679  -0.089
+#&gt; s.e.  0.067   0.080   0.051
 #&gt; 
-#&gt; sigma^2 = 0.928:  log likelihood = -715
-#&gt; AIC=1440   AICc=1441   BIC=1462</code></pre>
+#&gt; sigma^2 = 0.879:  log likelihood = -702
+#&gt; AIC=1411   AICc=1411   BIC=1428</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Extract the orders, see the value 'arma' in ?stats::arima</span></span>
 <span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">res_arma</span><span class="op">$</span><span class="va">arma</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>

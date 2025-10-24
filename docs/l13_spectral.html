@@ -369,13 +369,9 @@ window.Quarto = {
 <span class="header-section-number">11.2</span> Regression on sinusoidal components</h2>
 <p>The simplest form of spectral analysis consists of regression on a periodic component: <span id="eq-regr"><span class="math display">\[
 Y_t = A\cos \omega t + B \sin \omega t + C + \epsilon_t,
-\tag{11.1}\]</span></span> where <span class="math inline">\(t =1,\dots,T\)</span> and <span class="math inline">\(\epsilon_t \sim \mathrm{WN}(0, \sigma^2)\)</span>. Without loss of generality, we assume <span class="math inline">\(0 \leqslant \omega \leqslant \pi\)</span>. In fact, for discrete data, frequencies outside this range are aliased into this range. For example, suppose that <span class="math inline">\(-\pi &lt; (\omega = \pi - \delta) &lt; 0\)</span>, then <span class="math display">\[
-\begin{split}
-\cos(\omega t) &amp;= \cos((\pi - \delta)t) \\
-&amp; = \cos(\pi t) \cos(\delta t) + \sin(\pi t) \sin(\delta t) \\
-&amp; = \cos(\delta t).
-\end{split}
-\]</span> Hence, a sampled sinusoid with a frequency smaller than 0 appears to coincide with a sinusoid with frequency in the interval <span class="math inline">\([0, \pi]\)</span>.</p>
+\tag{11.1}\]</span></span> where <span class="math inline">\(t =1,\dots,T\)</span> and <span class="math inline">\(\epsilon_t \sim \mathrm{WN}(0, \sigma^2)\)</span>. Without loss of generality, we assume <span class="math inline">\(0 \leqslant \omega \leqslant \pi\)</span>. In fact, for discrete data, frequencies outside this range are aliased into this range. For example, suppose we have a negative frequency <span class="math inline">\(\omega = -\delta\)</span>, where <span class="math inline">\(0 \leqslant \delta \leqslant \pi\)</span>. Then, for any integer <span class="math inline">\(t\)</span>, <span class="math display">\[
+\cos(\omega t) = \cos(-\delta t) = \cos(\delta t).
+\]</span> because the cosine function is an even function (meaning <span class="math inline">\(\cos(−x) = \cos(x)\)</span>). <!-- that $-\pi < (\omega = \pi - \delta) < 0$, then --> <!-- $$ --> <!-- \begin{split} --> <!-- \cos(\omega t) &= \cos((\pi - \delta)t) \\ --> <!-- & = \cos(\pi t) \cos(\delta t) + \sin(\pi t) \sin(\delta t) \\ --> <!-- & = (-1)^t\cos(\delta t). --> <!-- \end{split} --> <!-- $$ --> Hence, a sampled sinusoid with a negative frequency <span class="math inline">\(\omega = -\delta\)</span> appears to coincide with a sinusoid with a positive frequency <span class="math inline">\(\delta\)</span> in the interval <span class="math inline">\([0, \pi]\)</span>.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
