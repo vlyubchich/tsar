@@ -417,7 +417,7 @@ To assess the quality of interval forecasts from model $m$, compute the *empiric
 $$
 \hat{C}_m = k^{-1}\sum_{t=n+1}^{n+k} \mathbf{1}\{Y_t \in PI_t^{(m)}\},
 $$
-where $PI_t^{(m)} = \left[PI_{t,lower}^{(m)}, PI_{t,upper}^{(m)}\right]$ is the prediction interval from model $m$ at time $t$.
+where $PI_t^{(m)} = \left[PI_{t,lower}^{(m)}, PI_{t,upper}^{(m)}\right]$ is the prediction interval from model $m$ at time $t$, and $\mathbf{1}\{ \cdot \}$ is the indicator function, it equals 1 if the condition is true and 0 otherwise.
 To select the best coverage, one can calculate the absolute differences between each empirical coverage $\hat{C}_m$ and the nominal coverage $C$:
 $$
 \Delta_m = |\hat{C}_m - C|.
