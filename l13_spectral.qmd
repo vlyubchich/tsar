@@ -53,7 +53,7 @@ In fact, for discrete data, frequencies outside this range are aliased into this
 For example, suppose we have a negative frequency $\omega = -\delta$, where $0 \leqslant \delta \leqslant \pi$.
 Then, for any integer $t$,
 $$
-\cos(\omega t) = \cos(-\delta t) = \cos(\delta t).
+\cos(\omega t) = \cos(-\delta t) = \cos(\delta t)
 $$
 because the cosine function is an even function (meaning $\cos(−x) = \cos(x)$).
 <!-- that $-\pi < (\omega = \pi - \delta) < 0$, then -->
