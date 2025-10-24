@@ -50,15 +50,21 @@ $$ {#eq-regr}
 where $t =1,\dots,T$ and $\epsilon_t \sim \mathrm{WN}(0, \sigma^2)$. 
 Without loss of generality, we assume $0 \leqslant \omega \leqslant \pi$. 
 In fact, for discrete data, frequencies outside this range are aliased into this range. 
-For example, suppose that $-\pi < (\omega = \pi - \delta) < 0$, then
+For example, suppose we have a negative frequency $\omega = -\delta$, where $0 \leqslant \delta \leqslant \pi$.
+Then, for any integer $t$,
 $$
-\begin{split}
-\cos(\omega t) &= \cos((\pi - \delta)t) \\
-& = \cos(\pi t) \cos(\delta t) + \sin(\pi t) \sin(\delta t) \\
-& = \cos(\delta t).
-\end{split}
+\cos(\omega t) = \cos(-\delta t) = \cos(\delta t).
 $$
-Hence, a sampled sinusoid with a frequency smaller than 0 appears to coincide with a sinusoid with frequency in the interval $[0, \pi]$.
+because the cosine function is an even function (meaning $\cos(−x) = \cos(x)$).
+<!-- that $-\pi < (\omega = \pi - \delta) < 0$, then -->
+<!-- $$ -->
+<!-- \begin{split} -->
+<!-- \cos(\omega t) &= \cos((\pi - \delta)t) \\ -->
+<!-- & = \cos(\pi t) \cos(\delta t) + \sin(\pi t) \sin(\delta t) \\ -->
+<!-- & = (-1)^t\cos(\delta t). -->
+<!-- \end{split} -->
+<!-- $$ -->
+Hence, a sampled sinusoid with a negative frequency $\omega = -\delta$ appears to coincide with a sinusoid with a positive frequency $\delta$ in the interval $[0, \pi]$.
 
 ::: {.callout-note}
 The term $A\cos \omega t + B \sin \omega t$ is a periodic function with the period $2\pi / \omega$. 
