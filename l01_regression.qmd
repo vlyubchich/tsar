@@ -181,7 +181,7 @@ H_{0}{:} ~ \rho = 0 & ~~ vs. ~~ H_{1}{:} ~ \rho < 0,
 $$
 and the two-tail test is
 $$
-H_{0}{:} ~ \rho = 0 ~~ vs. ~~ H_{1}{:} ~ \rho \neq 0.\\
+H_{0}{:} ~ \rho = 0 ~~ vs. ~~ H_{1}{:} ~ \rho \neq 0.
 $$
 
 ::: {.callout-note}

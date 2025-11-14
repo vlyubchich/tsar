@@ -21,6 +21,8 @@ mixed-effects models,
 generalized linear models, and
 generalized additive models).
 
+Get a print copy of the book from [Amazon](https://www.amazon.com/dp/B0G2C9PYVL).
+
 
 ## Authors {.unnumbered}
 
